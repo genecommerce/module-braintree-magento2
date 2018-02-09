@@ -1,0 +1,161 @@
+/**
+ * 3D Secure Container
+ */
+#braintree-three-d-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    z-index: 100000;
+    visibility: visible;
+}
+#braintree-three-d-modal .bt-modal-frame {
+    height: 420px;
+    width: 440px;
+    margin: auto;
+    background-color: #ffffff;
+    z-index: 2;
+    border-radius: 6px;
+}
+#braintree-three-d-modal .bt-modal-body {
+    height: 380px;
+    margin: 20px;
+    background-color: white;
+    border: 1px solid lightgray;
+}
+#braintree-three-d-modal .bt-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    opacity: 0.75;
+}
+@media (max-width: 650px) {
+    #braintree-three-d-modal .bt-modal-frame {
+        width: 100%;
+    }
+}
+
+/**
+ * Apple Pay button
+ */
+.braintree-applepay-container-product {
+    display: inline-block;
+
+    .braintree-apple-pay-button {
+        padding: 10px 0px;
+        margin: 0;
+        margin-bottom: 15px;
+    }
+}
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .braintree-applepay-container-product {
+        display: block;
+
+        .braintree-apple-pay-button {
+            width: 100%;
+        }
+    }
+}
+.braintree-apple-pay-button {
+    -webkit-appearance: -apple-pay-button; 
+    -apple-pay-button-type: plain;
+    display: block;
+    width: 200px;
+    min-height: 40px;
+    border: 1px solid black;
+    background-image: -webkit-named-image(apple-pay-logo-black);
+    background-size: 100% ~'calc(60% + 2px)';
+    background-repeat: no-repeat;
+    background-color: black;
+    background-position: 50% 50%;
+    border-radius: 5px;
+    padding: 2px;
+    margin: 20px auto;
+    transition: background-color .15s;
+    cursor: pointer;
+}
+
+/**
+ * PP Credit Calculator
+ */
+.ppcredit-summary {
+    background: linear-gradient(to right, #009CDE , #003087);
+    color: #fff;
+    padding: 15px;
+    text-align: center;
+    margin: 10px 0px;
+}
+
+.ppcreditcalc-container {
+    border: 1px solid #dedede;
+    background: #FFF;
+}
+
+.ppcreditcalc-header {
+    background: #FFF;
+    padding: 15px;
+}
+
+.ppcreditcalc-legal {
+    background-color: #eee;
+    border-top: 1px solid #dedede;
+    padding: 15px;
+    font-size: 1.2rem;
+    line-height: 2rem;
+}
+
+.ppcreditcalc-instalments {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid #DEDEDE;
+    border-bottom: 1px solid #DEDEDE;
+    background-color: #eeeeee;
+}
+.ppcreditcalc-instalments li {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
+
+.ppcreditcalc-instalments-term {
+    display: block;
+    padding: 10px 15px;
+    color: #000;
+}
+.ppcreditcalc-instalments-term:hover {
+    background: #009CDE;
+    color: #FFF;
+    text-decoration: none;
+}
+.ppcreditcalc-instalments-term.active {
+    background: #003087;
+    color: #FFF;
+}
+
+.ppcreditcalc-instalment-summary {
+    padding: 15px;
+}
+.ppcreditcalc-instalment-summary dl {
+    margin: 0;
+}
+.ppcreditcalc-instalment-summary dt {
+    display: inline-block;
+    width: 50%;
+}
+.ppcreditcalc-instalment-summary dd {
+    display: inline-block;
+}
+
+/**
+ * CC FORM
+ */
+#braintree_expirationDate {
+    width: 80px;
+}

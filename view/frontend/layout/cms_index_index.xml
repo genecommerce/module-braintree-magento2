@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="sidebar.additional">
+            <block class="Magento\Braintree\Block\Credit\Bml\Banners" name="braintree.bml.right.logo" template="Magento_Braintree::bml.phtml">
+                <arguments>
+                    <argument name="section" xsi:type="string">homepage</argument>
+                    <argument name="position" xsi:type="number">1</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+        <referenceContainer name="top.container">
+            <block class="Magento\Braintree\Block\Credit\Bml\Banners" name="braintree.bml.center.logo" template="Magento_Braintree::bml.phtml">
+                <arguments>
+                    <argument name="section" xsi:type="string">homepage</argument>
+                    <argument name="position" xsi:type="number">0</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>
