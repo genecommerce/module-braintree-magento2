@@ -19,11 +19,12 @@ class SalesOrderGridPlugin
     {
         if (!$subject->isLoaded()) {
             $primaryKey = $subject->getResource()->getIdFieldName();
+            $tableName = $subject->getResource()->getTable('braintree_transaction_details');
 
             $subject->getSelect()->joinLeft(
-                'braintree_transaction_details',
-                'braintree_transaction_details.order_id = main_table.' . $primaryKey,
-                'braintree_transaction_details.transaction_source'
+                $tableName,
+                $tableName . '.order_id = main_table.' . $primaryKey,
+                $tableName . '.transaction_source'
             );
         }
 

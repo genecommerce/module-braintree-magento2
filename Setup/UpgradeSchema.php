@@ -21,8 +21,11 @@ class UpgradeSchema implements UpgradeSchemaInterface
         $installer = $setup;
         $installer->startSetup();
 
-        $this->braintreeTransactionDetails($installer);
-        $this->braintreeCreditPrices($installer);
+        // 3.0.0
+        if (version_compare($context->getVersion(), '3.0.0', '<')) {
+            $this->braintreeTransactionDetails($installer);
+            $this->braintreeCreditPrices($installer);
+        }
 
         $installer->endSetup();
     }
