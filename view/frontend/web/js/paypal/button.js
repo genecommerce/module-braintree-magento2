@@ -178,7 +178,7 @@ define(
                                             firstname: payload.details.firstName,
                                             lastname: payload.details.lastName,
                                             telephone: typeof address.phone !== 'undefined' ? address.phone : '',
-                                            region: typeof address.region !== 'undefined' ? address.region : ''
+                                            region: typeof address.state !== 'undefined' ? address.state : ''
                                         };
 
                                         formBuilder.build(
