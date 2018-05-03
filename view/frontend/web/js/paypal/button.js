@@ -169,8 +169,9 @@ define(
 
                                         // Map the shipping address correctly
                                         var address = payload.details.shippingAddress;
+                                        var addressline2 = typeof address.line2 !== 'undefined' ? address.line2:'';
                                         payload.details.shippingAddress = {
-                                            streetAddress: address.line1,
+                                            streetAddress: address.line1+' '+ addressline2,
                                             locality: address.city,
                                             postalCode: address.postalCode,
                                             countryCodeAlpha2: address.countryCode,
@@ -178,8 +179,8 @@ define(
                                             firstname: payload.details.firstName,
                                             lastname: payload.details.lastName,
                                             telephone: typeof address.phone !== 'undefined' ? address.phone : '',
-                                            region: typeof address.region !== 'undefined' ? address.region : ''
-                                        };
+                                            region: typeof address.state !== 'undefined' ? address.state : ''
+                                       };
 
                                         formBuilder.build(
                                             {
