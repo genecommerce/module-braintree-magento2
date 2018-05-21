@@ -1,7 +1,7 @@
 {
     "name": "gene/module-braintree",
     "description": "Fork from the Magento Braintree 2.2.0 module by Gene Commerce for PayPal.",
-    "version": "3.0.2",
+    "version": "3.0.3",
     "require": {
         "magento/module-config": "101.0.*",
         "magento/module-directory": "100.2.*",
