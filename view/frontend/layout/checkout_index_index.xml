@@ -49,6 +49,15 @@
                                                                         </item>
                                                                     </item>
                                                                 </item>
+                                                                <!-- google pay -->
+                                                                <item name="braintree_googlepay" xsi:type="array">
+                                                                    <item name="component" xsi:type="string">Magento_Braintree/js/googlepay/implementations/core-checkout/method-googlepay</item>
+                                                                    <item name="methods" xsi:type="array">
+                                                                        <item name="braintree_googlepay" xsi:type="array">
+                                                                            <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
+                                                                        </item>
+                                                                    </item>
+                                                                </item>
                                                             </item>
                                                         </item>
                                                     </item>

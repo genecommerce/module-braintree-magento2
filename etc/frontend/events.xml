@@ -9,5 +9,6 @@
     <event name="shortcut_buttons_container">
         <observer name="braintree_paypal_shortcuts" instance="Magento\Braintree\Observer\AddPaypalShortcuts"/>
         <observer name="braintree_applepay_shortcuts" instance="Magento\Braintree\Observer\AddApplePayShortcuts" />
+        <observer name="braintree_googlepay_shortcuts" instance="Magento\Braintree\Observer\AddGooglePayShortcuts" />
     </event>
 </config>

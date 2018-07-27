@@ -13,7 +13,8 @@ define([
     'Magento_Checkout/js/model/full-screen-loader',
     'Magento_Checkout/js/model/payment/additional-validators',
     'Magento_Vault/js/view/payment/vault-enabler',
-    'Magento_Checkout/js/action/create-billing-address'
+    'Magento_Checkout/js/action/create-billing-address',
+    'Magento_Checkout/js/action/select-billing-address',
 ], function (
     $,
     _,
@@ -23,7 +24,8 @@ define([
     fullScreenLoader,
     additionalValidators,
     VaultEnabler,
-    createBillingAddress
+    createBillingAddress,
+    selectBillingAddress
 ) {
     'use strict';
 
@@ -206,16 +208,7 @@ define([
          */
         beforePlaceOrder: function (data) {
             this.setPaymentMethodNonce(data.nonce);
-
-            var billingAddr = quote.billingAddress();
-            if (billingAddr === null || typeof billingAddr.email === 'undefined') {
-                if (typeof data.details.billingAddress !== 'undefined') {
-                    this.setBillingAddress(data.details, data.details.billingAddress);
-                } else if (typeof data.details.shippingAddress !== 'undefined') {
-                    this.setBillingAddress(data.details, data.details.shippingAddress)
-                }
-            }
-
+            selectBillingAddress(quote.shippingAddress());
             this.customerEmail(data.details.email);
             this.placeOrder();
         },
@@ -224,17 +217,18 @@ define([
          * Re-init PayPal Auth Flow
          */
         reInitPayPal: function () {
-            if (Braintree.checkout) {
-                Braintree.checkout.teardown(function () {
-                    Braintree.checkout = null;
-                });
-            }
-
             this.disableButton();
-            this.clientConfig.paypal.amount = this.grandTotalAmount;
-
+            this.clientConfig.paypal.amount = parseFloat(this.grandTotalAmount).toFixed(2);
             Braintree.setConfig(this.clientConfig);
-            Braintree.setup();
+
+            if (Braintree.getPayPalInstance()) {
+                Braintree.getPayPalInstance().teardown(function () {
+                    Braintree.setup();
+                }.bind(this));
+                Braintree.setPayPalInstance(null);
+            } else {
+                Braintree.setup();
+            }
         },
 
         /**
@@ -243,14 +237,6 @@ define([
          */
         getLocale: function () {
             return window.checkoutConfig.payment[this.getCode()].locale;
-        },
-
-        /**
-         * Is shipping address can be editable on PayPal side
-         * @returns {Boolean}
-         */
-        isAllowOverrideShippingAddress: function () {
-            return window.checkoutConfig.payment[this.getCode()].isAllowShippingAddressOverride;
         },
 
         /**
@@ -264,12 +250,10 @@ define([
 
             config.paypal = {
                 flow: isActiveVaultEnabler ? 'vault' : 'checkout',
-                amount: this.grandTotalAmount,
+                amount: parseFloat(this.grandTotalAmount).toFixed(2),
                 currency: totals['base_currency_code'],
                 locale: this.getLocale(),
-                enableShippingAddress: true,
-                shippingAddressEditable: this.isAllowOverrideShippingAddress(),
-                shippingAddressOverride: this.getShippingAddress(),
+                enableShippingAddress: false,
 
                 /**
                  * Triggers on any Braintree error

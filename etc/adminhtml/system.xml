@@ -56,7 +56,7 @@
                         <comment>http://docs.magento.com/m2/ce/user_guide/payment/braintree.html</comment>
                         <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
                     </group>
-                    <group id="braintree_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="5">
+                    <group id="braintree_required" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="5">
                         <comment><![CDATA[<a href="https://www.braintreegateway.com/login" target="_blank">Click here to login to your existing Braintree account</a>. Or to setup a new account and accept payments on your website, <a href="https://apply.braintreegateway.com/signup/us" target="_blank">click here to signup for a Braintree account</a>.<br><br>Powered by <a href="https://www.braintreepayments.com/features/hosted-fields" target="_blank">Braintree v.zero with Hosted Fields</a> latest technology. Hosted Fields are small, transparent iframes that replace the sensitive credit card inputs in your checkout flow - helping you meet the latest data security requirements while ensuring your customization doesn't suffer. <a href="https://www.braintreepayments.com/features/hosted-fields" target="_blank">Find out more</a>.]]></comment>
                         <label>Basic Braintree Settings</label>
                         <attribute type="expanded">1</attribute>
@@ -65,31 +65,31 @@
                             <label>Title</label>
                             <config_path>payment/braintree/title</config_path>
                         </field>
-                        <field id="environment" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <field id="environment" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Environment</label>
                             <source_model>Magento\Braintree\Model\Adminhtml\Source\Environment</source_model>
                             <config_path>payment/braintree/environment</config_path>
                         </field>
-                        <field id="payment_action" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <field id="payment_action" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Payment Action</label>
                             <source_model>Magento\Braintree\Model\Adminhtml\Source\PaymentAction</source_model>
                             <config_path>payment/braintree/payment_action</config_path>
                         </field>
-                        <field id="merchant_id" translate="label" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <field id="merchant_id" translate="label" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Merchant ID</label>
                             <config_path>payment/braintree/merchant_id</config_path>
                         </field>
-                        <field id="public_key" translate="label" type="obscure" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <field id="public_key" translate="label" type="obscure" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Public Key</label>
                             <config_path>payment/braintree/public_key</config_path>
                             <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         </field>
-                        <field id="private_key" translate="label" type="obscure" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <field id="private_key" translate="label" type="obscure" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Private Key</label>
                             <config_path>payment/braintree/private_key</config_path>
                             <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         </field>
-                        <field id="key_validation" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <field id="key_validation" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label></label>
                             <frontend_model>Magento\Braintree\Block\Adminhtml\Form\Field\Validation</frontend_model>
                         </field>
@@ -101,7 +101,7 @@
                             <label>Vault Title</label>
                             <config_path>payment/braintree_cc_vault/title</config_path>
                         </field>
-                        <field id="merchant_account_id" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <field id="merchant_account_id" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Merchant Account ID</label>
                             <comment>If you don't specify the merchant account to use to process a transaction, Braintree will process it using your default merchant account.</comment>
                             <config_path>payment/braintree/merchant_account_id</config_path>
@@ -112,7 +112,7 @@
                             <comment>Be sure to Enable Advanced Fraud Protection in Your Braintree Account in Settings/Processing Section</comment>
                             <config_path>payment/braintree/fraudprotection</config_path>
                         </field>
-                        <field id="kount_id" translate="label" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <field id="kount_id" translate="label" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Kount Merchant ID</label>
                             <comment><![CDATA[Used for direct fraud tool integration. Make sure you also contact <a href="mailto:accounts@braintreepayments.com">accounts@braintreepayments.com</a> to setup your Kount account.]]></comment>
                             <depends>
@@ -179,7 +179,7 @@
                             <config_path>payment/braintree/countrycreditcard</config_path>
                         </field>
                     </group>
-                    <group id="braintree_applepay" translate="label" showInDefault="1" showInWebsite="1" sortOrder="31">
+                    <group id="braintree_applepay" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="31">
                         <label>ApplePay through Braintree</label>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                         <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -202,6 +202,35 @@
                             <comment>
                                 <![CDATA[Displayed to the customer in the Apple Pay dialog.]]>
                             </comment>
+                        </field>
+                    </group>
+                    <group id="braintree_googlepay" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="31">
+                        <label>GooglePay through Braintree</label>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
+                        <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Enable GooglePay through Braintree</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/braintree_googlepay/active</config_path>
+                            <comment>
+                                <![CDATA[Consult the <A href="https://developers.braintreepayments.com/guides/google-pay/testing-go-live/javascript/v3#go-live">Braintree documentation</a> when enabling Google Pay for production.]]>
+                            </comment>
+                        </field>
+                        <field id="payment_action" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment Action</label>
+                            <source_model>Magento\Braintree\Model\Adminhtml\Source\PaymentAction</source_model>
+                            <config_path>payment/braintree_googlepay/payment_action</config_path>
+                        </field>
+                        <field id="merchant_id" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Merchant ID</label>
+                            <config_path>payment/braintree_googlepay/merchant_id</config_path>
+                            <comment>
+                                <![CDATA[Your MerchantID, provided by Google.]]>
+                            </comment>
+                        </field>
+                        <field id="cctypes" translate="label" type="multiselect" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Accepted Cards</label>
+                            <source_model>Magento\Braintree\Model\Adminhtml\Source\GooglePayCcType</source_model>
+                            <config_path>payment/braintree_googlepay/cctypes</config_path>
                         </field>
                     </group>
                     <group id="braintree_paypal" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="40">
@@ -250,11 +279,6 @@
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/braintree_paypal/require_billing_address</config_path>
                             <comment>This feature needs to be enabled first for the merchant account through PayPal technical support.</comment>
-                        </field>
-                        <field id="allow_shipping_address_override" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
-                            <label>Allow to Edit Shipping Address Entered During Checkout on PayPal Side</label>
-                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                            <config_path>payment/braintree_paypal/allow_shipping_address_override</config_path>
                         </field>
                         <field id="debug" translate="label" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Debug</label>

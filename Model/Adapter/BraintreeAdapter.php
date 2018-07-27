@@ -12,6 +12,7 @@ use Braintree\PaymentMethodNonce;
 use Braintree\Transaction;
 use Magento\Braintree\Gateway\Config\Config;
 use Magento\Braintree\Model\Adminhtml\Source\Environment;
+use Magento\Braintree\Model\StoreConfigResolver;
 
 /**
  * Class BraintreeAdapter
@@ -19,18 +20,31 @@ use Magento\Braintree\Model\Adminhtml\Source\Environment;
  */
 class BraintreeAdapter
 {
-
     /**
      * @var Config
      */
     private $config;
 
     /**
-     * @param Config $config
+     * @var StoreConfigResolver
      */
-    public function __construct(Config $config)
-    {
+    private $storeConfigResolver;
+
+    /**
+     * BraintreeAdapter constructor.
+     *
+     * @param Config              $config              Braintree configurator
+     * @param StoreConfigResolver $storeConfigResolver StoreId resolver model
+     *
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function __construct(
+        Config $config,
+        StoreConfigResolver $storeConfigResolver
+    ) {
         $this->config = $config;
+        $this->storeConfigResolver = $storeConfigResolver;
         $this->initCredentials();
     }
 
@@ -38,17 +52,31 @@ class BraintreeAdapter
      * Initializes credentials.
      *
      * @return void
+     *
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     protected function initCredentials()
     {
-        if ($this->config->getValue(Config::KEY_ENVIRONMENT) == Environment::ENVIRONMENT_PRODUCTION) {
+        $storeId = $this->storeConfigResolver->getStoreId();
+        $environmentIdentifier = $this->config
+            ->getValue(Config::KEY_ENVIRONMENT, $storeId);
+
+        $this->environment(Environment::ENVIRONMENT_SANDBOX);
+
+        if ($environmentIdentifier == Environment::ENVIRONMENT_PRODUCTION) {
             $this->environment(Environment::ENVIRONMENT_PRODUCTION);
-        } else {
-            $this->environment(Environment::ENVIRONMENT_SANDBOX);
         }
-        $this->merchantId($this->config->getValue(Config::KEY_MERCHANT_ID));
-        $this->publicKey($this->config->getValue(Config::KEY_PUBLIC_KEY));
-        $this->privateKey($this->config->getValue(Config::KEY_PRIVATE_KEY));
+
+        $this->merchantId(
+            $this->config->getValue(Config::KEY_MERCHANT_ID, $storeId)
+        );
+        $this->publicKey(
+            $this->config->getValue(Config::KEY_PUBLIC_KEY, $storeId)
+        );
+        $this->privateKey(
+            $this->config->getValue(Config::KEY_PRIVATE_KEY, $storeId)
+        );
     }
 
     /**

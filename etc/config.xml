@@ -78,20 +78,11 @@
             <braintree_cc_vault>
                 <model>BraintreeCreditCardVaultFacade</model>
                 <title>Stored Cards</title>
-                <instant_purchase>
-                    <available>Magento\Braintree\Model\InstantPurchase\CreditCard\AvailabilityChecker</available>
-                    <tokenFormat>Magento\Braintree\Model\InstantPurchase\CreditCard\TokenFormatter</tokenFormat>
-                    <additionalInformation>Magento\Braintree\Model\InstantPurchase\PaymentAdditionalInformationProvider</additionalInformation>
-                </instant_purchase>
             </braintree_cc_vault>
             <braintree_paypal_vault>
                 <model>BraintreePayPalVaultFacade</model>
                 <title>Stored Accounts (PayPal)</title>
                 <can_use_internal>1</can_use_internal>
-                <instant_purchase>
-                    <tokenFormat>Magento\Braintree\Model\InstantPurchase\PayPal\TokenFormatter</tokenFormat>
-                    <additionalInformation>Magento\Braintree\Model\InstantPurchase\PaymentAdditionalInformationProvider</additionalInformation>
-                </instant_purchase>
             </braintree_paypal_vault>
             <braintree_applepay>
                 <model>BraintreeApplePay</model>
@@ -116,6 +107,30 @@
                 <paymentInfoKeys>processorAuthorizationCode,processorResponseCode,processorResponseText</paymentInfoKeys>
                 <merchant_name>Store</merchant_name>
             </braintree_applepay>
+            <braintree_googlepay>
+                <model>BraintreeGooglePay</model>
+                <title>Google Pay</title>
+                <active>0</active>
+                <payment_action>authorize</payment_action>
+                <allowspecific>0</allowspecific>
+                <require_billing_address>0</require_billing_address>
+                <allow_shipping_address_override>0</allow_shipping_address_override>
+                <display_on_shopping_cart>0</display_on_shopping_cart>
+                <order_status>processing</order_status>
+                <is_gateway>1</is_gateway>
+                <can_use_checkout>1</can_use_checkout>
+                <can_authorize>1</can_authorize>
+                <can_capture>1</can_capture>
+                <can_capture_partial>1</can_capture_partial>
+                <can_refund>1</can_refund>
+                <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
+                <can_void>1</can_void>
+                <can_cancel>1</can_cancel>
+                <privateInfoKeys>processorAuthorizationCode,processorResponseCode,processorResponseText</privateInfoKeys>
+                <paymentInfoKeys>processorAuthorizationCode,processorResponseCode,processorResponseText</paymentInfoKeys>
+                <cctypes>VISA,MASTERCARD,AMEX</cctypes>
+                <merchant_id>testmode</merchant_id>
+            </braintree_googlepay>
         </payment>
     </default>
 </config>

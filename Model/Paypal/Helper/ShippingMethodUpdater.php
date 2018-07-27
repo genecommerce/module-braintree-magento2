@@ -5,7 +5,6 @@
  */
 namespace Magento\Braintree\Model\Paypal\Helper;
 
-use Magento\Braintree\Gateway\Config\PayPal\Config;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
 
@@ -15,26 +14,17 @@ use Magento\Quote\Model\Quote;
 class ShippingMethodUpdater extends AbstractHelper
 {
     /**
-     * @var Config
-     */
-    private $config;
-
-    /**
      * @var CartRepositoryInterface
      */
     private $quoteRepository;
 
     /**
      * Constructor
-     *
-     * @param Config $config
      * @param CartRepositoryInterface $quoteRepository
      */
     public function __construct(
-        Config $config,
         CartRepositoryInterface $quoteRepository
     ) {
-        $this->config = $config;
         $this->quoteRepository = $quoteRepository;
     }
 

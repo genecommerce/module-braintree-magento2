@@ -60,10 +60,8 @@ class QuoteUpdater extends AbstractHelper
         }
 
         $payment = $quote->getPayment();
-
         $payment->setMethod(ConfigProvider::PAYPAL_CODE);
         $payment->setAdditionalInformation(DataAssignObserver::PAYMENT_METHOD_NONCE, $nonce);
-
         $this->updateQuote($quote, $details);
     }
 
@@ -122,7 +120,6 @@ class QuoteUpdater extends AbstractHelper
     private function updateShippingAddress(Quote $quote, array $details)
     {
         $shippingAddress = $quote->getShippingAddress();
-
         $shippingAddress->setLastname($details['lastName']);
         $shippingAddress->setFirstname($details['firstName']);
         $shippingAddress->setEmail($details['email']);
@@ -147,16 +144,25 @@ class QuoteUpdater extends AbstractHelper
     private function updateBillingAddress(Quote $quote, array $details)
     {
         $billingAddress = $quote->getBillingAddress();
-
-        if ($this->config->isRequiredBillingAddress()) {
-            $this->updateAddressData($billingAddress, $details['billingAddress']);
-        } else {
-            $this->updateAddressData($billingAddress, $details['shippingAddress']);
-        }
-
         $billingAddress->setFirstname($details['firstName']);
         $billingAddress->setLastname($details['lastName']);
         $billingAddress->setEmail($details['email']);
+
+        if ($this->config->isRequiredBillingAddress()) {
+            $this->updateAddressData($billingAddress, $details['billingAddress']);
+
+            if (!empty($details['billingAddress']['firstName'])) {
+                $billingAddress->setFirstname($details['firstName']);
+            }
+            if (!empty($details['billingAddress']['lastName'])) {
+                $billingAddress->setLastname($details['lastName']);
+            }
+            if (!empty($details['billingAddress']['email'])) {
+                $billingAddress->setEmail($details['email']);
+            }
+        } else {
+            $this->updateAddressData($billingAddress, $details['shippingAddress']);
+        }
 
         // PayPal's address supposes not saving against customer account
         $billingAddress->setSaveInAddressBook(false);

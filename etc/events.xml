@@ -19,6 +19,9 @@
     <event name="payment_method_assign_data_braintree_applepay">
         <observer name="braintree_applepay_gateway_data_assign" instance="Magento\Braintree\Observer\DataAssignObserver" />
     </event>
+    <event name="payment_method_assign_data_braintree_googlepay">
+        <observer name="braintree_googlepay_gateway_data_assign" instance="Magento\Braintree\Observer\DataAssignObserver" />
+    </event>
     <event name="sales_order_save_after">
         <observer name="braintree_sales_order_save_after" instance="Magento\Braintree\Observer\SalesOrderSaveObserver" />
     </event>

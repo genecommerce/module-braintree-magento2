@@ -1,7 +1,7 @@
 {
     "name": "gene/module-braintree",
     "description": "Fork from the Magento Braintree 2.2.0 module by Gene Commerce for PayPal.",
-    "version": "3.0.4",
+    "version": "3.0.5",
     "require": {
         "magento/module-config": "101.0.*",
         "magento/module-directory": "100.2.*",
@@ -42,7 +42,8 @@
             "role": "Original Developers"
         },
         {
-            "name": "Aidan Threadgold from Gene Commerce",
+            "name": "Aidan Threadgold",
+            "email": "aidan@gene.co.uk",
             "homepage": "http://www.gene.co.uk",
             "role": "Developer"
         }

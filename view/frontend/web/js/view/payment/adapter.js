@@ -110,6 +110,21 @@ define([
         },
 
         /**
+         * Has PayPal been init'd already
+         */
+        getPayPalInstance: function() {
+            if (typeof this.config.paypalInstance !== 'undefined' && this.config.paypalInstance) {
+                return this.config.paypalInstance;
+            }
+
+            return null;
+        },
+
+        setPayPalInstance: function(val) {
+            this.config.paypalInstance = val;
+        },
+
+        /**
          * Setup Braintree SDK
          */
         setup: function (callback) {
@@ -235,6 +250,7 @@ define([
                 }
 
                 this.config.paypalInstance = paypalCheckoutInstance;
+                $('#' + this.config.buttonId).html('');
                 paypal.Button.render({
                     env: this.getEnvironment(),
                     style: style,

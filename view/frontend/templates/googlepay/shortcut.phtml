@@ -1,0 +1,27 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var \Magento\Braintree\Block\GooglePay\Shortcut\Button $block
+ */
+
+$id = $block->getContainerId() . mt_rand();
+
+$config = [
+    "Magento_Braintree/js/googlepay/implementations/shortcut" => [
+        'id' => $id,
+        'environment' => $block->getEnvironment(),
+        'clientToken' => $block->getClientToken(),
+        'merchantId' => $block->getMerchantId(),
+        'actionSuccess' => $block->getActionSuccess(),
+        'currencyCode' => $block->getCurrencyCode(),
+        'amount' => $block->getAmount(),
+        'cardTypes' => $block->getAvailableCardTypes()
+    ]
+];
+
+?>
+<div id="<?php /* @noEscape */ echo $id; ?>" data-mage-init='<?php /* @noEscape */ echo json_encode($config); ?>' class="googlepay-minicart-logo"></div>

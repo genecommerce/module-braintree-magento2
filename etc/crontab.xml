@@ -4,5 +4,9 @@
         <job name="braintree_credit_price" instance="Magento\Braintree\Cron\CreditPrice" method="execute">
             <schedule>0 0 * * *</schedule>
         </job>
+        <!--  At 00:00 on Sunday.  -->
+        <job name="braintree_update_check" instance="Magento\Braintree\Cron\Update" method="execute">
+            <schedule>0 0 * * 0</schedule>
+        </job>
     </group>
 </config>
