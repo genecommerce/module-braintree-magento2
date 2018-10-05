@@ -193,7 +193,6 @@ define([
                 this.placeOrder();
             }
         },
-
         /**
          * @returns {String}
          */
