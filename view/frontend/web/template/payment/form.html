@@ -136,9 +136,12 @@
                 <button class="action primary checkout"
                         type="submit"
                         data-bind="
-                        click: placeOrderClick,
-                        attr: {title: $t('Place Order')}
-                ">
+                            click: placeOrderClick,
+                            attr: {title: $t('Place Order')},
+                            css: {disabled: !isPlaceOrderActionAllowed()},
+                            enable: (getCode() == isChecked())"
+                        disbaled
+                >
                     <span data-bind="i18n: 'Place Order'"></span>
                 </button>
             </div>
