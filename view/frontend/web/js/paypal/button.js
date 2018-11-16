@@ -84,8 +84,8 @@ define(
              * @returns {Object}
              */
             initComponent: function () {
-                console.log('credit');
-                console.log(this.offerCredit);
+                //console.log('credit');
+                //console.log(this.offerCredit);
                 var $this = $('#' + this.id),
                     data = {
                         amount: $this.data('amount'),
@@ -134,17 +134,17 @@ define(
                             shape: this.shape,
                         };
                         var funding = {};
-                        if (this.offerCredit === true) {
-                            //  console.log('went into if');
+                        if (this.offerCredit) {
+                          //  console.log('went into if');
 
                             //style = {
-                            funding =  {
-                                allowed: [paypal.FUNDING.CREDIT ]
-                            };
+                                funding =  {
+                                    allowed: [paypal.FUNDING.CREDIT ]
+                                };
 
                             // };
                         }
-                        console.log(funding);
+                        //console.log(funding);
                         var actionSuccess = this.actionSuccess;
                         paypal.Button.render({
                             env: this.environment,
