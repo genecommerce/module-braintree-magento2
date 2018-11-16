@@ -8,7 +8,7 @@
  * @var \Magento\Braintree\Block\Paypal\Button $block
  */
 
-
+//$id = $block->isCreditActive() ? $block->getContainerId() . "_credit" . mt_rand() :  $block->getContainerId() . mt_rand();
 $id = $block->getContainerId() . mt_rand();
 $config = [
     'Magento_Braintree/js/paypal/button' => [
@@ -17,20 +17,21 @@ $config = [
         'clientToken' => $block->getClientToken(),
         'displayName' => $block->getMerchantName(),
         'payeeEmail' => $block->getPayeeEmail(),
-        'color' => $block->getButtonColor(),
+//        'color' => $block->getButtonColor(),
+        'label' => 'checkout ',
         'shape' => $block->getButtonShape(),
-        'actionSuccess' => $block->getActionSuccess()
+        'size'  => $block->getButtonSize(),
+        //'layout'  => $block->getButtonLayout(),
+        //'color'  => $block->getButtonColor(),
+        'actionSuccess' => $block->getActionSuccess(),
+        'offerCredit' => true
+        //'offerCredit' => false
+        //'offerCredit' => $block->isCreditActive() == true ? true : false
     ]
 ];
-
-$creditId = $block->getContainerId() . "_credit" . mt_rand();
-$configCredit = $config;
-$configCredit['Magento_Braintree/js/paypal/button']['id'] = $creditId;
-$configCredit['Magento_Braintree/js/paypal/button']['offerCredit'] = true;
 ?>
-
 <div data-mage-init='<?php /* @noEscape */ echo json_encode($config); ?>'
-     class="paypal checkout paypal-logo braintree-paypal-logo<?php
+     class="paypal checkout paypal-logo braintree-paypal-logo <?php
      /* @noEscape */ echo $block->getContainerId(); ?>-container">
     <div data-currency="<?php /* @noEscape */ echo $block->getCurrency(); ?>"
          data-locale="<?php /* @noEscape */ echo $block->getLocale(); ?>"
@@ -38,15 +39,3 @@ $configCredit['Magento_Braintree/js/paypal/button']['offerCredit'] = true;
          id="<?php /* @noEscape */ echo $id; ?>"
          class="action-braintree-paypal-logo"></div>
 </div>
-
-<?php if ($block->isCreditActive()) : ?>
-    <div data-mage-init='<?php /* @noEscape */ echo json_encode($configCredit); ?>'
-         class="paypal checkout paypal-logo braintree-paypal-logo<?php
-         /* @noEscape */ echo $block->getContainerId(); ?>-container">
-        <div data-currency="<?php /* @noEscape */ echo $block->getCurrency(); ?>"
-             data-locale="<?php /* @noEscape */ echo $block->getLocale(); ?>"
-             data-amount="<?php /* @noEscape */ echo $block->getAmount(); ?>"
-             id="<?php /* @noEscape */ echo $creditId; ?>"
-             class="action-braintree-paypal-logo"></div>
-    </div>
-<?php endif; ?>

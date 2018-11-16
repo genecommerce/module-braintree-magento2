@@ -28,7 +28,6 @@ define(
         formBuilder
     ) {
         'use strict';
-
         return Component.extend({
 
             defaults: {
@@ -85,6 +84,8 @@ define(
              * @returns {Object}
              */
             initComponent: function () {
+                console.log('credit');
+                console.log(this.offerCredit);
                 var $this = $('#' + this.id),
                     data = {
                         amount: $this.data('amount'),
@@ -128,26 +129,30 @@ define(
                             console.error('paypalCheckout instantiation error', createErr);
                             return;
                         }
-
                         var style = {
                             color: this.color,
-                            shape: this.shape
+                            shape: this.shape,
                         };
+                        var funding = {};
                         if (this.offerCredit === true) {
-                            style = {
-                                label: 'credit'
-                            };
-                        }
+                            //  console.log('went into if');
 
+                            //style = {
+                            funding =  {
+                                allowed: [paypal.FUNDING.CREDIT ]
+                            };
+
+                            // };
+                        }
+                        console.log(funding);
                         var actionSuccess = this.actionSuccess;
                         paypal.Button.render({
                             env: this.environment,
                             style: style,
-
+                            funding: funding,
                             payment: function () {
                                 return paypalCheckoutInstance.createPayment(data);
                             },
-
                             onCancel: function (data) {
                                 jQuery("#maincontent").trigger('processStop');
                             },
@@ -156,7 +161,6 @@ define(
                                 console.error('paypalCheckout button render error', err);
                                 jQuery("#maincontent").trigger('processStop');
                             },
-
                             /**
                              * Pass the payload (and payload.nonce) through to the implementation's onPaymentMethodReceived method
                              * @param data
@@ -180,7 +184,6 @@ define(
                                             telephone: typeof payload.details.phone !== 'undefined' ? payload.details.phone : '',
                                             region: typeof address.state !== 'undefined' ? address.state : ''
                                         };
-
                                         formBuilder.build(
                                             {
                                                 action: actionSuccess,
