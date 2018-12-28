@@ -159,7 +159,7 @@
                         </field>
                     </group>
                     <group id="braintree_hic" translate="label" showInDefault="1" showInWebsite="1" sortOrder="25">
-                        <comment><![CDATA[<a href="https://h30.hiconversion.net" target="_blank">Click here to go to HiConversion.</a>]]></comment>
+                        <comment><![CDATA[<a href="https://h30.hiconversion.net" target="_blank">Click here to go to HiConversion</a>]]></comment>
                         <label>HiConversion Experience Optimization through Braintree</label>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                         <field id="enabled" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -171,10 +171,39 @@
                             <label>Site ID</label>
                             <config_path>hiconversion/configuration/site_id</config_path>
                         </field>
-                        <field id="bn_code" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Build Notation Code</label>
-                            <config_path>hiconversion/configuration/bn_code</config_path>
-                        </field>
+                        
+                        <group id="create_account" translate="label" showInDefault="1" showInWebsite="1" sortOrder="26">
+                            <label>Activate New HiConversion Account</label>
+                            <field id="site_url" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                                <label>Your Site URL</label>
+                                <frontend_class>validate-url</frontend_class>
+                            </field>
+                            <field id="email" translate="label" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
+                                <label>Your Email Address</label>
+                                <frontend_class>validate-email</frontend_class>
+                            </field>
+                            <field id="password" translate="label" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
+                                <label>Password</label>
+                            </field>
+                        </group>
+                        <group id="link_existing" translate="label" showInDefault="1" showInWebsite="1" sortOrder="26">
+                            <label>Link to an Existing HiConversion Account</label>
+                            <field id="site_url" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                                <label>Your Site URL</label>
+                                <frontend_class>validate-url</frontend_class>
+                            </field>
+                            <field id="email" translate="label" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
+                                <label>Your Email Address</label>
+                                <frontend_class>validate-email</frontend_class>
+                            </field>
+                        </group>
+                        <group id="advanced" translate="label" showInDefault="1" showInWebsite="1" sortOrder="26">
+                            <label>Advanced</label>
+                            <field id="bn_code" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                                <label>Build Notation Code</label>
+                                <config_path>hiconversion/configuration/bn_code</config_path>
+                            </field>
+                        </group>
                     </group>
                     <group id="braintree_country_specific" translate="label" showInDefault="1" showInWebsite="1" sortOrder="30">
                         <label>Country Specific Settings</label>
