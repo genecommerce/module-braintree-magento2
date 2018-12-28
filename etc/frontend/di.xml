@@ -88,4 +88,28 @@
     <type name="Magento\Catalog\Block\Product\ListProduct">
         <plugin name="braintreeProductDetailsBlockPlugin" type="\Magento\Braintree\Plugin\ProductDetailsBlockPlugin" />
     </type>
+
+    <type name="Magento\Framework\View\Page\Config\Renderer">
+       <plugin name="hic_plugin" type="Magento\Braintree\Plugin\HicPlugin" sortOrder="1" />
+    </type>
+    <type name="Magento\Customer\CustomerData\SectionPoolInterface">
+        <arguments>
+            <argument name="sectionSourceMap" xsi:type="array">
+                <item name="hic-cart-data" xsi:type="string">Magento\Braintree\CustomerData\CartData</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\CustomerData\SectionPoolInterface">
+        <arguments>
+            <argument name="sectionSourceMap" xsi:type="array">
+                <item name="hic-user-data" xsi:type="string">Magento\Braintree\CustomerData\UserData</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Braintree\Model\Hic\Data">
+        <arguments>
+            <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
 </config>

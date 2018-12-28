@@ -15,4 +15,59 @@
         <section name="cart"/>
         <section name="checkout-data"/>
     </action>
+
+    <action name="checkout/cart/add">
+        <section name="hic-cart-data"/>
+    </action>
+    <action name="checkout/cart/delete">
+        <section name="hic-cart-data"/>
+    </action>
+    <action name="checkout/cart/updatePost">
+        <section name="hic-cart-data"/>
+    </action>
+    <action name="checkout/cart/updateItemOptions">
+        <section name="hic-cart-data"/>
+    </action>
+    <action name="checkout/cart/couponPost">
+        <section name="hic-cart-data"/>
+    </action>
+    <action name="checkout/cart/estimatePost">
+        <section name="hic-cart-data"/>
+    </action>
+    <action name="checkout/cart/estimateUpdatePost">
+        <section name="hic-cart-data"/>
+    </action>
+    <action name="checkout/onepage/saveOrder">
+        <section name="hic-cart-data"/>
+    </action>
+    <action name="checkout/sidebar/removeItem">
+        <section name="hic-cart-data"/>
+    </action>
+    <action name="checkout/sidebar/updateItemQty">
+        <section name="hic-cart-data"/>
+    </action>
+    <action name="rest/*/V1/carts/*/payment-information">
+        <section name="hic-cart-data"/>
+    </action>
+    <action name="rest/*/V1/guest-carts/*/payment-information">
+        <section name="hic-cart-data"/>
+    </action>
+    <action name="rest/*/V1/guest-carts/*/selected-payment-method">
+        <section name="hic-cart-data"/>
+    </action>
+    <action name="rest/*/V1/carts/*/selected-payment-method">
+        <section name="hic-cart-data"/>
+    </action>
+    <action name="customer/account/logout">
+        <section name="hic-user-data"/>
+    </action>
+    <action name="customer/account/loginPost">
+        <section name="hic-user-data"/>
+    </action>
+    <action name="customer/account/createPost">
+        <section name="hic-user-data"/>
+    </action>
+    <action name="customer/ajax/login">
+        <section name="hic-user-data"/>
+    </action>
 </config>

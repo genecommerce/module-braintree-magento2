@@ -1,0 +1,47 @@
+<?php
+/**
+ * HiConversion
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * [http://opensource.org/licenses/MIT]
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * @Copyright © 2015 HiConversion, Inc. All rights reserved.
+ * @license [http://opensource.org/licenses/MIT] MIT License
+ */
+
+$helper = $this->helper('Magento\Braintree\Helper\HicHelper');
+?>
+<?php if ($helper->isEnabled()) :?>
+
+<script id="hiconversion_head_always" type="text/javascript">
+    var __hic = __hic || {};
+    (function(){
+        try {
+            __hic.version = "1.1.9";
+            __hic.data = __hic.data || {};
+            __hic.data.platform = "magento2";
+            __hic.data.platformVersion = "<?php /* @noEscape */ echo $helper->getMageVersion(); ?>";
+            __hic.data.platformEdition = "<?php /* @noEscape */ echo $helper->getMageEdition(); ?>";
+            __hic.data.pid = "<?php /* @noEscape */ echo $helper->getSiteId(); ?>";
+            
+            var script = document.createElement("script");
+            script.id = "hiconversion_30";
+            script.async = "async";
+            script.type = "text/javascript";
+            script.src = "<?php /* @noEscape */ echo $helper->getDeployUrl(); ?>";
+            var nodes = document.getElementsByTagName("script");
+            if (nodes.length > 0) {
+                nodes[0].parentNode.insertBefore(script, nodes[0]);
+            }
+        } catch (e) {
+        }
+    })();
+</script>
+<?php endif; ?>

@@ -796,6 +796,11 @@
         </arguments>
     </virtualType>
 
+    <!-- HiConversion -->
+    <type name="Magento\Braintree\Gateway\Request\ChannelDataBuilder">
+        <plugin name="hic_channel_data_plugin" type="Magento\Braintree\Plugin\HicChannelDataPlugin" /> 
+    </type>
+
     <!-- Preferences -->
     <preference for="Magento\Braintree\Api\AuthInterface" type="Magento\Braintree\Model\ApplePay\Auth" />
     <preference for="Magento\Braintree\Api\Data\AuthDataInterface" type="Magento\Braintree\Model\ApplePay\Auth\Data" />
