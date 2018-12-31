@@ -11,4 +11,5 @@
     margin: 0.5rem 0 0;
     width: 320px;
 }
-.braintree-credentials-success-message { background: none; margin: 0; }
+.braintree-credentials-success-message,
+.hic-activation-success-message { background: none; margin: 0; }

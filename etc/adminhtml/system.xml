@@ -158,7 +158,7 @@
                             <config_path>payment/braintree/sort_order</config_path>
                         </field>
                     </group>
-                    <group id="braintree_hic" translate="label" showInDefault="1" showInWebsite="1" sortOrder="25">
+                    <group id="braintree_hic" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="25">
                         <comment><![CDATA[<a href="https://h30.hiconversion.net" target="_blank">Click here to go to HiConversion</a>]]></comment>
                         <label>HiConversion Experience Optimization through Braintree</label>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
@@ -177,13 +177,21 @@
                             <field id="site_url" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                                 <label>Your Site URL</label>
                                 <frontend_class>validate-url</frontend_class>
+                                <config_path>hiconversion/configuration/site_url</config_path>
                             </field>
                             <field id="email" translate="label" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
                                 <label>Your Email Address</label>
                                 <frontend_class>validate-email</frontend_class>
+                                <config_path>hiconversion/configuration/email</config_path>
                             </field>
                             <field id="password" translate="label" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
                                 <label>Password</label>
+                                <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                                <config_path>hiconversion/configuration/password</config_path>
+                            </field>
+                            <field id="activate" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
+                                <label></label>
+                                <frontend_model>Magento\Braintree\Block\Adminhtml\Form\Field\HicActivation</frontend_model>
                             </field>
                         </group>
                         <group id="link_existing" translate="label" showInDefault="1" showInWebsite="1" sortOrder="26">
@@ -198,7 +206,7 @@
                             </field>
                         </group>
                         <group id="advanced" translate="label" showInDefault="1" showInWebsite="1" sortOrder="26">
-                            <label>Advanced</label>
+                            <label>Advanced Settings</label>
                             <field id="bn_code" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
                                 <label>Build Notation Code</label>
                                 <config_path>hiconversion/configuration/bn_code</config_path>
