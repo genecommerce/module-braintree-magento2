@@ -12,6 +12,7 @@ use Magento\Braintree\Model\GooglePay\Ui\ConfigProvider;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Braintree\Observer\DataAssignObserver;
 use Magento\Braintree\Model\Paypal\Helper\AbstractHelper;
+use Magento\Framework\Event\ManagerInterface;
 
 /**
  * Class QuoteUpdater
@@ -24,13 +25,20 @@ class QuoteUpdater extends AbstractHelper
     private $quoteRepository;
 
     /**
+     * @var ManagerInterface
+     */
+    private $eventManager;
+
+    /**
      * QuoteUpdater constructor.
      * @param CartRepositoryInterface $quoteRepository
      */
     public function __construct(
-        CartRepositoryInterface $quoteRepository
+        CartRepositoryInterface $quoteRepository,
+        ManagerInterface $eventManager
     ) {
         $this->quoteRepository = $quoteRepository;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -64,6 +72,11 @@ class QuoteUpdater extends AbstractHelper
      */
     private function updateQuote(Quote $quote, array $details)
     {
+        $this->eventManager->dispatch('braintree_googlepay_update_quote_before', [
+            'quote' => $quote,
+            'googlepay_response' => $details
+        ]);
+
         $quote->setMayEditShippingAddress(false);
         $quote->setMayEditShippingMethod(true);
 
@@ -81,6 +94,11 @@ class QuoteUpdater extends AbstractHelper
         }
 
         $this->quoteRepository->save($quote);
+
+        $this->eventManager->dispatch('braintree_googlepay_update_quote_after', [
+            'quote' => $quote,
+            'googlepay_response' => $details
+        ]);
     }
 
     /**
