@@ -163,7 +163,7 @@ class Config implements ConfigInterface
      */
     public function getSandbox()
     {
-        return (bool) $this->getConfigValue('payment/braintree/environment') == 'sandbox';
+        return $this->getConfigValue('payment/braintree/environment') === 'sandbox';
     }
 
     /**
