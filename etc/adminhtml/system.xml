@@ -296,17 +296,102 @@
                             <config_path>payment/braintree_paypal/payee_email</config_path>
                             <comment>Consult Braintree Support before enabling this option.</comment>
                         </field>
-                        <field id="button_shape" translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="0">
-                            <label>Button Shape</label>
-                            <source_model>Magento\Braintree\Model\Config\Source\Shape</source_model>
-                            <config_path>payment/braintree_paypal/button_shape</config_path>
-                        </field>
 
-                        <field id="button_color" translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="0">
-                            <label>Button Color</label>
-                            <source_model>Magento\Braintree\Model\Config\Source\Color</source_model>
-                            <config_path>payment/braintree_paypal/button_color</config_path>
-                        </field>
+                        <group id="button_cart" translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Mini-Cart and Cart Page</label>
+                            <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
+                            <field id="disabled_funding" translate="label" type="multiselect" sortOrder="131" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Disable Funding Options</label>
+                                <source_model>Magento\Braintree\Model\Adminhtml\Source\DisabledFundingOptions</source_model>
+                                <can_be_empty>1</can_be_empty>
+                                <config_path>payment/braintree_paypal/disabled_funding_cart</config_path>
+                            </field>
+                            <field id="button_customise_cart"  translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Customise Button</label>
+                                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                                <config_path>payment/braintree_paypal/button_customise_cart</config_path>
+                            </field>
+                            <field id="button_shape_cart" translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Shape</label>
+                                <source_model>Magento\Braintree\Model\Config\Source\Shape</source_model>
+                                <config_path>payment/braintree_paypal/button_shape_cart</config_path>
+                                <depends>
+                                    <field id="button_customise_cart">1</field>
+                                </depends>
+                            </field>
+                            <field id="button_size_cart" translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Size</label>
+                                <source_model>Magento\Braintree\Model\Config\Source\Size</source_model>
+                                <config_path>payment/braintree_paypal/button_size_cart</config_path>
+                                <depends>
+                                    <field id="button_customise_cart">1</field>
+                                </depends>
+                            </field>
+                            <field id="button_layout_cart" translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Layout</label>
+                                <source_model>Magento\Braintree\Model\Config\Source\Layout</source_model>
+                                <config_path>payment/braintree_paypal/button_layout_cart</config_path>
+                                <depends>
+                                    <field id="button_customise_cart">1</field>
+                                </depends>
+                            </field>
+                            <field id="button_color_cart" translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Color</label>
+                                <source_model>Magento\Braintree\Model\Config\Source\Color</source_model>
+                                <config_path>payment/braintree_paypal/button_color_cart</config_path>
+                                <depends>
+                                    <field id="button_customise_cart">1</field>
+                                </depends>
+                            </field>
+                        </group>
+                        <group id="button_checkout" translate="label" type="select" sortOrder="141" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Checkout Page</label>
+                            <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
+
+                            <field id="disabled_funding" translate="label" type="multiselect" sortOrder="131" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Disable Funding Options</label>
+                                <source_model>Magento\Braintree\Model\Adminhtml\Source\DisabledFundingOptions</source_model>
+                                <can_be_empty>1</can_be_empty>
+                                <config_path>payment/braintree_paypal/disabled_funding_checkout</config_path>
+                            </field>
+                            <field id="button_customise_checkout"  translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Customise Button</label>
+                                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                                <config_path>payment/braintree_paypal/button_customise_checkout</config_path>
+                            </field>
+                            <field id="button_shape_checkout" translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Shape</label>
+                                <source_model>Magento\Braintree\Model\Config\Source\Shape</source_model>
+                                <config_path>payment/braintree_paypal/button_shape_checkout</config_path>
+                                <depends>
+                                    <field id="button_customise_checkout">1</field>
+                                </depends>
+                            </field>
+                            <field id="button_size_checkout" translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Size</label>
+                                <source_model>Magento\Braintree\Model\Config\Source\Size</source_model>
+                                <config_path>payment/braintree_paypal/button_size_checkout</config_path>
+                                <depends>
+                                    <field id="button_customise_checkout">1</field>
+                                </depends>
+                            </field>
+                            <field id="button_layout_checkout" translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Layout</label>
+                                <source_model>Magento\Braintree\Model\Config\Source\Layout</source_model>
+                                <config_path>payment/braintree_paypal/button_layout_checkout</config_path>
+                                <depends>
+                                    <field id="button_customise_checkout">1</field>
+                                </depends>
+                            </field>
+                            <field id="button_color_checkout" translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Color</label>
+                                <source_model>Magento\Braintree\Model\Config\Source\Color</source_model>
+                                <config_path>payment/braintree_paypal/button_color_checkout</config_path>
+                                <depends>
+                                    <field id="button_customise_checkout">1</field>
+                                </depends>
+                            </field>
+                        </group>
                     </group>
                     <group id="braintree_paypal_credit" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="40">
                         <label>PayPal Credit through Braintree</label>

@@ -38,4 +38,19 @@ class Color implements \Magento\Framework\Option\ArrayInterface
             3 => __('Silver')
         ];
     }
+
+    /**
+     * Values in the format needed for the PayPal JS SDK
+     * @return array
+     */
+    public function toRawValues()
+    {
+        return [
+            0 => 'blue',
+            1 => 'black',
+            2 => 'gold',
+            3 => 'silver'
+        ];
+    }
 }
+

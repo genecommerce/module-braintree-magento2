@@ -70,6 +70,12 @@ class ConfigProvider implements ConfigProviderInterface
                         'https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-medium.png',
                     'vaultCode' => self::PAYPAL_VAULT_CODE,
                     'paymentIcon' => $this->config->getPayPalIcon(),
+                    'style' => [
+                        'shape' => $this->config->getButtonShape(Config::BUTTON_AREA_CHECKOUT),
+                        'size' => $this->config->getButtonSize(Config::BUTTON_AREA_CHECKOUT),
+                        'layout' => $this->config->getButtonLayout(Config::BUTTON_AREA_CHECKOUT),
+                        'color' => $this->config->getButtonColor(Config::BUTTON_AREA_CHECKOUT)
+                    ]
                 ],
 
                 self::PAYPAL_CREDIT_CODE => [
@@ -82,8 +88,15 @@ class ConfigProvider implements ConfigProviderInterface
                     'paymentAcceptanceMarkSrc' =>
                         'https://www.paypalobjects.com/webstatic/en_US/i/buttons/ppc-acceptance-medium.png',
                     'paymentIcon' => $this->config->getPayPalIcon(),
+                    'style' => [
+                        'shape' => $this->config->getButtonShape(Config::BUTTON_AREA_CHECKOUT),
+                        'size' => $this->config->getButtonSize(Config::BUTTON_AREA_CHECKOUT),
+                        'layout' => $this->config->getButtonLayout(Config::BUTTON_AREA_CHECKOUT),
+                        'color' => $this->config->getButtonColor(Config::BUTTON_AREA_CHECKOUT)
+                    ]
                 ]
             ]
         ];
     }
 }
+

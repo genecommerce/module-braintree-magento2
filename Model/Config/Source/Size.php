@@ -3,11 +3,11 @@
 namespace Magento\Braintree\Model\Config\Source;
 
 /**
- * Class Shape
+ * Class Size
  * @package Magento\Braintree\Model\Config\Source
- * @author Aidan Threadgold <aidan@gene.co.uk>
+ * @author Muj <muj@gene.co.uk>
  */
-class Shape implements \Magento\Framework\Option\ArrayInterface
+class Size implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * Options getter
@@ -16,7 +16,11 @@ class Shape implements \Magento\Framework\Option\ArrayInterface
      */
     public function toOptionArray()
     {
-        return [['value' => 0, 'label' => __('Pill')], ['value' => 1, 'label' => __('Rectangle')]];
+        return [
+            ['value' => 0, 'label' => __('Medium')],
+            ['value' => 1, 'label' => __('Large')],
+            ['value' => 2, 'label' => __('Responsive')]
+        ];
     }
 
     /**
@@ -26,7 +30,7 @@ class Shape implements \Magento\Framework\Option\ArrayInterface
      */
     public function toArray()
     {
-        return [0 => __('Pill'), 1 => __('Rectangle')];
+        return [0 => __('Medium'), 1 => __('Large'), 2 => __('Responsive')];
     }
 
     /**
@@ -36,8 +40,9 @@ class Shape implements \Magento\Framework\Option\ArrayInterface
     public function toRawValues()
     {
         return [
-            0 => 'pill',
-            1 => 'rect',
+            0 => 'medium',
+            1 => 'large',
+            2 => 'responsive'
         ];
     }
 }
