@@ -29,15 +29,6 @@ define(
             );
         }
 
-        if (config[payPalCreditType].isActive) {
-            rendererList.push(
-                {
-                    type: payPalCreditType,
-                    component: 'Magento_Braintree/js/view/payment/method-renderer/paypal-credit'
-                }
-            );
-        }
-
         if (config[payPalType].isActive) {
             rendererList.push(
                 {
@@ -47,7 +38,17 @@ define(
             );
         }
 
+        if (config[payPalCreditType].isActive) {
+            rendererList.push(
+                {
+                    type: payPalCreditType,
+                    component: 'Magento_Braintree/js/view/payment/method-renderer/paypal-credit'
+                }
+            );
+        }
+
         /** Add view logic here if needed */
         return Component.extend({});
     }
 );
+

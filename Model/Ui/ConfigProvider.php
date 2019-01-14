@@ -79,12 +79,20 @@ final class ConfigProvider implements ConfigProviderInterface
                     'availableCardTypes' => $this->config->getAvailableCardTypes(),
                     'useCvv' => $this->config->isCvvEnabled(),
                     'environment' => $this->config->getEnvironment(),
-                    'buttonColor' => $this->paypalConfig->getButtonColor(),
-                    'buttonShape' => $this->paypalConfig->getButtonShape(),
                     'kountMerchantId' => $this->config->getKountMerchantId(),
                     'hasFraudProtection' => $this->config->hasFraudProtection(),
                     'merchantId' => $this->config->getMerchantId(),
-                    'ccVaultCode' => self::CC_VAULT_CODE
+                    'ccVaultCode' => self::CC_VAULT_CODE,
+                    'style' => [
+                        'shape' => $this->paypalConfig->getButtonShape(PayPalConfig::BUTTON_AREA_CHECKOUT),
+                        'size' => $this->paypalConfig->getButtonSize(PayPalConfig::BUTTON_AREA_CHECKOUT),
+                        'layout' => $this->paypalConfig->getButtonLayout(PayPalConfig::BUTTON_AREA_CHECKOUT),
+                        'color' => $this->paypalConfig->getButtonColor(PayPalConfig::BUTTON_AREA_CHECKOUT)
+                    ],
+                    'disabledFunding' => [
+                        'card' => $this->paypalConfig->getDisabledFundingOptionCard(),
+                        'elv' => $this->paypalConfig->getDisabledFundingOptionElv()
+                    ]
                 ],
                 Config::CODE_3DSECURE => [
                     'enabled' => $this->config->isVerify3DSecure(),
@@ -119,3 +127,4 @@ final class ConfigProvider implements ConfigProviderInterface
         return $this->clientToken;
     }
 }
+

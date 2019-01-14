@@ -25,6 +25,7 @@ define([
         clientInstance: null,
         hostedFieldsInstance: null,
         paypalInstance: null,
+        code: 'braintree',
 
         /**
          * Get Braintree api client
@@ -47,7 +48,7 @@ define([
          * @returns {String}
          */
         getCode: function () {
-            return 'braintree';
+            return this.code;
         },
 
         /**
@@ -69,14 +70,35 @@ define([
          * @returns {String}
          */
         getColor: function () {
-            return window.checkoutConfig.payment[this.getCode()].buttonColor;
+            return window.checkoutConfig.payment[this.getCode()].style.color;
         },
 
         /**
          * @returns {String}
          */
         getShape: function () {
-            return window.checkoutConfig.payment[this.getCode()].buttonShape;
+            return window.checkoutConfig.payment[this.getCode()].style.shape;
+        },
+
+        /**
+         * @returns {String}
+         */
+        getLayout: function () {
+            return window.checkoutConfig.payment[this.getCode()].style.layout;
+        },
+
+        /**
+         * @returns {String}
+         */
+        getSize: function () {
+            return window.checkoutConfig.payment[this.getCode()].style.size;
+        },
+
+        /**
+         * @returns {String}
+         */
+        getDisabledFunding: function () {
+            return window.checkoutConfig.payment[this.getCode()].disabledFunding;
         },
 
         /**
@@ -234,27 +256,45 @@ define([
 
                 var paypalPayment = this.config.paypal,
                     onPaymentMethodReceived = this.config.onPaymentMethodReceived,
-                    style = {};
+                    style = {
+                        color: this.getColor(),
+                        shape: this.getShape(),
+                        layout: this.getLayout(),
+                        size: this.getSize()
+                    },
+                    funding = {
+                        allowed: [],
+                        disallowed: []
+                    };
 
                 if (this.config.offerCredit === true) {
                     paypalPayment.offerCredit = true;
-                    style = {
-                        label: 'credit'
-                    };
+                    style.label = "credit";
+                    style.color = "darkblue";
+                    style.layout = "horizontal";
+                    funding.allowed.push(paypal.FUNDING.CREDIT);
                 } else {
                     paypalPayment.offerCredit = false;
-                    style = {
-                        color: this.getColor(),
-                        shape: this.getShape()
-                    };
+                    funding.disallowed.push(paypal.FUNDING.CREDIT);
                 }
 
+                // Disabled function options
+                var disabledFunding = this.getDisabledFunding();
+                if (true === disabledFunding.card) {
+                    funding.disallowed.push(paypal.FUNDING.CARD);
+                }
+                if (true === disabledFunding.elv) {
+                    funding.disallowed.push(paypal.FUNDING.ELV);
+                }
+
+                // Render
                 this.config.paypalInstance = paypalCheckoutInstance;
                 $('#' + this.config.buttonId).html('');
                 paypal.Button.render({
                     env: this.getEnvironment(),
                     style: style,
                     commit: true,
+                    funding: funding,
 
                     payment: function () {
                         return paypalCheckoutInstance.createPayment(paypalPayment);
@@ -336,3 +376,4 @@ define([
         }
     };
 });
+
