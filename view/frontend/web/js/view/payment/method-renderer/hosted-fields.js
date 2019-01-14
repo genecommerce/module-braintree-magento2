@@ -10,8 +10,9 @@ define([
     'Magento_Braintree/js/view/payment/method-renderer/cc-form',
     'Magento_Braintree/js/validator',
     'Magento_Vault/js/view/payment/vault-enabler',
+    'Magento_Checkout/js/model/payment/additional-validators',
     'mage/translate'
-], function ($, Component, validator, VaultEnabler, $t) {
+], function ($, Component, validator, VaultEnabler, additionalValidators, $t) {
     'use strict';
 
     return Component.extend({
@@ -188,11 +189,10 @@ define([
          * Trigger order placing
          */
         placeOrderClick: function () {
-            if (this.validateFormFields()) {
+            if (this.validateFormFields() && additionalValidators.validate()) {
                 this.placeOrder();
             }
         },
-
         /**
          * @returns {String}
          */
