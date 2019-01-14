@@ -13,6 +13,7 @@ use Magento\Braintree\Model\Ui\PayPal\ConfigProvider;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Braintree\Observer\DataAssignObserver;
 use Magento\Braintree\Gateway\Config\PayPal\Config;
+use Magento\Framework\Event\ManagerInterface;
 
 /**
  * Class QuoteUpdater
@@ -30,6 +31,11 @@ class QuoteUpdater extends AbstractHelper
     private $quoteRepository;
 
     /**
+     * @var ManagerInterface
+     */
+    private $eventManager;
+
+    /**
      * Constructor
      *
      * @param Config $config
@@ -37,10 +43,12 @@ class QuoteUpdater extends AbstractHelper
      */
     public function __construct(
         Config $config,
-        CartRepositoryInterface $quoteRepository
+        CartRepositoryInterface $quoteRepository,
+        ManagerInterface $eventManager
     ) {
         $this->config = $config;
         $this->quoteRepository = $quoteRepository;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -74,6 +82,11 @@ class QuoteUpdater extends AbstractHelper
      */
     private function updateQuote(Quote $quote, array $details)
     {
+        $this->eventManager->dispatch('braintree_paypal_update_quote_before', [
+            'quote' => $quote,
+            'paypal_response' => $details
+        ]);
+
         $quote->setMayEditShippingAddress(false);
         $quote->setMayEditShippingMethod(true);
 
@@ -91,6 +104,11 @@ class QuoteUpdater extends AbstractHelper
         }
 
         $this->quoteRepository->save($quote);
+
+        $this->eventManager->dispatch('braintree_paypal_update_quote_after', [
+            'quote' => $quote,
+            'paypal_response' => $details
+        ]);
     }
 
     /**
