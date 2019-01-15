@@ -10,14 +10,14 @@
         <section id="payment">
             <group id="braintree_section" sortOrder="6" showInDefault="0" showInWebsite="1" showInStore="1">
                 <group id="braintree" translate="label comment" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Braintree</label>
-                    <comment><![CDATA[Accept credit/debit cards and PayPal in your Magento store.<br/>No setup or monthly fees and your customers never leave your store to complete the purchase.]]></comment>
+                    <label><![CDATA[Braintree Payments (by <a href="https://www.gene.co.uk/braintree-payments/" target="_blank">GENE Commerce</a>)]]></label>
+                    <comment><![CDATA[Accept credit/debit cards and PayPal in your Magento store.<br />No setup or monthly fees and your customers never leave your store to complete the purchase.]]></comment>
                     <fieldset_css>complex braintree-section</fieldset_css>
                     <frontend_model>Magento\Braintree\Block\System\Config\Form\Fieldset</frontend_model>
                     <attribute type="activity_path">payment/braintree/active</attribute>
                     <attribute type="displayIn">recommended_solutions</attribute>
                     <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Enable this Solution</label>
+                        <label>Enable Card Payments</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/braintree/active</config_path>
                         <requires>
@@ -45,17 +45,13 @@
                         </depends>
                     </field>
                     <field id="braintree_cc_vault_active" translate="label" type="select" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Vault Enabled</label>
+                        <label>Enable Vault for Card Payments</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/braintree_cc_vault/active</config_path>
                         <requires>
                             <group id="braintree_required"/>
                         </requires>
                     </field>
-                    <group id="configuration_details" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
-                        <comment>http://docs.magento.com/m2/ce/user_guide/payment/braintree.html</comment>
-                        <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
-                    </group>
                     <group id="braintree_required" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="5">
                         <comment><![CDATA[<a href="https://www.braintreegateway.com/login" target="_blank">Click here to login to your existing Braintree account</a>. Or to setup a new account and accept payments on your website, <a href="https://apply.braintreegateway.com/signup/us" target="_blank">click here to signup for a Braintree account</a>.<br><br>Powered by <a href="https://www.braintreepayments.com/features/hosted-fields" target="_blank">Braintree v.zero with Hosted Fields</a> latest technology. Hosted Fields are small, transparent iframes that replace the sensitive credit card inputs in your checkout flow - helping you meet the latest data security requirements while ensuring your customization doesn't suffer. <a href="https://www.braintreepayments.com/features/hosted-fields" target="_blank">Find out more</a>.]]></comment>
                         <label>Basic Braintree Settings</label>
