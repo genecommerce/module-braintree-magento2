@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*browser:true*/
@@ -323,6 +323,9 @@ define([
                     }
                 }, '#' + this.config.buttonId).then(function () {
                     this.enableButton();
+                    if (typeof this.config.onPaymentMethodError === 'function') {
+                        this.config.onPaymentMethodError();
+                    }
                 }.bind(this));
             }.bind(this));
         },

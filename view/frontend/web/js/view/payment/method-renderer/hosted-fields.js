@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*browser:true*/
@@ -117,6 +117,9 @@ define([
                         validator.getMageCardType(event.cards[0].type, this.getCcAvailableTypes())
                     );
                     this.validateCardType();
+                } else {
+                    this.isValidCardNumber = event.fields.number.isValid;
+                    this.validateCardType();
                 }
             }
 
@@ -151,7 +154,7 @@ define([
         validateCardType: function () {
             return this.validateField(
                 'cc_number',
-                (this.selectedCardType() !== null && this.isValidCardNumber)
+                (this.isValidCardNumber)
             );
         },
 
