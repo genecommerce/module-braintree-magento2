@@ -13,6 +13,7 @@ use Magento\Braintree\Model\Ui\PayPal\ConfigProvider;
 use Magento\Braintree\Observer\DataAssignObserver;
 use Magento\Braintree\Gateway\Config\PayPal\Config;
 use Magento\Braintree\Model\Paypal\Helper\QuoteUpdater;
+use Magento\Framework\Event\ManagerInterface;
 
 /**
  * Class QuoteUpdaterTest
@@ -36,6 +37,11 @@ class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
     private $quoteRepositoryMock;
 
     /**
+     * @var ManagerInterface
+     */
+    private $managerMock;
+
+    /**
      * @var Address|\PHPUnit_Framework_MockObject_MockObject
      */
     private $billingAddressMock;
@@ -57,7 +63,6 @@ class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->quoteRepositoryMock = $this->getMockBuilder(CartRepositoryInterface::class)
             ->getMockForAbstractClass();
-
         $this->billingAddressMock = $this->getMockBuilder(Address::class)
             ->setMethods(
                 [
@@ -92,9 +97,14 @@ class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
             )->disableOriginalConstructor()
             ->getMock();
 
+        $this->managerMock = $this->getMockBuilder(ManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->quoteUpdater = new QuoteUpdater(
             $this->configMock,
-            $this->quoteRepositoryMock
+            $this->quoteRepositoryMock,
+            $this->managerMock
         );
     }
 

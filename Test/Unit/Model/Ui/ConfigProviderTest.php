@@ -146,8 +146,16 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
                             'merchantId' => 'test-merchant-id',
                             'hasFraudProtection' => true,
                             'ccVaultCode' => ConfigProvider::CC_VAULT_CODE,
-                            'buttonColor' => null,
-                            'buttonShape' => null
+                            'style' => [
+                                'shape' => null,
+                                'size' => null,
+                                'layout' => null,
+                                'color' => null,
+                            ],
+                            'disabledFunding' => [
+                                'card' => null,
+                                'elv' => null,
+                            ]
                         ],
                         Config::CODE_3DSECURE => [
                             'enabled' => true,

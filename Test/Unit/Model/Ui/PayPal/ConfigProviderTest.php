@@ -102,13 +102,19 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
                             'title' => 'Payment Title',
                             'isAllowShippingAddressOverride' => true,
                             'merchantName' => 'Test',
-                            'payeeEmail' => '',
+                            'payeeEmail' => null,
                             'locale' => 'en_US',
                             'paymentAcceptanceMarkSrc' =>
                                 'https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-medium.png',
                             'vaultCode' => ConfigProvider::PAYPAL_VAULT_CODE,
                             'paymentIcon' => [
                                 'width' => 30, 'height' => 26, 'url' => 'https://icon.test.url'
+                            ],
+                            'style' => [
+                                'shape' => null,
+                                'size' => null,
+                                'layout' => null,
+                                'color' => null,
                             ]
                         ],
 
@@ -117,12 +123,18 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
                             'title' => __('PayPal Credit'),
                             'isAllowShippingAddressOverride' => true,
                             'merchantName' => 'Test',
-                            'payeeEmail' => '',
+                            'payeeEmail' => null,
                             'locale' => 'en_us',
                             'paymentAcceptanceMarkSrc' =>
                                 'https://www.paypalobjects.com/webstatic/en_US/i/buttons/ppc-acceptance-medium.png',
                             'paymentIcon' => [
                                 'width' => 30, 'height' => 26, 'url' => 'https://icon.test.url'
+                            ],
+                            'style' => [
+                                'shape' => null,
+                                'size' => null,
+                                'layout' => null,
+                                'color' => null,
                             ]
                         ]
                     ]
