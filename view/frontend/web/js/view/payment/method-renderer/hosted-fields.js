@@ -32,6 +32,7 @@ define([
 
             onInstanceReady: function (instance) {
                 instance.on('validityChange', this.onValidityChange.bind(this));
+                instance.on('cardTypeChange', this.onCardTypeChange.bind(this));
             }
         },
 
@@ -126,6 +127,21 @@ define([
             // Other field validations
             this.isValidExpirationDate = event.fields.expirationDate.isValid;
             this.isValidCvvNumber = event.fields.cvv.isValid;
+        },
+
+        /**
+         * Triggers on Hosted Field card type changes
+         * @param {Object} event
+         * @returns {Boolean}
+         */
+        onCardTypeChange: function (event) {
+            if (event.cards.length === 1) {
+                this.selectedCardType(
+                    validator.getMageCardType(event.cards[0].type, this.getCcAvailableTypes())
+                );
+            } else {
+                this.selectedCardType(null);
+            }
         },
 
         /**

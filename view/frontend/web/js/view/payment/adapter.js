@@ -221,7 +221,22 @@ define([
 
             hostedFields.create({
                 client: this.clientInstance,
-                fields: this.config.hostedFields
+                fields: this.config.hostedFields,
+                styles: {
+                    "input": {
+                        "font-size": "14pt",
+                        "color": "#3A3A3A"
+                    },
+                    ":focus": {
+                        "color": "black"
+                    },
+                    ".valid": {
+                        "color": "green"
+                    },
+                    ".invalid": {
+                        "color": "red"
+                    }
+                }
             }, function (createErr, hostedFieldsInstance) {
                 if (createErr) {
                     self.showError($t("Braintree hosted fields could not be initialized. Please contact the store owner."));

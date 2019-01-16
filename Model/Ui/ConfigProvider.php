@@ -10,6 +10,8 @@ use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Braintree\Gateway\Config\Config;
 use Magento\Braintree\Gateway\Config\PayPal\Config as PayPalConfig;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
+use Magento\Payment\Model\CcConfig;
+use Magento\Framework\View\Asset\Source;
 
 /**
  * Class ConfigProvider
@@ -46,6 +48,21 @@ final class ConfigProvider implements ConfigProviderInterface
     private $clientToken = '';
 
     /**
+     * @var CcConfig
+     */
+    private $ccConfig;
+
+    /**
+     * @var Source
+     */
+    private $assetSource;
+
+    /**
+     * @var array
+     */
+    private $icons = [];
+
+    /**
      * ConfigProvider constructor.
      * @param Config $config
      * @param PayPalConfig $payPalConfig
@@ -54,11 +71,15 @@ final class ConfigProvider implements ConfigProviderInterface
     public function __construct(
         Config $config,
         PayPalConfig $payPalConfig,
-        BraintreeAdapter $adapter
+        BraintreeAdapter $adapter,
+        CcConfig $ccConfig,
+        Source $assetSource
     ) {
         $this->config = $config;
         $this->adapter = $adapter;
         $this->paypalConfig = $payPalConfig;
+        $this->ccConfig = $ccConfig;
+        $this->assetSource = $assetSource;
     }
 
     /**
@@ -92,7 +113,8 @@ final class ConfigProvider implements ConfigProviderInterface
                     'disabledFunding' => [
                         'card' => $this->paypalConfig->getDisabledFundingOptionCard(),
                         'elv' => $this->paypalConfig->getDisabledFundingOptionElv()
-                    ]
+                    ],
+                    'icons' => $this->getIcons()
                 ],
                 Config::CODE_3DSECURE => [
                     'enabled' => $this->config->isVerify3DSecure(),
@@ -125,6 +147,36 @@ final class ConfigProvider implements ConfigProviderInterface
         }
 
         return $this->clientToken;
+    }
+
+    /**
+     * Get icons for available payment methods
+     * @return array
+     */
+    public function getIcons()
+    {
+        if (!empty($this->icons)) {
+            return $this->icons;
+        }
+
+        $types = $this->ccConfig->getCcAvailableTypes();
+        $types['NONE'] = '';
+        foreach (array_keys($types) as $code) {
+            if (!array_key_exists($code, $this->icons)) {
+                $asset = $this->ccConfig->createAsset('Magento_Braintree::images/cc/' . strtoupper($code) . '.png');
+                if ($asset) {
+                    $placeholder = $this->assetSource->findSource($asset);
+                    if ($placeholder) {
+                        list($width, $height) = getimagesize($asset->getSourceFile());
+                        $this->icons[$code] = [
+                            'url' => $asset->getUrl()
+                        ];
+                    }
+                }
+            }
+        }
+
+        return $this->icons;
     }
 }
 

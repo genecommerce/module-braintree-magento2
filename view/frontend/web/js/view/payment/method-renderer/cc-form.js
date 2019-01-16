@@ -349,7 +349,18 @@ define(
 
                 braintree.tokenizeHostedFields();
                 return false;
-            }
+            },
+
+            /**
+             * Get payment icons
+             * @param {String} type
+             * @returns {Boolean}
+             */
+            getIcons: function (type) {
+                return window.checkoutConfig.payment.braintree.icons.hasOwnProperty(type) ?
+                    window.checkoutConfig.payment.braintree.icons[type]
+                    : false;
+            },
         });
     }
 );
