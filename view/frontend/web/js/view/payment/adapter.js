@@ -295,6 +295,7 @@ define([
                     style: style,
                     commit: true,
                     funding: funding,
+                    locale: this.config.paypal.locale,
 
                     payment: function () {
                         return paypalCheckoutInstance.createPayment(paypalPayment);

@@ -180,6 +180,7 @@ define(
                             env: this.environment,
                             style: style,
                             funding: funding,
+                            locale: data.locale,
 
                             payment: function () {
                                 return paypalCheckoutInstance.createPayment(data);
