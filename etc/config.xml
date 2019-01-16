@@ -10,7 +10,7 @@
         <dev>
             <js>
                 <minify_exclude>
-                    <googlepay>https://pay.google.com/gp/p/js/pay</googlepay>
+                    https://pay.google.com/gp/p/js/pay
                 </minify_exclude>
             </js>
         </dev>
