@@ -124,7 +124,7 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
                             'isAllowShippingAddressOverride' => true,
                             'merchantName' => 'Test',
                             'payeeEmail' => null,
-                            'locale' => 'en_us',
+                            'locale' => 'en_US',
                             'paymentAcceptanceMarkSrc' =>
                                 'https://www.paypalobjects.com/webstatic/en_US/i/buttons/ppc-acceptance-medium.png',
                             'paymentIcon' => [
