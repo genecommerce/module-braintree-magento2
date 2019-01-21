@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*browser:true*/
@@ -38,6 +38,7 @@ define(
                 lastBillingAddress: null,
                 validatorManager: validatorManager,
                 code: 'braintree',
+                isProcessing: false,
 
                 /**
                  * Additional payment data
@@ -65,7 +66,14 @@ define(
                      * @param {Object} response
                      */
                     onPaymentMethodReceived: function (response) {
-                        this.beforePlaceOrder(response);
+                        this.handleNonce(response);
+                    },
+
+                    /**
+                     * Allow a new nonce to be generated
+                     */
+                    onPaymentMethodError: function() {
+                        this.isProcessing = false;
                     },
 
                     /**
@@ -86,6 +94,7 @@ define(
                      * @param {Object} response
                      */
                     onError: function (response) {
+                        this.isProcessing = false;
                         braintree.showError($t('Payment ' + this.getTitle() + ' can\'t be initialized'));
                         throw response.message;
                     },
@@ -95,6 +104,7 @@ define(
                      */
                     onCancelled: function () {
                         this.paymentMethodNonce = null;
+                        this.isProcessing = false;
                     }
                 },
                 imports: {
@@ -308,9 +318,18 @@ define(
              * Prepare data to place order
              * @param {Object} data
              */
-            beforePlaceOrder: function (data) {
+            handleNonce: function (data) {
+                var self = this;
+
                 this.setPaymentMethodNonce(data.nonce);
-                this.placeOrder();
+
+                // place order on success validation
+                self.validatorManager.validate(self, function () {
+                    return self.placeOrder('parent');
+                }, function() {
+                    self.isProcessing = false;
+                    self.paymentMethodNonce = null;
+                });
             },
 
             /**
@@ -318,24 +337,30 @@ define(
              * @param {String} key
              */
             placeOrder: function (key) {
-                var self = this;
-
-                if (!this.paymentMethodNonce) {
-                    braintree.tokenizeHostedFields();
-                    return false;
-                }
-
                 if (key) {
-                    return self._super();
+                    return this._super();
                 }
 
-                // place order on success validation
-                self.validatorManager.validate(self, function () {
-                    return self.placeOrder('parent');
-                });
+                if (this.isProcessing) {
+                    return false;
+                } else {
+                    this.isProcessing = true;
+                }
 
+                braintree.tokenizeHostedFields();
                 return false;
-            }
+            },
+
+            /**
+             * Get payment icons
+             * @param {String} type
+             * @returns {Boolean}
+             */
+            getIcons: function (type) {
+                return window.checkoutConfig.payment.braintree.icons.hasOwnProperty(type) ?
+                    window.checkoutConfig.payment.braintree.icons[type]
+                    : false;
+            },
         });
     }
 );

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*browser:true*/
@@ -25,6 +25,7 @@ define([
         clientInstance: null,
         hostedFieldsInstance: null,
         paypalInstance: null,
+        code: 'braintree',
 
         /**
          * Get Braintree api client
@@ -47,7 +48,7 @@ define([
          * @returns {String}
          */
         getCode: function () {
-            return 'braintree';
+            return this.code;
         },
 
         /**
@@ -69,14 +70,35 @@ define([
          * @returns {String}
          */
         getColor: function () {
-            return window.checkoutConfig.payment[this.getCode()].buttonColor;
+            return window.checkoutConfig.payment[this.getCode()].style.color;
         },
 
         /**
          * @returns {String}
          */
         getShape: function () {
-            return window.checkoutConfig.payment[this.getCode()].buttonShape;
+            return window.checkoutConfig.payment[this.getCode()].style.shape;
+        },
+
+        /**
+         * @returns {String}
+         */
+        getLayout: function () {
+            return window.checkoutConfig.payment[this.getCode()].style.layout;
+        },
+
+        /**
+         * @returns {String}
+         */
+        getSize: function () {
+            return window.checkoutConfig.payment[this.getCode()].style.size;
+        },
+
+        /**
+         * @returns {String}
+         */
+        getDisabledFunding: function () {
+            return window.checkoutConfig.payment[this.getCode()].disabledFunding;
         },
 
         /**
@@ -199,7 +221,22 @@ define([
 
             hostedFields.create({
                 client: this.clientInstance,
-                fields: this.config.hostedFields
+                fields: this.config.hostedFields,
+                styles: {
+                    "input": {
+                        "font-size": "14pt",
+                        "color": "#3A3A3A"
+                    },
+                    ":focus": {
+                        "color": "black"
+                    },
+                    ".valid": {
+                        "color": "green"
+                    },
+                    ".invalid": {
+                        "color": "red"
+                    }
+                }
             }, function (createErr, hostedFieldsInstance) {
                 if (createErr) {
                     self.showError($t("Braintree hosted fields could not be initialized. Please contact the store owner."));
@@ -234,27 +271,46 @@ define([
 
                 var paypalPayment = this.config.paypal,
                     onPaymentMethodReceived = this.config.onPaymentMethodReceived,
-                    style = {};
+                    style = {
+                        color: this.getColor(),
+                        shape: this.getShape(),
+                        layout: this.getLayout(),
+                        size: this.getSize()
+                    },
+                    funding = {
+                        allowed: [],
+                        disallowed: []
+                    };
 
                 if (this.config.offerCredit === true) {
                     paypalPayment.offerCredit = true;
-                    style = {
-                        label: 'credit'
-                    };
+                    style.label = "credit";
+                    style.color = "darkblue";
+                    style.layout = "horizontal";
+                    funding.allowed.push(paypal.FUNDING.CREDIT);
                 } else {
                     paypalPayment.offerCredit = false;
-                    style = {
-                        color: this.getColor(),
-                        shape: this.getShape()
-                    };
+                    funding.disallowed.push(paypal.FUNDING.CREDIT);
                 }
 
+                // Disabled function options
+                var disabledFunding = this.getDisabledFunding();
+                if (true === disabledFunding.card) {
+                    funding.disallowed.push(paypal.FUNDING.CARD);
+                }
+                if (true === disabledFunding.elv) {
+                    funding.disallowed.push(paypal.FUNDING.ELV);
+                }
+
+                // Render
                 this.config.paypalInstance = paypalCheckoutInstance;
                 $('#' + this.config.buttonId).html('');
                 paypal.Button.render({
                     env: this.getEnvironment(),
                     style: style,
                     commit: true,
+                    funding: funding,
+                    locale: this.config.paypal.locale,
 
                     payment: function () {
                         return paypalCheckoutInstance.createPayment(paypalPayment);
@@ -283,6 +339,9 @@ define([
                     }
                 }, '#' + this.config.buttonId).then(function () {
                     this.enableButton();
+                    if (typeof this.config.onPaymentMethodError === 'function') {
+                        this.config.onPaymentMethodError();
+                    }
                 }.bind(this));
             }.bind(this));
         },
@@ -336,3 +395,4 @@ define([
         }
     };
 });
+

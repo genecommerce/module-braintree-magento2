@@ -53,6 +53,7 @@ define([
              */
             clientConfig: {
                 offerCredit: false,
+                offerCreditOnly: false,
                 dataCollector: {
                     paypal: true
                 },
@@ -402,3 +403,4 @@ define([
         }
     });
 });
+

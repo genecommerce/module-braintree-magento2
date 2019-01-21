@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*browser:true*/
@@ -49,7 +49,7 @@ define([
          * @param {Object} context
          * @param {Function} callback
          */
-        validate: function (context, callback) {
+        validate: function (context, callback, errorCallback) {
             var self = this,
                 deferred;
 
@@ -69,6 +69,7 @@ define([
                 .done(function () {
                     callback();
                 }).fail(function (error) {
+                    errorCallback();
                     self.showError(error);
                 });
         },

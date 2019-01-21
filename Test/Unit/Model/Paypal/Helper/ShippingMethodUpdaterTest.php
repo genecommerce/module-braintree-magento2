@@ -23,11 +23,6 @@ class ShippingMethodUpdaterTest extends \PHPUnit\Framework\TestCase
     const TEST_EMAIL = 'test@test.loc';
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $configMock;
-
-    /**
      * @var CartRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $quoteRepositoryMock;
@@ -44,9 +39,6 @@ class ShippingMethodUpdaterTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->configMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->quoteRepositoryMock = $this->getMockBuilder(CartRepositoryInterface::class)
             ->getMockForAbstractClass();
 
@@ -62,7 +54,6 @@ class ShippingMethodUpdaterTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->shippingMethodUpdater = new ShippingMethodUpdater(
-            $this->configMock,
             $this->quoteRepositoryMock
         );
     }

@@ -184,7 +184,7 @@ class Button extends Template implements ShortcutInterface
      */
     public function getButtonShape()
     {
-        return $this->config->getButtonShape();
+        return $this->config->getButtonShape(Config::BUTTON_AREA_CART);
     }
 
     /**
@@ -192,7 +192,25 @@ class Button extends Template implements ShortcutInterface
      */
     public function getButtonColor()
     {
-        return $this->config->getButtonColor();
+        return $this->config->getButtonColor(Config::BUTTON_AREA_CART);
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getButtonLayout()
+    {
+        return $this->config->getButtonLayout(Config::BUTTON_AREA_CART);
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getButtonSize()
+    {
+        return $this->config->getButtonSize(Config::BUTTON_AREA_CART);
     }
 
     /**
@@ -218,4 +236,16 @@ class Button extends Template implements ShortcutInterface
     {
         return $this->getUrl(ConfigProvider::CODE . '/paypal/review', ['_secure' => true]);
     }
+
+    /**
+     * @return string
+     */
+    public function getDisabledFunding()
+    {
+        return [
+            'card' => $this->config->getDisabledFundingOptionCard(Config::KEY_PAYPAL_DISABLED_FUNDING_CART),
+            'elv' => $this->config->getDisabledFundingOptionElv(Config::KEY_PAYPAL_DISABLED_FUNDING_CART)
+        ];
+    }
 }
+

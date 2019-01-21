@@ -10,6 +10,8 @@ use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Braintree\Model\Ui\ConfigProvider;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\Braintree\Gateway\Config\PayPal\Config as PayPalConfig;
+use Magento\Payment\Model\CcConfig;
+use Magento\Framework\View\Asset\Source;
 
 /**
  * Class ConfigProviderTest
@@ -42,6 +44,16 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
      */
     private $payPalConfig;
 
+    /**
+     * @var CcConfig
+     */
+    private $ccConfig;
+
+    /**
+     * @var Source
+     */
+    private $assetSource;
+
     protected function setUp()
     {
         $this->config = $this->getMockBuilder(Config::class)
@@ -56,10 +68,20 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->ccConfig = $this->getMockBuilder(CcConfig::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->assetSource = $this->getMockBuilder(Source::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->configProvider = new ConfigProvider(
             $this->config,
             $this->payPalConfig,
-            $this->braintreeAdapter
+            $this->braintreeAdapter,
+            $this->ccConfig,
+            $this->assetSource
         );
     }
 
@@ -146,8 +168,17 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
                             'merchantId' => 'test-merchant-id',
                             'hasFraudProtection' => true,
                             'ccVaultCode' => ConfigProvider::CC_VAULT_CODE,
-                            'buttonColor' => null,
-                            'buttonShape' => null
+                            'style' => [
+                                'shape' => null,
+                                'size' => null,
+                                'layout' => null,
+                                'color' => null,
+                            ],
+                            'disabledFunding' => [
+                                'card' => null,
+                                'elv' => null,
+                            ],
+                            'icons' => []
                         ],
                         Config::CODE_3DSECURE => [
                             'enabled' => true,

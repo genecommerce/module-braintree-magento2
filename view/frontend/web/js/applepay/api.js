@@ -207,6 +207,10 @@ define(['uiComponent', 'mage/translate', 'mage/storage', 'jquery'], function (Co
 
                     // Format shipping methods array
                     for (var i = 0; i < r.length; i++) {
+                        if (typeof r[i].method_code !== 'string') {
+                            continue;
+                        }
+                        
                         method = {
                             identifier: r[i].method_code,
                             label: r[i].method_title,
@@ -215,10 +219,11 @@ define(['uiComponent', 'mage/translate', 'mage/storage', 'jquery'], function (Co
                         };
                         shippingMethods.push(method);
                         this.shippingMethods[ r[i].method_code ] = r[i];
+                        
+                        if (!this.shippingMethod) {
+                            this.shippingMethod = r[i].method_code;
+                        }
                     }
-
-                    // Set the shipping method to the first option
-                    this.shippingMethod = r[0].method_code;
 
                     // Pass shipping methods back
                     session.completeShippingContactSelection(

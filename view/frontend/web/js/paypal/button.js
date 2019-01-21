@@ -68,7 +68,25 @@ define(
                 /**
                  * {String}
                  */
-                offerCredit: false
+                size: null,
+
+                /**
+                 * {String}
+                 */
+                layout: null,
+
+                /**
+                 * {String}
+                 */
+                offerCredit: false,
+
+                /**
+                 * {Object}
+                 */
+                disabledFunding: {
+                    card: false,
+                    elv: false
+                }
             },
 
             /**
@@ -131,18 +149,38 @@ define(
 
                         var style = {
                             color: this.color,
-                            shape: this.shape
+                            shape: this.shape,
+                            layout: this.layout,
+                            size: this.size
+                        };
+
+                        // PayPal Credit funding options
+                        var funding = {
+                            allowed: [],
+                            disallowed: []
                         };
                         if (this.offerCredit === true) {
-                            style = {
-                                label: 'credit'
-                            };
+                            funding.allowed.push(paypal.FUNDING.CREDIT);
+                        } else {
+                            funding.disallowed.push(paypal.FUNDING.CREDIT);
                         }
 
+                        // Disabled function options
+                        var disabledFunding = this.disabledFunding;
+                        if (true === disabledFunding.card) {
+                            funding.disallowed.push(paypal.FUNDING.CARD);
+                        }
+                        if (true === disabledFunding.elv) {
+                            funding.disallowed.push(paypal.FUNDING.ELV);
+                        }
+
+                        // Render
                         var actionSuccess = this.actionSuccess;
                         paypal.Button.render({
                             env: this.environment,
                             style: style,
+                            funding: funding,
+                            locale: data.locale,
 
                             payment: function () {
                                 return paypalCheckoutInstance.createPayment(data);
@@ -198,3 +236,4 @@ define(
         });
     }
 );
+

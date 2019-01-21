@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*browser:true*/
@@ -10,8 +10,9 @@ define([
     'Magento_Braintree/js/view/payment/method-renderer/cc-form',
     'Magento_Braintree/js/validator',
     'Magento_Vault/js/view/payment/vault-enabler',
+    'Magento_Checkout/js/model/payment/additional-validators',
     'mage/translate'
-], function ($, Component, validator, VaultEnabler, $t) {
+], function ($, Component, validator, VaultEnabler, additionalValidators, $t) {
     'use strict';
 
     return Component.extend({
@@ -31,6 +32,7 @@ define([
 
             onInstanceReady: function (instance) {
                 instance.on('validityChange', this.onValidityChange.bind(this));
+                instance.on('cardTypeChange', this.onCardTypeChange.bind(this));
             }
         },
 
@@ -116,12 +118,30 @@ define([
                         validator.getMageCardType(event.cards[0].type, this.getCcAvailableTypes())
                     );
                     this.validateCardType();
+                } else {
+                    this.isValidCardNumber = event.fields.number.isValid;
+                    this.validateCardType();
                 }
             }
 
             // Other field validations
             this.isValidExpirationDate = event.fields.expirationDate.isValid;
             this.isValidCvvNumber = event.fields.cvv.isValid;
+        },
+
+        /**
+         * Triggers on Hosted Field card type changes
+         * @param {Object} event
+         * @returns {Boolean}
+         */
+        onCardTypeChange: function (event) {
+            if (event.cards.length === 1) {
+                this.selectedCardType(
+                    validator.getMageCardType(event.cards[0].type, this.getCcAvailableTypes())
+                );
+            } else {
+                this.selectedCardType(null);
+            }
         },
 
         /**
@@ -150,7 +170,7 @@ define([
         validateCardType: function () {
             return this.validateField(
                 'cc_number',
-                (this.selectedCardType() !== null && this.isValidCardNumber)
+                (this.isValidCardNumber)
             );
         },
 
@@ -188,11 +208,10 @@ define([
          * Trigger order placing
          */
         placeOrderClick: function () {
-            if (this.validateFormFields()) {
+            if (this.validateFormFields() && additionalValidators.validate()) {
                 this.placeOrder();
             }
         },
-
         /**
          * @returns {String}
          */
