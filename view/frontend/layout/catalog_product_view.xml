@@ -20,6 +20,36 @@
                     <argument name="position" xsi:type="number">1</argument>
                 </arguments>
             </block>
+            <!--<block name="product.info.addtocart.braintreeOneClick" class="Magento\Braintree\Block\OneClickButton" template="Magento_Braintree::paypal/product_page.phtml" before="-">
+                <arguments>
+                    <argument name="jsLayout" xsi:type="array">
+                        <item name="components" xsi:type="array">
+                            <item name="braintree-oneclick" xsi:type="array">
+                                <item name="component" xsi:type="string">Magento_Braintree/js/view/one-click</item>
+                                <item name="config" xsi:type="array">
+                                    <item name="template" xsi:type="string">Magento_Braintree/one-click</item>
+                                </item>
+                            </item>
+                        </item>
+                    </argument>
+                </arguments>
+            </block>-->
         </referenceContainer>
+        <referenceBlock name="product.info.addtocart.additional">
+            <block name="product.info.addtocart.braintreeOneClick.additional" class="Magento\Braintree\Block\OneClickButton" template="Magento_Braintree::paypal/product_page.phtml" before="-">
+                <arguments>
+                    <argument name="jsLayout" xsi:type="array">
+                        <item name="components" xsi:type="array">
+                            <item name="braintree-one-click" xsi:type="array">
+                                <item name="component" xsi:type="string">Magento_Braintree/js/view/one-click</item>
+                                <item name="config" xsi:type="array">
+                                    <item name="template" xsi:type="string">Magento_Braintree/one-click</item>
+                                </item>
+                            </item>
+                        </item>
+                    </argument>
+                </arguments>
+            </block>
+        </referenceBlock>
     </body>
 </page>

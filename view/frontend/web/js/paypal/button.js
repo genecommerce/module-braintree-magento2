@@ -154,6 +154,13 @@ define(
                             size: this.size
                         };
 
+                        if (this.styleLabel) {
+                            style.label = this.styleLabel;
+                        }
+                        if (this.styleBranding) {
+                            style.branding = this.styleBranding;
+                        }
+
                         // PayPal Credit funding options
                         var funding = {
                             allowed: [],
@@ -175,7 +182,10 @@ define(
                         }
 
                         // Render
-                        var actionSuccess = this.actionSuccess;
+                        var actionSuccess = this.actionSuccess,
+                            validate = this.validate,
+                            beforeSubmit = this.beforeSubmit;
+
                         paypal.Button.render({
                             env: this.environment,
                             style: style,
@@ -203,6 +213,12 @@ define(
                             onAuthorize: function (data, actions) {
                                 return paypalCheckoutInstance.tokenizePayment(data)
                                     .then(function (payload) {
+                                        if (typeof beforeSubmit === 'function') {
+                                            if (!beforeSubmit(payload)) {
+                                                return false;
+                                            }
+                                        }
+
                                         jQuery("#maincontent").trigger('processStart');
 
                                         // Map the shipping address correctly
@@ -232,6 +248,15 @@ define(
                         }, '#' + this.id);
                     }.bind(this));
                 }.bind(this));
+            },
+
+            // See https://developer.paypal.com/demo/checkout/#/pattern/validation
+            validate: function (actions) {
+                return;
+            },
+
+            beforeSubmit: function () {
+                return;
             }
         });
     }
