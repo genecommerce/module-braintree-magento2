@@ -95,7 +95,6 @@ define(
             initialize: function () {
                 this._super()
                     .initComponent();
-
                 return this;
             },
 

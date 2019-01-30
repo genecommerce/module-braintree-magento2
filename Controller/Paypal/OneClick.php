@@ -1,8 +1,8 @@
 <?php
 
 namespace Magento\Braintree\Controller\Paypal;
+
 use Magento\Checkout\Model\Session;
-use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Braintree\Gateway\Config\PayPal\Config;
@@ -36,11 +36,6 @@ class OneClick extends Review
     protected $storeManager;
 
     /**
-     * @var CustomerSession
-     */
-    protected $customerSession;
-
-    /**
      * @var \Magento\Quote\Api\Data\CartInterface
      */
     protected $quote;
@@ -72,22 +67,20 @@ class OneClick extends Review
         \Magento\Quote\Model\QuoteFactory $quoteFactory,
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Json\Helper\Data $jsonHelper,
-        CustomerSession $customerSession
+        \Magento\Framework\Json\Helper\Data $jsonHelper
     ) {
-        $this->productRepository = $productRepository;
-        $this->quoteFactory = $quoteFactory;
-        $this->formKeyValidator = $formKeyValidator;
-        $this->storeManager = $storeManager;
-        $this->customerSession = $customerSession;
-        $this->jsonHelper = $jsonHelper;
-
         parent::__construct(
             $context,
             $config,
             $checkoutSession,
             $quoteUpdater
         );
+
+        $this->productRepository = $productRepository;
+        $this->quoteFactory = $quoteFactory;
+        $this->formKeyValidator = $formKeyValidator;
+        $this->storeManager = $storeManager;
+        $this->jsonHelper = $jsonHelper;
     }
 
     /**
@@ -122,13 +115,9 @@ class OneClick extends Review
         // Create a blank quote to just purchase this one product
         $quote = $this->quoteFactory->create();
 
-        $currentCustomer = $this->customerSession->getCustomer();
-        if ($currentCustomer->getId()) {
-            $quote->setCustomer($currentCustomer);
-            $quote->setCustomerIsGuest(0);
-        } else {
-            $quote->setCustomerIsGuest(1);
-        }
+        // This is always set to true due to an unknown issue whereby the shipping address's association
+        // with the quote is lost when placing order when logged in
+        $quote->setCustomerIsGuest(1);
 
         /** @var $product \Magento\Quote\Api\Data\CartItemInterface */
         try {
