@@ -82,7 +82,7 @@ define([
                             formComponent.additionalData['cvv'] = self.vaultedCVV();
                         }
                         formComponent.code = self.code;
-                        formComponent.placeOrder();
+                        formComponent.placeOrder('parent');
                     });
                 })
                 .fail(function (response) {
