@@ -2,14 +2,66 @@
 
 namespace Magento\Braintree\Block\Paypal;
 
+use Magento\Braintree\Gateway\Config\Config as BraintreeConfig;
 use Magento\Braintree\Gateway\Config\PayPal\Config;
+use Magento\Braintree\Gateway\Config\PayPalCredit\Config as PayPalCreditConfig;
+use Magento\Braintree\Model\Ui\ConfigProvider;
+use Magento\Checkout\Model\Session;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Payment\Model\MethodInterface;
 
 /**
  * Class ProductPage
  * @package Magento\Braintree\Block\Paypal
  */
-class ProductPage extends Paypal\Button
+class ProductPage extends Button
 {
+    /**
+     * @var \Magento\Framework\Registry
+     */
+    protected $registry;
+
+    /**
+     * ProductPage constructor.
+     * @param Context $context
+     * @param ResolverInterface $localeResolver
+     * @param Session $checkoutSession
+     * @param Config $config
+     * @param PayPalCreditConfig $payPalCreditConfig
+     * @param BraintreeConfig $braintreeConfig
+     * @param ConfigProvider $configProvider
+     * @param MethodInterface $payment
+     * @param \Magento\Framework\Registry $registry
+     * @param array $data
+     */
+    public function __construct(
+        Context $context,
+        ResolverInterface $localeResolver,
+        Session $checkoutSession,
+        Config $config,
+        PayPalCreditConfig $payPalCreditConfig,
+        BraintreeConfig $braintreeConfig,
+        ConfigProvider $configProvider,
+        MethodInterface $payment,
+        \Magento\Framework\Registry $registry,
+        array $data = []
+    ) {
+        parent::__construct(
+            $context,
+            $localeResolver,
+            $checkoutSession,
+            $config,
+            $payPalCreditConfig,
+            $braintreeConfig,
+            $configProvider,
+            $payment,
+            $data
+        );
+
+        $this->registry = $registry;
+    }
+
     /**
      * @inheritdoc
      */
@@ -35,7 +87,13 @@ class ProductPage extends Paypal\Button
      */
     public function getAmount()
     {
-        return "27.00"; // @todo not hardcoded
+        $product = $this->registry->registry('product');
+        if ($product) {
+            /** @var $product \Magento\Catalog\Model\Product */
+            return $product->getPrice();
+        }
+
+        return 100;
     }
 
     /**

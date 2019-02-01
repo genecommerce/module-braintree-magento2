@@ -76,6 +76,26 @@ define(
                 layout: null,
 
                 /**
+                 * {Bool}
+                 */
+                fundingicons: null,
+
+                /**
+                 * {Bool}
+                 */
+                branding: null,
+
+                /**
+                 * {Bool}
+                 */
+                tagline: null,
+
+                /**
+                 * {String}
+                 */
+                label: null,
+
+                /**
                  * {String}
                  */
                 offerCredit: false,
@@ -86,6 +106,15 @@ define(
                 disabledFunding: {
                     card: false,
                     elv: false
+                },
+
+                /**
+                 * {Object}
+                 */
+                events: {
+                    onClick: null,
+                    onCancel: null,
+                    onError: null
                 }
             },
 
@@ -153,11 +182,17 @@ define(
                             size: this.size
                         };
 
-                        if (this.styleLabel) {
-                            style.label = this.styleLabel;
+                        if (typeof this.fundingicons === 'boolean') {
+                            style.fundingicons = this.fundingicons;
                         }
-                        if (this.styleBranding) {
-                            style.branding = this.styleBranding;
+                        if (typeof this.branding === 'boolean') {
+                            style.branding = this.branding;
+                        }
+                        if (typeof this.label === 'string') {
+                            style.label = this.label;
+                        }
+                        if (typeof this.tagline === 'boolean') {
+                            style.tagline = this.tagline;
                         }
 
                         // PayPal Credit funding options
@@ -182,8 +217,8 @@ define(
 
                         // Render
                         var actionSuccess = this.actionSuccess,
-                            validate = this.validate,
-                            beforeSubmit = this.beforeSubmit;
+                            beforeSubmit = this.beforeSubmit,
+                            events = this.events;
 
                         paypal.Button.render({
                             env: this.environment,
@@ -197,11 +232,26 @@ define(
 
                             onCancel: function (data) {
                                 jQuery("#maincontent").trigger('processStop');
+
+                                if (typeof events.onCancel === 'function') {
+                                    events.onCancel();
+                                }
                             },
 
                             onError: function (err) {
                                 console.error('paypalCheckout button render error', err);
                                 jQuery("#maincontent").trigger('processStop');
+
+
+                                if (typeof events.onError === 'function') {
+                                    events.onError(err);
+                                }
+                            },
+
+                            onClick: function() {
+                                if (typeof events.onClick === 'function') {
+                                    events.onClick();
+                                }
                             },
 
                             /**
@@ -247,11 +297,6 @@ define(
                         }, '#' + this.id);
                     }.bind(this));
                 }.bind(this));
-            },
-
-            // See https://developer.paypal.com/demo/checkout/#/pattern/validation
-            validate: function (actions) {
-                return;
             },
 
             beforeSubmit: function () {

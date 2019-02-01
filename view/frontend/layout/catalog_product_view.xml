@@ -20,22 +20,13 @@
                     <argument name="position" xsi:type="number">1</argument>
                 </arguments>
             </block>
+            <!-- Simple Product -->
+            <block name="product.info.addtocart.braintreeOneClick.additional" class="Magento\Braintree\Block\Paypal\ProductPage" template="Magento_Braintree::paypal/product_page.phtml" before="-" />
         </referenceContainer>
+
+        <!-- Configurable Products -->
         <referenceBlock name="product.info.addtocart.additional">
-            <block name="product.info.addtocart.braintreeOneClick.additional" class="Magento\Braintree\Block\Paypal\ProductPage" template="Magento_Braintree::paypal/product_page.phtml" before="-">
-                <arguments>
-                    <argument name="jsLayout" xsi:type="array">
-                        <item name="components" xsi:type="array">
-                            <item name="braintree-product-page" xsi:type="array">
-                                <item name="component" xsi:type="string">Magento_Braintree/js/view/product-page</item>
-                                <item name="config" xsi:type="array">
-                                    <item name="template" xsi:type="string">Magento_Braintree/product-page</item>
-                                </item>
-                            </item>
-                        </item>
-                    </argument>
-                </arguments>
-            </block>
+            <block name="product.info.addtocart.braintreeOneClick.additional" class="Magento\Braintree\Block\Paypal\ProductPage" template="Magento_Braintree::paypal/product_page.phtml" before="-" />
         </referenceBlock>
     </body>
 </page>

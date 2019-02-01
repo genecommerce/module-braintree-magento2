@@ -4,8 +4,11 @@ define(
         'use strict';
 
         return button.extend({
-            styleLabel: 'buynow',
-            styleBranding: true,
+
+            defaults: {
+                label: 'buynow',
+                branding: true,
+            },
 
             /**
              * The validation on the add-to-cart form is done after the PayPal window has opened.
