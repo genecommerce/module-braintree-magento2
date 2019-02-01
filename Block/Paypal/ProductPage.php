@@ -1,14 +1,14 @@
 <?php
 
-namespace Magento\Braintree\Block;
+namespace Magento\Braintree\Block\Paypal;
 
 use Magento\Braintree\Gateway\Config\PayPal\Config;
 
 /**
- * Class OneClickButton
- * @package Magento\Braintree\Block
+ * Class ProductPage
+ * @package Magento\Braintree\Block\Paypal
  */
-class OneClickButton extends Paypal\Button
+class ProductPage extends Paypal\Button
 {
     /**
      * @inheritdoc
