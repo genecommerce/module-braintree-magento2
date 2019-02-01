@@ -8,7 +8,7 @@ define([
     'jquery',
     'underscore',
     'Magento_Checkout/js/view/payment/default',
-    'Magento_Braintree/js/view/payment/adapter',
+    'braintreeCheckoutPayPalAdapter',
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/model/full-screen-loader',
     'Magento_Checkout/js/model/payment/additional-validators',

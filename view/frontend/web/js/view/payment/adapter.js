@@ -28,6 +28,15 @@ define([
         code: 'braintree',
 
         /**
+         * {Object}
+         */
+        events: {
+            onClick: null,
+            onCancel: null,
+            onError: null
+        },
+
+        /**
          * Get Braintree api client
          * @returns {Object}
          */
@@ -92,6 +101,27 @@ define([
          */
         getSize: function () {
             return window.checkoutConfig.payment[this.getCode()].style.size;
+        },
+
+        /**
+         * @returns {String}
+         */
+        getLabel: function () {
+            return null;
+        },
+
+        /**
+         * @returns {String}
+         */
+        getBranding: function () {
+            return null;
+        },
+
+        /**
+         * @returns {String}
+         */
+        getFundingIcons: function () {
+            return null;
         },
 
         /**
@@ -282,6 +312,16 @@ define([
                         disallowed: []
                     };
 
+                if (this.getLabel()) {
+                    style.label = this.getLabel();
+                }
+                if (this.getBranding()) {
+                    style.branding = this.getBranding();
+                }
+                if (this.getFundingIcons()) {
+                    style.fundingicons = this.getFundingIcons();
+                }
+
                 if (this.config.offerCredit === true) {
                     paypalPayment.offerCredit = true;
                     style.label = "credit";
@@ -304,6 +344,8 @@ define([
 
                 // Render
                 this.config.paypalInstance = paypalCheckoutInstance;
+                var events = this.events;
+
                 $('#' + this.config.buttonId).html('');
                 paypal.Button.render({
                     env: this.getEnvironment(),
@@ -318,13 +360,27 @@ define([
 
                     onCancel: function (data) {
                         console.log('checkout.js payment cancelled', JSON.stringify(data, 0, 2));
+
+                        if (typeof events.onCancel === 'function') {
+                            events.onCancel();
+                        }
                     },
 
                     onError: function (err) {
                         self.showError($t("PayPal Checkout could not be initialized. Please contact the store owner."));
                         this.config.paypalInstance = null;
                         console.error('Paypal checkout.js error', err);
+
+                        if (typeof events.onError === 'function') {
+                            events.onError(err);
+                        }
                     }.bind(this),
+
+                    onClick: function() {
+                        if (typeof events.onClick === 'function') {
+                            events.onClick();
+                        }
+                    },
 
                     /**
                      * Pass the payload (and payload.nonce) through to the implementation's onPaymentMethodReceived method
