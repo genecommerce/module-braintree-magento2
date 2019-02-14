@@ -248,9 +248,9 @@ define(
                                 }
                             },
 
-                            onClick: function() {
+                            onClick: function(data) {
                                 if (typeof events.onClick === 'function') {
-                                    events.onClick();
+                                    events.onClick(data);
                                 }
                             },
 
