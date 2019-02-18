@@ -90,6 +90,10 @@ class ProductPage extends Button
         $product = $this->registry->registry('product');
         if ($product) {
             /** @var $product \Magento\Catalog\Model\Product */
+            if ($product->getTypeId() == \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) {
+                return $product->getPriceInfo()->getPrice('regular_price')->getAmount();
+            }
+
             return $product->getPrice();
         }
 
