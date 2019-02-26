@@ -27,6 +27,11 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $this->braintreeCreditPrices($installer);
         }
 
+        // 3.1.0
+        if (version_compare($context->getVersion(), '3.1.0', '<')) {
+            $this->braintreeAddWebsiteFieldToCreditPrices($installer);
+        }
+
         $installer->endSetup();
     }
 
@@ -149,5 +154,24 @@ class UpgradeSchema implements UpgradeSchemaInterface
             )
             ->setComment('Braintree credit rates');
         $installer->getConnection()->createTable($table);
+    }
+
+    /**
+     * Add website_id field to the braintree_credit_prices table
+     * @param SchemaSetupInterface $installer
+     */
+    private function braintreeAddWebsiteFieldToCreditPrices(SchemaSetupInterface $installer)
+    {
+        $installer->getConnection()->addColumn(
+            $installer->getTable('braintree_credit_prices'),
+            'website_id',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                'size' => null,
+                'nullable' => false,
+                'unsigned' => true,
+                'comment' => 'Website Id'
+            ]
+        );
     }
 }
