@@ -8,6 +8,8 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductColl
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
+use Magento\Store\Model\StoreManager;
+use Magento\Store\Model\Website;
 
 /**
  * Class CreditPrice
@@ -51,6 +53,16 @@ class CreditPrice
     private $config;
 
     /**
+     * @var StoreManager
+     */
+    private $storeManager;
+
+    /**
+     * @var array
+     */
+    protected $websites;
+
+    /**
      * CreditPrice constructor.
      * @param \Magento\Braintree\Api\CreditPriceRepositoryInterface $creditPriceRepository
      * @param \Magento\Braintree\Api\Data\CreditPriceDataInterfaceFactory $creditPriceDataInterfaceFactory
@@ -59,6 +71,7 @@ class CreditPrice
      * @param ProductCollectionFactory $productCollection
      * @param LoggerInterface $logger
      * @param PayPalCreditConfig $config
+     * @param StoreManager $storeManager
      */
     public function __construct(
         \Magento\Braintree\Api\CreditPriceRepositoryInterface $creditPriceRepository,
@@ -67,7 +80,8 @@ class CreditPrice
         \Magento\Braintree\Model\Paypal\CreditApi $creditApi,
         ProductCollectionFactory $productCollection,
         LoggerInterface $logger,
-        PayPalCreditConfig $config
+        PayPalCreditConfig $config,
+        StoreManager $storeManager
     ) {
         $this->creditPriceRepository = $creditPriceRepository;
         $this->scopeConfig = $scopeConfig;
@@ -76,6 +90,7 @@ class CreditPrice
         $this->creditPriceFactory = $creditPriceDataInterfaceFactory;
         $this->creditApi = $creditApi;
         $this->config = $config;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -88,46 +103,63 @@ class CreditPrice
             return $this;
         }
 
-        // Retrieve paginated collection of product and their price
-        $collection = $this->productCollection->create();
-        $collection->addAttributeToSelect('price')
-            ->setPageSize(100);
+        /* @var Website $website */
+        foreach ($this->getWebsites() as $website) {
+            // Retrieve paginated collection of product and their price
+            $collection = $this->productCollection->create();
+            $collection->addAttributeToSelect('price')
+                ->setPageSize(100);
 
-        $lastPage = $collection->getLastPageNumber();
-        for ($i = 1; $i <= $lastPage; $i++) {
-            $collection->setCurPage($i);
-            $collection->load();
+            $lastPage = $collection->getLastPageNumber();
+            for ($i = 1; $i <= $lastPage; $i++) {
+                $collection->setCurPage($i);
+                $collection->load();
 
-            foreach ($collection as $product) {
-                try {
-                    // Delete by product_id
-                    $this->creditPriceRepository->deleteByProductId($product->getId());
+                foreach ($collection as $product) {
+                    try {
+                        // Delete by product_id
+                        $this->creditPriceRepository->deleteByProductId($product->getId());
 
-                    // Retrieve data from PayPal
-                    $priceOptions = $this->creditApi->getPriceOptions($product->getFinalPrice());
-                    foreach ($priceOptions as $priceOption) {
-                        // Populate model
-                        /** @var $model \Magento\Braintree\Api\Data\CreditPriceDataInterface */
-                        $model = $this->creditPriceFactory->create();
-                        $model->setProductId($product->getId());
-                        $model->setTerm($priceOption['term']);
-                        $model->setMonthlyPayment($priceOption['monthly_payment']);
-                        $model->setInstalmentRate($priceOption['instalment_rate']);
-                        $model->setCostOfPurchase($priceOption['cost_of_purchase']);
-                        $model->setTotalIncInterest($priceOption['total_inc_interest']);
+                        // Retrieve data from PayPal
+                        $priceOptions = $this->creditApi->getPriceOptions($product->getFinalPrice());
+                        foreach ($priceOptions as $priceOption) {
+                            // Populate model
+                            /** @var $model \Magento\Braintree\Api\Data\CreditPriceDataInterface */
+                            $model = $this->creditPriceFactory->create();
+                            $model->setProductId($product->getId());
+                            $model->setTerm($priceOption['term']);
+                            $model->setMonthlyPayment($priceOption['monthly_payment']);
+                            $model->setInstalmentRate($priceOption['instalment_rate']);
+                            $model->setCostOfPurchase($priceOption['cost_of_purchase']);
+                            $model->setTotalIncInterest($priceOption['total_inc_interest']);
 
-                        $this->creditPriceRepository->save($model);
+                            $this->creditPriceRepository->save($model);
+                        }
+                    } catch (AuthenticationException $e) {
+                        throw new \Exception($e->getMessage());
+                    } catch (LocalizedException $e) {
+                        $this->logger->critical($e->getMessage());
                     }
-                } catch (AuthenticationException $e) {
-                    throw new \Exception($e->getMessage());
-                } catch (LocalizedException $e) {
-                    $this->logger->critical($e->getMessage());
                 }
-            }
 
-            $collection->clear();
+                $collection->clear();
+            }
         }
 
         return $this;
+    }
+
+    /**
+     * Retrieve website collection array
+     *
+     * @return array
+     */
+    private function getWebsites()
+    {
+        if ($this->websites === null) {
+            $this->websites = $this->storeManager->getWebsites();
+        }
+
+        return $this->websites;
     }
 }
