@@ -17,6 +17,7 @@ interface CreditPriceDataInterface
     const INSTALMENT_RATE = 'instalment_rate';
     const COST_OF_PURCHASE = 'cost_of_purchase';
     const TOTAL_INC_INTEREST = 'total_inc_interest';
+    const WEBSITE_ID = 'website_id';
 
     /**
      * @return int
@@ -94,4 +95,15 @@ interface CreditPriceDataInterface
      * @return CreditPriceDataInterface
      */
     public function setTotalIncInterest($value);
+
+    /**
+     * @return int
+     */
+    public function getWebsiteId();
+
+    /**
+     * @param int $value
+     * @return CreditPriceDataInterface
+     */
+    public function setWebsiteId($value);
 }

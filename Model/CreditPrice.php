@@ -80,6 +80,14 @@ class CreditPrice extends AbstractModel implements CreditPriceDataInterface
     /**
      * @inheritdoc
      */
+    public function getWebsiteId()
+    {
+        return $this->getData(self::WEBSITE_ID);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function setId($value)
     {
         return $this->setData(self::ID, $value);
@@ -131,5 +139,13 @@ class CreditPrice extends AbstractModel implements CreditPriceDataInterface
     public function setTotalIncInterest($value)
     {
         return $this->setData(self::TOTAL_INC_INTEREST, $value);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setWebsiteId($value)
+    {
+        return $this->setData(self::WEBSITE_ID, $value);
     }
 }
