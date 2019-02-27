@@ -105,6 +105,10 @@ class CreditPrice
 
         /* @var Website $website */
         foreach ($this->getWebsites() as $website) {
+            if (!$website->getDefaultGroup() || !$website->getDefaultGroup()->getDefaultStore()) {
+                continue;
+            }
+
             // Retrieve paginated collection of product and their price
             $collection = $this->productCollection->create();
             $collection->addAttributeToSelect('price')
