@@ -112,6 +112,7 @@ class CreditPrice
             $websiteId = $website->getId();
             $defaultStore = $website->getDefaultGroup()->getDefaultStore()->getId();
 
+            // Set current store to allow for store specific catalog price rules to be applied
             $this->storeManager->setCurrentStore($defaultStore);
 
             // Retrieve paginated collection of product and their price
@@ -130,6 +131,7 @@ class CreditPrice
                         // Delete by product_id
                         $this->creditPriceRepository->deleteByProductId($product->getId(), $websiteId);
 
+                        // Get product price including any catalog price rules or discounts
                         $productPrice = $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue();
 
                         // Retrieve data from PayPal
