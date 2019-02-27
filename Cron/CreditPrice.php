@@ -117,6 +117,7 @@ class CreditPrice
             // Retrieve paginated collection of product and their price
             $collection = $this->productCollection->create();
             $collection->addAttributeToSelect('price')
+                ->addWebsiteFilter($websiteId)
                 ->setPageSize(100);
 
             $lastPage = $collection->getLastPageNumber();
@@ -143,6 +144,7 @@ class CreditPrice
                             $model->setInstalmentRate($priceOption['instalment_rate']);
                             $model->setCostOfPurchase($priceOption['cost_of_purchase']);
                             $model->setTotalIncInterest($priceOption['total_inc_interest']);
+                            $model->setWebsiteId($websiteId);
 
                             $this->creditPriceRepository->save($model);
                         }
