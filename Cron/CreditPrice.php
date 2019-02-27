@@ -2,13 +2,17 @@
 
 namespace Magento\Braintree\Cron;
 
-use Magento\Braintree\Api\Data\CreditPriceDataInterface;
-use Magento\Braintree\Gateway\Config\PayPalCredit\Config as PayPalCreditConfig;
+use Magento\Braintree\Api\CreditPriceRepositoryInterface;
+use Magento\Braintree\Api\Data\CreditPriceDataInterfaceFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Braintree\Model\Paypal\CreditApi;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
+use Psr\Log\LoggerInterface;
+use Magento\Braintree\Gateway\Config\PayPalCredit\Config as PayPalCreditConfig;
+use Magento\Store\Model\StoreManager;
+use Magento\Braintree\Api\Data\CreditPriceDataInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\LocalizedException;
-use Psr\Log\LoggerInterface;
-use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\Website;
 
 /**
@@ -18,14 +22,24 @@ use Magento\Store\Model\Website;
 class CreditPrice
 {
     /**
-     * @var \Magento\Braintree\Api\CreditPriceRepositoryInterface
+     * @var CreditPriceRepositoryInterface
      */
     private $creditPriceRepository;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var CreditPriceDataInterfaceFactory
+     */
+    private $creditPriceFactory;
+
+    /**
+     * @var ScopeConfigInterface
      */
     private $scopeConfig;
+
+    /**
+     * @var CreditApi
+     */
+    private $creditApi;
 
     /**
      * @var ProductCollectionFactory
@@ -33,19 +47,9 @@ class CreditPrice
     private $productCollection;
 
     /**
-     * @var \Magento\Braintree\Api\Data\CreditPriceDataInterfaceFactory
-     */
-    private $creditPriceFactory;
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
-
-    /**
-     * @var \Magento\Braintree\Model\Paypal\CreditApi
-     */
-    private $creditApi;
 
     /**
      * @var PayPalCreditConfig
@@ -64,31 +68,31 @@ class CreditPrice
 
     /**
      * CreditPrice constructor.
-     * @param \Magento\Braintree\Api\CreditPriceRepositoryInterface $creditPriceRepository
-     * @param \Magento\Braintree\Api\Data\CreditPriceDataInterfaceFactory $creditPriceDataInterfaceFactory
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Braintree\Model\Paypal\CreditApi $creditApi
+     * @param CreditPriceRepositoryInterface $creditPriceRepository
+     * @param CreditPriceDataInterfaceFactory $creditPriceDataInterfaceFactory
+     * @param ScopeConfigInterface $scopeConfig
+     * @param CreditApi $creditApi
      * @param ProductCollectionFactory $productCollection
      * @param LoggerInterface $logger
      * @param PayPalCreditConfig $config
      * @param StoreManager $storeManager
      */
     public function __construct(
-        \Magento\Braintree\Api\CreditPriceRepositoryInterface $creditPriceRepository,
-        \Magento\Braintree\Api\Data\CreditPriceDataInterfaceFactory $creditPriceDataInterfaceFactory,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Braintree\Model\Paypal\CreditApi $creditApi,
+        CreditPriceRepositoryInterface $creditPriceRepository,
+        CreditPriceDataInterfaceFactory $creditPriceDataInterfaceFactory,
+        ScopeConfigInterface $scopeConfig,
+        CreditApi $creditApi,
         ProductCollectionFactory $productCollection,
         LoggerInterface $logger,
         PayPalCreditConfig $config,
         StoreManager $storeManager
     ) {
         $this->creditPriceRepository = $creditPriceRepository;
+        $this->creditPriceFactory = $creditPriceDataInterfaceFactory;
         $this->scopeConfig = $scopeConfig;
+        $this->creditApi = $creditApi;
         $this->productCollection = $productCollection;
         $this->logger = $logger;
-        $this->creditPriceFactory = $creditPriceDataInterfaceFactory;
-        $this->creditApi = $creditApi;
         $this->config = $config;
         $this->storeManager = $storeManager;
     }
@@ -138,7 +142,7 @@ class CreditPrice
                         $priceOptions = $this->creditApi->getPriceOptions($productPrice);
                         foreach ($priceOptions as $priceOption) {
                             // Populate model
-                            /** @var $model \Magento\Braintree\Api\Data\CreditPriceDataInterface */
+                            /** @var CreditPriceDataInterface $model */
                             $model = $this->creditPriceFactory->create();
                             $model->setProductId($product->getId());
                             $model->setTerm($priceOption['term']);
