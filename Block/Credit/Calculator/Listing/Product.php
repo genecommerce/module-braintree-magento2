@@ -84,7 +84,10 @@ class Product extends Template
      */
     public function getPriceData()
     {
-        $data = $this->creditPriceRepository->getCheapestByProductId($this->getProduct()->getId());
+        $productId = $this->getProduct()->getId();
+        $websiteId = $this->_storeManager->getStore()->getWebsiteId();
+
+        $data = $this->creditPriceRepository->getCheapestByProductId($productId, $websiteId);
         if ($data->getId()) {
             return $data;
         }

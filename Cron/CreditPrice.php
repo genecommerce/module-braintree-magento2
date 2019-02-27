@@ -128,7 +128,7 @@ class CreditPrice
                 foreach ($collection as $product) {
                     try {
                         // Delete by product_id
-                        $this->creditPriceRepository->deleteByProductId($product->getId());
+                        $this->creditPriceRepository->deleteByProductId($product->getId(), $websiteId);
 
                         $productPrice = $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue();
 

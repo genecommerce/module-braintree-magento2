@@ -75,7 +75,10 @@ class View extends Template
     public function getPriceData()
     {
         if ($this->getProduct()) {
-            $results = $this->creditPriceRepository->getByProductId($this->getProduct()->getId());
+            $productId = $this->getProduct()->getId();
+            $websiteId = $this->_storeManager->getStore()->getWebsiteId();
+
+            $results = $this->creditPriceRepository->getByProductId($productId, $websiteId);
             if (!empty($results)) {
                 $options = [];
                 foreach ($results as $option) {

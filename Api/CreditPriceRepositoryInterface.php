@@ -20,19 +20,22 @@ interface CreditPriceRepositoryInterface
 
     /**
      * @param int $productId
+     * @param int $websiteId
      * @return CreditPriceDataInterface
      */
-    public function getByProductId($productId);
+    public function getByProductId($productId, $websiteId = 0);
 
     /**
      * @param $productId
+     * @param int $websiteId
      * @return Data\CreditPriceDataInterface
      */
-    public function getCheapestByProductId($productId);
+    public function getCheapestByProductId($productId, $websiteId = 0);
 
     /**
      * @param int $productId
+     * @param int $websiteId
      * @return mixed
      */
-    public function deleteByProductId($productId);
+    public function deleteByProductId($productId, $websiteId = 0);
 }

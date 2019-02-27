@@ -38,11 +38,12 @@ class CreditPriceRepository implements CreditPriceRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function getByProductId($productId)
+    public function getByProductId($productId, $websiteId = 0)
     {
         /** @var CreditPrice\Collection $collection */
         $collection = $this->collectionFactory->create();
         $collection->addFieldToFilter('product_id', $productId);
+        $collection->addFieldToFilter('website_id', $websiteId);
         $collection->setOrder('term', \Magento\Framework\Data\Collection\AbstractDb::SORT_ORDER_ASC);
         return $collection->getItems();
     }
@@ -50,11 +51,12 @@ class CreditPriceRepository implements CreditPriceRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function getCheapestByProductId($productId)
+    public function getCheapestByProductId($productId, $websiteId = 0)
     {
         /** @var CreditPrice\Collection $collection */
         $collection = $this->collectionFactory->create();
         $collection->addFieldToFilter('product_id', $productId);
+        $collection->addFieldToFilter('website_id', $websiteId);
         $collection->setOrder('monthly_payment', \Magento\Framework\Data\Collection\AbstractDb::SORT_ORDER_ASC);
         $collection->setPageSize(1);
 
@@ -64,10 +66,11 @@ class CreditPriceRepository implements CreditPriceRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function deleteByProductId($productId)
+    public function deleteByProductId($productId, $websiteId = 0)
     {
         $collection = $this->collectionFactory->create();
         $collection->addFieldToFilter('product_id', $productId);
+        $collection->addFieldToFilter('website_id', $websiteId);
         return $collection->walk('delete');
     }
 }
