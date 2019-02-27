@@ -109,6 +109,11 @@ class CreditPrice
                 continue;
             }
 
+            $websiteId = $website->getId();
+            $defaultStore = $website->getDefaultGroup()->getDefaultStore()->getId();
+
+            $this->storeManager->setCurrentStore($defaultStore);
+
             // Retrieve paginated collection of product and their price
             $collection = $this->productCollection->create();
             $collection->addAttributeToSelect('price')
