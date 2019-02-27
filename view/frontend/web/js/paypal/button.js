@@ -76,6 +76,26 @@ define(
                 layout: null,
 
                 /**
+                 * {Bool}
+                 */
+                fundingicons: null,
+
+                /**
+                 * {Bool}
+                 */
+                branding: null,
+
+                /**
+                 * {Bool}
+                 */
+                tagline: null,
+
+                /**
+                 * {String}
+                 */
+                label: null,
+
+                /**
                  * {String}
                  */
                 offerCredit: false,
@@ -86,6 +106,15 @@ define(
                 disabledFunding: {
                     card: false,
                     elv: false
+                },
+
+                /**
+                 * {Object}
+                 */
+                events: {
+                    onClick: null,
+                    onCancel: null,
+                    onError: null
                 }
             },
 
@@ -95,7 +124,6 @@ define(
             initialize: function () {
                 this._super()
                     .initComponent();
-
                 return this;
             },
 
@@ -154,6 +182,19 @@ define(
                             size: this.size
                         };
 
+                        if (typeof this.fundingicons === 'boolean') {
+                            style.fundingicons = this.fundingicons;
+                        }
+                        if (typeof this.branding === 'boolean') {
+                            style.branding = this.branding;
+                        }
+                        if (typeof this.label === 'string') {
+                            style.label = this.label;
+                        }
+                        if (typeof this.tagline === 'boolean') {
+                            style.tagline = this.tagline;
+                        }
+
                         // PayPal Credit funding options
                         var funding = {
                             allowed: [],
@@ -175,7 +216,10 @@ define(
                         }
 
                         // Render
-                        var actionSuccess = this.actionSuccess;
+                        var actionSuccess = this.actionSuccess,
+                            beforeSubmit = this.beforeSubmit,
+                            events = this.events;
+
                         paypal.Button.render({
                             env: this.environment,
                             style: style,
@@ -188,11 +232,26 @@ define(
 
                             onCancel: function (data) {
                                 jQuery("#maincontent").trigger('processStop');
+
+                                if (typeof events.onCancel === 'function') {
+                                    events.onCancel();
+                                }
                             },
 
                             onError: function (err) {
                                 console.error('paypalCheckout button render error', err);
                                 jQuery("#maincontent").trigger('processStop');
+
+
+                                if (typeof events.onError === 'function') {
+                                    events.onError(err);
+                                }
+                            },
+
+                            onClick: function(data) {
+                                if (typeof events.onClick === 'function') {
+                                    events.onClick(data);
+                                }
                             },
 
                             /**
@@ -203,6 +262,12 @@ define(
                             onAuthorize: function (data, actions) {
                                 return paypalCheckoutInstance.tokenizePayment(data)
                                     .then(function (payload) {
+                                        if (typeof beforeSubmit === 'function') {
+                                            if (!beforeSubmit(payload)) {
+                                                return false;
+                                            }
+                                        }
+
                                         jQuery("#maincontent").trigger('processStart');
 
                                         // Map the shipping address correctly
@@ -232,6 +297,10 @@ define(
                         }, '#' + this.id);
                     }.bind(this));
                 }.bind(this));
+            },
+
+            beforeSubmit: function () {
+                return;
             }
         });
     }

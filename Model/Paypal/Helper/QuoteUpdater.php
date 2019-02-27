@@ -31,6 +31,11 @@ class QuoteUpdater extends AbstractHelper
     private $quoteRepository;
 
     /**
+     * @var \Magento\Quote\Model\ResourceModel\Quote\Address
+     */
+    private $addressFactory;
+
+    /**
      * @var ManagerInterface
      */
     private $eventManager;
@@ -44,11 +49,13 @@ class QuoteUpdater extends AbstractHelper
     public function __construct(
         Config $config,
         CartRepositoryInterface $quoteRepository,
-        ManagerInterface $eventManager
+        ManagerInterface $eventManager,
+        \Magento\Quote\Model\ResourceModel\Quote\Address $addressFactory
     ) {
         $this->config = $config;
         $this->quoteRepository = $quoteRepository;
         $this->eventManager = $eventManager;
+        $this->addressFactory = $addressFactory;
     }
 
     /**
@@ -104,11 +111,21 @@ class QuoteUpdater extends AbstractHelper
         }
 
         $this->quoteRepository->save($quote);
+        $this->cleanUpAddress($quote);
 
         $this->eventManager->dispatch('braintree_paypal_update_quote_after', [
             'quote' => $quote,
             'paypal_response' => $details
         ]);
+    }
+
+    // @todo "why is this needed"
+    private function cleanUpAddress(Quote $quote)
+    {
+        $this->addressFactory->getConnection()->delete(
+            'quote_address',
+            'quote_id = ' . (int) $quote->getId() . ' AND email IS NULL'
+        );
     }
 
     /**

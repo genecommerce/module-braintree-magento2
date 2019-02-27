@@ -125,8 +125,12 @@ define([
             }
 
             // Other field validations
-            this.isValidExpirationDate = event.fields.expirationDate.isValid;
-            this.isValidCvvNumber = event.fields.cvv.isValid;
+            if (event.emittedBy === 'expirationDate') {
+                this.isValidExpirationDate = event.fields.expirationDate.isValid;
+            }
+            if (event.emittedBy === 'cvv') {
+                this.isValidCvvNumber = event.fields.cvv.isValid;
+            }
         },
 
         /**
