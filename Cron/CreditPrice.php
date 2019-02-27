@@ -129,8 +129,10 @@ class CreditPrice
                         // Delete by product_id
                         $this->creditPriceRepository->deleteByProductId($product->getId());
 
+                        $productPrice = $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue();
+
                         // Retrieve data from PayPal
-                        $priceOptions = $this->creditApi->getPriceOptions($product->getFinalPrice());
+                        $priceOptions = $this->creditApi->getPriceOptions($productPrice);
                         foreach ($priceOptions as $priceOption) {
                             // Populate model
                             /** @var $model \Magento\Braintree\Api\Data\CreditPriceDataInterface */
