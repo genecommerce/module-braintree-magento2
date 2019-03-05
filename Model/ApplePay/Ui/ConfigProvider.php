@@ -1,6 +1,7 @@
 <?php
 namespace Magento\Braintree\Model\ApplePay\Ui;
 
+use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
 use Magento\Braintree\Model\ApplePay\Config;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
@@ -44,11 +45,13 @@ final class ConfigProvider implements ConfigProviderInterface
     public function __construct(
         Config $config,
         BraintreeAdapter $adapter,
-        Repository $assetRepo
+        Repository $assetRepo,
+        \Magento\Braintree\Gateway\Config\Config $braintreeConfig
     ) {
         $this->config = $config;
         $this->adapter = $adapter;
         $this->assetRepo = $assetRepo;
+        $this->braintreeConfig = $braintreeConfig;
     }
 
     /**
@@ -76,7 +79,14 @@ final class ConfigProvider implements ConfigProviderInterface
     public function getClientToken()
     {
         if (empty($this->clientToken)) {
-            $this->clientToken = $this->adapter->generate();
+            $params = [];
+
+            $merchantAccountId = $this->braintreeConfig->getMerchantAccountId();
+            if (!empty($merchantAccountId)) {
+                $params[PaymentDataBuilder::MERCHANT_ACCOUNT_ID] = $merchantAccountId;
+            }
+
+            $this->clientToken = $this->adapter->generate($params);
         }
 
         return $this->clientToken;
