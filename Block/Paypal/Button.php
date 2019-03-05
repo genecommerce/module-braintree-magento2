@@ -38,7 +38,7 @@ class Button extends Template implements ShortcutInterface
     /**
      * @var Config
      */
-    private $config;
+    protected $config;
 
     /**
      * @var BraintreeConfig

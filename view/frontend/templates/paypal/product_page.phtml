@@ -1,0 +1,32 @@
+<?php
+/**
+ * @var \Magento\Braintree\Block\Paypal\ProductPage $block
+ */
+$id = $block->getContainerId() . mt_rand();
+$config = [
+    'Magento_Braintree/js/paypal/product-page' => [
+        'id' => $id,
+        'environment' => $block->getEnvironment(),
+        'clientToken' => $block->getClientToken(),
+        'displayName' => $block->getMerchantName(),
+        'payeeEmail' => $block->getPayeeEmail(),
+        'actionSuccess' => $block->getActionSuccess(),
+        'offerCredit' => $block->isCreditActive(),
+        'shape' => $block->getButtonShape(),
+        'size' => $block->getButtonSize(),
+        'layout' => $block->getButtonLayout(),
+        'color' => $block->getButtonColor(),
+        'disabledFunding' => $block->getDisabledFunding()
+    ]
+];
+?>
+
+<div data-mage-init='<?php /* @noEscape */ echo json_encode($config); ?>'
+     class="paypal checkout paypal-logo braintree-paypal-logo<?php
+     /* @noEscape */ echo $block->getContainerId(); ?>-container">
+    <div data-currency="<?php /* @noEscape */ echo $block->getCurrency(); ?>"
+         data-locale="<?php /* @noEscape */ echo $block->getLocale(); ?>"
+         data-amount="<?php /* @noEscape */ echo $block->getAmount(); ?>"
+         id="<?php /* @noEscape */ echo $id; ?>"
+         class="action-braintree-paypal-logo"></div>
+</div>

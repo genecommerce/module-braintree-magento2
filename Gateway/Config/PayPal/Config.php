@@ -22,9 +22,10 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const KEY_PAYEE_EMAIL = 'payee_email';
     const KEY_PAYPAL_DISABLED_FUNDING_CHECKOUT = 'disabled_funding_checkout';
     const KEY_PAYPAL_DISABLED_FUNDING_CART = 'disabled_funding_cart';
-
+    const KEY_PAYPAL_DISABLED_FUNDING_PDP = 'disabled_funding_productpage';
     const BUTTON_AREA_CART = 'cart';
     const BUTTON_AREA_CHECKOUT = 'checkout';
+    const BUTTON_AREA_PDP = 'productpage';
     const KEY_BUTTON_COLOR = 'color';
     const KEY_BUTTON_SHAPE = 'shape';
     const KEY_BUTTON_SIZE = 'size';
@@ -173,7 +174,11 @@ class Config extends \Magento\Payment\Gateway\Config\Config
                 'button_color_checkout' => 2,
                 'button_layout_checkout' => 1,
                 'button_size_checkout' => 2,
-                'button_shape_checkout' => 1
+                'button_shape_checkout' => 1,
+                'button_color_productpage' => 2,
+                'button_layout_productpage' => 0,
+                'button_size_productpage' => 2,
+                'button_shape_productpage' => 1
             ];
             $value = $defaults["button_" . $style . "_" . $area];
         }
@@ -268,6 +273,15 @@ class Config extends \Magento\Payment\Gateway\Config\Config
             $area = self::KEY_PAYPAL_DISABLED_FUNDING_CHECKOUT;
         }
         return strstr($this->getValue($area), "elv") ? true : false;
+    }
+
+    /**
+     * PayPal btn enabled product page
+     * @return bool
+     */
+    public function getProductPageBtnEnabled()
+    {
+        return $this->getValue('button_productpage_enabled');
     }
 }
 

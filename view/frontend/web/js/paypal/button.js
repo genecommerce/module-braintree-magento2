@@ -124,7 +124,6 @@ define(
             initialize: function () {
                 this._super()
                     .initComponent();
-
                 return this;
             },
 
@@ -218,6 +217,7 @@ define(
 
                         // Render
                         var actionSuccess = this.actionSuccess,
+                            beforeSubmit = this.beforeSubmit,
                             events = this.events;
 
                         paypal.Button.render({
@@ -248,9 +248,9 @@ define(
                                 }
                             },
 
-                            onClick: function() {
+                            onClick: function(data) {
                                 if (typeof events.onClick === 'function') {
-                                    events.onClick();
+                                    events.onClick(data);
                                 }
                             },
 
@@ -262,6 +262,12 @@ define(
                             onAuthorize: function (data, actions) {
                                 return paypalCheckoutInstance.tokenizePayment(data)
                                     .then(function (payload) {
+                                        if (typeof beforeSubmit === 'function') {
+                                            if (!beforeSubmit(payload)) {
+                                                return false;
+                                            }
+                                        }
+
                                         jQuery("#maincontent").trigger('processStart');
 
                                         // Map the shipping address correctly
@@ -291,6 +297,10 @@ define(
                         }, '#' + this.id);
                     }.bind(this));
                 }.bind(this));
+            },
+
+            beforeSubmit: function () {
+                return true;
             }
         });
     }
