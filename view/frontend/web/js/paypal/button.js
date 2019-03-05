@@ -300,7 +300,7 @@ define(
             },
 
             beforeSubmit: function () {
-                return;
+                return true;
             }
         });
     }
