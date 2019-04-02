@@ -53,11 +53,11 @@ define([
 
             var self = this;
             require(['Magento_Checkout/js/model/quote', 'jquery'], function (quote, $) {
-                if (typeof quote.totals().grand_total === 'undefined') {
+                if (typeof quote.totals().base_grand_total === 'undefined') {
                     return false;
                 }
 
-                $.getJSON(self.endpoint, {amount: quote.totals().grand_total}, function (response) {
+                $.getJSON(self.endpoint, {amount: quote.totals().base_grand_total}, function (response) {
                     self.instalments(response);
                     self.setCurrentInstalment(response[0]);
                     self.visible(true);
