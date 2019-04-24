@@ -209,7 +209,13 @@ define([
          */
         beforePlaceOrder: function (data) {
             this.setPaymentMethodNonce(data.nonce);
-            selectBillingAddress(quote.shippingAddress());
+
+            if (quote.shippingAddress() === quote.billingAddress()) {
+                selectBillingAddress(quote.shippingAddress());
+            } else {
+                selectBillingAddress(quote.billingAddress());
+            }
+
             this.customerEmail(data.details.email);
             this.placeOrder();
         },
