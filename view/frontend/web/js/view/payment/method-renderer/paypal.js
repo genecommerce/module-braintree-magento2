@@ -254,7 +254,7 @@ define([
                 amount: parseFloat(this.grandTotalAmount).toFixed(2),
                 currency: totals['base_currency_code'],
                 locale: this.getLocale(),
-                enableShippingAddress: false,
+                enableShippingAddress: true,
 
                 /**
                  * Triggers on any Braintree error
