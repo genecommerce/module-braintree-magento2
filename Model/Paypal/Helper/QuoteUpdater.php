@@ -122,8 +122,9 @@ class QuoteUpdater extends AbstractHelper
     // @todo "why is this needed"
     private function cleanUpAddress(Quote $quote)
     {
+        $tableName = $this->addressFactory->getConnection()->getTableName('quote_address');
         $this->addressFactory->getConnection()->delete(
-            'quote_address',
+            $tableName,
             'quote_id = ' . (int) $quote->getId() . ' AND email IS NULL'
         );
     }
