@@ -296,12 +296,11 @@ define([
             return {
                 recipientName: address.firstname + ' ' + address.lastname,
                 line1: address.street[0],
-                line2: typeof address.street[2] !== 'undefined' ? address.street[1] : address.street[1] + ' ' + address.street[2],
+                line2: typeof address.street[2] === 'undefined' ? address.street[1] : address.street[1] + ' ' + address.street[2],
                 city: address.city,
                 countryCode: address.countryId,
                 postalCode: address.postcode,
-                state: address.region,
-                phone: address.telephone
+                state: address.region
             };
         },
 
