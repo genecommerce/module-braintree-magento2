@@ -82,10 +82,6 @@ define([
             this.getPaymentMethodNonce();
         },
 
-        setPaymentMethodNonce: function (paymentMethodNonce) {
-            this.paymentMethodNonce = paymentMethodNonce;
-        },
-
         /**
          * Send request to get payment method nonce
          */
@@ -101,15 +97,15 @@ define([
                 self.hostedFields(function (formComponent) {
                     formComponent.setPaymentMethodNonce(response.paymentMethodNonce);
                     formComponent.additionalData['public_hash'] = self.publicHash;
+                    formComponent.code = self.code;
                     if (self.vaultedCVV()) {
                         formComponent.additionalData['cvv'] = self.vaultedCVV();
                     }
-                    formComponent.code = self.code;
 
                     self.validatorManager.validate(formComponent, function () {
                         return formComponent.placeOrder('parent');
                     }, function() {
-                        // TODO add teardown from failed validation.
+                        // No teardown actions required.
                     });
 
                 });
