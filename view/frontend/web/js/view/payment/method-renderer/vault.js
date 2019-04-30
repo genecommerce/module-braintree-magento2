@@ -30,9 +30,7 @@ define([
                 hostedFields: '${ $.parentName }.braintree'
             },
             vaultedCVV: ko.observable(""),
-            validatorManager: validatorManager,
-            paymentMethodNonce: null,
-            additionalData: {}
+            validatorManager: validatorManager
         },
 
         initObservable: function () {
@@ -106,6 +104,7 @@ define([
                         return formComponent.placeOrder('parent');
                     }, function() {
                         // No teardown actions required.
+                        formComponent.setPaymentMethodNonce(null);
                     });
 
                 });
