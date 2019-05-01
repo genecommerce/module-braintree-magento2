@@ -2,72 +2,89 @@
 
 namespace Magento\Braintree\Controller\Paypal;
 
+use Exception;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Braintree\Gateway\Config\PayPal\Config;
 use Magento\Braintree\Model\Paypal\Helper\QuoteUpdater;
+use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Json\Helper\Data;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Api\Data\CartItemInterface;
+use Magento\Quote\Model\QuoteFactory;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class OneClick
  * Used by the product page to create a quote for a single product
+ *
  * @package Magento\Braintree\Controller\Paypal
  */
 class OneClick extends Review
 {
     /**
-     * @var \Magento\Quote\Model\QuoteFactory
+     * @var QuoteFactory
      */
     protected $quoteFactory;
 
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @var ProductRepositoryInterface
      */
     protected $productRepository;
 
     /**
-     * @var \Magento\Framework\Data\Form\FormKey\Validator
+     * @var Validator
      */
     protected $formKeyValidator;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\Quote\Api\Data\CartInterface
+     * @var CartInterface
      */
     protected $quote;
 
     /**
-     * @var \Magento\Framework\Json\Helper\Data
+     * @var Data
      */
     protected $jsonHelper;
 
     /**
+     * @var Json
+     */
+    protected $json;
+
+    /**
      * OneClick constructor.
+     *
      * @param Context $context
      * @param Config $config
      * @param Session $checkoutSession
      * @param QuoteUpdater $quoteUpdater
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param \Magento\Quote\Model\QuoteFactory $quoteFactory
-     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
-     * @param CustomerSession $customerSession
+     * @param ProductRepositoryInterface $productRepository
+     * @param QuoteFactory $quoteFactory
+     * @param Validator $formKeyValidator
+     * @param StoreManagerInterface $storeManager
+     * @param Json $json
      */
     public function __construct(
         Context $context,
         Config $config,
         Session $checkoutSession,
         QuoteUpdater $quoteUpdater,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Quote\Model\QuoteFactory $quoteFactory,
-        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Json\Helper\Data $jsonHelper
+        ProductRepositoryInterface $productRepository,
+        QuoteFactory $quoteFactory,
+        Validator $formKeyValidator,
+        StoreManagerInterface $storeManager,
+        Json $json
     ) {
         parent::__construct(
             $context,
@@ -80,7 +97,7 @@ class OneClick extends Review
         $this->quoteFactory = $quoteFactory;
         $this->formKeyValidator = $formKeyValidator;
         $this->storeManager = $storeManager;
-        $this->jsonHelper = $jsonHelper;
+        $this->json = $json;
     }
 
     /**
@@ -90,10 +107,14 @@ class OneClick extends Review
     {
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
-        // Convert JSON form fields to array keys & extract form_key
-        $requestData = $this->jsonHelper->jsonDecode(
+        // Convert JSON form fields to array keys & extract form_key.
+        $requestData = $this->json->unserialize(
             $this->getRequest()->getPostValue('result', '{}')
         );
+
+        if (empty($requestData)) {
+            return $resultRedirect->setPath('braintree/paypal/review');
+        }
 
         if (!empty($requestData['additionalData'])) {
             parse_str($requestData['additionalData'], $requestData['additionalData']);
@@ -106,38 +127,43 @@ class OneClick extends Review
             return $resultRedirect->setPath($this->_redirect->getRefererUrl());
         }
 
-        // Retrieve product form values
+        // Retrieve product form values.
         if (empty($requestData['additionalData']['product'])) {
             $this->messageManager->addErrorMessage("No product specified");
             return $resultRedirect->setPath($this->_redirect->getRefererUrl());
         }
 
-        // Create a blank quote to just purchase this one product
+        // Create a blank quote to just purchase this one product.
         $quote = $this->quoteFactory->create();
 
-        // This is always set to true due to an unknown issue whereby the shipping address's association
-        // with the quote is lost when placing order when logged in
+        /**
+         * This is always set to true due to an unknown issue
+         * whereby the shipping address association with the
+         * quote is lost when placing order when logged in.
+         */
         $quote->setCustomerIsGuest(1);
 
-        /** @var $product \Magento\Quote\Api\Data\CartItemInterface */
+        /**
+         * @var $product CartItemInterface
+         */
         try {
             $product = $this->productRepository->getById(
                 $requestData['additionalData']['product'],
                 false,
                 $this->storeManager->getStore()->getId()
             );
-        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+        } catch (NoSuchEntityException $e) {
             $this->messageManager->addExceptionMessage($e);
             return $resultRedirect->setPath($this->_redirect->getRefererUrl());
         }
 
-        // Add product to quote
+        // Add product to quote.
         $quote->setInventoryProcessed(false);
-        $additionalData = new \Magento\Framework\DataObject;
+        $additionalData = new DataObject;
         $additionalData->setData($requestData['additionalData']);
         try {
             $quote->addProduct($product, $additionalData);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->messageManager->addExceptionMessage($e);
             return $resultRedirect->setPath($this->_redirect->getRefererUrl());
         }
@@ -145,7 +171,7 @@ class OneClick extends Review
         $quote->save($quote);
         $quote->setTotalsCollectedFlag(false);
 
-        // Replace the user's current cart with this one to ensure the place order actions work correctly
+        // Replace the user's current cart with this one to ensure the place order actions work correctly.
         $this->checkoutSession->setBraintreeOneClickQuoteId($quote->getId());
         $this->checkoutSession->replaceQuote($quote);
 
@@ -153,8 +179,9 @@ class OneClick extends Review
     }
 
     /**
-     * Return this controller's quote instance
-     * @return \Magento\Quote\Api\Data\CartInterface
+     * Return this controller's quote instance.
+     *
+     * @return CartInterface
      */
     protected function getQuote()
     {
