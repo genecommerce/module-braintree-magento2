@@ -10,8 +10,17 @@ define([
     'Magento_Vault/js/view/payment/method-renderer/vault',
     'Magento_Braintree/js/view/payment/adapter',
     'Magento_Ui/js/model/messageList',
+    'Magento_Braintree/js/view/payment/validator-handler',
     'Magento_Checkout/js/model/full-screen-loader'
-], function (ko, $, VaultComponent, Braintree, globalMessageList, fullScreenLoader) {
+], function (
+    ko,
+    $,
+    VaultComponent,
+    Braintree,
+    globalMessageList,
+    validatorManager,
+    fullScreenLoader
+) {
     'use strict';
 
     return VaultComponent.extend({
@@ -20,7 +29,16 @@ define([
             modules: {
                 hostedFields: '${ $.parentName }.braintree'
             },
-            vaultedCVV: ko.observable("")
+            vaultedCVV: ko.observable(""),
+            validatorManager: validatorManager
+        },
+
+        initObservable: function () {
+            this._super()
+                .observe(['active']);
+            this.validatorManager.initialize();
+
+            return this;
         },
 
         /**
@@ -72,27 +90,32 @@ define([
             $.getJSON(self.nonceUrl, {
                 'public_hash': self.publicHash,
                 'cvv': self.vaultedCVV()
-            })
-                .done(function (response) {
-                    fullScreenLoader.stopLoader();
-                    self.hostedFields(function (formComponent) {
-                        formComponent.setPaymentMethodNonce(response.paymentMethodNonce);
-                        formComponent.additionalData['public_hash'] = self.publicHash;
-                        if (self.vaultedCVV()) {
-                            formComponent.additionalData['cvv'] = self.vaultedCVV();
-                        }
-                        formComponent.code = self.code;
-                        formComponent.placeOrder('parent');
-                    });
-                })
-                .fail(function (response) {
-                    var error = JSON.parse(response.responseText);
+            }).done(function (response) {
+                fullScreenLoader.stopLoader();
+                self.hostedFields(function (formComponent) {
+                    formComponent.setPaymentMethodNonce(response.paymentMethodNonce);
+                    formComponent.additionalData['public_hash'] = self.publicHash;
+                    formComponent.code = self.code;
+                    if (self.vaultedCVV()) {
+                        formComponent.additionalData['cvv'] = self.vaultedCVV();
+                    }
 
-                    fullScreenLoader.stopLoader();
-                    globalMessageList.addErrorMessage({
-                        message: error.message
+                    self.validatorManager.validate(formComponent, function () {
+                        return formComponent.placeOrder('parent');
+                    }, function() {
+                        // No teardown actions required.
+                        formComponent.setPaymentMethodNonce(null);
                     });
+
                 });
+            }).fail(function (response) {
+                var error = JSON.parse(response.responseText);
+
+                fullScreenLoader.stopLoader();
+                globalMessageList.addErrorMessage({
+                    message: error.message
+                });
+            });
         }
     });
 });
