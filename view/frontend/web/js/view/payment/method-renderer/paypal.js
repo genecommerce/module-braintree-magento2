@@ -226,6 +226,8 @@ define([
         reInitPayPal: function () {
             this.disableButton();
             this.clientConfig.paypal.amount = parseFloat(this.grandTotalAmount).toFixed(2);
+            this.clientConfig.paypal.shippingAddressOverride = this.getShippingAddress();
+
             Braintree.setConfig(this.clientConfig);
 
             if (Braintree.getPayPalInstance()) {
@@ -260,7 +262,9 @@ define([
                 amount: parseFloat(this.grandTotalAmount).toFixed(2),
                 currency: totals['base_currency_code'],
                 locale: this.getLocale(),
-                enableShippingAddress: false,
+                enableShippingAddress: true,
+                shippingAddressEditable: false,
+                shippingAddressOverride: this.getShippingAddress(),
 
                 /**
                  * Triggers on any Braintree error
@@ -291,18 +295,18 @@ define([
         getShippingAddress: function () {
             var address = quote.shippingAddress();
 
-            if (address.postcode === null) {
+            if (address.postcode === null || typeof address.postcode === 'undefined') {
                 return {};
             }
 
             return {
                 recipientName: address.firstname + ' ' + address.lastname,
                 line1: address.street[0],
+                line2: typeof address.street[2] === 'undefined' ? address.street[1] : address.street[1] + ' ' + address.street[2],
                 city: address.city,
                 countryCode: address.countryId,
                 postalCode: address.postcode,
-                state: address.regionCode,
-                phone: address.telephone
+                state: address.region
             };
         },
 
