@@ -59,6 +59,11 @@ class Cart extends Action
                 ];
             }
 
+            // Sort $options by term, ascending.
+            usort($options, function ($a, $b) {
+                return $a['term'] <=> $b['term'];
+            });
+
             $response->setData($options);
         } catch (\Exception $e) {
             return $this->processBadRequest($response);
