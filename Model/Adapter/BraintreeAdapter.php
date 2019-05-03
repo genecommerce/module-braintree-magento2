@@ -8,6 +8,7 @@ namespace Magento\Braintree\Model\Adapter;
 use Braintree\ClientToken;
 use Braintree\Configuration;
 use Braintree\CreditCard;
+use Braintree\PaymentMethod;
 use Braintree\PaymentMethodNonce;
 use Braintree\Transaction;
 use Magento\Braintree\Gateway\Config\Config;
@@ -207,5 +208,12 @@ class BraintreeAdapter
     public function cloneTransaction($transactionId, array $attributes)
     {
         return Transaction::cloneTransaction($transactionId, $attributes);
+    }
+
+    public function deletePaymentMethod($token)
+    {
+        $result = PaymentMethod::delete($token);
+
+        return $result->success;
     }
 }

@@ -88,4 +88,8 @@
     <type name="Magento\Catalog\Block\Product\ListProduct">
         <plugin name="braintreeProductDetailsBlockPlugin" type="\Magento\Braintree\Plugin\ProductDetailsBlockPlugin" />
     </type>
+
+    <type name="Magento\Vault\Api\PaymentTokenRepositoryInterface">
+        <plugin name="braintreeDeleteStoredPaymentPlugin" type="\Magento\Braintree\Plugin\DeleteStoredPaymentPlugin" />
+    </type>
 </config>
