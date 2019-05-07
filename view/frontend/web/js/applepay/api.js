@@ -210,7 +210,7 @@ define(['uiComponent', 'mage/translate', 'mage/storage', 'jquery'], function (Co
                         if (typeof r[i].method_code !== 'string') {
                             continue;
                         }
-                        
+
                         method = {
                             identifier: r[i].method_code,
                             label: r[i].method_title,
@@ -219,7 +219,7 @@ define(['uiComponent', 'mage/translate', 'mage/storage', 'jquery'], function (Co
                         };
                         shippingMethods.push(method);
                         this.shippingMethods[ r[i].method_code ] = r[i];
-                        
+
                         if (!this.shippingMethod) {
                             this.shippingMethod = r[i].method_code;
                         }
@@ -231,7 +231,7 @@ define(['uiComponent', 'mage/translate', 'mage/storage', 'jquery'], function (Co
                         shippingMethods,
                         {
                             label: this.getDisplayName(),
-                            amount: parseFloat(this.getGrandTotalAmount() + parseFloat(shippingMethods[0].amount)).toFixed(2)
+                            amount: this.getGrandTotalAmount()
                         },
                         [{
                             type: 'final',
@@ -277,7 +277,7 @@ define(['uiComponent', 'mage/translate', 'mage/storage', 'jquery'], function (Co
                     ApplePaySession.STATUS_SUCCESS,
                     {
                         label: this.getDisplayName(),
-                        amount: this.getGrandTotalAmount() + parseFloat(shippingMethod.amount)
+                        amount: this.getGrandTotalAmount()
                     },
                     [{
                         type: 'final',
