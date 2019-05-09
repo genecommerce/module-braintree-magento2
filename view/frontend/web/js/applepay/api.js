@@ -181,7 +181,7 @@ define(
                     }
                 };
 
-                this.shippingAddress = payload;
+                this.shippingAddress = payload.address;
 
                 // POST to endpoint for shipping methods.
                 storage.post(
