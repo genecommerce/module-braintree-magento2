@@ -230,8 +230,8 @@ define(
                                 "regionId": this.getRegionId(this.shippingAddress.country_id, this.shippingAddress.region),
                                 "postcode": this.shippingAddress.postcode
                             },
-                            "shipping_method_code": shippingMethods[0].method_code,
-                            "shipping_carrier_code": shippingMethods[0].carrier_code
+                            "shipping_method_code": this.shippingMethods[0].method_code,
+                            "shipping_carrier_code": this.shippingMethods[0].carrier_code
                         }
                     };
 
