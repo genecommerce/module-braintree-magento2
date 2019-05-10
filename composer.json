@@ -17,7 +17,7 @@
         "magento/module-ui": "101.0.*|101.1.*"
     },
     "replace": {
-	 "magento/module-braintree": "100.*.*"
+        "magento/module-braintree": "100.*.*"
     },
     "type": "magento2-module",
     "license": [
@@ -40,7 +40,13 @@
         {
             "name": "Aidan Threadgold",
             "email": "aidan@gene.co.uk",
-            "homepage": "http://www.gene.co.uk",
+            "homepage": "https://www.gene.co.uk",
+            "role": "Developer"
+        },
+        {
+            "name": "Paul Canning",
+            "email": "paul.canning@gene.co.uk",
+            "homepage": "https://www.gene.co.uk",
             "role": "Developer"
         }
     ]
