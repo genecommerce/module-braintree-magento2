@@ -273,7 +273,7 @@ define(
                                         // Map the shipping address correctly
                                         var address = payload.details.shippingAddress;
                                         payload.details.shippingAddress = {
-                                            streetAddress: address.line1,
+                                            streetAddress: typeof address.line2 !== 'undefined' ? address.line1 + " " + address.line2 : address.line1,
                                             locality: address.city,
                                             postalCode: address.postalCode,
                                             countryCodeAlpha2: address.countryCode,

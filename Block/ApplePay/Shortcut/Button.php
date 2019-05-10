@@ -8,6 +8,7 @@ use Magento\Catalog\Block\ShortcutInterface;
 use Magento\Checkout\Model\DefaultConfigProvider;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Payment\Model\MethodInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Class Button
@@ -68,11 +69,17 @@ class Button extends AbstractButton implements ShortcutInterface
      */
     public function getQuoteId()
     {
-        $config = $this->defaultConfigProvider->getConfig();
-        if (!empty($config['quoteData']['entity_id'])) {
-            return $config['quoteData']['entity_id'];
+        try {
+            $config = $this->defaultConfigProvider->getConfig();
+            if (!empty($config['quoteData']['entity_id'])) {
+                return $config['quoteData']['entity_id'];
+            }
+        } catch (NoSuchEntityException $e) {
+            if ($e->getMessage() !== 'No such entity with cartId = ') {
+                throw $e;
+            }
         }
-        
+
         return 0;
     }
 }
