@@ -10,24 +10,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Callback to delete stored card in Braintree when Customer deletes card in account
 
-### Changed
-
-### Deprecated
-
-### Removed
-
 ### Fixed
-- Order button "unstuck" after invalid card details/failed payment
-- Sort PayPal Credit instalments on Product page
-- Stop cards always being stored after successful order
-- PayPal billing address
-- PayPal quote updater
-- PayPal shipping address
 - Vaulted cards now work with 3DS
-- PayPal voucher redirect loop
-- Apple Pay no longer adding shipping twice
-
-### Security
+- Order button "unstuck" after invalid card details/failed payment
+- Stop cards always being stored after successful order
+- No cart session exception handled correctly (https://github.com/shilpambb)
+- PayPal
+  - Credit instalments now sorted on Product page
+  - Billing address now updated correctly
+  - Quote updater no longer throws an error if store uses DB table prefix
+  - Shipping address now used for Virtual Products
+  - Voucher redirect loop fixed
+  - 2nd address line now included (https://github.com/igor-imaginemage)
+  - Credit calculator now uses correct total values (https://github.com/diazwatson)
+- Apple Pay
+  - Shipping cost is no longer added multiple times
+  - Apple Pay dialog now shows correct total on initial popup
 
 ## [3.1.1] - 2019-03-05
 ### Fixed
