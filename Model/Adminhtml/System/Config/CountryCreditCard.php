@@ -66,19 +66,25 @@ class CountryCreditCard extends Value
     public function beforeSave()
     {
         $value = $this->getValue();
+        unset($value['__empty']);
+
         $result = [];
-        foreach ($value as $data) {
-            if (empty($data['country_id']) || empty($data['cc_types'])) {
-                continue;
+        if (!empty($value)) {
+            foreach ($value as $data) {
+                if (empty($data['country_id']) || empty($data['cc_types'])) {
+                    continue;
+                }
+                $country = $data['country_id'];
+                if (array_key_exists($country, $result)) {
+                    $result[$country] = $this->appendUniqueCountries($result[$country], $data['cc_types']);
+                } else {
+                    $result[$country] = $data['cc_types'];
+                }
             }
-            $country = $data['country_id'];
-            if (array_key_exists($country, $result)) {
-                $result[$country] = $this->appendUniqueCountries($result[$country], $data['cc_types']);
-            } else {
-                $result[$country] = $data['cc_types'];
-            }
+            $this->setValue($this->serializer->serialize($result));
+        } else {
+            $this->setValue(null);
         }
-        $this->setValue($this->serializer->serialize($result));
         return $this;
     }
 
