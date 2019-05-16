@@ -167,7 +167,7 @@ define(
                 }
 
                 if ((window.ApplePaySession && ApplePaySession.canMakePayments()) !== true) {
-                    console.warn("Braintree ApplePay Apple Pay is not supported on this device/browser");
+                    // console.warn("Braintree ApplePay Apple Pay is not supported on this device/browser");
                     return false;
                 }
 
