@@ -123,7 +123,7 @@ class QuoteUpdater extends AbstractHelper
     private function cleanUpAddress(Quote $quote)
     {
         $this->addressFactory->getConnection()->delete(
-            'quote_address',
+			$quote->getResource()->getTable('quote_address'),
             'quote_id = ' . (int) $quote->getId() . ' AND email IS NULL'
         );
     }
