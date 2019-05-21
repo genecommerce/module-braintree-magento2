@@ -6,6 +6,10 @@
 
 namespace Magento\Braintree\Model\Adminhtml\System\Config;
 
+/**
+ * Class BmlPosition
+ * @package Magento\Braintree\Model\Adminhtml\System\Config
+ */
 class BmlPosition
 {
     /**

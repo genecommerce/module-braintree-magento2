@@ -2,12 +2,14 @@
 
 namespace Magento\Braintree\Model\Config\Source;
 
+use Magento\Framework\Option\ArrayInterface;
+
 /**
  * Class Size
  * @package Magento\Braintree\Model\Config\Source
  * @author Muj <muj@gene.co.uk>
  */
-class Size implements \Magento\Framework\Option\ArrayInterface
+class Size implements ArrayInterface
 {
     /**
      * Options getter
@@ -46,4 +48,3 @@ class Size implements \Magento\Framework\Option\ArrayInterface
         ];
     }
 }
-

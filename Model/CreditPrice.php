@@ -4,6 +4,7 @@ namespace Magento\Braintree\Model;
 
 use Magento\Braintree\Api\Data\CreditPriceDataInterface;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Braintree\Model\ResourceModel\CreditPrice as CreditPriceResource;
 
 /**
  * Class CreditPrice
@@ -18,7 +19,7 @@ class CreditPrice extends AbstractModel implements CreditPriceDataInterface
      */
     protected function _construct() // @codingStandardsIgnoreLine
     {
-        $this->_init('Magento\Braintree\Model\ResourceModel\CreditPrice');
+        $this->_init(CreditPriceResource::class);
     }
 
     /**

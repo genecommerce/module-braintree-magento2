@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<alr:test-suite xmlns:alr="urn:model.allure.qatools.yandex.ru" start="1557505450624" stop="1557505450630" version="1.4.0">
+  <name>Magento\Braintree\Test\Unit\Model\Ui\PayPal\ConfigProviderTest</name>
+  <test-cases>
+    <test-case start="1557505450625" stop="1557505450630" status="passed">
+      <name>testGetConfig with data set #0</name>
+    </test-case>
+  </test-cases>
+</alr:test-suite>

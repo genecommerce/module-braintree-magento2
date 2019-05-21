@@ -82,5 +82,4 @@ class StoreConfigResolver
 
         return $currentStoreId ? $currentStoreId : $currentStoreIdInAdmin;
     }
-
 }

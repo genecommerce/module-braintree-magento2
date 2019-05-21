@@ -10,6 +10,10 @@ use Magento\Payment\Gateway\Http\TransferFactoryInterface;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\Payment\Gateway\ConfigInterface;
 
+/**
+ * Class TransferFactory
+ * @package Magento\Braintree\Gateway\Http
+ */
 class TransferFactory implements TransferFactoryInterface
 {
     /**

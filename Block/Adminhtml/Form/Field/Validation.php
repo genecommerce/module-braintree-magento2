@@ -3,6 +3,8 @@
 namespace Magento\Braintree\Block\Adminhtml\Form\Field;
 
 use Magento\Config\Block\System\Config\Form\Field;
+use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Class Validation
@@ -12,23 +14,22 @@ use Magento\Config\Block\System\Config\Form\Field;
 class Validation extends Field
 {
     /**
-     * Force scope label to be blank
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
-     * @return string
+     * @inheritDoc
      */
-    protected function _renderScopeLabel(\Magento\Framework\Data\Form\Element\AbstractElement $element) // @codingStandardsIgnoreLine
+    protected function _renderScopeLabel(AbstractElement $element): string
     {
+        // Return empty label
         return '';
     }
 
     /**
-     * Replace field markup with validation button
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
-     * @return string
+     * @inheritDoc
+     * @throws LocalizedException
      */
-    protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element) // @codingStandardsIgnoreLine
+    protected function _getElementHtml(AbstractElement $element): string
     {
-        $title = __("Validate Credentials");
+        // Replace field markup with validation button
+        $title = __('Validate Credentials');
         $envId = 'select-groups-braintree-section-groups-braintree-groups-braintree-'
             . 'required-fields-environment-value';
         $merchantId = 'text-groups-braintree-section-groups-braintree-groups-braintree-'
@@ -39,17 +40,26 @@ class Validation extends Field
             . 'required-fields-private-key-value';
         $storeId = 0;
 
-        if ($this->getRequest()->getParam("website")) {
-            $website = $this->_storeManager->getWebsite($this->getRequest()->getParam("website"));
+        if ($this->getRequest()->getParam('website')) {
+            $website = $this->_storeManager->getWebsite($this->getRequest()->getParam('website'));
             if ($website->getId()) {
                 $storeId = $website->getId();
             }
         }
 
-        $endpoint = $this->getUrl("braintree/configuration/validate", ['storeId' => $storeId]);
-        $html = '<button type="button" title="' .$title . '" class="button" onclick="' .
-            "braintreeValidator.call(this, '$endpoint', '$envId', '$merchantId', '$publicKeyId', '$privateKeyId')" .
-            '"><span>' . $title . '</span></button>';
+        $endpoint = $this->getUrl('braintree/configuration/validate', ['storeId' => $storeId]);
+
+        // @codingStandardsIgnoreStart
+        $html = <<<TEXT
+            <button
+                type="button"
+                title="{$title}"
+                class="button"
+                onclick="braintreeValidator.call(this, '{$endpoint}', '{$envId}', '{$merchantId}', '{$publicKeyId}', '{$privateKeyId}')">
+                <span>{$title}</span>
+            </button>
+TEXT;
+        // @codingStandardsIgnoreEnd
 
         return $html;
     }

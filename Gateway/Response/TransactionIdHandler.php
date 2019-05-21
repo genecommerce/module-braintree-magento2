@@ -9,6 +9,10 @@ use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Sales\Model\Order\Payment;
 
+/**
+ * Class TransactionIdHandler
+ * @package Magento\Braintree\Gateway\Response
+ */
 class TransactionIdHandler implements HandlerInterface
 {
     /**

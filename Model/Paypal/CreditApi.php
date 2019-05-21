@@ -9,6 +9,10 @@ use Magento\Braintree\Gateway\Config\PayPalCredit\Config;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\AuthenticationException;
 
+/**
+ * Class CreditApi
+ * @package Magento\Braintree\Model\Paypal
+ */
 class CreditApi
 {
     /**

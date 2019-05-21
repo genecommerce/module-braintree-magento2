@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<alr:test-suite xmlns:alr="urn:model.allure.qatools.yandex.ru" start="1557505450032" stop="1557505450113" version="1.4.0">
+  <name>Magento\Braintree\Test\Unit\Block\FormTest</name>
+  <test-cases>
+    <test-case start="1557505450037" stop="1557505450104" status="passed">
+      <name>testGetCcAvailableTypes with data set #0</name>
+    </test-case>
+    <test-case start="1557505450104" stop="1557505450105" status="passed">
+      <name>testGetCcAvailableTypes with data set #1</name>
+    </test-case>
+    <test-case start="1557505450105" stop="1557505450106" status="passed">
+      <name>testGetCcAvailableTypes with data set #2</name>
+    </test-case>
+    <test-case start="1557505450106" stop="1557505450107" status="passed">
+      <name>testGetCcAvailableTypes with data set #3</name>
+    </test-case>
+    <test-case start="1557505450107" stop="1557505450112" status="passed">
+      <name>testIsVaultEnabled</name>
+    </test-case>
+  </test-cases>
+</alr:test-suite>

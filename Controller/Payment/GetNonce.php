@@ -16,6 +16,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class GetNonce
+ * @package Magento\Braintree\Controller\Payment
  */
 class GetNonce extends Action
 {
@@ -74,10 +75,11 @@ class GetNonce extends Action
 
     /**
      * Return response for bad request
+     *
      * @param ResultInterface $response
      * @return ResultInterface
      */
-    private function processBadRequest(ResultInterface $response)
+    private function processBadRequest(ResultInterface $response): ResultInterface
     {
         $response->setHttpResponseCode(Exception::HTTP_BAD_REQUEST);
         $response->setData(['message' => __('Sorry, but something went wrong')]);

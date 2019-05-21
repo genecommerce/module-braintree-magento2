@@ -36,24 +36,26 @@ class Payment extends Template
         array $data = []
     ) {
         parent::__construct($context, $data);
+
         $this->config = $config;
     }
 
     /**
      * @return string
      */
-    public function getPaymentConfig()
+    public function getPaymentConfig(): string
     {
         $payment = $this->config->getConfig()['payment'];
         $config = $payment[$this->getCode()];
         $config['code'] = $this->getCode();
+
         return json_encode($config, JSON_UNESCAPED_SLASHES);
     }
 
     /**
      * @return string
      */
-    public function getCode()
+    public function getCode(): string
     {
         return ConfigProvider::CODE;
     }

@@ -3,7 +3,11 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/** @var Magento\Braintree\Block\Payment $block */
+
+use Magento\Braintree\Block\Payment;
+
+/** @var Payment $block */
+
 $code = $block->escapeHtml($block->getCode());
 ?>
 <script>
@@ -14,7 +18,7 @@ $code = $block->escapeHtml($block->getCode());
             'jquery',
             'domReady!'
         ], function(Braintree, $) {
-            var config = <?php /* @noEscape */ echo $block->getPaymentConfig(); ?>,
+            let config = <?= $block->escapeJs($block->getPaymentConfig()) ?>,
                 payment;
             payment = new Braintree(config);
         });

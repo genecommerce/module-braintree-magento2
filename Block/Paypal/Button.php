@@ -9,6 +9,8 @@ use Magento\Braintree\Gateway\Config\PayPal\Config;
 use Magento\Braintree\Model\Ui\ConfigProvider;
 use Magento\Catalog\Block\ShortcutInterface;
 use Magento\Checkout\Model\Session;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
@@ -97,7 +99,7 @@ class Button extends Template implements ShortcutInterface
     /**
      * @inheritdoc
      */
-    protected function _toHtml() // @codingStandardsIgnoreLine
+    protected function _toHtml(): string // @codingStandardsIgnoreLine
     {
         if ($this->isActive()) {
             return parent::_toHtml();
@@ -109,7 +111,7 @@ class Button extends Template implements ShortcutInterface
     /**
      * @inheritdoc
      */
-    public function getAlias()
+    public function getAlias(): string
     {
         return $this->getData(self::ALIAS_ELEMENT_INDEX);
     }
@@ -117,7 +119,7 @@ class Button extends Template implements ShortcutInterface
     /**
      * @return string
      */
-    public function getContainerId()
+    public function getContainerId(): string
     {
         return $this->getData(self::BUTTON_ELEMENT_INDEX);
     }
@@ -125,13 +127,13 @@ class Button extends Template implements ShortcutInterface
     /**
      * @return string
      */
-    public function getLocale()
+    public function getLocale(): string
     {
         return $this->localeResolver->getLocale();
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getCurrency()
     {
@@ -139,7 +141,7 @@ class Button extends Template implements ShortcutInterface
     }
 
     /**
-     * @return float
+     * @return float|null
      */
     public function getAmount()
     {
@@ -149,7 +151,7 @@ class Button extends Template implements ShortcutInterface
     /**
      * @return bool
      */
-    public function isActive()
+    public function isActive(): bool
     {
         return $this->payment->isAvailable($this->checkoutSession->getQuote()) &&
             $this->config->isDisplayShoppingCart();
@@ -158,13 +160,13 @@ class Button extends Template implements ShortcutInterface
     /**
      * @return bool
      */
-    public function isCreditActive()
+    public function isCreditActive(): bool
     {
         return $this->payPalCreditConfig->isActive();
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getMerchantName()
     {
@@ -172,7 +174,7 @@ class Button extends Template implements ShortcutInterface
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getPayeeEmail()
     {
@@ -182,7 +184,7 @@ class Button extends Template implements ShortcutInterface
     /**
      * @return string
      */
-    public function getButtonShape()
+    public function getButtonShape(): string
     {
         return $this->config->getButtonShape(Config::BUTTON_AREA_CART);
     }
@@ -190,33 +192,33 @@ class Button extends Template implements ShortcutInterface
     /**
      * @return string
      */
-    public function getButtonColor()
+    public function getButtonColor(): string
     {
         return $this->config->getButtonColor(Config::BUTTON_AREA_CART);
     }
 
-
     /**
      * @return string
      */
-    public function getButtonLayout()
+    public function getButtonLayout(): string
     {
         return $this->config->getButtonLayout(Config::BUTTON_AREA_CART);
     }
 
-
     /**
      * @return string
      */
-    public function getButtonSize()
+    public function getButtonSize(): string
     {
         return $this->config->getButtonSize(Config::BUTTON_AREA_CART);
     }
 
     /**
      * @return string
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
-    public function getEnvironment()
+    public function getEnvironment(): string
     {
         return $this->braintreeConfig->getEnvironment();
     }
@@ -232,15 +234,15 @@ class Button extends Template implements ShortcutInterface
     /**
      * @return string
      */
-    public function getActionSuccess()
+    public function getActionSuccess(): string
     {
         return $this->getUrl(ConfigProvider::CODE . '/paypal/review', ['_secure' => true]);
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getDisabledFunding()
+    public function getDisabledFunding(): array
     {
         return [
             'card' => $this->config->getDisabledFundingOptionCard(Config::KEY_PAYPAL_DISABLED_FUNDING_CART),
@@ -248,4 +250,3 @@ class Button extends Template implements ShortcutInterface
         ];
     }
 }
-

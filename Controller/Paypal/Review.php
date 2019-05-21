@@ -5,12 +5,15 @@
  */
 namespace Magento\Braintree\Controller\Paypal;
 
+use Exception;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Braintree\Gateway\Config\PayPal\Config;
 use Magento\Braintree\Model\Paypal\Helper\QuoteUpdater;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\View\Result\Page;
 
 /**
  * Class Review
@@ -69,7 +72,7 @@ class Review extends AbstractAction
                 throw new LocalizedException(__('We can\'t initialize checkout.'));
             }
 
-            /** @var \Magento\Framework\View\Result\Page $resultPage */
+            /** @var Page $resultPage */
             $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
 
             /** @var \Magento\Braintree\Block\Paypal\Checkout\Review $reviewBlock */
@@ -79,11 +82,11 @@ class Review extends AbstractAction
             $reviewBlock->getChildBlock('shipping_method')->setData('quote', $quote);
 
             return $resultPage;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->messageManager->addExceptionMessage($e, $e->getMessage());
         }
 
-        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
         return $resultRedirect->setPath('checkout/cart', ['_secure' => true]);

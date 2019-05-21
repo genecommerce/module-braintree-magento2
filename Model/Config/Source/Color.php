@@ -53,4 +53,3 @@ class Color implements \Magento\Framework\Option\ArrayInterface
         ];
     }
 }
-

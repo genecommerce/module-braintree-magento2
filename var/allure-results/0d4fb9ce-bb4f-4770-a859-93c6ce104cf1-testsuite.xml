@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<alr:test-suite xmlns:alr="urn:model.allure.qatools.yandex.ru" start="1557505450656" stop="1557505450658" version="1.4.0">
+  <name>Magento\Braintree\Test\Unit\Observer\DataAssignObserverTest</name>
+  <test-cases>
+    <test-case start="1557505450656" stop="1557505450658" status="passed">
+      <name>testExecute</name>
+    </test-case>
+  </test-cases>
+</alr:test-suite>

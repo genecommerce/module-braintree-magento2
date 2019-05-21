@@ -190,7 +190,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Get button color mapped to the value expected by the PayPal API
      * @return string
      */
-    public function getButtonColor($area=self::BUTTON_AREA_CART)
+    public function getButtonColor($area = self::BUTTON_AREA_CART)
     {
         $value = $this->getButtonStyle($area, self::KEY_BUTTON_COLOR);
         $options = $this->colorConfigSource->toRawValues();
@@ -201,7 +201,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Get button shape mapped to the value expected by the PayPal API
      * @return string
      */
-    public function getButtonShape($area=self::BUTTON_AREA_CART)
+    public function getButtonShape($area = self::BUTTON_AREA_CART)
     {
         $value = $this->getButtonStyle($area, self::KEY_BUTTON_SHAPE);
         $options = $this->shapeConfigSource->toRawValues();
@@ -212,7 +212,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Get button size mapped to the value expected by the PayPal API
      * @return string
      */
-    public function getButtonSize($area=self::BUTTON_AREA_CART)
+    public function getButtonSize($area = self::BUTTON_AREA_CART)
     {
         $value = $this->getButtonStyle($area, self::KEY_BUTTON_SIZE);
         $options = $this->sizeConfigSource->toRawValues();
@@ -223,7 +223,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Get button layout mapped to the value expected by the PayPal API
      * @return string
      */
-    public function getButtonLayout($area=self::BUTTON_AREA_CART)
+    public function getButtonLayout($area = self::BUTTON_AREA_CART)
     {
         $value = $this->getButtonStyle($area, self::KEY_BUTTON_LAYOUT);
         $options = $this->layoutConfigSource->toRawValues();
@@ -284,4 +284,3 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         return $this->getValue('button_productpage_enabled');
     }
 }
-

@@ -5,6 +5,7 @@
  */
 namespace Magento\Braintree\Controller\GooglePay;
 
+use InvalidArgumentException;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
@@ -68,12 +69,12 @@ abstract class AbstractAction extends Action
     /**
      * @param CartInterface $quote
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected function validateQuote($quote)
     {
         if (!$quote || !$quote->getItemsCount()) {
-            throw new \InvalidArgumentException(__('We can\'t initialize checkout.'));
+            throw new InvalidArgumentException(__("We can't initialize checkout."));
         }
     }
 }

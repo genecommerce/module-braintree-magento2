@@ -2,6 +2,9 @@
 
 namespace Magento\Braintree\Block\Credit\Calculator\Product;
 
+use Magento\Braintree\Api\CreditPriceRepositoryInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Template;
 use Magento\Braintree\Gateway\Config\PayPalCredit\Config as PayPalCreditConfig;
 
@@ -13,12 +16,12 @@ use Magento\Braintree\Gateway\Config\PayPalCredit\Config as PayPalCreditConfig;
 class View extends Template
 {
     /**
-     * @var \Magento\Braintree\Api\CreditPriceRepositoryInterface
+     * @var CreditPriceRepositoryInterface
      */
     protected $creditPriceRepository;
 
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $coreRegistry;
 
@@ -31,15 +34,15 @@ class View extends Template
      * View constructor.
      * @param Template\Context $context
      * @param PayPalCreditConfig $config
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Braintree\Api\CreditPriceRepositoryInterface $creditPriceRepository
+     * @param Registry $registry
+     * @param CreditPriceRepositoryInterface $creditPriceRepository
      * @param array $data
      */
     public function __construct(
         Template\Context $context,
         PayPalCreditConfig $config,
-        \Magento\Framework\Registry $registry,
-        \Magento\Braintree\Api\CreditPriceRepositoryInterface $creditPriceRepository,
+        Registry $registry,
+        CreditPriceRepositoryInterface $creditPriceRepository,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -62,7 +65,7 @@ class View extends Template
 
     /**
      * Retrieve current product model
-     * @return \Magento\Catalog\Model\Product
+     * @return Product
      */
     public function getProduct()
     {

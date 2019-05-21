@@ -7,6 +7,10 @@ namespace Magento\Braintree\Gateway\Response;
 
 use Magento\Sales\Model\Order\Payment;
 
+/**
+ * Class VoidHandler
+ * @package Magento\Braintree\Gateway\Response
+ */
 class VoidHandler extends TransactionIdHandler
 {
     /**
@@ -17,7 +21,7 @@ class VoidHandler extends TransactionIdHandler
      */
     protected function setTransactionId(Payment $orderPayment, \Braintree\Transaction $transaction)
     {
-        return;
+        return null;
     }
 
     /**

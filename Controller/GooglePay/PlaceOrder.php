@@ -5,8 +5,10 @@
  */
 namespace Magento\Braintree\Controller\GooglePay;
 
+use Exception;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Braintree\Model\GooglePay\Config;
@@ -37,12 +39,12 @@ class PlaceOrder extends AbstractAction
         OrderPlace $orderPlace
     ) {
         parent::__construct($context, $config, $checkoutSession);
+
         $this->orderPlace = $orderPlace;
     }
 
     /**
      * @inheritdoc
-     * @throws LocalizedException
      */
     public function execute()
     {
@@ -54,9 +56,9 @@ class PlaceOrder extends AbstractAction
             $this->validateQuote($quote);
             $this->orderPlace->execute($quote, $agreement);
 
-            /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+            /** @var Redirect $resultRedirect */
             return $resultRedirect->setPath('checkout/onepage/success', ['_secure' => true]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->messageManager->addExceptionMessage($e, $e->getMessage());
         }
 

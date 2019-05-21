@@ -41,4 +41,3 @@ class Shape implements \Magento\Framework\Option\ArrayInterface
         ];
     }
 }
-

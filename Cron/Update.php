@@ -174,7 +174,8 @@ class Update
             )->order(
                 $resource->getIdFieldName() . ' DESC'
             )->where(
-                'title = ?', $title
+                'title = ?',
+                $title
             )->limit(
                 1
             );
@@ -193,8 +194,9 @@ class Update
      * @param $level
      * @return string
      */
-    private function getUpdateLevel($level) {
-        switch($level) {
+    private function getUpdateLevel($level)
+    {
+        switch ($level) {
             case self::LEVEL_1:
                 return self::LEVEL_1;
             case self::LEVEL_2:

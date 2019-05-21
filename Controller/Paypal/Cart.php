@@ -5,6 +5,7 @@
  */
 namespace Magento\Braintree\Controller\Paypal;
 
+use Magento\Braintree\Model\Paypal\CreditApi;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
@@ -17,18 +18,18 @@ use Magento\Framework\Webapi\Exception;
 class Cart extends Action
 {
     /**
-     * @var \Magento\Braintree\Model\Paypal\CreditApi
+     * @var CreditApi
      */
     private $creditApi;
 
     /**
      * Cart constructor.
      * @param Context $context
-     * @param \Magento\Braintree\Model\Paypal\CreditApi $creditApi
+     * @param CreditApi $creditApi
      */
     public function __construct(
         Context $context,
-        \Magento\Braintree\Model\Paypal\CreditApi $creditApi
+        CreditApi $creditApi
     ) {
         parent::__construct($context);
         $this->creditApi = $creditApi;
@@ -40,8 +41,8 @@ class Cart extends Action
     public function execute()
     {
         $response = $this->resultFactory->create(ResultFactory::TYPE_JSON);
-        $amount = number_format($this->getRequest()->getParam("amount", 0), 2, '.', '');
-        
+        $amount = number_format($this->getRequest()->getParam('amount', 0), 2, '.', '');
+
         if (!$amount || $amount <= 0) {
             return $this->processBadRequest($response);
         }
@@ -60,7 +61,7 @@ class Cart extends Action
             }
 
             // Sort $options by term, ascending.
-            usort($options, function ($a, $b) {
+            usort($options, static function ($a, $b) {
                 return $a['term'] <=> $b['term'];
             });
 
@@ -77,7 +78,7 @@ class Cart extends Action
      * @param ResultInterface $response
      * @return ResultInterface
      */
-    private function processBadRequest(ResultInterface $response)
+    private function processBadRequest(ResultInterface $response): ResultInterface
     {
         $response->setHttpResponseCode(Exception::HTTP_BAD_REQUEST);
         $response->setData(['message' => __('No Credit Options available')]);

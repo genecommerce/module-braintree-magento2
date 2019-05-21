@@ -5,6 +5,8 @@ use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
 use Magento\Braintree\Model\GooglePay\Config;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Asset\Repository;
 
 /**
@@ -12,7 +14,7 @@ use Magento\Framework\View\Asset\Repository;
  * @package Magento\Braintree\Model\GooglePay\Ui
  * @author Aidan Threadgold <aidan@gene.co.uk>
  */
-final class ConfigProvider implements ConfigProviderInterface
+class ConfigProvider implements ConfigProviderInterface
 {
     const METHOD_CODE = 'braintree_googlepay';
 
@@ -32,6 +34,11 @@ final class ConfigProvider implements ConfigProviderInterface
     private $assetRepo;
 
     /**
+     * @var \Magento\Braintree\Gateway\Config\Config
+     */
+    private $braintreeConfig;
+
+    /**
      * @var string
      */
     private $clientToken = '';
@@ -41,6 +48,7 @@ final class ConfigProvider implements ConfigProviderInterface
      * @param Config $config
      * @param BraintreeAdapter $adapter
      * @param Repository $assetRepo
+     * @param \Magento\Braintree\Gateway\Config\Config $braintreeConfig
      */
     public function __construct(
         Config $config,
@@ -55,11 +63,9 @@ final class ConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Retrieve assoc array of checkout configuration
-     *
-     * @return array
+     * @inheritDoc
      */
-    public function getConfig()
+    public function getConfig(): array
     {
         return [
             'payment' => [
@@ -77,8 +83,10 @@ final class ConfigProvider implements ConfigProviderInterface
     /**
      * Generate a new client token if necessary
      * @return string
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
-    public function getClientToken()
+    public function getClientToken(): string
     {
         if (empty($this->clientToken)) {
             $params = [];
@@ -98,7 +106,7 @@ final class ConfigProvider implements ConfigProviderInterface
      * Get environment
      * @return string
      */
-    public function getEnvironment()
+    public function getEnvironment(): string
     {
         return $this->config->getEnvironment();
     }
@@ -107,7 +115,7 @@ final class ConfigProvider implements ConfigProviderInterface
      * Get merchant name
      * @return string
      */
-    public function getMerchantId()
+    public function getMerchantId(): string
     {
         return $this->config->getMerchantId();
     }
@@ -115,7 +123,7 @@ final class ConfigProvider implements ConfigProviderInterface
     /**
      * @return array
      */
-    public function getAvailableCardTypes()
+    public function getAvailableCardTypes(): array
     {
         return $this->config->getAvailableCardTypes();
     }
@@ -126,6 +134,7 @@ final class ConfigProvider implements ConfigProviderInterface
      */
     public function getPaymentMarkSrc()
     {
-        return $this->assetRepo->getUrl('Magento_Braintree::images/GooglePay_AcceptanceMark_WhiteShape_WithStroke_RGB_62x38pt@4x.png');
+        $fileId = 'Magento_Braintree::images/GooglePay_AcceptanceMark_WhiteShape_WithStroke_RGB_62x38pt@4x.png';
+        return $this->assetRepo->getUrl($fileId);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Magento\Braintree\Api;
 
+use Magento\Braintree\Api\Data\AuthDataInterface;
+
 /**
  * Interface AuthInterface
  * @api
@@ -11,7 +13,7 @@ interface AuthInterface
 {
     /**
      * Returns details required to be able to submit a payment with apple pay.
-     * @return \Magento\Braintree\Api\Data\AuthDataInterface
+     * @return AuthDataInterface
      */
-    public function get();
+    public function get(): AuthDataInterface;
 }

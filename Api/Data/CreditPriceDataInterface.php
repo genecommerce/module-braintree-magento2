@@ -5,7 +5,6 @@ namespace Magento\Braintree\Api\Data;
 /**
  * Interface CreditPriceDataInterface
  * @package Magento\Braintree\Api\Data
- * @api
  * @author Aidan Threadgold <aidan@gene.co.uk>
  */
 interface CreditPriceDataInterface
@@ -21,77 +20,77 @@ interface CreditPriceDataInterface
     /**
      * @return int
      */
-    public function getId();
+    public function getId(): int;
 
     /**
      * @param int $value
      * @return CreditPriceDataInterface
      */
-    public function setId($value);
+    public function setId($value): CreditPriceDataInterface;
 
     /**
      * @return int
      */
-    public function getProductId();
+    public function getProductId(): int;
 
     /**
      * @param int $value
      * @return CreditPriceDataInterface
      */
-    public function setProductId($value);
+    public function setProductId($value): CreditPriceDataInterface;
 
     /**
      * @return int
      */
-    public function getTerm();
+    public function getTerm(): int;
 
     /**
      * @param int $value
      * @return CreditPriceDataInterface
      */
-    public function setTerm($value);
+    public function setTerm($value): CreditPriceDataInterface;
 
     /**
      * @return float
      */
-    public function getMonthlyPayment();
+    public function getMonthlyPayment(): float;
 
     /**
      * @param float $value
      * @return CreditPriceDataInterface
      */
-    public function setMonthlyPayment($value);
+    public function setMonthlyPayment($value): CreditPriceDataInterface;
 
     /**
      * @return float
      */
-    public function getInstalmentRate();
+    public function getInstalmentRate(): float;
 
     /**
      * @param float $value
      * @return CreditPriceDataInterface
      */
-    public function setInstalmentRate($value);
+    public function setInstalmentRate($value): CreditPriceDataInterface;
 
     /**
      * @return float
      */
-    public function getCostOfPurchase();
+    public function getCostOfPurchase(): float;
 
     /**
      * @param float $value
      * @return CreditPriceDataInterface
      */
-    public function setCostOfPurchase($value);
+    public function setCostOfPurchase($value): CreditPriceDataInterface;
 
     /**
      * @return float
      */
-    public function getTotalIncInterest();
+    public function getTotalIncInterest(): float;
 
     /**
      * @param float $value
      * @return CreditPriceDataInterface
      */
-    public function setTotalIncInterest($value);
+    public function setTotalIncInterest($value): CreditPriceDataInterface;
 }

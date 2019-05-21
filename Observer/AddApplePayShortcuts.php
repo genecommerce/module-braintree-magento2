@@ -5,6 +5,7 @@ use Magento\Braintree\Block\ApplePay\Shortcut\Button;
 use Magento\Catalog\Block\ShortcutButtons;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Class AddApplePayShortcuts
@@ -18,6 +19,7 @@ class AddApplePayShortcuts implements ObserverInterface
      *
      * @param Observer $observer
      * @return void
+     * @throws LocalizedException
      */
     public function execute(Observer $observer)
     {

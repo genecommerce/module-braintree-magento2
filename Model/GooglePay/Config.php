@@ -1,6 +1,7 @@
 <?php
 
 namespace Magento\Braintree\Model\GooglePay;
+
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**

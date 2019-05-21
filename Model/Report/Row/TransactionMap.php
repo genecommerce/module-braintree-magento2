@@ -7,11 +7,14 @@ namespace Magento\Braintree\Model\Report\Row;
 
 use Braintree\Transaction;
 use DateTime;
+use LogicException;
+use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\Search\DocumentInterface;
 
 /**
  * Class TransactionMap
+ * @package Magento\Braintree\Model\Report\Row
  */
 class TransactionMap implements DocumentInterface
 {
@@ -78,17 +81,18 @@ class TransactionMap implements DocumentInterface
      */
     public function setId($id)
     {
+        return null;
     }
 
     /**
      * Get an attribute value.
      *
      * @param string $attributeCode
-     * @return \Magento\Framework\Api\AttributeInterface|null
+     * @return AttributeInterface|null
      */
     public function getCustomAttribute($attributeCode)
     {
-        /** @var \Magento\Framework\Api\AttributeInterface $attributeValue */
+        /** @var AttributeInterface $attributeValue */
         $attributeValue = $this->attributeValueFactory->create();
         $attributeValue->setAttributeCode($attributeCode);
         $attributeValue->setValue($this->getMappedValue($attributeCode));
@@ -111,7 +115,7 @@ class TransactionMap implements DocumentInterface
     /**
      * Retrieve custom attributes values.
      *
-     * @return \Magento\Framework\Api\AttributeInterface[]|null
+     * @return AttributeInterface[]|null
      */
     public function getCustomAttributes()
     {
@@ -130,9 +134,9 @@ class TransactionMap implements DocumentInterface
     /**
      * Set array of custom attributes
      *
-     * @param \Magento\Framework\Api\AttributeInterface[] $attributes
+     * @param AttributeInterface[] $attributes
      * @return $this
-     * @throws \LogicException
+     * @throws LogicException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setCustomAttributes(array $attributes)

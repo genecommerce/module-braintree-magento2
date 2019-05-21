@@ -2,6 +2,8 @@
 
 namespace Magento\Braintree\Block\Credit\Calculator\Listing;
 
+use Magento\Braintree\Api\CreditPriceRepositoryInterface;
+use Magento\Braintree\Api\Data\CreditPriceDataInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Braintree\Gateway\Config\PayPalCredit\Config as PayPalCreditConfig;
@@ -19,7 +21,7 @@ class Product extends Template
     protected $_template = 'Magento_Braintree::credit/product/listing.phtml'; // @codingStandardsIgnoreLine
 
     /**
-     * @var \Magento\Braintree\Api\CreditPriceRepositoryInterface
+     * @var CreditPriceRepositoryInterface
      */
     protected $creditPriceRepository;
 
@@ -37,13 +39,13 @@ class Product extends Template
      * Product constructor.
      * @param Template\Context $context
      * @param PayPalCreditConfig $config
-     * @param \Magento\Braintree\Api\CreditPriceRepositoryInterface $creditPriceRepository
+     * @param CreditPriceRepositoryInterface $creditPriceRepository
      * @param array $data
      */
     public function __construct(
         Template\Context $context,
         PayPalCreditConfig $config,
-        \Magento\Braintree\Api\CreditPriceRepositoryInterface $creditPriceRepository,
+        CreditPriceRepositoryInterface $creditPriceRepository,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -80,7 +82,7 @@ class Product extends Template
     }
 
     /**
-     * @return \Magento\Braintree\Api\Data\CreditPriceDataInterface|bool
+     * @return CreditPriceDataInterface|bool
      */
     public function getPriceData()
     {

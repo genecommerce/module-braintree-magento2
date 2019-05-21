@@ -12,6 +12,7 @@ use Magento\Framework\Locale\ResolverInterface;
 
 /**
  * Class ConfigProvider
+ * @package Magento\Braintree\Model\Ui\PayPal
  */
 class ConfigProvider implements ConfigProviderInterface
 {
@@ -99,4 +100,3 @@ class ConfigProvider implements ConfigProviderInterface
         ];
     }
 }
-

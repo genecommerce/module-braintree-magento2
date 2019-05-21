@@ -8,6 +8,7 @@ use Magento\Paypal\Model\Config;
 
 /**
  * Class Banners
+ *
  * @see \Magento\Paypal\Block\Bml\Banners
  */
 class Banners extends Template
@@ -49,18 +50,17 @@ class Banners extends Template
         $this->position = isset($data['position']) ? (int)$data['position'] : 0;
         $this->config = $config;
         $this->paypalConfig = $paypalConfig;
+
         parent::__construct($context, $data);
     }
 
     /**
      * Disable block output if banner turned off or PublisherId is missing
      *
-     * @return string
+     * @inheritDoc
      */
-    protected function _toHtml() // @codingStandardsIgnoreLine
+    protected function _toHtml(): string
     {
-        return '';
-
         if (!$this->config->isActive() || !$this->config->isUS()) {
             return '';
         }
@@ -68,11 +68,14 @@ class Banners extends Template
         $publisherId = $this->paypalConfig->getBmlPublisherId();
         $display = $this->config->getBmlDisplay($this->section);
         $position = $this->config->getBmlPosition($this->section);
-        if (!$publisherId || $display == 0 || $this->position != $position) {
+
+        if (!$publisherId || $display === 0 || $this->position === $position) {
             return '';
         }
+
         $this->setData('publisher_id', $publisherId);
         $this->setData('size', $this->config->getBmlSize($this->section));
+
         return parent::_toHtml();
     }
 }

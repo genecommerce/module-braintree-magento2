@@ -16,19 +16,19 @@ interface CreditPriceRepositoryInterface
      * @param CreditPriceDataInterface $entity
      * @return CreditPriceDataInterface
      */
-    public function save(CreditPriceDataInterface $entity);
+    public function save(CreditPriceDataInterface $entity): CreditPriceDataInterface;
 
     /**
      * @param int $productId
      * @return CreditPriceDataInterface
      */
-    public function getByProductId($productId);
+    public function getByProductId($productId): CreditPriceDataInterface;
 
     /**
      * @param $productId
      * @return Data\CreditPriceDataInterface
      */
-    public function getCheapestByProductId($productId);
+    public function getCheapestByProductId($productId): CreditPriceDataInterface;
 
     /**
      * @param int $productId

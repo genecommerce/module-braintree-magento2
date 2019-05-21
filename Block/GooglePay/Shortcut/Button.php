@@ -3,6 +3,7 @@
 namespace Magento\Braintree\Block\GooglePay\Shortcut;
 
 use Magento\Braintree\Block\GooglePay\AbstractButton;
+use Magento\Braintree\Model\GooglePay\Auth;
 use Magento\Checkout\Model\Session;
 use Magento\Catalog\Block\ShortcutInterface;
 use Magento\Checkout\Model\DefaultConfigProvider;
@@ -30,7 +31,7 @@ class Button extends AbstractButton implements ShortcutInterface
      * @param Context $context
      * @param Session $checkoutSession
      * @param MethodInterface $payment
-     * @param \Magento\Braintree\Model\GooglePay\Auth $auth
+     * @param Auth $auth
      * @param DefaultConfigProvider $defaultConfigProvider
      * @param array $data
      */
@@ -38,7 +39,7 @@ class Button extends AbstractButton implements ShortcutInterface
         Context $context,
         Session $checkoutSession,
         MethodInterface $payment,
-        \Magento\Braintree\Model\GooglePay\Auth $auth,
+        Auth $auth,
         DefaultConfigProvider $defaultConfigProvider,
         array $data = []
     ) {
@@ -57,7 +58,7 @@ class Button extends AbstractButton implements ShortcutInterface
     /**
      * @return string
      */
-    public function getContainerId()
+    public function getContainerId(): string
     {
         return $this->getData(self::BUTTON_ELEMENT_INDEX);
     }

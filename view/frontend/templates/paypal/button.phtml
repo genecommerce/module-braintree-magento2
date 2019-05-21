@@ -3,10 +3,21 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/**
- * @var \Magento\Braintree\Block\Paypal\Button $block
- */
-$id = $block->getContainerId() . mt_rand();
+
+use Magento\Braintree\Block\Paypal\Button;
+
+/** @var Button $block */
+
+try {
+    $id = sprintf('%s%s', $block->getContainerId(), random_int(PHP_INT_MIN, PHP_INT_MAX));
+} catch (Exception $e) {
+    /**
+     * Exception only thrown if an appropriate source of randomness cannot be found.
+     * https://www.php.net/manual/en/function.random-int.php
+     */
+    $id = 0;
+}
+
 $config = [
     'Magento_Braintree/js/paypal/button' => [
         'id' => $id,
@@ -24,13 +35,11 @@ $config = [
     ]
 ];
 ?>
-
-<div data-mage-init='<?php /* @noEscape */ echo json_encode($config); ?>'
-     class="paypal checkout paypal-logo braintree-paypal-btn braintree-paypal-logo<?php
-     /* @noEscape */ echo $block->getContainerId(); ?>-container">
-    <div data-currency="<?php /* @noEscape */ echo $block->getCurrency(); ?>"
-         data-locale="<?php /* @noEscape */ echo $block->getLocale(); ?>"
-         data-amount="<?php /* @noEscape */ echo $block->getAmount(); ?>"
-         id="<?php /* @noEscape */ echo $id; ?>"
+<div data-mage-init="<?= $block->escapeHtmlAttr(json_encode($config)) ?>"
+     class="paypal checkout paypal-logo braintree-paypal-btn braintree-paypal-logo <?= $block->escapeHtmlAttr($block->getContainerId()) ?>-container">
+    <div data-currency="<?= $block->escapeHtmlAttr($block->getCurrency()) ?>"
+         data-locale="<?= $block->escapeHtmlAttr($block->getLocale()) ?>"
+         data-amount="<?= $block->escapeHtmlAttr($block->getAmount()) ?>"
+         id="<?= $block->escapeHtmlAttr($id) ?>"
          class="action-braintree-paypal-logo"></div>
 </div>

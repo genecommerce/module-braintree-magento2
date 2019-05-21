@@ -9,6 +9,10 @@ use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Sales\Model\Order\Payment;
 
+/**
+ * Class VoidDataBuilder
+ * @package Magento\Braintree\Gateway\Request
+ */
 class VoidDataBuilder implements BuilderInterface
 {
     /**

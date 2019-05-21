@@ -5,14 +5,20 @@
  */
 namespace Magento\Braintree\Gateway\Http\Client;
 
+use Braintree\Result\Error;
+use Braintree\Result\Successful;
 use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
 
+/**
+ * Class TransactionRefund
+ * @package Magento\Braintree\Gateway\Http\Client
+ */
 class TransactionRefund extends AbstractTransaction
 {
     /**
      * Process http request
      * @param array $data
-     * @return \Braintree\Result\Error|\Braintree\Result\Successful
+     * @return Error|Successful
      */
     protected function process(array $data)
     {

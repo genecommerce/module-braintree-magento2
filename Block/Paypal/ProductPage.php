@@ -6,8 +6,12 @@ use Magento\Braintree\Gateway\Config\Config as BraintreeConfig;
 use Magento\Braintree\Gateway\Config\PayPal\Config;
 use Magento\Braintree\Gateway\Config\PayPalCredit\Config as PayPalCreditConfig;
 use Magento\Braintree\Model\Ui\ConfigProvider;
+use Magento\Catalog\Model\Product;
 use Magento\Checkout\Model\Session;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Payment\Model\MethodInterface;
 
@@ -18,7 +22,7 @@ use Magento\Payment\Model\MethodInterface;
 class ProductPage extends Button
 {
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $registry;
 
@@ -32,7 +36,7 @@ class ProductPage extends Button
      * @param BraintreeConfig $braintreeConfig
      * @param ConfigProvider $configProvider
      * @param MethodInterface $payment
-     * @param \Magento\Framework\Registry $registry
+     * @param Registry $registry
      * @param array $data
      */
     public function __construct(
@@ -44,7 +48,7 @@ class ProductPage extends Button
         BraintreeConfig $braintreeConfig,
         ConfigProvider $configProvider,
         MethodInterface $payment,
-        \Magento\Framework\Registry $registry,
+        Registry $registry,
         array $data = []
     ) {
         parent::__construct(
@@ -65,7 +69,7 @@ class ProductPage extends Button
     /**
      * @inheritdoc
      */
-    public function isActive()
+    public function isActive(): bool
     {
         if (parent::isActive() === true) {
             return $this->config->getProductPageBtnEnabled();
@@ -76,8 +80,9 @@ class ProductPage extends Button
 
     /**
      * @return string
+     * @throws NoSuchEntityException
      */
-    public function getCurrency()
+    public function getCurrency(): string
     {
         return $this->_storeManager->getStore()->getCurrentCurrency()->getCode();
     }
@@ -85,25 +90,26 @@ class ProductPage extends Button
     /**
      * @return float
      */
-    public function getAmount()
+    public function getAmount(): float
     {
         $product = $this->registry->registry('product');
+
         if ($product) {
-            /** @var $product \Magento\Catalog\Model\Product */
-            if ($product->getTypeId() == \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) {
+            /** @var $product Product */
+            if ($product->getTypeId() === Configurable::TYPE_CODE) {
                 return $product->getPriceInfo()->getPrice('regular_price')->getAmount();
             }
 
             return $product->getPrice();
         }
 
-        return 100;
+        return 100; // TODO There must be a better return value than this?
     }
 
     /**
      * @return string
      */
-    public function getContainerId()
+    public function getContainerId(): string
     {
         return 'oneclick';
     }
@@ -111,7 +117,7 @@ class ProductPage extends Button
     /**
      * @return string
      */
-    public function getActionSuccess()
+    public function getActionSuccess(): string
     {
         return $this->getUrl('braintree/paypal/oneclick', ['_secure' => true]);
     }
@@ -119,39 +125,39 @@ class ProductPage extends Button
     /**
      * @return string
      */
-    public function getButtonShape()
+    public function getButtonShape(): string
     {
         return $this->config->getButtonShape(Config::BUTTON_AREA_PDP);
     }
 
     /**
-     * @return string
+     * @inheritDoc
      */
-    public function getButtonColor()
+    public function getButtonColor(): string
     {
         return $this->config->getButtonColor(Config::BUTTON_AREA_PDP);
     }
 
     /**
-     * @return string
+     * @inheritDoc
      */
-    public function getButtonLayout()
+    public function getButtonLayout(): string
     {
         return $this->config->getButtonLayout(Config::BUTTON_AREA_PDP);
     }
 
     /**
-     * @return string
+     * @inheritDoc
      */
-    public function getButtonSize()
+    public function getButtonSize(): string
     {
         return $this->config->getButtonSize(Config::BUTTON_AREA_PDP);
     }
 
     /**
-     * @return string
+     * @inheritDoc
      */
-    public function getDisabledFunding()
+    public function getDisabledFunding(): array
     {
         return [
             'card' => $this->config->getDisabledFundingOptionCard(Config::KEY_PAYPAL_DISABLED_FUNDING_PDP),

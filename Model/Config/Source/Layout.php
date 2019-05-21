@@ -45,4 +45,3 @@ class Layout implements \Magento\Framework\Option\ArrayInterface
         ];
     }
 }
-

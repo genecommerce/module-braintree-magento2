@@ -2,6 +2,7 @@
 
 namespace Magento\Braintree\Block\GooglePay;
 
+use Magento\Braintree\Model\GooglePay\Auth;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
@@ -25,7 +26,7 @@ abstract class AbstractButton extends Template
     protected $payment;
 
     /**
-     * @var \Magento\Braintree\Model\GooglePay\Auth
+     * @var Auth
      */
     protected $auth;
 
@@ -34,14 +35,14 @@ abstract class AbstractButton extends Template
      * @param Context $context
      * @param Session $checkoutSession
      * @param MethodInterface $payment
-     * @param \Magento\Braintree\Model\GooglePay\Auth $auth
+     * @param Auth $auth
      * @param array $data
      */
     public function __construct(
         Context $context,
         Session $checkoutSession,
         MethodInterface $payment,
-        \Magento\Braintree\Model\GooglePay\Auth $auth,
+        Auth $auth,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -53,7 +54,7 @@ abstract class AbstractButton extends Template
     /**
      * @inheritdoc
      */
-    protected function _toHtml() // @codingStandardsIgnoreLine
+    protected function _toHtml(): string // @codingStandardsIgnoreLine
     {
         if ($this->isActive()) {
             return parent::_toHtml();
@@ -65,31 +66,34 @@ abstract class AbstractButton extends Template
     /**
      * @return bool
      */
-    public function isActive()
+    public function isActive(): bool
     {
         return $this->payment->isAvailable($this->checkoutSession->getQuote());
     }
 
     /**
      * Merchant name to display in popup
+     *
      * @return string
      */
-    public function getMerchantId()
+    public function getMerchantId(): string
     {
         return $this->auth->getMerchantId();
     }
 
     /**
      * Get environment code
+     *
      * @return string
      */
-    public function getEnvironment()
+    public function getEnvironment(): string
     {
         return $this->auth->getEnvironment();
     }
 
     /**
      * Braintree's API token
+     *
      * @return string|null
      */
     public function getClientToken()
@@ -99,25 +103,32 @@ abstract class AbstractButton extends Template
 
     /**
      * URL To success page
+     *
      * @return string
      */
-    public function getActionSuccess()
+    public function getActionSuccess(): string
     {
         return $this->getUrl('braintree/googlepay/review', ['_secure' => true]);
     }
 
     /**
      * Currency code
-     * @return float
+     *
+     * @return float|null
      */
     public function getCurrencyCode()
     {
-        return $this->checkoutSession->getQuote()->getCurrency()->getBaseCurrencyCode();
+        if ($this->checkoutSession->getQuote()->getCurrency()) {
+            return $this->checkoutSession->getQuote()->getCurrency()->getBaseCurrencyCode();
+        }
+
+        return null;
     }
 
     /**
      * Cart grand total
-     * @return float
+     *
+     * @return float|null
      */
     public function getAmount()
     {
@@ -126,6 +137,7 @@ abstract class AbstractButton extends Template
 
     /**
      * Available card types
+     *
      * @return mixed
      */
     public function getAvailableCardTypes()

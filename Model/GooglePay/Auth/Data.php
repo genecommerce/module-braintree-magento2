@@ -63,7 +63,7 @@ class Data implements AuthDataInterface
     /**
      * @inheritdoc
      */
-    public function getIsLoggedIn()
+    public function isLoggedIn()
     {
         return $this->isLoggedIn;
     }

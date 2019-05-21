@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<alr:test-suite xmlns:alr="urn:model.allure.qatools.yandex.ru" start="1557505450342" stop="1557505450344" version="1.4.0">
+  <name>Magento\Braintree\Test\Unit\Gateway\Request\ChannelDataBuilderTest</name>
+  <test-cases>
+    <test-case start="1557505450342" stop="1557505450344" status="canceled">
+      <name>Magento\Braintree\Test\Unit\Gateway\Request\ChannelDataBuilderTest::testBuild</name>
+      <failure>
+        <message>Test for Magento\Braintree\Test\Unit\Gateway\Request\ChannelDataBuilderTest::testBuild skipped by data provider</message>
+        <stack-trace>#0 /Users/paulcanning/Projects/multistore/magento2/vendor/phpunit/phpunit/src/Framework/SkippedTestCase.php(61): PHPUnit\Framework\Assert::markTestSkipped('Test for Magent...')
+#1 /Users/paulcanning/Projects/multistore/magento2/vendor/phpunit/phpunit/src/Framework/TestCase.php(939): PHPUnit\Framework\SkippedTestCase-&gt;runTest()
+#2 /Users/paulcanning/Projects/multistore/magento2/vendor/phpunit/phpunit/src/Framework/TestResult.php(698): PHPUnit\Framework\TestCase-&gt;runBare()
+#3 /Users/paulcanning/Projects/multistore/magento2/vendor/phpunit/phpunit/src/Framework/TestCase.php(894): PHPUnit\Framework\TestResult-&gt;run(Object(PHPUnit\Framework\SkippedTestCase))
+#4 /Users/paulcanning/Projects/multistore/magento2/vendor/phpunit/phpunit/src/Framework/TestSuite.php(755): PHPUnit\Framework\TestCase-&gt;run(Object(PHPUnit\Framework\TestResult))
+#5 /Users/paulcanning/Projects/multistore/magento2/vendor/phpunit/phpunit/src/Framework/TestSuite.php(755): PHPUnit\Framework\TestSuite-&gt;run(Object(PHPUnit\Framework\TestResult))
+#6 /Users/paulcanning/Projects/multistore/magento2/vendor/phpunit/phpunit/src/Framework/TestSuite.php(755): PHPUnit\Framework\TestSuite-&gt;run(Object(PHPUnit\Framework\TestResult))
+#7 /Users/paulcanning/Projects/multistore/magento2/vendor/phpunit/phpunit/src/TextUI/TestRunner.php(545): PHPUnit\Framework\TestSuite-&gt;run(Object(PHPUnit\Framework\TestResult))
+#8 /Users/paulcanning/Projects/multistore/magento2/vendor/phpunit/phpunit/src/TextUI/Command.php(195): PHPUnit\TextUI\TestRunner-&gt;doRun(Object(PHPUnit\Framework\TestSuite), Array, true)
+#9 /Users/paulcanning/Projects/multistore/magento2/vendor/phpunit/phpunit/src/TextUI/Command.php(148): PHPUnit\TextUI\Command-&gt;run(Array, true)
+#10 /Users/paulcanning/Projects/multistore/magento2/vendor/phpunit/phpunit/phpunit(53): PHPUnit\TextUI\Command::main()
+#11 {main}</stack-trace>
+      </failure>
+    </test-case>
+  </test-cases>
+</alr:test-suite>

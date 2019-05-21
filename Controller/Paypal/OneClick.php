@@ -3,6 +3,7 @@
 namespace Magento\Braintree\Controller\Paypal;
 
 use Exception;
+use function GuzzleHttp\Psr7\parse_query;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Context;
@@ -22,7 +23,6 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Class OneClick
  * Used by the product page to create a quote for a single product
- *
  * @package Magento\Braintree\Controller\Paypal
  */
 class OneClick extends Review
@@ -102,6 +102,8 @@ class OneClick extends Review
 
     /**
      * @inheritdoc
+     *
+     * @throws Exception
      */
     public function execute()
     {
@@ -117,19 +119,24 @@ class OneClick extends Review
         }
 
         if (!empty($requestData['additionalData'])) {
-            parse_str($requestData['additionalData'], $requestData['additionalData']);
+            // parse_str($requestData['additionalData'], $requestData['additionalData']); // @codingStandardsIgnoreLine
+            $requestData['additionalData'] = parse_query($requestData['additionalData']);
         }
+
         if (!empty($requestData['additionalData']['form_key'])) {
             $this->getRequest()->setParams(['form_key' => $requestData['additionalData']['form_key']]);
         }
+
         if (!$this->formKeyValidator->validate($this->getRequest())) {
-            $this->messageManager->addErrorMessage("Invalid Formkey");
+            $this->messageManager->addErrorMessage('Invalid Form key');
+
             return $resultRedirect->setPath($this->_redirect->getRefererUrl());
         }
 
         // Retrieve product form values.
         if (empty($requestData['additionalData']['product'])) {
-            $this->messageManager->addErrorMessage("No product specified");
+            $this->messageManager->addErrorMessage('No product specified');
+
             return $resultRedirect->setPath($this->_redirect->getRefererUrl());
         }
 
@@ -143,9 +150,7 @@ class OneClick extends Review
          */
         $quote->setCustomerIsGuest(1);
 
-        /**
-         * @var $product CartItemInterface
-         */
+        /** @var $product CartItemInterface */
         try {
             $product = $this->productRepository->getById(
                 $requestData['additionalData']['product'],
@@ -154,6 +159,7 @@ class OneClick extends Review
             );
         } catch (NoSuchEntityException $e) {
             $this->messageManager->addExceptionMessage($e);
+
             return $resultRedirect->setPath($this->_redirect->getRefererUrl());
         }
 
@@ -183,11 +189,12 @@ class OneClick extends Review
      *
      * @return CartInterface
      */
-    protected function getQuote()
+    protected function getQuote(): CartInterface
     {
         if ($this->quote) {
             return $this->quote;
         }
+
         return parent::getQuote();
     }
 }

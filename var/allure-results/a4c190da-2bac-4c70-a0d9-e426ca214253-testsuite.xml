@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<alr:test-suite xmlns:alr="urn:model.allure.qatools.yandex.ru" start="1557505450303" stop="1557505450306" version="1.4.0">
+  <name>Magento\Braintree\Test\Unit\Gateway\Helper\SubjectReaderTest</name>
+  <test-cases>
+    <test-case start="1557505450303" stop="1557505450305" status="passed">
+      <name>testReadCustomerIdWithException</name>
+    </test-case>
+    <test-case start="1557505450305" stop="1557505450305" status="passed">
+      <name>testReadCustomerId</name>
+    </test-case>
+    <test-case start="1557505450305" stop="1557505450305" status="passed">
+      <name>testReadPublicHashWithException</name>
+    </test-case>
+    <test-case start="1557505450305" stop="1557505450305" status="passed">
+      <name>testReadPublicHash</name>
+    </test-case>
+    <test-case start="1557505450306" stop="1557505450306" status="passed">
+      <name>testReadPayPalWithException</name>
+    </test-case>
+    <test-case start="1557505450306" stop="1557505450306" status="passed">
+      <name>testReadPayPal</name>
+    </test-case>
+  </test-cases>
+</alr:test-suite>

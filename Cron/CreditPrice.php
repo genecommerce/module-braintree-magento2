@@ -2,12 +2,18 @@
 
 namespace Magento\Braintree\Cron;
 
+use Exception;
+use Magento\Braintree\Api\CreditPriceRepositoryInterface;
 use Magento\Braintree\Api\Data\CreditPriceDataInterface;
+use Magento\Braintree\Api\Data\CreditPriceDataInterfaceFactory;
 use Magento\Braintree\Gateway\Config\PayPalCredit\Config as PayPalCreditConfig;
+use Magento\Braintree\Model\Paypal\CreditApi;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 
 /**
  * Class CreditPrice
@@ -16,12 +22,12 @@ use Psr\Log\LoggerInterface;
 class CreditPrice
 {
     /**
-     * @var \Magento\Braintree\Api\CreditPriceRepositoryInterface
+     * @var CreditPriceRepositoryInterface
      */
     private $creditPriceRepository;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     private $scopeConfig;
 
@@ -31,7 +37,7 @@ class CreditPrice
     private $productCollection;
 
     /**
-     * @var \Magento\Braintree\Api\Data\CreditPriceDataInterfaceFactory
+     * @var CreditPriceDataInterfaceFactory
      */
     private $creditPriceFactory;
 
@@ -41,7 +47,7 @@ class CreditPrice
     private $logger;
 
     /**
-     * @var \Magento\Braintree\Model\Paypal\CreditApi
+     * @var CreditApi
      */
     private $creditApi;
 
@@ -52,19 +58,19 @@ class CreditPrice
 
     /**
      * CreditPrice constructor.
-     * @param \Magento\Braintree\Api\CreditPriceRepositoryInterface $creditPriceRepository
-     * @param \Magento\Braintree\Api\Data\CreditPriceDataInterfaceFactory $creditPriceDataInterfaceFactory
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Braintree\Model\Paypal\CreditApi $creditApi
+     * @param CreditPriceRepositoryInterface $creditPriceRepository
+     * @param CreditPriceDataInterfaceFactory $creditPriceDataInterfaceFactory
+     * @param ScopeConfigInterface $scopeConfig
+     * @param CreditApi $creditApi
      * @param ProductCollectionFactory $productCollection
      * @param LoggerInterface $logger
      * @param PayPalCreditConfig $config
      */
     public function __construct(
-        \Magento\Braintree\Api\CreditPriceRepositoryInterface $creditPriceRepository,
-        \Magento\Braintree\Api\Data\CreditPriceDataInterfaceFactory $creditPriceDataInterfaceFactory,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Braintree\Model\Paypal\CreditApi $creditApi,
+        CreditPriceRepositoryInterface $creditPriceRepository,
+        CreditPriceDataInterfaceFactory $creditPriceDataInterfaceFactory,
+        ScopeConfigInterface $scopeConfig,
+        CreditApi $creditApi,
         ProductCollectionFactory $productCollection,
         LoggerInterface $logger,
         PayPalCreditConfig $config
@@ -80,7 +86,7 @@ class CreditPrice
 
     /**
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      */
     public function execute()
     {
@@ -107,7 +113,7 @@ class CreditPrice
                     $priceOptions = $this->creditApi->getPriceOptions($product->getFinalPrice());
                     foreach ($priceOptions as $priceOption) {
                         // Populate model
-                        /** @var $model \Magento\Braintree\Api\Data\CreditPriceDataInterface */
+                        /** @var CreditPriceDataInterface $model */
                         $model = $this->creditPriceFactory->create();
                         $model->setProductId($product->getId());
                         $model->setTerm($priceOption['term']);
@@ -118,8 +124,6 @@ class CreditPrice
 
                         $this->creditPriceRepository->save($model);
                     }
-                } catch (AuthenticationException $e) {
-                    throw new \Exception($e->getMessage());
                 } catch (LocalizedException $e) {
                     $this->logger->critical($e->getMessage());
                 }

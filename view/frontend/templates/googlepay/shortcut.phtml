@@ -4,14 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * @var \Magento\Braintree\Block\GooglePay\Shortcut\Button $block
- */
-
-$id = $block->getContainerId() . mt_rand();
+/** @var \Magento\Braintree\Block\GooglePay\Shortcut\Button $block */
+try {
+    $id = sprintf('%s%s', $block->getContainerId(), random_int(PHP_INT_MIN, PHP_INT_MAX));
+} catch (Exception $e) {
+    /**
+     * Exception only thrown if an appropriate source of randomness cannot be found.
+     * https://www.php.net/manual/en/function.random-int.php
+     */
+    $id = 0;
+}
 
 $config = [
-    "Magento_Braintree/js/googlepay/implementations/shortcut" => [
+    'Magento_Braintree/js/googlepay/implementations/shortcut' => [
         'id' => $id,
         'environment' => $block->getEnvironment(),
         'clientToken' => $block->getClientToken(),
@@ -22,6 +27,8 @@ $config = [
         'cardTypes' => $block->getAvailableCardTypes()
     ]
 ];
-
 ?>
-<div id="<?php /* @noEscape */ echo $id; ?>" data-mage-init='<?php /* @noEscape */ echo json_encode($config); ?>' class="googlepay-minicart-logo"></div>
+<div id="<?= $block->escapeHtmlAttr($id) ?>"
+     data-mage-init="<?= $block->escapeHtmlAttr(json_encode($config)) ?>"
+     class="googlepay-minicart-logo">
+</div>
