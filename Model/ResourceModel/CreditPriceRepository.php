@@ -30,7 +30,7 @@ class CreditPriceRepository implements CreditPriceRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function save(CreditPriceDataInterface $entity)
+    public function save(CreditPriceDataInterface $entity): CreditPriceDataInterface
     {
         return $entity->getResource()->save($entity);
     }
@@ -38,7 +38,7 @@ class CreditPriceRepository implements CreditPriceRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function getByProductId($productId)
+    public function getByProductId($productId): CreditPriceDataInterface
     {
         /** @var CreditPrice\Collection $collection */
         $collection = $this->collectionFactory->create();
@@ -50,7 +50,7 @@ class CreditPriceRepository implements CreditPriceRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function getCheapestByProductId($productId)
+    public function getCheapestByProductId($productId):  CreditPriceDataInterface
     {
         /** @var CreditPrice\Collection $collection */
         $collection = $this->collectionFactory->create();

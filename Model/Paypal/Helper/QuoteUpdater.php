@@ -5,6 +5,7 @@
  */
 namespace Magento\Braintree\Model\Paypal\Helper;
 
+use InvalidArgumentException;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Payment;
@@ -65,13 +66,13 @@ class QuoteUpdater extends AbstractHelper
      * @param array $details
      * @param Quote $quote
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws LocalizedException
      */
     public function execute($nonce, array $details, Quote $quote)
     {
         if (empty($nonce) || empty($details)) {
-            throw new \InvalidArgumentException('The "nonce" and "details" fields does not exists');
+            throw new InvalidArgumentException('The "nonce" and "details" fields do not exist.');
         }
 
         $payment = $quote->getPayment();
