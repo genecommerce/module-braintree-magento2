@@ -96,7 +96,7 @@ class Review extends AbstractAction
      * @param array $requestData
      * @return boolean
      */
-    private function validateRequestData(array $requestData)
+    private function validateRequestData(array $requestData): bool
     {
         return !empty($requestData['nonce']) && !empty($requestData['details']);
     }

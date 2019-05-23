@@ -150,7 +150,7 @@ class OneClick extends Review
          */
         $quote->setCustomerIsGuest(1);
 
-        /** @var $product CartItemInterface */
+        /** @var CartItemInterface $product */
         try {
             $product = $this->productRepository->getById(
                 $requestData['additionalData']['product'],
