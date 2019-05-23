@@ -30,11 +30,18 @@ class DeleteStoredPaymentPlugin
      * @var BraintreeAdapter
      */
     private $braintreeAdapter;
+
     /**
      * @var LoggerInterface
      */
     private $logger;
 
+    /**
+     * DeleteStoredPaymentPlugin constructor
+     *
+     * @param BraintreeAdapter $braintreeAdapter
+     * @param LoggerInterface $logger
+     */
     public function __construct(
         BraintreeAdapter $braintreeAdapter,
         LoggerInterface $logger
@@ -43,13 +50,20 @@ class DeleteStoredPaymentPlugin
         $this->logger = $logger;
     }
 
+    /**
+     * @param PaymentTokenRepositoryInterface $subject
+     * @param PaymentTokenInterface $paymentToken
+     * @return bool|null
+     */
     public function beforeDelete(PaymentTokenRepositoryInterface $subject, PaymentTokenInterface $paymentToken)
     {
         $token = $paymentToken->getGatewayToken();
+
         if ($this->braintreeAdapter->deletePaymentMethod($token)) {
             $this->logger->debug('vault payment deleted ' . $token);
             return null;
         }
+
         return false;
     }
 }
