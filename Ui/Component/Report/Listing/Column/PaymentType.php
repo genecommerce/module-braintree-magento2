@@ -23,13 +23,14 @@ class PaymentType implements OptionSourceInterface
      *
      * @return array
      */
-    public function toOptionArray()
+    public function toOptionArray(): array
     {
         if ($this->options !== null) {
             return $this->options;
         }
 
         $types = $this->getAvailablePaymentTypes();
+
         foreach ($types as $typeCode => $typeName) {
             $this->options[$typeCode]['label'] = $typeName;
             $this->options[$typeCode]['value'] = $typeCode;
@@ -41,7 +42,7 @@ class PaymentType implements OptionSourceInterface
     /**
      * @return array
      */
-    private function getAvailablePaymentTypes()
+    private function getAvailablePaymentTypes(): array
     {
         // @codingStandardsIgnoreStart
         return [

@@ -23,13 +23,14 @@ class Status implements OptionSourceInterface
      *
      * @return array
      */
-    public function toOptionArray()
+    public function toOptionArray(): array
     {
         if ($this->options !== null) {
             return $this->options;
         }
 
         $statuses = $this->getAvailableStatuses();
+
         foreach ($statuses as $statusCode => $statusName) {
             $this->options[$statusCode]['label'] = $statusName;
             $this->options[$statusCode]['value'] = $statusCode;
@@ -41,7 +42,7 @@ class Status implements OptionSourceInterface
     /**
      * @return array
      */
-    private function getAvailableStatuses()
+    private function getAvailableStatuses(): array
     {
         // @codingStandardsIgnoreStart
         return [

@@ -23,13 +23,14 @@ class TransactionType implements OptionSourceInterface
      *
      * @return array
      */
-    public function toOptionArray()
+    public function toOptionArray(): array
     {
         if ($this->options !== null) {
             return $this->options;
         }
 
         $types = $this->getAvailableTransactionTypes();
+
         foreach ($types as $typeCode => $typeName) {
             $this->options[$typeCode]['label'] = $typeName;
             $this->options[$typeCode]['value'] = $typeCode;
@@ -41,7 +42,7 @@ class TransactionType implements OptionSourceInterface
     /**
      * @return array
      */
-    private function getAvailableTransactionTypes()
+    private function getAvailableTransactionTypes(): array
     {
         // @codingStandardsIgnoreStart
         return [
