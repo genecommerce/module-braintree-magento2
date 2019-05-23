@@ -12,6 +12,7 @@ define(
         'braintree',
         'braintreeDataCollector',
         'braintreePayPalCheckout',
+        'braintreeCheckoutPayPalAdapter',
         'Magento_Braintree/js/form-builder',
         'domReady!',
         'https://www.paypalobjects.com/api/checkout.js'
@@ -25,6 +26,7 @@ define(
         braintree,
         dataCollector,
         paypalCheckout,
+        paypalAdapter,
         formBuilder
     ) {
         'use strict';

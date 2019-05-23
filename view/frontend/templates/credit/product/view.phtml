@@ -19,7 +19,7 @@ if (!$priceData) {
                         "displaySummary": false,
                         "displayInterestDetails": true,
                         "merchantName": "<?= $block->escapeHtml($block->getMerchantName()) ?>",
-                        "instalments": <?= $block->escapeHtml($priceData) ?>
+                        "instalments": <?php /* @noEscape */ echo $priceData; ?>
                     }
                 }
             }
