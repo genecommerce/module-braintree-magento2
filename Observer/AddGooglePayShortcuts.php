@@ -5,6 +5,7 @@ use Magento\Braintree\Block\GooglePay\Shortcut\Button;
 use Magento\Catalog\Block\ShortcutButtons;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Class AddGooglePayShortcuts
@@ -18,6 +19,7 @@ class AddGooglePayShortcuts implements ObserverInterface
      *
      * @param Observer $observer
      * @return void
+     * @throws LocalizedException
      */
     public function execute(Observer $observer)
     {
