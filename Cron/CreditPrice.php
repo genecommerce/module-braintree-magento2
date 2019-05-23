@@ -88,7 +88,7 @@ class CreditPrice
      * @return $this
      * @throws Exception
      */
-    public function execute()
+    public function execute(): self
     {
         if (!$this->config->isCalculatorEnabled()) {
             return $this;

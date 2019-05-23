@@ -2,8 +2,14 @@
 
 namespace Magento\Braintree\Cron;
 
+use Exception;
+use Magento\AdminNotification\Model\Inbox;
+use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\Notification\NotifierInterface as NotifierPool;
 use Magento\Framework\Module\ModuleListInterface;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\UrlInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Update
@@ -22,7 +28,7 @@ class Update
     private $notifier;
 
     /**
-     * @var \Magento\AdminNotification\Model\Inbox
+     * @var Inbox
      */
     private $inbox;
 
@@ -32,17 +38,17 @@ class Update
     private $moduleList;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     private $storeManager;
 
     /**
-     * @var \Magento\Framework\HTTP\Client\Curl
+     * @var Curl
      */
     private $curl;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @var Json
      */
     private $json;
 
@@ -51,13 +57,22 @@ class Update
      */
     private $updateInformation;
 
+    /**
+     * Update constructor.
+     * @param NotifierPool $notifier
+     * @param Inbox $inbox
+     * @param ModuleListInterface $moduleList
+     * @param StoreManagerInterface $storeManager
+     * @param Curl $curl
+     * @param Json $json
+     */
     public function __construct(
         NotifierPool $notifier,
-        \Magento\AdminNotification\Model\Inbox $inbox,
+        Inbox $inbox,
         ModuleListInterface $moduleList,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\HTTP\Client\Curl $curl,
-        \Magento\Framework\Serialize\Serializer\Json $json
+        StoreManagerInterface $storeManager,
+        Curl $curl,
+        Json $json
     ) {
         $this->notifier = $notifier;
         $this->inbox = $inbox;
@@ -67,7 +82,10 @@ class Update
         $this->json = $json;
     }
 
-    public function execute()
+    /**
+     * @return $this
+     */
+    public function execute(): self
     {
         if ($this->updateAvailable()) {
             $this->addNotification();
@@ -95,14 +113,14 @@ class Update
 
         try {
             $storeUrl = $this->storeManager->getDefaultStoreView()
-                ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB);
+                ->getBaseUrl(UrlInterface::URL_TYPE_WEB);
 
             $this->curl->post(
-                "https://braintree.gene.co.uk/",
+                'https://braintree.gene.co.uk/',
                 [
-                    "magento" => "2",
-                    "version" => $currentVersion,
-                    "storeUrl" => $storeUrl
+                    'magento' => '2',
+                    'version' => $currentVersion,
+                    'storeUrl' => $storeUrl
                 ]
             );
             $response = $this->curl->getBody();
@@ -122,7 +140,7 @@ class Update
             }
 
             return false;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return false;
         }
     }
@@ -130,7 +148,7 @@ class Update
     /**
      * @return $this
      */
-    private function addNotification()
+    private function addNotification(): self
     {
         $title = $this->updateInformation['title'];
         $message = $this->updateInformation['message'];
@@ -185,7 +203,7 @@ class Update
             }
 
             return false;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return true;
         }
     }
