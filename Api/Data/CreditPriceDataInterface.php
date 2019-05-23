@@ -18,9 +18,9 @@ interface CreditPriceDataInterface
     const TOTAL_INC_INTEREST = 'total_inc_interest';
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getId(): int;
+    public function getId();
 
     /**
      * @param int $value

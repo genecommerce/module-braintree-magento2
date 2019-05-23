@@ -3,6 +3,7 @@
 namespace Magento\Braintree\Api;
 
 use Magento\Braintree\Api\Data\CreditPriceDataInterface;
+use Magento\Framework\DataObject;
 
 /**
  * Interface CreditPricesInterface
@@ -22,13 +23,13 @@ interface CreditPriceRepositoryInterface
      * @param int $productId
      * @return CreditPriceDataInterface
      */
-    public function getByProductId($productId): CreditPriceDataInterface;
+    public function getByProductId($productId);
 
     /**
      * @param $productId
-     * @return Data\CreditPriceDataInterface
+     * @return Data\CreditPriceDataInterface|DataObject
      */
-    public function getCheapestByProductId($productId): CreditPriceDataInterface;
+    public function getCheapestByProductId($productId);
 
     /**
      * @param int $productId

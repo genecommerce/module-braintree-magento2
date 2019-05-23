@@ -11,18 +11,21 @@ interface AuthDataInterface
 {
     /**
      * Braintree client token
-     * @return string
+     *
+     * @return string|null
      */
-    public function getClientToken(): string;
+    public function getClientToken();
 
     /**
      * Merchant display name
+     *
      * @return string
      */
     public function getDisplayName(): string;
 
     /**
      * URL To success page
+     *
      * @return string
      */
     public function getActionSuccess(): string;
@@ -34,41 +37,47 @@ interface AuthDataInterface
 
     /**
      * Get current store code
+     *
      * @return string
      */
     public function getStoreCode(): string;
 
     /**
      * Set Braintree client token
-     * @var $value string
+     *
+     * @param string $value
      * @return string|null
      */
     public function setClientToken($value);
 
     /**
      * Set Merchant display name
-     * @var $value string
+     *
+     * @param string $value
      * @return string|null
      */
     public function setDisplayName($value);
 
     /**
      * Set URL To success page
-     * @var $value string
+     *
+     * @param string $value
      * @return string|null
      */
     public function setActionSuccess($value);
 
     /**
      * Set if user is logged in
-     * @var $value bool
+     *
+     * @param bool $value
      * @return bool|null
      */
     public function setIsLoggedIn($value);
 
     /**
      * Set current store code
-     * @var $value string
+     *
+     * @param string $value
      * @return string|null
      */
     public function setStoreCode($value);
