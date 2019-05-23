@@ -14,21 +14,23 @@ use Magento\Framework\Option\ArrayInterface;
 class Country implements ArrayInterface
 {
     /**
-     * @var array
+     * @var array $options
      */
     protected $options;
 
     /**
      * Countries
      *
-     * @var \Magento\Directory\Model\ResourceModel\Country\Collection
+     * @var Collection $countryCollection
      */
     protected $countryCollection;
 
     /**
      * Countries not supported by Braintree
+     *
+     * @var array $excludedCountries
      */
-    protected $excludedCountries = [
+    protected static $excludedCountries = [
         'MM',
         'IR',
         'SD',
@@ -51,7 +53,7 @@ class Country implements ArrayInterface
     ];
 
     /**
-     * @param \Magento\Directory\Model\ResourceModel\Country\Collection $countryCollection
+     * @param Collection $countryCollection
      */
     public function __construct(Collection $countryCollection)
     {
@@ -59,10 +61,10 @@ class Country implements ArrayInterface
     }
 
     /**
-     * @param bool $isMultiselect
+     * @param bool $isMultiSelect
      * @return array
      */
-    public function toOptionArray($isMultiselect = false)
+    public function toOptionArray($isMultiSelect = false): array
     {
         if (!$this->options) {
             $this->options = $this->countryCollection
@@ -72,7 +74,7 @@ class Country implements ArrayInterface
         }
 
         $options = $this->options;
-        if (!$isMultiselect) {
+        if (!$isMultiSelect) {
             array_unshift($options, ['value' => '', 'label' => __('--Please Select--')]);
         }
 
@@ -85,17 +87,18 @@ class Country implements ArrayInterface
      * @param string $countryId
      * @return boolean
      */
-    public function isCountryRestricted($countryId)
+    public function isCountryRestricted($countryId): bool
     {
         return in_array($countryId, $this->getExcludedCountries());
     }
 
     /**
      * Return list of excluded countries
+     *
      * @return array
      */
-    public function getExcludedCountries()
+    public function getExcludedCountries(): array
     {
-        return $this->excludedCountries;
+        return self::$excludedCountries;
     }
 }

@@ -8,7 +8,9 @@ namespace Magento\Braintree\Model\Adminhtml\System\Config;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Value;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
@@ -21,25 +23,25 @@ use Magento\Framework\Serialize\Serializer\Json;
 class CountryCreditCard extends Value
 {
     /**
-     * @var \Magento\Framework\Math\Random
+     * @var Random
      */
     protected $mathRandom;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @var Json
      */
     private $serializer;
 
     /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
-     * @param \Magento\Framework\Math\Random $mathRandom
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param Context $context
+     * @param Registry $registry
+     * @param ScopeConfigInterface $config
+     * @param TypeListInterface $cacheTypeList
+     * @param Random $mathRandom
+     * @param AbstractResource $resource
+     * @param AbstractDb $resourceCollection
      * @param array $data
-     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @param Json $serializer
      */
     public function __construct(
         Context $context,
@@ -53,7 +55,7 @@ class CountryCreditCard extends Value
         Json $serializer = null
     ) {
         $this->mathRandom = $mathRandom;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->serializer = $serializer ?: ObjectManager::getInstance()
             ->get(Json::class);
         parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
     }
@@ -86,6 +88,7 @@ class CountryCreditCard extends Value
      * Process data after load
      *
      * @return $this
+     * @throws LocalizedException
      */
     public function afterLoad()
     {
@@ -103,8 +106,9 @@ class CountryCreditCard extends Value
      *
      * @param array $value
      * @return array
+     * @throws LocalizedException
      */
-    protected function encodeArrayFieldValue(array $value)
+    protected function encodeArrayFieldValue(array $value): array
     {
         $result = [];
         foreach ($value as $country => $creditCardType) {
@@ -121,7 +125,7 @@ class CountryCreditCard extends Value
      * @param array $inputCountriesList
      * @return array
      */
-    private function appendUniqueCountries(array $countriesList, array $inputCountriesList)
+    private function appendUniqueCountries(array $countriesList, array $inputCountriesList): array
     {
         $result = array_merge($countriesList, $inputCountriesList);
         return array_values(array_unique($result));

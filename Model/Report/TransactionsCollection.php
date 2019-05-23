@@ -5,7 +5,11 @@
  */
 namespace Magento\Braintree\Model\Report;
 
+use Braintree\ResourceCollection;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
+use Magento\Braintree\Model\Report\Row\TransactionMap;
+use Magento\Framework\Api\Search\AggregationInterface;
+use Magento\Framework\Api\Search\DocumentInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection;
@@ -26,7 +30,7 @@ class TransactionsCollection extends Collection implements SearchResultInterface
      *
      * @var string
      */
-    protected $_itemObjectClass = \Magento\Braintree\Model\Report\Row\TransactionMap::class;
+    protected $_itemObjectClass = TransactionMap::class;
 
     /**
      * @var array
@@ -44,7 +48,7 @@ class TransactionsCollection extends Collection implements SearchResultInterface
     private $braintreeAdapter;
 
     /**
-     * @var \Braintree\ResourceCollection | null
+     * @var ResourceCollection | null
      */
     private $collection;
 
@@ -64,9 +68,9 @@ class TransactionsCollection extends Collection implements SearchResultInterface
     }
 
     /**
-     * @return \Magento\Framework\Api\Search\DocumentInterface[]
+     * @return array
      */
-    public function getItems()
+    public function getItems(): array
     {
         if (!$this->fetchIdsCollection()) {
             return [];
@@ -99,7 +103,7 @@ class TransactionsCollection extends Collection implements SearchResultInterface
 
     /**
      * Fetch collection from Braintree
-     * @return \Braintree\ResourceCollection|null
+     * @return ResourceCollection|null
      */
     protected function fetchIdsCollection()
     {
@@ -119,7 +123,7 @@ class TransactionsCollection extends Collection implements SearchResultInterface
     /**
      * Set items list.
      *
-     * @param \Magento\Framework\Api\Search\DocumentInterface[] $items
+     * @param DocumentInterface[] $items
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -129,7 +133,7 @@ class TransactionsCollection extends Collection implements SearchResultInterface
     }
 
     /**
-     * @return \Magento\Framework\Api\Search\AggregationInterface
+     * @return AggregationInterface
      */
     public function getAggregations()
     {
@@ -137,7 +141,7 @@ class TransactionsCollection extends Collection implements SearchResultInterface
     }
 
     /**
-     * @param \Magento\Framework\Api\Search\AggregationInterface $aggregations
+     * @param AggregationInterface $aggregations
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -159,7 +163,7 @@ class TransactionsCollection extends Collection implements SearchResultInterface
     /**
      * Set search criteria.
      *
-     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @param SearchCriteriaInterface $searchCriteria
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -173,7 +177,7 @@ class TransactionsCollection extends Collection implements SearchResultInterface
      *
      * @return int
      */
-    public function getTotalCount()
+    public function getTotalCount(): int
     {
         $collection = $this->fetchIdsCollection();
         return null === $collection ? 0 : $collection->maximumCount();
@@ -184,10 +188,10 @@ class TransactionsCollection extends Collection implements SearchResultInterface
      *
      * @return int
      */
-    public function getPageSize()
+    public function getPageSize(): int
     {
         $pageSize = parent::getPageSize();
-        return $pageSize === null ? static::TRANSACTION_MAXIMUM_COUNT : $pageSize;
+        return $pageSize ?? static::TRANSACTION_MAXIMUM_COUNT;
     }
 
     /**
@@ -236,7 +240,7 @@ class TransactionsCollection extends Collection implements SearchResultInterface
     /**
      * @return array
      */
-    private function getFilters()
+    private function getFilters(): array
     {
         return $this->filtersList;
     }

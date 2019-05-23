@@ -10,14 +10,16 @@ use Magento\Payment\Model\Method\AbstractMethod;
 
 /**
  * Class PaymentAction
+ * @package Magento\Braintree\Model\Adminhtml\Source
  */
 class PaymentAction implements ArrayInterface
 {
     /**
      * Possible actions on order place
+     *
      * @return array
      */
-    public function toOptionArray()
+    public function toOptionArray(): array
     {
         return [
             [

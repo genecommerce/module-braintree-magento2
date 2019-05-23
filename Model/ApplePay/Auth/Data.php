@@ -12,34 +12,34 @@ use Magento\Braintree\Api\Data\AuthDataInterface;
 class Data implements AuthDataInterface
 {
     /**
-     * @var string
+     * @var string $clientToken
      */
     private $clientToken;
 
     /**
-     * @var string
+     * @var string $displayName
      */
     private $displayName;
 
     /**
-     * @var string
+     * @var string $actionSuccess
      */
     private $actionSuccess;
 
     /**
-     * @var bool
+     * @var bool $isLoggedIn
      */
     private $isLoggedIn;
 
     /**
-     * @var string
+     * @var string $storeCode
      */
     private $storeCode;
 
     /**
      * @inheritdoc
      */
-    public function getClientToken(): string
+    public function getClientToken()
     {
         return $this->clientToken;
     }

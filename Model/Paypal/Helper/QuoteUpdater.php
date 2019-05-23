@@ -46,6 +46,8 @@ class QuoteUpdater extends AbstractHelper
      *
      * @param Config $config
      * @param CartRepositoryInterface $quoteRepository
+     * @param ManagerInterface $eventManager
+     * @param \Magento\Quote\Model\ResourceModel\Quote\Address $addressFactory
      */
     public function __construct(
         Config $config,
@@ -121,6 +123,10 @@ class QuoteUpdater extends AbstractHelper
     }
 
     // @todo "why is this needed"
+
+    /**
+     * @param Quote $quote
+     */
     private function cleanUpAddress(Quote $quote)
     {
         $tableName = $this->addressFactory->getConnection()->getTableName('quote_address');
@@ -216,9 +222,7 @@ class QuoteUpdater extends AbstractHelper
      */
     private function updateAddressData(Address $address, array $addressData)
     {
-        $extendedAddress = isset($addressData['extendedAddress'])
-            ? $addressData['extendedAddress']
-            : null;
+        $extendedAddress = $addressData['extendedAddress'] ?? null;
 
         $address->setStreet([$addressData['streetAddress'], $extendedAddress]);
         $address->setCity($addressData['locality']);

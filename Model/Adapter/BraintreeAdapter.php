@@ -10,10 +10,16 @@ use Braintree\Configuration;
 use Braintree\CreditCard;
 use Braintree\PaymentMethod;
 use Braintree\PaymentMethodNonce;
+use Braintree\ResourceCollection;
+use Braintree\Result\Error;
+use Braintree\Result\Successful;
 use Braintree\Transaction;
+use Exception;
 use Magento\Braintree\Gateway\Config\Config;
 use Magento\Braintree\Model\Adminhtml\Source\Environment;
 use Magento\Braintree\Model\StoreConfigResolver;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Class BraintreeAdapter
@@ -37,8 +43,8 @@ class BraintreeAdapter
      * @param Config              $config              Braintree configurator
      * @param StoreConfigResolver $storeConfigResolver StoreId resolver model
      *
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
     public function __construct(
         Config $config,
@@ -54,8 +60,8 @@ class BraintreeAdapter
      *
      * @return void
      *
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
     protected function initCredentials()
     {
@@ -65,7 +71,7 @@ class BraintreeAdapter
 
         $this->environment(Environment::ENVIRONMENT_SANDBOX);
 
-        if ($environmentIdentifier == Environment::ENVIRONMENT_PRODUCTION) {
+        if ($environmentIdentifier === Environment::ENVIRONMENT_PRODUCTION) {
             $this->environment(Environment::ENVIRONMENT_PRODUCTION);
         }
 
@@ -118,42 +124,42 @@ class BraintreeAdapter
 
     /**
      * @param array $params
-     * @return \Braintree\Result\Successful|\Braintree\Result\Error|null
+     * @return Successful|Error|string|null
      */
     public function generate(array $params = [])
     {
         try {
             return ClientToken::generate($params);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return null;
         }
     }
 
     /**
      * @param string $token
-     * @return \Braintree\CreditCard|null
+     * @return CreditCard|null
      */
     public function find($token)
     {
         try {
             return CreditCard::find($token);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return null;
         }
     }
 
     /**
      * @param array $filters
-     * @return \Braintree\ResourceCollection
+     * @return ResourceCollection
      */
-    public function search(array $filters)
+    public function search(array $filters): ResourceCollection
     {
         return Transaction::search($filters);
     }
 
     /**
      * @param string $token
-     * @return \Braintree\Result\Successful|\Braintree\Result\Error
+     * @return Successful|Error
      */
     public function createNonce($token)
     {
@@ -162,18 +168,17 @@ class BraintreeAdapter
 
     /**
      * @param array $attributes
-     * @return \Braintree\Result\Successful|\Braintree\Result\Error
+     * @return Successful|Error
      */
     public function sale(array $attributes)
     {
-        $r= Transaction::sale($attributes);
-        return $r;
+        return Transaction::sale($attributes);
     }
 
     /**
      * @param string $transactionId
      * @param null|float $amount
-     * @return \Braintree\Result\Successful|\Braintree\Result\Error
+     * @return Successful|Error
      */
     public function submitForSettlement($transactionId, $amount = null)
     {
@@ -182,7 +187,7 @@ class BraintreeAdapter
 
     /**
      * @param string $transactionId
-     * @return \Braintree\Result\Successful|\Braintree\Result\Error
+     * @return Successful|Error
      */
     public function void($transactionId)
     {
@@ -192,7 +197,7 @@ class BraintreeAdapter
     /**
      * @param string $transactionId
      * @param null|float $amount
-     * @return \Braintree\Result\Successful|\Braintree\Result\Error
+     * @return Successful|Error
      */
     public function refund($transactionId, $amount = null)
     {
@@ -210,10 +215,16 @@ class BraintreeAdapter
         return Transaction::cloneTransaction($transactionId, $attributes);
     }
 
+    /**
+     * @param $token
+     * @return mixed
+     */
+    /**
+     * @param $token
+     * @return mixed
+     */
     public function deletePaymentMethod($token)
     {
-        $result = PaymentMethod::delete($token);
-
-        return $result->success;
+        return PaymentMethod::delete($token)->success;
     }
 }

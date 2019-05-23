@@ -16,7 +16,7 @@ class Size implements ArrayInterface
      *
      * @return array
      */
-    public function toOptionArray()
+    public function toOptionArray(): array
     {
         return [
             ['value' => 0, 'label' => __('Medium')],
@@ -30,16 +30,20 @@ class Size implements ArrayInterface
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
-        return [0 => __('Medium'), 1 => __('Large'), 2 => __('Responsive')];
+        return [
+            0 => __('Medium'),
+            1 => __('Large'),
+            2 => __('Responsive')
+        ];
     }
 
     /**
      * Values in the format needed for the PayPal JS SDK
      * @return array
      */
-    public function toRawValues()
+    public function toRawValues(): array
     {
         return [
             0 => 'medium',

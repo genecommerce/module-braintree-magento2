@@ -33,7 +33,7 @@ class CreditPrice extends AbstractModel implements CreditPriceDataInterface
     /**
      * @inheritdoc
      */
-    public function getProductId()
+    public function getProductId(): int
     {
         return $this->getData(self::PRODUCT_ID);
     }
@@ -41,7 +41,7 @@ class CreditPrice extends AbstractModel implements CreditPriceDataInterface
     /**
      * @inheritdoc
      */
-    public function getTerm()
+    public function getTerm(): int
     {
         return $this->getData(self::TERM);
     }
@@ -49,7 +49,7 @@ class CreditPrice extends AbstractModel implements CreditPriceDataInterface
     /**
      * @inheritdoc
      */
-    public function getMonthlyPayment()
+    public function getMonthlyPayment(): float
     {
         return $this->getData(self::MONTHLY_PAYMENT);
     }
@@ -57,7 +57,7 @@ class CreditPrice extends AbstractModel implements CreditPriceDataInterface
     /**
      * @inheritdoc
      */
-    public function getInstalmentRate()
+    public function getInstalmentRate(): float
     {
         return $this->getData(self::INSTALMENT_RATE);
     }
@@ -65,7 +65,7 @@ class CreditPrice extends AbstractModel implements CreditPriceDataInterface
     /**
      * @inheritdoc
      */
-    public function getCostOfPurchase()
+    public function getCostOfPurchase(): float
     {
         return $this->getData(self::COST_OF_PURCHASE);
     }
@@ -73,7 +73,7 @@ class CreditPrice extends AbstractModel implements CreditPriceDataInterface
     /**
      * @inheritdoc
      */
-    public function getTotalIncInterest()
+    public function getTotalIncInterest(): float
     {
         return $this->getData(self::TOTAL_INC_INTEREST);
     }
@@ -81,7 +81,7 @@ class CreditPrice extends AbstractModel implements CreditPriceDataInterface
     /**
      * @inheritdoc
      */
-    public function setId($value)
+    public function setId($value): CreditPriceDataInterface
     {
         return $this->setData(self::ID, $value);
     }
@@ -89,7 +89,7 @@ class CreditPrice extends AbstractModel implements CreditPriceDataInterface
     /**
      * @inheritdoc
      */
-    public function setProductId($value)
+    public function setProductId($value): CreditPriceDataInterface
     {
         return $this->setData(self::PRODUCT_ID, $value);
     }
@@ -97,7 +97,7 @@ class CreditPrice extends AbstractModel implements CreditPriceDataInterface
     /**
      * @inheritdoc
      */
-    public function setTerm($value)
+    public function setTerm($value): CreditPriceDataInterface
     {
         return $this->setData(self::TERM, $value);
     }
@@ -105,7 +105,7 @@ class CreditPrice extends AbstractModel implements CreditPriceDataInterface
     /**
      * @inheritdoc
      */
-    public function setMonthlyPayment($value)
+    public function setMonthlyPayment($value): CreditPriceDataInterface
     {
         return $this->setData(self::MONTHLY_PAYMENT, $value);
     }
@@ -113,7 +113,7 @@ class CreditPrice extends AbstractModel implements CreditPriceDataInterface
     /**
      * @inheritdoc
      */
-    public function setInstalmentRate($value)
+    public function setInstalmentRate($value): CreditPriceDataInterface
     {
         return $this->setData(self::INSTALMENT_RATE, $value);
     }
@@ -121,7 +121,7 @@ class CreditPrice extends AbstractModel implements CreditPriceDataInterface
     /**
      * @inheritdoc
      */
-    public function setCostOfPurchase($value)
+    public function setCostOfPurchase($value): CreditPriceDataInterface
     {
         return $this->setData(self::COST_OF_PURCHASE, $value);
     }
@@ -129,7 +129,7 @@ class CreditPrice extends AbstractModel implements CreditPriceDataInterface
     /**
      * @inheritdoc
      */
-    public function setTotalIncInterest($value)
+    public function setTotalIncInterest($value): CreditPriceDataInterface
     {
         return $this->setData(self::TOTAL_INC_INTEREST, $value);
     }

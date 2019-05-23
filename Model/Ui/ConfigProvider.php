@@ -90,20 +90,16 @@ class ConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Retrieve assoc array of checkout configuration
-     *
-     * @return array
-     * @throws InputException
-     * @throws NoSuchEntityException
+     * @inheritDoc
      */
-    public function getConfig()
+    public function getConfig(): array
     {
-        return [
+        $config = [
             'payment' => [
                 self::CODE => [
                     'isActive' => $this->config->isActive(),
                     'clientToken' => $this->getClientToken(),
-                    'ccTypesMapper' => $this->config->getCctypesMapper(),
+                    'ccTypesMapper' => $this->config->getCcTypesMapper(),
                     'sdkUrl' => $this->config->getSdkUrl(),
                     'countrySpecificCardTypes' => $this->config->getCountrySpecificCardTypeConfig(),
                     'availableCardTypes' => $this->config->getAvailableCardTypes(),
@@ -136,6 +132,8 @@ class ConfigProvider implements ConfigProviderInterface
                 ]
             ]
         ];
+
+        return $config;
     }
 
     /**
@@ -163,9 +161,10 @@ class ConfigProvider implements ConfigProviderInterface
 
     /**
      * Get icons for available payment methods
+     *
      * @return array
      */
-    public function getIcons()
+    public function getIcons(): array
     {
         if (!empty($this->icons)) {
             return $this->icons;
@@ -173,6 +172,7 @@ class ConfigProvider implements ConfigProviderInterface
 
         $types = $this->ccConfig->getCcAvailableTypes();
         $types['NONE'] = '';
+
         foreach (array_keys($types) as $code) {
             if (!array_key_exists($code, $this->icons)) {
                 $asset = $this->ccConfig->createAsset('Magento_Braintree::images/cc/' . strtoupper($code) . '.png');

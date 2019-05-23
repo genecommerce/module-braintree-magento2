@@ -14,14 +14,14 @@ class GooglePayCcType extends \Magento\Payment\Model\Source\Cctype
     /**
      * @inheritdoc
      */
-    public function toOptionArray()
+    public function toOptionArray(): array
     {
         return [
-            ['value' => 'VISA', 'label' => "Visa"],
-            ['value' => 'MASTERCARD', 'label' => "MasterCard"],
-            ['value' => 'AMEX', 'label' => "AMEX"],
-            ['value' => 'DISCOVER', 'label' => "Discover"],
-            ['value' => 'JCB', 'label' => "JCB"]
+            ['value' => 'VISA', 'label' => 'Visa'],
+            ['value' => 'MASTERCARD', 'label' => 'MasterCard'],
+            ['value' => 'AMEX', 'label' => 'AMEX'],
+            ['value' => 'DISCOVER', 'label' => 'Discover'],
+            ['value' => 'JCB', 'label' => 'JCB']
         ];
     }
 }

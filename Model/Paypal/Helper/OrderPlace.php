@@ -90,7 +90,7 @@ class OrderPlace extends AbstractHelper
      * @param Quote $quote
      * @return string
      */
-    private function getCheckoutMethod(Quote $quote)
+    private function getCheckoutMethod(Quote $quote): string
     {
         if ($this->customerSession->isLoggedIn()) {
             return Onepage::METHOD_CUSTOMER;

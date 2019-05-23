@@ -37,7 +37,7 @@ class LocaleResolver implements ResolverInterface
     /**
      * @inheritdoc
      */
-    public function getDefaultLocalePath()
+    public function getDefaultLocalePath(): string
     {
         return $this->resolver->getDefaultLocalePath();
     }
@@ -53,7 +53,7 @@ class LocaleResolver implements ResolverInterface
     /**
      * @inheritdoc
      */
-    public function getDefaultLocale()
+    public function getDefaultLocale(): string
     {
         return $this->resolver->getDefaultLocale();
     }
@@ -71,7 +71,7 @@ class LocaleResolver implements ResolverInterface
      *
      * @return string
      */
-    public function getLocale()
+    public function getLocale(): string
     {
         $locale = $this->resolver->getLocale();
         $allowedLocales = $this->config->getValue('supported_locales');

@@ -3,6 +3,8 @@
 namespace Magento\Braintree\Model\GooglePay;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Class Config
@@ -38,9 +40,10 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     /**
      * Get merchant name to display
+     *
      * @return string
      */
-    public function getMerchantId()
+    public function getMerchantId(): string
     {
         return $this->getValue('merchant_id');
     }
@@ -50,7 +53,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      *
      * @return bool
      */
-    public function isActive()
+    public function isActive(): bool
     {
         return (bool) $this->getValue(self::KEY_ACTIVE);
     }
@@ -59,7 +62,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Get allowed payment card types
      * @return array
      */
-    public function getAvailableCardTypes()
+    public function getAvailableCardTypes(): array
     {
         $ccTypes = $this->getValue(self::KEY_CC_TYPES);
         return !empty($ccTypes) ? explode(',', $ccTypes) : [];
@@ -67,14 +70,17 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     /**
      * Map Braintree Environment setting
+     *
      * @return string
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
-    public function getEnvironment()
+    public function getEnvironment(): string
     {
         if ($this->braintreeConfig->getEnvironment() !== 'production') {
-            return "TEST";
+            return 'TEST';
         }
 
-        return "PRODUCTION";
+        return 'PRODUCTION';
     }
 }

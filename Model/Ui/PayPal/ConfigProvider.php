@@ -56,7 +56,7 @@ class ConfigProvider implements ConfigProviderInterface
      *
      * @return array
      */
-    public function getConfig()
+    public function getConfig(): array
     {
         return [
             'payment' => [
@@ -81,7 +81,7 @@ class ConfigProvider implements ConfigProviderInterface
 
                 self::PAYPAL_CREDIT_CODE => [
                     'isActive' => $this->creditConfig->isActive(),
-                    'title' => __("PayPal Credit"),
+                    'title' => __('PayPal Credit'),
                     'isAllowShippingAddressOverride' => $this->config->isAllowToEditShippingAddress(),
                     'merchantName' => $this->config->getMerchantName(),
                     'payeeEmail' => $this->config->getPayeeEmail(),

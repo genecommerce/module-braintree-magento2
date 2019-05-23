@@ -12,6 +12,9 @@ use Magento\Braintree\Model\ResourceModel\CreditPrice as CreditPriceResource;
  */
 class Collection extends AbstractCollection
 {
+    /**
+     * @var string
+     */
     protected $_idFieldName = 'id'; //@codingStandardsIgnoreLine
 
     protected function _construct() //@codingStandardsIgnoreLine

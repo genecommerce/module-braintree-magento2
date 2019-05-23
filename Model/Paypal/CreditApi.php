@@ -8,6 +8,7 @@ use Magento\Framework\App\Cache\Type\Config as Cache;
 use Magento\Braintree\Gateway\Config\PayPalCredit\Config;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\AuthenticationException;
+use Zend_Http_Client;
 
 /**
  * Class CreditApi
@@ -60,16 +61,16 @@ class CreditApi
     }
 
     /**
-     * @return bool
+     * @return string
      * @throws LocalizedException
      */
-    public function getAuthorization()
+    public function getAuthorization(): string
     {
         if ($this->accessToken) {
             return $this->getAuthorizationToken();
         }
 
-        $cacheKey = "braintree_credit_api_token";
+        $cacheKey = 'braintree_credit_api_token';
         if ($this->cache->test($cacheKey)) {
             $this->accessToken = $this->cache->load($cacheKey);
             return $this->getAuthorizationToken();
@@ -83,17 +84,17 @@ class CreditApi
                 $this->getAuthorizationUrl(),
                 'grant_type=client_credentials',
                 ['Accept: application/json'],
-                ['userpwd' => $clientId . ":" . $secret]
+                ['userpwd' => $clientId . ':' . $secret]
             );
 
-            if (!isset($response->token_type) || !isset($response->access_token)) {
-                throw new AuthenticationException(__("No token returned"));
+            if (!isset($response->token_type, $response->access_token)) {
+                throw new AuthenticationException(__('No token returned'));
             }
 
-            $this->accessToken = $response->token_type . " " . $response->access_token;
+            $this->accessToken = $response->token_type . ' ' . $response->access_token;
             $this->cache->save($this->accessToken, $cacheKey, [], $response->expires_in ?: 10000);
         } catch (LocalizedException $e) {
-            throw new AuthenticationException(__("Unable to retrieve PayPal API token. " . $e->getMessage()));
+            throw new AuthenticationException(__('Unable to retrieve PayPal API token. ' . $e->getMessage()));
         }
 
         return $this->getAuthorizationToken();
@@ -104,7 +105,7 @@ class CreditApi
      * @return array
      * @throws LocalizedException
      */
-    public function getPriceOptions($price)
+    public function getPriceOptions($price): array
     {
         $body = [
             'financing_country_code' => 'GB',
@@ -135,12 +136,12 @@ class CreditApi
         foreach ($response->financing_options as $option) {
             $qualifyingOptions = $option->qualifying_financing_options;
             if (empty($qualifyingOptions)) {
-                throw new LocalizedException(__("No qualifying financing options available"));
+                throw new LocalizedException(__('No qualifying financing options available'));
             }
 
             foreach ($qualifyingOptions as $qualifyingOption) {
-                if ($qualifyingOption->credit_financing->credit_type == 'INST' &&
-                    $qualifyingOption->credit_financing->enabled == 1
+                if ($qualifyingOption->credit_financing->credit_type === 'INST' &&
+                    $qualifyingOption->credit_financing->enabled === 1
                 ) {
                     $options[] = [
                         'term' => $qualifyingOption->credit_financing->term,
@@ -163,7 +164,7 @@ class CreditApi
     /**
      * @return string
      */
-    private function getAuthorizationToken()
+    private function getAuthorizationToken(): string
     {
         return $this->accessToken;
     }
@@ -171,7 +172,7 @@ class CreditApi
     /**
      * @return string
      */
-    private function getAuthorizationUrl()
+    private function getAuthorizationUrl(): string
     {
         $sandbox = $this->config->getSandbox() ? '.sandbox' : '';
         return sprintf('https://api%s.paypal.com/v1/oauth2/token', $sandbox);
@@ -180,7 +181,7 @@ class CreditApi
     /**
      * @return string
      */
-    private function getCalcUrl()
+    private function getCalcUrl(): string
     {
         $sandbox = $this->config->getSandbox() ? '.sandbox' : '';
         return sprintf('https://api%s.paypal.com/v1/credit/calculated-financing-options', $sandbox);
@@ -200,7 +201,7 @@ class CreditApi
 
         $this->curl->setConfig($configuration);
         $this->curl->write(
-            \Zend_Http_Client::POST,
+            Zend_Http_Client::POST,
             $url,
             '1.1',
             $headers,
@@ -210,13 +211,13 @@ class CreditApi
         $response = $this->curl->read();
 
         if (!$response) {
-            throw new LocalizedException(__("No response from request to " . $url));
+            throw new LocalizedException(__('No response from request to ' . $url));
         }
 
         $response = json_decode($response);
 
         if (!empty($response->error)) {
-            throw new LocalizedException(__("Error returned with request to " . $url . ". Error: " . $response->error));
+            throw new LocalizedException(__('Error returned with request to ' . $url . '. Error: ' . $response->error));
         }
 
         return $response;

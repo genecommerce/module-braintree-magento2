@@ -70,7 +70,8 @@ class ConfigProvider implements ConfigProviderInterface
         return [
             'payment' => [
                 'braintree_applepay' => [
-                    'clientToken' => $this->getClientToken(),
+                    'clientToken' => $this->
+                    getClientToken(),
                     'merchantName' => $this->getMerchantName(),
                     'paymentMarkSrc' => $this->getPaymentMarkSrc()
                 ]
@@ -80,11 +81,12 @@ class ConfigProvider implements ConfigProviderInterface
 
     /**
      * Generate a new client token if necessary
-     * @return string
+     *
+     * @return string|null
      * @throws InputException
      * @throws NoSuchEntityException
      */
-    public function getClientToken(): string
+    public function getClientToken()
     {
         if (empty($this->clientToken)) {
             $params = [];
@@ -102,6 +104,7 @@ class ConfigProvider implements ConfigProviderInterface
 
     /**
      * Get merchant name
+     *
      * @return string
      */
     public function getMerchantName(): string

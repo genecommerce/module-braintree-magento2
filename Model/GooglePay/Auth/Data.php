@@ -39,7 +39,7 @@ class Data implements AuthDataInterface
     /**
      * @inheritdoc
      */
-    public function getClientToken()
+    public function getClientToken(): string
     {
         return $this->clientToken;
     }
@@ -47,7 +47,7 @@ class Data implements AuthDataInterface
     /**
      * @inheritdoc
      */
-    public function getDisplayName()
+    public function getDisplayName(): string
     {
         return $this->displayName;
     }
@@ -55,7 +55,7 @@ class Data implements AuthDataInterface
     /**
      * @inheritdoc
      */
-    public function getActionSuccess()
+    public function getActionSuccess(): string
     {
         return $this->actionSuccess;
     }
@@ -63,7 +63,7 @@ class Data implements AuthDataInterface
     /**
      * @inheritdoc
      */
-    public function isLoggedIn()
+    public function isLoggedIn(): bool
     {
         return $this->isLoggedIn;
     }
@@ -71,7 +71,7 @@ class Data implements AuthDataInterface
     /**
      * @inheritdoc
      */
-    public function getStoreCode()
+    public function getStoreCode(): string
     {
         return $this->storeCode;
     }

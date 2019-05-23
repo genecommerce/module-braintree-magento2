@@ -5,6 +5,7 @@
  */
 namespace Magento\Braintree\Model\Paypal\Helper;
 
+use InvalidArgumentException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
 
@@ -34,12 +35,12 @@ class ShippingMethodUpdater extends AbstractHelper
      * @param string $shippingMethod
      * @param Quote $quote
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function execute($shippingMethod, Quote $quote)
     {
         if (empty($shippingMethod)) {
-            throw new \InvalidArgumentException('The "shippingMethod" field does not exist.');
+            throw new InvalidArgumentException('The "shippingMethod" field does not exist.');
         }
 
         if (!$quote->getIsVirtual()) {

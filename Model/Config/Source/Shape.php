@@ -2,21 +2,26 @@
 
 namespace Magento\Braintree\Model\Config\Source;
 
+use Magento\Framework\Option\ArrayInterface;
+
 /**
  * Class Shape
  * @package Magento\Braintree\Model\Config\Source
  * @author Aidan Threadgold <aidan@gene.co.uk>
  */
-class Shape implements \Magento\Framework\Option\ArrayInterface
+class Shape implements ArrayInterface
 {
     /**
      * Options getter
      *
      * @return array
      */
-    public function toOptionArray()
+    public function toOptionArray(): array
     {
-        return [['value' => 0, 'label' => __('Pill')], ['value' => 1, 'label' => __('Rectangle')]];
+        return [
+            ['value' => 0, 'label' => __('Pill')],
+            ['value' => 1, 'label' => __('Rectangle')]
+        ];
     }
 
     /**
@@ -24,16 +29,20 @@ class Shape implements \Magento\Framework\Option\ArrayInterface
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
-        return [0 => __('Pill'), 1 => __('Rectangle')];
+        return [
+            0 => __('Pill'),
+            1 => __('Rectangle')
+        ];
     }
 
     /**
      * Values in the format needed for the PayPal JS SDK
+     *
      * @return array
      */
-    public function toRawValues()
+    public function toRawValues(): array
     {
         return [
             0 => 'pill',

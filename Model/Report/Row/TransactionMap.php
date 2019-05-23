@@ -11,6 +11,7 @@ use LogicException;
 use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\Search\DocumentInterface;
+use stdClass;
 
 /**
  * Class TransactionMap
@@ -63,11 +64,9 @@ class TransactionMap implements DocumentInterface
     }
 
     /**
-     * Get Id
-     *
-     * @return string
+     * @inheritDoc
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->getMappedValue('id');
     }
@@ -100,11 +99,7 @@ class TransactionMap implements DocumentInterface
     }
 
     /**
-     * Set an attribute value for a given attribute code
-     *
-     * @param string $attributeCode
-     * @param mixed $attributeValue
-     * @return $this
+     * @inheritDoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setCustomAttribute($attributeCode, $attributeValue)
@@ -132,11 +127,7 @@ class TransactionMap implements DocumentInterface
     }
 
     /**
-     * Set array of custom attributes
-     *
-     * @param AttributeInterface[] $attributes
-     * @return $this
-     * @throws LogicException
+     * @inheritDoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setCustomAttributes(array $attributes)
@@ -164,7 +155,7 @@ class TransactionMap implements DocumentInterface
     /**
      * @return array
      */
-    private function getMappedValues()
+    private function getMappedValues(): array
     {
         $result = [];
 
@@ -200,16 +191,16 @@ class TransactionMap implements DocumentInterface
     /**
      * Convert value to text representation
      *
-     * @param string $val
+     * @param string|array|stdClass $val
      * @return string
      */
-    private function convertToText($val)
+    private function convertToText($val): string
     {
         if (is_object($val)) {
-            switch (get_class($val)) {
-                case 'DateTime':
-                    /** @var DateTime $val */
-                    $val = $val->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+            $i = get_class($val);
+            if ($i === 'DateTime') {
+                /** @var DateTime $val */
+                $val = $val->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
             }
         } elseif (is_array($val)) {
             $val = implode(', ', $val);

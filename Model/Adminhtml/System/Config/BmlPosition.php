@@ -17,7 +17,7 @@ class BmlPosition
      *
      * @return array
      */
-    public function getBmlPositionsHP()
+    public function getBmlPositionsHP(): array
     {
         return [
             '0' => __('Header (center)'),
@@ -30,7 +30,7 @@ class BmlPosition
      *
      * @return array
      */
-    public function getBmlPositionsCCP()
+    public function getBmlPositionsCCP(): array
     {
         return [
             '0' => __('Header (center)'),
@@ -43,7 +43,7 @@ class BmlPosition
      *
      * @return array
      */
-    public function getBmlPositionsCPP()
+    public function getBmlPositionsCPP(): array
     {
         return [
             '0' => __('Header (center)'),
@@ -56,7 +56,7 @@ class BmlPosition
      *
      * @return array
      */
-    public function getBmlPositionsCheckout()
+    public function getBmlPositionsCheckout(): array
     {
         return [
             '0' => __('Header (center)'),

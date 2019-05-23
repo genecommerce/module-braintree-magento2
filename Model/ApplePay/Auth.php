@@ -19,32 +19,33 @@ use Magento\Store\Model\StoreManagerInterface;
 class Auth implements AuthInterface
 {
     /**
-     * @var AuthDataInterfaceFactory
+     * @var AuthDataInterfaceFactory $authData
      */
     private $authData;
 
     /**
-     * @var Ui\ConfigProvider
+     * @var Ui\ConfigProvider $configProvider
      */
     private $configProvider;
 
     /**
-     * @var UrlInterface
+     * @var UrlInterface $url
      */
     private $url;
 
     /**
-     * @var CustomerSession
+     * @var CustomerSession $customerSession
      */
     private $customerSession;
 
     /**
-     * @var StoreManagerInterface
+     * @var StoreManagerInterface $storeManager
      */
     private $storeManager;
 
     /**
-     * Auth constructor.
+     * Auth constructor
+     *
      * @param AuthDataInterfaceFactory $authData
      * @param Ui\ConfigProvider $configProvider
      * @param UrlInterface $url
@@ -72,7 +73,7 @@ class Auth implements AuthInterface
      */
     public function get(): AuthDataInterface
     {
-        /** @var $data AuthDataInterface */
+        /** @var AuthDataInterface $data */
         $data = $this->authData->create();
         $data->setClientToken($this->getClientToken());
         $data->setDisplayName($this->getDisplayName());
@@ -84,19 +85,19 @@ class Auth implements AuthInterface
     }
 
     /**
-     * @return string
+     * @return string|null
      * @throws InputException
      * @throws NoSuchEntityException
      */
-    protected function getClientToken(): string
+    protected function getClientToken()
     {
         return $this->configProvider->getClientToken();
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    protected function getDisplayName(): string
+    protected function getDisplayName()
     {
         return $this->configProvider->getMerchantName();
     }

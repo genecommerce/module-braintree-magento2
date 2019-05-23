@@ -13,6 +13,7 @@ class CcType extends \Magento\Payment\Model\Source\Cctype
 {
     /**
      * List of specific credit card types
+     *
      * @var array
      */
     private $specificCardTypesList = [
@@ -20,11 +21,9 @@ class CcType extends \Magento\Payment\Model\Source\Cctype
     ];
 
     /**
-     * Allowed credit card types
-     *
-     * @return string[]
+     * @inheritDoc
      */
-    public function getAllowedTypes()
+    public function getAllowedTypes(): array
     {
         return ['VI', 'MC', 'AE', 'DI', 'JCB', 'MI', 'DN', 'CUP'];
     }
@@ -34,7 +33,7 @@ class CcType extends \Magento\Payment\Model\Source\Cctype
      *
      * @return array
      */
-    public function getCcTypeLabelMap()
+    public function getCcTypeLabelMap(): array
     {
         return array_merge($this->specificCardTypesList, $this->_paymentConfig->getCcTypes());
     }
@@ -42,7 +41,7 @@ class CcType extends \Magento\Payment\Model\Source\Cctype
     /**
      * @inheritdoc
      */
-    public function toOptionArray()
+    public function toOptionArray(): array
     {
         $allowed = $this->getAllowedTypes();
         $options = [];

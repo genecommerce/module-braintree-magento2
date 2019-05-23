@@ -82,11 +82,12 @@ class ConfigProvider implements ConfigProviderInterface
 
     /**
      * Generate a new client token if necessary
-     * @return string
+     *
+     * @return string|null
      * @throws InputException
      * @throws NoSuchEntityException
      */
-    public function getClientToken(): string
+    public function getClientToken()
     {
         if (empty($this->clientToken)) {
             $params = [];
@@ -105,6 +106,8 @@ class ConfigProvider implements ConfigProviderInterface
     /**
      * Get environment
      * @return string
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
     public function getEnvironment(): string
     {
@@ -113,6 +116,7 @@ class ConfigProvider implements ConfigProviderInterface
 
     /**
      * Get merchant name
+     *
      * @return string
      */
     public function getMerchantId(): string
@@ -130,6 +134,7 @@ class ConfigProvider implements ConfigProviderInterface
 
     /**
      * Get the url to the payment mark image
+     *
      * @return mixed
      */
     public function getPaymentMarkSrc()

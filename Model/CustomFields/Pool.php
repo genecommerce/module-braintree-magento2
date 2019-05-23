@@ -2,6 +2,8 @@
 
 namespace Magento\Braintree\Model\CustomFields;
 
+use InvalidArgumentException;
+
 /**
  * Class Pool
  * @package Magento\Braintree\Model\CustomFields
@@ -28,12 +30,11 @@ class Pool
      * @param $buildSubject
      * @return array
      */
-    public function getFields($buildSubject)
+    public function getFields($buildSubject): array
     {
         $result = [];
-        /**
-         * @var $field CustomFieldInterface
-         */
+
+        /** @var CustomFieldInterface $field */
         foreach ($this->fieldsPool as $field) {
             $result[ $field->getApiName() ] = $field->getValue($buildSubject);
         }
@@ -44,11 +45,11 @@ class Pool
     /**
      * @return bool
      */
-    protected function checkFields()
+    protected function checkFields(): bool
     {
         foreach ($this->fieldsPool as $field) {
             if (!($field instanceof CustomFieldInterface)) {
-                throw new \InvalidArgumentException('Custom field must implement CustomFieldInterface');
+                throw new InvalidArgumentException('Custom field must implement CustomFieldInterface');
             }
         }
         return true;

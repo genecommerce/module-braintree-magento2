@@ -5,6 +5,7 @@
  */
 namespace Magento\Braintree\Model\GooglePay\Helper;
 
+use InvalidArgumentException;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -30,8 +31,10 @@ class QuoteUpdater extends AbstractHelper
     private $eventManager;
 
     /**
-     * QuoteUpdater constructor.
+     * QuoteUpdater constructor
+     *
      * @param CartRepositoryInterface $quoteRepository
+     * @param ManagerInterface $eventManager
      */
     public function __construct(
         CartRepositoryInterface $quoteRepository,
@@ -48,13 +51,13 @@ class QuoteUpdater extends AbstractHelper
      * @param array $details
      * @param Quote $quote
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws LocalizedException
      */
     public function execute($nonce, array $details, Quote $quote)
     {
         if (empty($nonce) || empty($details)) {
-            throw new \InvalidArgumentException('The "nonce" and "details" fields does not exists');
+            throw new InvalidArgumentException('The "nonce" and "details" fields does not exists');
         }
 
         $payment = $quote->getPayment();
@@ -163,11 +166,9 @@ class QuoteUpdater extends AbstractHelper
      */
     private function updateAddressData(Address $address, array $addressData)
     {
-        $extendedAddress = isset($addressData['extendedAddress'])
-            ? $addressData['extendedAddress']
-            : null;
+        $extendedAddress = $addressData['extendedAddress'] ?? null;
 
-        $name = explode(" ", $addressData['name'], 2);
+        $name = explode(' ', $addressData['name'], 2);
 
         $address->setEmail($addressData['email']);
         $address->setFirstname($name[0]);
