@@ -56,7 +56,7 @@ class Product extends Template
     /**
      * @inheritdoc
      */
-    protected function _toHtml() // @codingStandardsIgnoreLine
+    protected function _toHtml(): string
     {
         if ($this->config->isCalculatorEnabled()) {
             return parent::_toHtml();
@@ -76,7 +76,7 @@ class Product extends Template
     /**
      * @return ProductInterface
      */
-    public function getProduct()
+    public function getProduct(): ProductInterface
     {
         return $this->product;
     }
@@ -97,7 +97,7 @@ class Product extends Template
     /**
      * @return string
      */
-    public function getMerchantName()
+    public function getMerchantName(): string
     {
         return $this->config->getMerchantName();
     }

@@ -95,7 +95,7 @@ class ProductPage extends Button
         $product = $this->registry->registry('product');
 
         if ($product) {
-            /** @var $product Product */
+            /** @var Product $product */
             if ($product->getTypeId() === Configurable::TYPE_CODE) {
                 return $product->getPriceInfo()->getPrice('regular_price')->getAmount();
             }

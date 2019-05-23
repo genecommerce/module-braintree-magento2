@@ -13,12 +13,13 @@ use Magento\Braintree\Gateway\Config\PayPalCredit\Config as PayPalCreditConfig;
 class Cart extends Template
 {
     /**
-     * @var PayPalCreditConfig
+     * @var PayPalCreditConfig $config
      */
     protected $config;
 
     /**
-     * Product constructor.
+     * Product constructor
+     *
      * @param Template\Context $context
      * @param PayPalCreditConfig $config
      * @param array $data
@@ -35,7 +36,7 @@ class Cart extends Template
     /**
      * @inheritdoc
      */
-    protected function _toHtml() // @codingStandardsIgnoreLine
+    protected function _toHtml(): string
     {
         if ($this->config->isCalculatorEnabled()) {
             return parent::_toHtml();
@@ -47,7 +48,7 @@ class Cart extends Template
     /**
      * @return string
      */
-    public function getMerchantName()
+    public function getMerchantName(): string
     {
         return $this->config->getMerchantName();
     }

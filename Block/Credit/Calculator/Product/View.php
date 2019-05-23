@@ -54,7 +54,7 @@ class View extends Template
     /**
      * @inheritdoc
      */
-    protected function _toHtml() // @codingStandardsIgnoreLine
+    protected function _toHtml(): string
     {
         if ($this->config->isCalculatorEnabled()) {
             return parent::_toHtml();
@@ -65,9 +65,10 @@ class View extends Template
 
     /**
      * Retrieve current product model
+     *
      * @return Product
      */
-    public function getProduct()
+    public function getProduct(): Product
     {
         return $this->coreRegistry->registry('product');
     }
@@ -79,7 +80,7 @@ class View extends Template
     {
         if ($this->getProduct()) {
             $results = $this->creditPriceRepository->getByProductId($this->getProduct()->getId());
-            if (!empty($results)) {
+            if (null !== $results) {
                 $options = [];
                 foreach ($results as $option) {
                     $options[] = [
@@ -99,7 +100,7 @@ class View extends Template
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getMerchantName()
     {

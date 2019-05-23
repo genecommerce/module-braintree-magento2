@@ -142,6 +142,8 @@ class Form extends Cc
      * @param array $configCardTypes
      * @param string $countryId
      * @return array
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
     private function filterCardTypesForCountry(array $configCardTypes, $countryId): array
     {

@@ -25,7 +25,13 @@ class Button extends AbstractButton implements ShortcutInterface
     const BUTTON_ELEMENT_INDEX = 'button_id';
 
     /**
-     * Button constructor.
+     * @var DefaultConfigProvider
+     */
+    private $defaultConfigProvider;
+
+    /**
+     * Button constructor
+     *
      * @param Context $context
      * @param Session $checkoutSession
      * @param MethodInterface $payment
@@ -48,11 +54,6 @@ class Button extends AbstractButton implements ShortcutInterface
     }
 
     /**
-     * @var DefaultConfigProvider
-     */
-    private $defaultConfigProvider;
-
-    /**
      * @inheritdoc
      */
     public function getAlias(): string
@@ -70,6 +71,7 @@ class Button extends AbstractButton implements ShortcutInterface
 
     /**
      * Current Quote ID for guests
+     *
      * @return string
      * @throws LocalizedException
      * @throws NoSuchEntityException
@@ -86,6 +88,7 @@ class Button extends AbstractButton implements ShortcutInterface
                 throw $e;
             }
         }
+
         return '';
     }
 }

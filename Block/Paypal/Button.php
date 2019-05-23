@@ -225,6 +225,8 @@ class Button extends Template implements ShortcutInterface
 
     /**
      * @return string|null
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
     public function getClientToken()
     {

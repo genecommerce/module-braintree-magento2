@@ -4,6 +4,8 @@ namespace Magento\Braintree\Block\GooglePay;
 
 use Magento\Braintree\Model\GooglePay\Auth;
 use Magento\Checkout\Model\Session;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Payment\Model\MethodInterface;
@@ -85,6 +87,8 @@ abstract class AbstractButton extends Template
      * Get environment code
      *
      * @return string
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
     public function getEnvironment(): string
     {
@@ -95,6 +99,8 @@ abstract class AbstractButton extends Template
      * Braintree's API token
      *
      * @return string|null
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
     public function getClientToken()
     {
