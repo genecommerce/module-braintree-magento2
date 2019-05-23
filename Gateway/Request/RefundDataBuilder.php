@@ -5,6 +5,7 @@
  */
 namespace Magento\Braintree\Gateway\Request;
 
+use InvalidArgumentException;
 use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Payment\Helper\Formatter;
@@ -50,7 +51,7 @@ class RefundDataBuilder implements BuilderInterface
      * @param array $buildSubject
      * @return array
      */
-    public function build(array $buildSubject)
+    public function build(array $buildSubject): array
     {
         $paymentDO = $this->subjectReader->readPayment($buildSubject);
 
@@ -58,9 +59,10 @@ class RefundDataBuilder implements BuilderInterface
         $payment = $paymentDO->getPayment();
 
         $amount = null;
+
         try {
             $amount = $this->formatPrice($this->subjectReader->readAmount($buildSubject));
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             $this->logger->critical($e->getMessage());
         }
 

@@ -6,6 +6,9 @@
 
 namespace Magento\Braintree\Gateway\Http\Client;
 
+use Braintree\Result\Error;
+use Braintree\Result\Successful;
+use Exception;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Payment\Gateway\Http\ClientException;
 use Magento\Payment\Gateway\Http\ClientInterface;
@@ -38,7 +41,7 @@ abstract class AbstractTransaction implements ClientInterface
      *
      * @param LoggerInterface $logger
      * @param Logger $customLogger
-     * @param BraintreeAdapter $transaction
+     * @param BraintreeAdapter $adapter
      */
     public function __construct(LoggerInterface $logger, Logger $customLogger, BraintreeAdapter $adapter)
     {
@@ -61,7 +64,7 @@ abstract class AbstractTransaction implements ClientInterface
 
         try {
             $response['object'] = $this->process($data);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $message = __($e->getMessage() ?: 'Sorry, but something went wrong');
             $this->logger->critical($message);
             throw new ClientException($message);
@@ -76,7 +79,7 @@ abstract class AbstractTransaction implements ClientInterface
     /**
      * Process http request
      * @param array $data
-     * @return \Braintree\Result\Error|\Braintree\Result\Successful
+     * @return Error|Successful
      */
     abstract protected function process(array $data);
 }

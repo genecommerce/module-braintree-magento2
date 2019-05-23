@@ -6,6 +6,9 @@
 namespace Magento\Braintree\Gateway\Config;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Braintree\Model\StoreConfigResolver;
 
@@ -45,7 +48,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     ];
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @var Json
      */
     private $serializer;
 
@@ -71,7 +74,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     ) {
         $this->storeConfigResolver = $storeConfigResolver;
         parent::__construct($scopeConfig, $methodCode, $pathPattern);
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->serializer = $serializer ?: ObjectManager::getInstance()
             ->get(Json::class);
     }
 
@@ -79,10 +82,10 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Return the country specific card type config
      *
      * @return array
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
-    public function getCountrySpecificCardTypeConfig()
+    public function getCountrySpecificCardTypeConfig(): array
     {
         $countryCardTypes = $this->getValue(
             self::KEY_COUNTRY_CREDIT_CARD,
@@ -99,10 +102,10 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Retrieve available credit card types
      *
      * @return array
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
-    public function getAvailableCardTypes()
+    public function getAvailableCardTypes(): array
     {
         $ccTypes = $this->getValue(
             self::KEY_CC_TYPES,
@@ -116,10 +119,10 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Retrieve mapper between Magento and Braintree card types
      *
      * @return array
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
-    public function getCcTypesMapper()
+    public function getCcTypesMapper(): array
     {
         $result = json_decode(
             $this->getValue(
@@ -136,22 +139,24 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Get list of card types available for country
      * @param string $country
      * @return array
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
-    public function getCountryAvailableCardTypes($country)
+    public function getCountryAvailableCardTypes($country): array
     {
         $types = $this->getCountrySpecificCardTypeConfig();
 
-        return (!empty($types[$country])) ? $types[$country] : [];
+        return !empty($types[$country]) ? $types[$country] : [];
     }
 
     /**
      * Check if cvv field is enabled
      *
      * @return boolean
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
-    public function isCvvEnabled()
+    public function isCvvEnabled(): bool
     {
         return (bool) $this->getValue(
             self::KEY_USE_CVV,
@@ -164,7 +169,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      *
      * @return boolean
      */
-    public function isCvvEnabledVault()
+    public function isCvvEnabledVault(): bool
     {
         return false;
     }
@@ -173,10 +178,10 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Check if 3d secure verification enabled
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
-    public function isVerify3DSecure()
+    public function isVerify3DSecure(): bool
     {
         return (bool) $this->getValue(
             self::KEY_VERIFY_3DSECURE,
@@ -188,10 +193,10 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Get threshold amount for 3d secure
      *
      * @return float
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
-    public function getThresholdAmount()
+    public function getThresholdAmount(): float
     {
         return (double) $this->getValue(
             self::KEY_THRESHOLD_AMOUNT,
@@ -203,16 +208,16 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Get list of specific countries for 3d secure
      *
      * @return array
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
-    public function get3DSecureSpecificCountries()
+    public function get3DSecureSpecificCountries(): array
     {
         $keyVerifyAllowSpecific = $this->getValue(
             self::KEY_VERIFY_ALLOW_SPECIFIC,
             $this->storeConfigResolver->getStoreId()
         );
-        if ((int) $keyVerifyAllowSpecific == self::VALUE_3DSECURE_ALL) {
+        if ((int) $keyVerifyAllowSpecific === self::VALUE_3DSECURE_ALL) {
             return [];
         }
 
@@ -229,13 +234,13 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Get environment
      *
      * @return string
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
-    public function getEnvironment()
+    public function getEnvironment(): string
     {
         return $this->getValue(
-            Config::KEY_ENVIRONMENT,
+            self::KEY_ENVIRONMENT,
             $this->storeConfigResolver->getStoreId()
         );
     }
@@ -243,14 +248,14 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * Get Kount Merchant Id
      *
-     * @return string
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return string|null
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
     public function getKountMerchantId()
     {
         return $this->getValue(
-            Config::KEY_KOUNT_MERCHANT_ID,
+            self::KEY_KOUNT_MERCHANT_ID,
             $this->storeConfigResolver->getStoreId()
         );
     }
@@ -259,13 +264,13 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Get Merchant Id
      *
      * @return string
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
-    public function getMerchantId()
+    public function getMerchantId(): string
     {
         return $this->getValue(
-            Config::KEY_MERCHANT_ID,
+            self::KEY_MERCHANT_ID,
             $this->storeConfigResolver->getStoreId()
         );
     }
@@ -274,13 +279,13 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Get Sdk Url
      *
      * @return string
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
-    public function getSdkUrl()
+    public function getSdkUrl(): string
     {
         return $this->getValue(
-            Config::KEY_SDK_URL,
+            self::KEY_SDK_URL,
             $this->storeConfigResolver->getStoreId()
         );
     }
@@ -289,13 +294,13 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Check for fraud protection
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
-    public function hasFraudProtection()
+    public function hasFraudProtection(): bool
     {
         return (bool) $this->getValue(
-            Config::FRAUD_PROTECTION,
+            self::FRAUD_PROTECTION,
             $this->storeConfigResolver->getStoreId()
         );
     }
@@ -304,13 +309,13 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Get fraud protection threshold
      *
      * @return float|null
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
     public function getFraudProtectionThreshold()
     {
         return $this->getValue(
-            Config::FRAUD_PROTECTION_THRESHOLD,
+            self::FRAUD_PROTECTION_THRESHOLD,
             $this->storeConfigResolver->getStoreId()
         );
     }
@@ -319,10 +324,10 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Get Payment configuration status
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
-    public function isActive()
+    public function isActive(): bool
     {
         return (bool) $this->getValue(
             self::KEY_ACTIVE,
@@ -335,7 +340,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      *
      * @return array
      */
-    public function getDynamicDescriptors()
+    public function getDynamicDescriptors(): array
     {
         $values = [];
         foreach (self::$dynamicDescriptorKeys as $key) {
@@ -351,10 +356,10 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Get Merchant account ID
      *
      * @return string
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
-    public function getMerchantAccountId()
+    public function getMerchantAccountId(): string
     {
         return $this->getValue(
             self::KEY_MERCHANT_ACCOUNT_ID,

@@ -5,6 +5,9 @@
  */
 namespace Magento\Braintree\Gateway\Http\Client;
 
+use Braintree\Result\Error;
+use Braintree\Result\Successful;
+
 /**
  * Class TransactionVoid
  * @package Magento\Braintree\Gateway\Http\Client
@@ -14,7 +17,7 @@ class TransactionVoid extends AbstractTransaction
     /**
      * Process http request
      * @param array $data
-     * @return \Braintree\Result\Error|\Braintree\Result\Successful
+     * @return Error|Successful
      */
     protected function process(array $data)
     {

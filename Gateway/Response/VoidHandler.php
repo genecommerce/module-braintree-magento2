@@ -5,6 +5,7 @@
  */
 namespace Magento\Braintree\Gateway\Response;
 
+use Braintree\Transaction;
 use Magento\Sales\Model\Order\Payment;
 
 /**
@@ -15,11 +16,11 @@ class VoidHandler extends TransactionIdHandler
 {
     /**
      * @param Payment $orderPayment
-     * @param \Braintree\Transaction $transaction
+     * @param Transaction $transaction
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function setTransactionId(Payment $orderPayment, \Braintree\Transaction $transaction)
+    protected function setTransactionId(Payment $orderPayment, Transaction $transaction)
     {
         return null;
     }
@@ -29,7 +30,7 @@ class VoidHandler extends TransactionIdHandler
      *
      * @return bool
      */
-    protected function shouldCloseTransaction()
+    protected function shouldCloseTransaction(): bool
     {
         return true;
     }
@@ -41,7 +42,7 @@ class VoidHandler extends TransactionIdHandler
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function shouldCloseParentTransaction(Payment $orderPayment)
+    protected function shouldCloseParentTransaction(Payment $orderPayment): bool
     {
         return true;
     }

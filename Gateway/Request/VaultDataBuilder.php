@@ -26,7 +26,7 @@ class VaultDataBuilder implements BuilderInterface
     const STORE_IN_VAULT_ON_SUCCESS = 'storeInVaultOnSuccess';
 
     /**
-     * @var SubjectReader
+     * @var SubjectReader $subjectReader
      */
     private $subjectReader;
 
@@ -42,7 +42,7 @@ class VaultDataBuilder implements BuilderInterface
     /**
      * @inheritdoc
      */
-    public function build(array $buildSubject)
+    public function build(array $buildSubject): array
     {
         $result = [];
         $paymentDO = $this->subjectReader->readPayment($buildSubject);

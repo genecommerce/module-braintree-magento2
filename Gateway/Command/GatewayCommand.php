@@ -118,7 +118,7 @@ class GatewayCommand implements CommandInterface
      * @param $response
      * @return Phrase
      */
-    private function getExceptionMessage($response)
+    private function getExceptionMessage($response): Phrase
     {
         if (!isset($response['object']) || empty($response['object']->message)) {
             return __('Your payment could not be taken. Please try again or use a different payment method.');
@@ -128,9 +128,9 @@ class GatewayCommand implements CommandInterface
 
         if (in_array($response['object']->message, $allowedMessages)) {
             return __('Your payment could not be taken. Please try again or use a different payment method.');
-        } else {
-            return __('Your payment could not be taken. Please try again or use a different payment method. ' . $response['object']->message);
         }
+
+        return __('Your payment could not be taken. Please try again or use a different payment method. ' . $response['object']->message);
     }
 
     /**

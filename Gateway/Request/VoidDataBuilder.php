@@ -36,7 +36,7 @@ class VoidDataBuilder implements BuilderInterface
      * @param array $buildSubject
      * @return array
      */
-    public function build(array $buildSubject)
+    public function build(array $buildSubject): array
     {
         $paymentDO = $this->subjectReader->readPayment($buildSubject);
 
@@ -44,8 +44,7 @@ class VoidDataBuilder implements BuilderInterface
         $payment = $paymentDO->getPayment();
 
         return [
-            'transaction_id' => $payment->getParentTransactionId()
-                ?: $payment->getLastTransId()
+            'transaction_id' => $payment->getParentTransactionId() ?: $payment->getLastTransId()
         ];
     }
 }

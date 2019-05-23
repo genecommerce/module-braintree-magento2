@@ -36,8 +36,9 @@ class CaptureDataBuilder implements BuilderInterface
 
     /**
      * @inheritdoc
+     * @throws LocalizedException
      */
-    public function build(array $buildSubject)
+    public function build(array $buildSubject): array
     {
         $paymentDO = $this->subjectReader->readPayment($buildSubject);
 

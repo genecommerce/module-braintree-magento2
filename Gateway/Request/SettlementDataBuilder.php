@@ -17,7 +17,7 @@ class SettlementDataBuilder implements BuilderInterface
     /**
      * @inheritdoc
      */
-    public function build(array $buildSubject)
+    public function build(array $buildSubject): array
     {
         return [
             'options' => [

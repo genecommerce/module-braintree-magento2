@@ -26,12 +26,13 @@ class VaultDataBuilder implements BuilderInterface
     private static $storeInVaultOnSuccess = 'storeInVaultOnSuccess';
 
     /**
-     * @var SubjectReader
+     * @var SubjectReader $subjectReader
      */
     private $subjectReader;
 
     /**
-     * VaultDataBuilder constructor.
+     * VaultDataBuilder constructor
+     *
      * @param SubjectReader $subjectReader
      */
     public function __construct(SubjectReader $subjectReader)
@@ -42,13 +43,13 @@ class VaultDataBuilder implements BuilderInterface
     /**
      * @inheritdoc
      */
-    public function build(array $buildSubject)
+    public function build(array $buildSubject): array
     {
         $result = [];
         $paymentDO = $this->subjectReader->readPayment($buildSubject);
-
         $payment = $paymentDO->getPayment();
         $data = $payment->getAdditionalInformation();
+
         if (!empty($data[VaultConfigProvider::IS_ACTIVE_CODE])) {
             $result[self::$optionsKey] = [
                 self::$storeInVaultOnSuccess => true

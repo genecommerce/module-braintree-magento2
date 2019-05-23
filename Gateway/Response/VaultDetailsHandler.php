@@ -6,14 +6,23 @@
 namespace Magento\Braintree\Gateway\Response;
 
 use Braintree\Transaction;
+use DateInterval;
+use DateTime;
+use DateTimeZone;
+use Exception;
 use Magento\Braintree\Gateway\Config\Config;
 use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
+use RuntimeException;
 
 /**
  * Vault Details Handler
@@ -42,7 +51,7 @@ class VaultDetailsHandler implements HandlerInterface
     protected $config;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @var Json
      */
     private $serializer;
 
@@ -53,22 +62,22 @@ class VaultDetailsHandler implements HandlerInterface
      * @param OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory
      * @param Config $config
      * @param SubjectReader $subjectReader
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
-     * @throws \RuntimeException
+     * @param Json|null $serializer
+     * @throws RuntimeException
      */
     public function __construct(
         PaymentTokenInterfaceFactory $paymentTokenFactory,
         OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory,
         Config $config,
         SubjectReader $subjectReader,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        Json $serializer = null
     ) {
         $this->paymentTokenFactory = $paymentTokenFactory;
         $this->paymentExtensionFactory = $paymentExtensionFactory;
         $this->config = $config;
         $this->subjectReader = $subjectReader;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()
+            ->get(Json::class);
     }
 
     /**
@@ -91,8 +100,10 @@ class VaultDetailsHandler implements HandlerInterface
     /**
      * Get vault payment token entity
      *
-     * @param \Braintree\Transaction $transaction
+     * @param Transaction $transaction
      * @return PaymentTokenInterface|null
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
     protected function getVaultPaymentToken(Transaction $transaction)
     {
@@ -119,10 +130,12 @@ class VaultDetailsHandler implements HandlerInterface
     /**
      * @param Transaction $transaction
      * @return string
+     * @throws Exception
+     * @throws Exception
      */
-    private function getExpirationDate(Transaction $transaction)
+    private function getExpirationDate(Transaction $transaction): string
     {
-        $expDate = new \DateTime(
+        $expDate = new DateTime(
             $transaction->creditCardDetails->expirationYear
             . '-'
             . $transaction->creditCardDetails->expirationMonth
@@ -130,9 +143,9 @@ class VaultDetailsHandler implements HandlerInterface
             . '01'
             . ' '
             . '00:00:00',
-            new \DateTimeZone('UTC')
+            new DateTimeZone('UTC')
         );
-        $expDate->add(new \DateInterval('P1M'));
+        $expDate->add(new DateInterval('P1M'));
         return $expDate->format('Y-m-d 00:00:00');
     }
 
@@ -141,10 +154,10 @@ class VaultDetailsHandler implements HandlerInterface
      * @param array $details
      * @return string
      */
-    private function convertDetailsToJSON($details)
+    private function convertDetailsToJSON($details): string
     {
         $json = $this->serializer->serialize($details);
-        return $json ? $json : '{}';
+        return $json ?: '{}';
     }
 
     /**
@@ -152,21 +165,24 @@ class VaultDetailsHandler implements HandlerInterface
      *
      * @param string $type
      * @return array
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
-    private function getCreditCardType($type)
+    private function getCreditCardType($type): array
     {
         $replaced = str_replace(' ', '-', strtolower($type));
-        $mapper = $this->config->getCctypesMapper();
+        $mapper = $this->config->getCcTypesMapper();
 
         return $mapper[$replaced];
     }
 
     /**
      * Get payment extension attributes
+     *
      * @param InfoInterface $payment
      * @return OrderPaymentExtensionInterface
      */
-    private function getExtensionAttributes(InfoInterface $payment)
+    private function getExtensionAttributes(InfoInterface $payment): OrderPaymentExtensionInterface
     {
         $extensionAttributes = $payment->getExtensionAttributes();
         if (null === $extensionAttributes) {

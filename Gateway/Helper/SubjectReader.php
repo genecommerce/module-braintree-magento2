@@ -6,6 +6,7 @@
 namespace Magento\Braintree\Gateway\Helper;
 
 use Braintree\Transaction;
+use InvalidArgumentException;
 use Magento\Quote\Model\Quote;
 use Magento\Payment\Gateway\Helper;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
@@ -26,7 +27,7 @@ class SubjectReader
     {
         $response = Helper\SubjectReader::readResponse($subject);
         if (!isset($response['object']) || !is_object($response['object'])) {
-            throw new \InvalidArgumentException('Response object does not exist');
+            throw new InvalidArgumentException('Response object does not exist');
         }
 
         return $response['object'];
@@ -38,7 +39,7 @@ class SubjectReader
      * @param array $subject
      * @return PaymentDataObjectInterface
      */
-    public function readPayment(array $subject)
+    public function readPayment(array $subject): PaymentDataObjectInterface
     {
         return Helper\SubjectReader::readPayment($subject);
     }
@@ -47,18 +48,18 @@ class SubjectReader
      * Reads transaction from subject
      *
      * @param array $subject
-     * @return \Braintree\Transaction
+     * @return Transaction
      */
-    public function readTransaction(array $subject)
+    public function readTransaction(array $subject): Transaction
     {
         if (!isset($subject['object']) || !is_object($subject['object'])) {
-            throw new \InvalidArgumentException('Response object does not exist');
+            throw new InvalidArgumentException('Response object does not exist');
         }
 
         if (!isset($subject['object']->transaction)
             && !$subject['object']->transaction instanceof Transaction
         ) {
-            throw new \InvalidArgumentException('The object is not a class \Braintree\Transaction.');
+            throw new InvalidArgumentException('The object is not a class \Braintree\Transaction.');
         }
 
         return $subject['object']->transaction;
@@ -81,10 +82,10 @@ class SubjectReader
      * @param array $subject
      * @return int
      */
-    public function readCustomerId(array $subject)
+    public function readCustomerId(array $subject): int
     {
         if (!isset($subject['customer_id'])) {
-            throw new \InvalidArgumentException('The "customerId" field does not exists');
+            throw new InvalidArgumentException('The "customerId" field does not exists');
         }
 
         return (int) $subject['customer_id'];
@@ -96,10 +97,10 @@ class SubjectReader
      * @param array $subject
      * @return string
      */
-    public function readPublicHash(array $subject)
+    public function readPublicHash(array $subject): string
     {
         if (empty($subject[PaymentTokenInterface::PUBLIC_HASH])) {
-            throw new \InvalidArgumentException('The "public_hash" field does not exists');
+            throw new InvalidArgumentException('The "public_hash" field does not exists');
         }
 
         return $subject[PaymentTokenInterface::PUBLIC_HASH];
@@ -111,10 +112,10 @@ class SubjectReader
      * @param Transaction $transaction
      * @return array
      */
-    public function readPayPal(Transaction $transaction)
+    public function readPayPal(Transaction $transaction): array
     {
         if (!isset($transaction->paypal)) {
-            throw new \InvalidArgumentException('Transaction has\'t paypal attribute');
+            throw new InvalidArgumentException('Transaction has\'t paypal attribute');
         }
 
         return $transaction->paypal;

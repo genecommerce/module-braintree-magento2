@@ -6,6 +6,8 @@
 namespace Magento\Braintree\Gateway\Request;
 
 use Magento\Braintree\Gateway\Config\Config;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
@@ -43,7 +45,7 @@ class ThreeDSecureDataBuilder implements BuilderInterface
     /**
      * @inheritdoc
      */
-    public function build(array $buildSubject)
+    public function build(array $buildSubject): array
     {
         $result = [];
 
@@ -61,8 +63,10 @@ class ThreeDSecureDataBuilder implements BuilderInterface
      * @param OrderAdapterInterface $order
      * @param float $amount
      * @return bool
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
-    protected function is3DSecureEnabled(OrderAdapterInterface $order, $amount)
+    protected function is3DSecureEnabled(OrderAdapterInterface $order, $amount): bool
     {
         if (!$this->config->isVerify3DSecure() || $amount < $this->config->getThresholdAmount()) {
             return false;
@@ -70,10 +74,7 @@ class ThreeDSecureDataBuilder implements BuilderInterface
 
         $billingAddress = $order->getBillingAddress();
         $specificCounties = $this->config->get3DSecureSpecificCountries();
-        if (!empty($specificCounties) && !in_array($billingAddress->getCountryId(), $specificCounties)) {
-            return false;
-        }
 
-        return true;
+        return !(!empty($specificCounties) && !in_array($billingAddress->getCountryId(), $specificCounties));
     }
 }

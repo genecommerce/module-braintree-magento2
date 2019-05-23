@@ -10,9 +10,10 @@ use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Braintree\Model\Adapter\BraintreeSearchAdapter;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Payment\Gateway\Command;
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Payment\Gateway\Command\CommandPoolInterface;
 use Magento\Payment\Gateway\CommandInterface;
+use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Gateway\Helper\ContextHelper;
 use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
@@ -106,13 +107,14 @@ class CaptureStrategyCommand implements CommandInterface
 
     /**
      * @inheritdoc
+     * @throws NotFoundException
      */
     public function execute(array $commandSubject)
     {
-        /** @var \Magento\Payment\Gateway\Data\PaymentDataObjectInterface $paymentDO */
+        /** @var PaymentDataObjectInterface $paymentDO */
         $paymentDO = $this->subjectReader->readPayment($commandSubject);
 
-        /** @var \Magento\Sales\Api\Data\OrderPaymentInterface $paymentInfo */
+        /** @var OrderPaymentInterface $paymentInfo */
         $paymentInfo = $paymentDO->getPayment();
         ContextHelper::assertOrderPayment($paymentInfo);
 
@@ -125,11 +127,11 @@ class CaptureStrategyCommand implements CommandInterface
      * @param OrderPaymentInterface $payment
      * @return string
      */
-    private function getCommand(OrderPaymentInterface $payment)
+    private function getCommand(OrderPaymentInterface $payment): string
     {
         // if auth transaction is not exists execute authorize&capture command
         $existsCapture = $this->isExistsCaptureTransaction($payment);
-        if (!$payment->getAuthorizationTransaction() && !$existsCapture) {
+        if (!$existsCapture && !$payment->getAuthorizationTransaction()) {
             return self::SALE;
         }
 
@@ -146,7 +148,7 @@ class CaptureStrategyCommand implements CommandInterface
      * @param OrderPaymentInterface $payment
      * @return boolean
      */
-    private function isExpiredAuthorization(OrderPaymentInterface $payment)
+    private function isExpiredAuthorization(OrderPaymentInterface $payment): bool
     {
         $collection = $this->braintreeAdapter->search(
             [
@@ -164,7 +166,7 @@ class CaptureStrategyCommand implements CommandInterface
      * @param OrderPaymentInterface $payment
      * @return bool
      */
-    private function isExistsCaptureTransaction(OrderPaymentInterface $payment)
+    private function isExistsCaptureTransaction(OrderPaymentInterface $payment): bool
     {
         $this->searchCriteriaBuilder->addFilters(
             [

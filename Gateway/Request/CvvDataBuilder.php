@@ -57,7 +57,7 @@ class CvvDataBuilder implements BuilderInterface
     /**
      * @inheritdoc
      */
-    public function build(array $buildSubject)
+    public function build(array $buildSubject): array
     {
         if (!$this->request->isSecure() || !$this->config->isCvvEnabledVault()) {
             return [];

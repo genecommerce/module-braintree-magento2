@@ -5,6 +5,7 @@
  */
 namespace Magento\Braintree\Gateway\Response;
 
+use Braintree\ThreeDSecureInfo;
 use Braintree\Transaction;
 use Magento\Payment\Gateway\Helper\ContextHelper;
 use Magento\Braintree\Gateway\Helper\SubjectReader;
@@ -58,7 +59,7 @@ class ThreeDSecureDetailsHandler implements HandlerInterface
             return;
         }
 
-        /** @var \Braintree\ThreeDSecureInfo $info */
+        /** @var ThreeDSecureInfo $info */
         $info = $transaction->threeDSecureInfo;
         $payment->setAdditionalInformation(self::LIABILITY_SHIFTED, $info->liabilityShifted ? 'Yes' : 'No');
         $shiftPossible = $info->liabilityShiftPossible ? 'Yes' : 'No';
