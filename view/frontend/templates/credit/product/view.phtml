@@ -18,8 +18,8 @@ if (!$priceData) {
                         "template": "Magento_Braintree/credit/calculator",
                         "displaySummary": false,
                         "displayInterestDetails": true,
-                        "merchantName": "<?= $block->escapeHtml($block->getMerchantName()) ?>",
-                        "instalments": <?php /* @noEscape */ echo $priceData; ?>
+                        "merchantName": "<?= $block->escapeJs($block->getMerchantName()) ?>",
+                        "instalments": <?= /* @noEscape */ $priceData ?>
                     }
                 }
             }

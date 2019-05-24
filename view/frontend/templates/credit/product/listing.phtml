@@ -17,14 +17,14 @@ if (!$priceData) {
                         "component": "Magento_Braintree/js/paypal/credit/calculator",
                         "template": "Magento_Braintree/credit/calculator",
                         "displaySummary": true,
-                        "merchantName": "<?= $block->escapeHtml($block->getMerchantName()) ?>",
+                        "merchantName": "<?= $block->escapeJs($block->getMerchantName()) ?>",
                         "instalments": [
                             {
-                                "term": <?= $block->escapeHtml($priceData->getTerm()) ?>,
-                                "monthlyPayment": <?= $block->escapeHtml($priceData->getMonthlyPayment()) ?>,
-                                "apr": <?= $block->escapeHtml($priceData->getInstalmentRate()) ?>,
-                                "cost": <?= $block->escapeHtml($priceData->getCostOfPurchase()) ?>,
-                                "costIncInterest": <?= $block->escapeHtml($priceData->getTotalIncInterest()) ?>
+                                "term": <?= $block->escapeJs($priceData->getTerm()) ?>,
+                                "monthlyPayment": <?= $block->escapeJs($priceData->getMonthlyPayment()) ?>,
+                                "apr": <?= $block->escapeJs($priceData->getInstalmentRate()) ?>,
+                                "cost": <?= $block->escapeJs($priceData->getCostOfPurchase()) ?>,
+                                "costIncInterest": <?= $block->escapeJs($priceData->getTotalIncInterest()) ?>
                             }
                         ]
                     }

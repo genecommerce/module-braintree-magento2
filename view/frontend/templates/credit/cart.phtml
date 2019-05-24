@@ -9,13 +9,13 @@ $scopeId = 'ppcreditsummary-cart';
         "*": {
             "Magento_Ui/js/core/app":{
                 "components": {
-                    "<?= $block->escapeHtmlAttr($scopeId) ?>": {
+                    "<?= $block->escapeHtml($scopeId) ?>": {
                         "component": "Magento_Braintree/js/paypal/credit/calculator",
                         "template": "Magento_Braintree/credit/calculator",
                         "displaySummary": false,
                         "displayInterestDetails": true,
                         "endpoint": "<?= $block->escapeUrl($block->getUrl('braintree/paypal/cart')) ?>",
-                        "merchantName": "<?= $block->escapeHtmlAttr($block->getMerchantName()) ?>",
+                        "merchantName": "<?= $block->escapeJs($block->getMerchantName()) ?>",
                         "instalments": []
                     }
                 }
