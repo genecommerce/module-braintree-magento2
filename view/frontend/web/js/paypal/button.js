@@ -177,10 +177,10 @@ define(
                             return;
                         }
 
-                        var style = {
+                        let style = {
                             color: this.color,
                             shape: this.shape,
-                            layout: this.layout,
+                            // layout: this.layout,
                             size: this.size
                         };
 
@@ -203,15 +203,16 @@ define(
                             disallowed: []
                         };
                         if (this.offerCredit === true) {
-                            funding.allowed.push(paypal.FUNDING.CREDIT);
+                            //funding.allowed.push(paypal.FUNDING.CREDIT);
+                            style.label = 'credit'
                         } else {
-                            funding.disallowed.push(paypal.FUNDING.CREDIT);
+                            //funding.disallowed.push(paypal.FUNDING.CREDIT);
                         }
 
                         // Disabled function options
                         var disabledFunding = this.disabledFunding;
                         if (true === disabledFunding.card) {
-                            funding.disallowed.push(paypal.FUNDING.CARD);
+                            //funding.disallowed.push(paypal.FUNDING.CARD);
                         }
                         if (true === disabledFunding.elv) {
                             funding.disallowed.push(paypal.FUNDING.ELV);
