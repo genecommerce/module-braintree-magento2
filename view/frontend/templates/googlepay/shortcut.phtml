@@ -30,5 +30,5 @@ $config = [
 ?>
 <div id="<?= $block->escapeHtmlAttr($id) ?>"
      data-mage-init="<?= $block->escapeHtmlAttr(json_encode($config)) ?>"
-     class="googlepay-minicart-logo">
+     class="googlepay-minicart-logo <?= $block->escapeHtmlAttr($block->getExtraClassname()) ?>">
 </div>

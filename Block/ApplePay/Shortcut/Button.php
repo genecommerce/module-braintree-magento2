@@ -25,7 +25,7 @@ class Button extends AbstractButton implements ShortcutInterface
     const BUTTON_ELEMENT_INDEX = 'button_id';
 
     /**
-     * @var DefaultConfigProvider
+     * @var DefaultConfigProvider $defaultConfigProvider
      */
     private $defaultConfigProvider;
 
@@ -90,5 +90,13 @@ class Button extends AbstractButton implements ShortcutInterface
         }
 
         return '';
+    }
+
+    /**
+     * @return string
+     */
+    public function getExtraClassname(): string
+    {
+        return $this->getIsCart() ? 'cart' : 'minicart';
     }
 }

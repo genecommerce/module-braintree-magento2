@@ -31,5 +31,5 @@ $config = [
 ?>
 <div id="<?= $block->escapeHtmlAttr($id) ?>"
      data-mage-init="<?= $block->escapeHtmlAttr(json_encode($config)) ?>"
-     class="braintree-applepay-minicart">
+     class="braintree-applepay-minicart <?= $block->escapeHtmlAttr($block->getExtraClassname()) ?>">
 </div>

@@ -7,6 +7,7 @@ namespace Magento\Braintree\Observer;
 
 use Magento\Braintree\Block\Paypal\Button;
 use Magento\Catalog\Block\ShortcutButtons;
+use Magento\Checkout\Block\QuoteShortcutButtons;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -37,9 +38,8 @@ class AddPaypalShortcuts implements ObserverInterface
 
         /** @var ShortcutButtons $shortcutButtons */
         $shortcutButtons = $observer->getEvent()->getContainer();
-
         $shortcut = $shortcutButtons->getLayout()->createBlock(self::PAYPAL_SHORTCUT_BLOCK);
-
+        $shortcut->setIsCart(get_class($shortcutButtons) === QuoteShortcutButtons::class);
         $shortcutButtons->addShortcut($shortcut);
     }
 }

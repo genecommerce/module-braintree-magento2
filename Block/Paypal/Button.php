@@ -3,6 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Braintree\Block\Paypal;
 
 use Magento\Braintree\Gateway\Config\PayPal\Config;
@@ -20,6 +21,7 @@ use Magento\Braintree\Gateway\Config\PayPalCredit\Config as PayPalCreditConfig;
 
 /**
  * Class Button
+ * @package Magento\Braintree\Block\Paypal
  */
 class Button extends Template implements ShortcutInterface
 {
@@ -28,42 +30,43 @@ class Button extends Template implements ShortcutInterface
     const BUTTON_ELEMENT_INDEX = 'button_id';
 
     /**
-     * @var ResolverInterface
+     * @var ResolverInterface $localeResolver
      */
     private $localeResolver;
 
     /**
-     * @var Session
+     * @var Session $checkoutSession
      */
     private $checkoutSession;
 
     /**
-     * @var Config
+     * @var Config $config
      */
     protected $config;
 
     /**
-     * @var BraintreeConfig
+     * @var BraintreeConfig $braintreeConfig
      */
     private $braintreeConfig;
 
     /**
-     * @var ConfigProvider
+     * @var ConfigProvider $configProvider
      */
     private $configProvider;
 
     /**
-     * @var MethodInterface
+     * @var MethodInterface $payment
      */
     private $payment;
 
     /**
-     * @var PayPalCreditConfig
+     * @var PayPalCreditConfig $payPalCreditConfig
      */
     private $payPalCreditConfig;
 
     /**
-     * Button constructor.
+     * Button constructor
+     *
      * @param Context $context
      * @param ResolverInterface $localeResolver
      * @param Session $checkoutSession
@@ -99,7 +102,7 @@ class Button extends Template implements ShortcutInterface
     /**
      * @inheritdoc
      */
-    protected function _toHtml(): string // @codingStandardsIgnoreLine
+    protected function _toHtml(): string
     {
         if ($this->isActive()) {
             return parent::_toHtml();
@@ -250,5 +253,13 @@ class Button extends Template implements ShortcutInterface
             'card' => $this->config->getDisabledFundingOptionCard(Config::KEY_PAYPAL_DISABLED_FUNDING_CART),
             'elv' => $this->config->getDisabledFundingOptionElv(Config::KEY_PAYPAL_DISABLED_FUNDING_CART)
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getExtraClassname(): string
+    {
+        return $this->getIsCart() ? 'cart' : 'minicart';
     }
 }
