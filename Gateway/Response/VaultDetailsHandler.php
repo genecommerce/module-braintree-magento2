@@ -164,11 +164,11 @@ class VaultDetailsHandler implements HandlerInterface
      * Get type of credit card mapped from Braintree
      *
      * @param string $type
-     * @return array
+     * @return string
      * @throws InputException
      * @throws NoSuchEntityException
      */
-    private function getCreditCardType($type): array
+    private function getCreditCardType($type): string
     {
         $replaced = str_replace(' ', '-', strtolower($type));
         $mapper = $this->config->getCcTypesMapper();
