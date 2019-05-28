@@ -12,6 +12,10 @@ use Magento\Sales\Api\Data\OrderPaymentExtension;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Vault\Model\PaymentToken;
 
+/**
+ * Class VaultCaptureDataBuilderTest
+ * @package Magento\Braintree\Test\Unit\Gateway\Request
+ */
 class VaultCaptureDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**

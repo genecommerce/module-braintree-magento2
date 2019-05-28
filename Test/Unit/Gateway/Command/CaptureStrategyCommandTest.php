@@ -250,6 +250,7 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
         $this->payment->expects(static::once())
             ->method('getAuthorizationTransaction')
             ->willReturn(true);
+
         $this->payment->expects(static::once())
             ->method('getLastTransId')
             ->willReturn($lastTransId);
@@ -290,10 +291,6 @@ class CaptureStrategyCommandTest extends \PHPUnit\Framework\TestCase
             ->method('readPayment')
             ->with($subject)
             ->willReturn($paymentData);
-
-        $this->payment->expects(static::once())
-            ->method('getAuthorizationTransaction')
-            ->willReturn(true);
 
         $this->payment->expects(static::once())
             ->method('getId')

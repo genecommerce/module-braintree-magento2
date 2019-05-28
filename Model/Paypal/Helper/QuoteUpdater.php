@@ -122,8 +122,6 @@ class QuoteUpdater extends AbstractHelper
         ]);
     }
 
-    // @todo "why is this needed"
-
     /**
      * @param Quote $quote
      */

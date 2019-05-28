@@ -150,9 +150,9 @@ class BraintreeAdapter
 
     /**
      * @param array $filters
-     * @return ResourceCollection
+     * @return ResourceCollection|null
      */
-    public function search(array $filters): ResourceCollection
+    public function search(array $filters)
     {
         return Transaction::search($filters);
     }

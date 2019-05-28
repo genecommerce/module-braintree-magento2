@@ -131,6 +131,7 @@ class CaptureStrategyCommand implements CommandInterface
     {
         // if auth transaction is not exists execute authorize&capture command
         $existsCapture = $this->isExistsCaptureTransaction($payment);
+
         if (!$existsCapture && !$payment->getAuthorizationTransaction()) {
             return self::SALE;
         }

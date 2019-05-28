@@ -65,6 +65,7 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Get items
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testGetItems()
     {
@@ -88,7 +89,7 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
 
         $collection->addFieldToFilter('orderId', ['like' => '0']);
         $items = $collection->getItems();
-        $this->assertEquals(2, count($items));
+        $this->assertCount(2, $items);
         $this->assertInstanceOf(DocumentInterface::class, $items[1]);
     }
 

@@ -67,10 +67,11 @@ class TokenUiComponentProvider implements TokenUiComponentProviderInterface
     /**
      * Get url to retrieve payment method nonce
      *
-     * @return string
+     * @return string|null
      */
-    private function getNonceRetrieveUrl(): string
+    private function getNonceRetrieveUrl()
     {
-        return $this->urlBuilder->getUrl(CommonConfigProvider::CODE . '/payment/getnonce', ['_secure' => true]);
+        $url = $this->urlBuilder->getUrl(CommonConfigProvider::CODE . '/payment/getnonce', ['_secure' => true]);
+        return $url;
     }
 }
