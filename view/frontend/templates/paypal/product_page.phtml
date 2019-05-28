@@ -13,7 +13,6 @@ try {
      */
     $paypalId = sprintf('paypal-%s', $block->getContainerId());
     $paypalCreditId = sprintf('paypalcredit-%s', $block->getContainerId());
-
 }
 
 $config = [
@@ -33,24 +32,27 @@ $config = [
         'disabledFunding' => $block->getDisabledFunding()
     ]
 ];
-$paypalCreditConfig = [
-    'Magento_Braintree/js/paypal/product-page' => [
-        'id' => $paypalCreditId,
-        'environment' => $block->getEnvironment(),
-        'clientToken' => $block->getClientToken(),
-        'displayName' => $block->getMerchantName(),
-        'payeeEmail' => $block->getPayeeEmail(),
-        'actionSuccess' => $block->getActionSuccess(),
-        'offerCredit' => true,
-        'shape' => $block->getButtonShape(),
-        'size' => $block->getButtonSize(),
-        'layout' => $block->getButtonLayout(),
-        'color' => 'darkblue',
-    ]
-];
+
+if ($block->isCreditActive()) {
+    $paypalCreditConfig = [
+        'Magento_Braintree/js/paypal/product-page' => [
+            'id' => $paypalCreditId,
+            'environment' => $block->getEnvironment(),
+            'clientToken' => $block->getClientToken(),
+            'displayName' => $block->getMerchantName(),
+            'payeeEmail' => $block->getPayeeEmail(),
+            'actionSuccess' => $block->getActionSuccess(),
+            'offerCredit' => true,
+            'shape' => $block->getButtonShape(),
+            'size' => $block->getButtonSize(),
+            'layout' => $block->getButtonLayout(),
+            'color' => 'darkblue',
+        ]
+    ];
+}
 ?>
 
-<div data-mage-init='<?= json_encode($config) ?>'
+<div data-mage-init='<?= /** @noEscape */ json_encode($config) ?>'
      class="paypal checkout paypal-logo braintree-paypal-logo <?= $block->escapeHtmlAttr($block->getContainerId()) ?>-container">
     <div data-currency="<?= $block->escapeHtmlAttr($block->getCurrency()) ?>"
          data-locale="<?= $block->escapeHtmlAttr($block->getLocale()) ?>"
@@ -59,7 +61,8 @@ $paypalCreditConfig = [
          class="action-braintree-paypal-logo"></div>
 </div>
 
-<div data-mage-init='<?= json_encode($paypalCreditConfig) ?>'
+<?php if ($block->isCreditActive()) : ?>
+<div data-mage-init='<?= /** @noEscape */ json_encode($paypalCreditConfig) ?>'
      class="paypal checkout paypal-logo braintree-paypal-logo <?= $block->escapeHtmlAttr($block->getContainerId()) ?>-container">
     <div data-currency="<?= $block->escapeHtmlAttr($block->getCurrency()) ?>"
          data-locale="<?= $block->escapeHtmlAttr($block->getLocale()) ?>"
@@ -67,3 +70,4 @@ $paypalCreditConfig = [
          id="<?= $block->escapeHtmlAttr($paypalCreditId) ?>"
          class="action-braintree-paypal-logo"></div>
 </div>
+<?php endif; ?>
