@@ -263,11 +263,11 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * Get Merchant Id
      *
-     * @return string
+     * @return string|null
      * @throws InputException
      * @throws NoSuchEntityException
      */
-    public function getMerchantId(): string
+    public function getMerchantId()
     {
         return $this->getValue(
             self::KEY_MERCHANT_ID,
@@ -355,11 +355,11 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * Get Merchant account ID
      *
-     * @return string
+     * @return string|null
      * @throws InputException
      * @throws NoSuchEntityException
      */
-    public function getMerchantAccountId(): string
+    public function getMerchantAccountId()
     {
         return $this->getValue(
             self::KEY_MERCHANT_ACCOUNT_ID,
