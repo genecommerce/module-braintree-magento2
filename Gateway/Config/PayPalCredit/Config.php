@@ -150,9 +150,9 @@ class Config implements ConfigInterface
     /**
      * UK Activation Code
      *
-     * @return string
+     * @return string|null
      */
-    public function getActivationCode(): string
+    public function getActivationCode()
     {
         return $this->getValue(self::KEY_UK_ACTIVATION_CODE);
     }
@@ -170,18 +170,18 @@ class Config implements ConfigInterface
     /**
      * Client ID
      *
-     * @return string
+     * @return string|null
      */
-    public function getClientId(): string
+    public function getClientId()
     {
         return $this->getValue(self::KEY_CLIENT_ID);
     }
 
     /**
      * Secret Key
-     * @return string
+     * @return string|null
      */
-    public function getSecret(): string
+    public function getSecret()
     {
         return $this->getValue(self::KEY_SECRET);
     }
