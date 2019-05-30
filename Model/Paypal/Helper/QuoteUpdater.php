@@ -224,7 +224,7 @@ class QuoteUpdater extends AbstractHelper
 
         $address->setStreet([$addressData['streetAddress'], $extendedAddress]);
         $address->setCity($addressData['locality']);
-        $address->setRegionCode($addressData['region']);
+        $address->setRegion($addressData['region']);
         $address->setCountryId($addressData['countryCodeAlpha2']);
         $address->setPostcode($addressData['postalCode']);
 

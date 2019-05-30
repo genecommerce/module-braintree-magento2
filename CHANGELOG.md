@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Voucher redirect loop fixed
   - 2nd address line now included (https://github.com/igor-imaginemage)
   - Credit calculator now uses correct total values (https://github.com/diazwatson)
+  - Region now added to shipping address correctly on PayPal OneClick/Review screen
 - Apple Pay
   - Shipping cost is no longer added multiple times
   - Apple Pay dialog now shows correct total on initial popup
