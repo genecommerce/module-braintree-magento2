@@ -1,27 +1,25 @@
 <?php
-/**
- * @var $block \Magento\Braintree\Block\Credit\Calculator\Product\View
- */
+/** @var $block \Magento\Braintree\Block\Credit\Calculator\Product\View */
 
-$scopeId = 'ppcreditsummary-product-' . $block->getProduct()->getId() . mt_rand();
+$scopeId = sprintf('ppcreditsummary-product-%d%d', $block->getProduct()->getId(), random_int(PHP_INT_MIN, PHP_INT_MAX));
 $priceData = $block->getPriceData();
 if (!$priceData) {
     return;
 }
 ?>
-<div data-bind="scope: '<?php echo $scopeId; ?>'"><!-- ko template: getTemplate() --><!-- /ko --></div>
+<div data-bind="scope: '<?= $block->escapeHtmlAttr($scopeId) ?>'"><!-- ko template: getTemplate() --><!-- /ko --></div>
 <script type="text/x-magento-init">
     {
         "*": {
             "Magento_Ui/js/core/app":{
                 "components": {
-                    "<?php echo $scopeId; ?>": {
+                    "<?= $block->escapeHtml($scopeId) ?>": {
                         "component": "Magento_Braintree/js/paypal/credit/calculator",
                         "template": "Magento_Braintree/credit/calculator",
                         "displaySummary": false,
                         "displayInterestDetails": true,
-                        "merchantName": "<?php echo $block->escapeHtmlAttr($block->getMerchantName()); ?>",
-                        "instalments": <?php echo $priceData; ?>
+                        "merchantName": "<?= $block->escapeJs($block->getMerchantName()) ?>",
+                        "instalments": <?= /* @noEscape */ $priceData ?>
                     }
                 }
             }

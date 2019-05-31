@@ -7,6 +7,7 @@ namespace Magento\Braintree\Block\Adminhtml\Form\Field;
 
 use Magento\Framework\DataObject;
 use Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Class CountryCreditCard
@@ -16,18 +17,19 @@ class CountryCreditCard extends AbstractFieldArray
     /**
      * @var Countries
      */
-    protected $countryRenderer = null;
+    protected $countryRenderer;
 
     /**
      * @var CcTypes
      */
-    protected $ccTypesRenderer = null;
-    
+    protected $ccTypesRenderer;
+
     /**
      * Returns renderer for country element
      * @return Countries
+     * @throws LocalizedException
      */
-    protected function getCountryRenderer()
+    protected function getCountryRenderer(): Countries
     {
         if (!$this->countryRenderer) {
             $this->countryRenderer = $this->getLayout()->createBlock(
@@ -42,8 +44,9 @@ class CountryCreditCard extends AbstractFieldArray
     /**
      * Returns renderer for country element
      * @return CcTypes
+     * @throws LocalizedException
      */
-    protected function getCcTypesRenderer()
+    protected function getCcTypesRenderer(): CcTypes
     {
         if (!$this->ccTypesRenderer) {
             $this->ccTypesRenderer = $this->getLayout()->createBlock(
@@ -58,8 +61,9 @@ class CountryCreditCard extends AbstractFieldArray
     /**
      * Prepare to render
      * @return void
+     * @throws LocalizedException
      */
-    protected function _prepareToRender() // @codingStandardsIgnoreLine
+    protected function _prepareToRender()
     {
         $this->addColumn(
             'country_id',
@@ -81,11 +85,11 @@ class CountryCreditCard extends AbstractFieldArray
 
     /**
      * Prepare existing row data object
-     *
      * @param DataObject $row
      * @return void
+     * @throws LocalizedException
      */
-    protected function _prepareArrayRow(DataObject $row) // @codingStandardsIgnoreLine
+    protected function _prepareArrayRow(DataObject $row)
     {
         $country = $row->getCountryId();
         $options = [];

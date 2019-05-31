@@ -13,14 +13,9 @@ use Braintree\TextNode;
 class Text implements ApplierInterface
 {
     /**
-     * Apply filter condition
-     *
-     * @param TextNode $field
-     * @param string $condition
-     * @param mixed $value
-     * @return bool
+     * @inheritDoc
      */
-    public function apply($field, $condition, $value)
+    public function apply($field, $condition, $value): bool
     {
         $result = false;
 

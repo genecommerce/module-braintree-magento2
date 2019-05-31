@@ -9,6 +9,10 @@ use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Sales\Model\Order\Payment;
 
+/**
+ * Class VoidDataBuilder
+ * @package Magento\Braintree\Gateway\Request
+ */
 class VoidDataBuilder implements BuilderInterface
 {
     /**
@@ -32,7 +36,7 @@ class VoidDataBuilder implements BuilderInterface
      * @param array $buildSubject
      * @return array
      */
-    public function build(array $buildSubject)
+    public function build(array $buildSubject): array
     {
         $paymentDO = $this->subjectReader->readPayment($buildSubject);
 
@@ -40,8 +44,7 @@ class VoidDataBuilder implements BuilderInterface
         $payment = $paymentDO->getPayment();
 
         return [
-            'transaction_id' => $payment->getParentTransactionId()
-                ?: $payment->getLastTransId()
+            'transaction_id' => $payment->getParentTransactionId() ?: $payment->getLastTransId()
         ];
     }
 }

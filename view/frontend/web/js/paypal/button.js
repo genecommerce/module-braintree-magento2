@@ -12,6 +12,7 @@ define(
         'braintree',
         'braintreeDataCollector',
         'braintreePayPalCheckout',
+        'braintreeCheckoutPayPalAdapter',
         'Magento_Braintree/js/form-builder',
         'domReady!',
         'https://www.paypalobjects.com/api/checkout.js'
@@ -25,6 +26,7 @@ define(
         braintree,
         dataCollector,
         paypalCheckout,
+        paypalAdapter,
         formBuilder
     ) {
         'use strict';
@@ -175,10 +177,10 @@ define(
                             return;
                         }
 
-                        var style = {
+                        let style = {
                             color: this.color,
                             shape: this.shape,
-                            layout: this.layout,
+                            // layout: this.layout,
                             size: this.size
                         };
 
@@ -201,15 +203,16 @@ define(
                             disallowed: []
                         };
                         if (this.offerCredit === true) {
-                            funding.allowed.push(paypal.FUNDING.CREDIT);
+                            //funding.allowed.push(paypal.FUNDING.CREDIT);
+                            style.label = 'credit'
                         } else {
-                            funding.disallowed.push(paypal.FUNDING.CREDIT);
+                            //funding.disallowed.push(paypal.FUNDING.CREDIT);
                         }
 
                         // Disabled function options
                         var disabledFunding = this.disabledFunding;
                         if (true === disabledFunding.card) {
-                            funding.disallowed.push(paypal.FUNDING.CARD);
+                            //funding.disallowed.push(paypal.FUNDING.CARD);
                         }
                         if (true === disabledFunding.elv) {
                             funding.disallowed.push(paypal.FUNDING.ELV);
@@ -273,7 +276,7 @@ define(
                                         // Map the shipping address correctly
                                         var address = payload.details.shippingAddress;
                                         payload.details.shippingAddress = {
-                                            streetAddress: address.line1,
+                                            streetAddress: typeof address.line2 !== 'undefined' ? address.line1 + " " + address.line2 : address.line1,
                                             locality: address.city,
                                             postalCode: address.postalCode,
                                             countryCodeAlpha2: address.countryCode,

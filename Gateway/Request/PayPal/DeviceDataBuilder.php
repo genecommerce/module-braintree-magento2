@@ -20,12 +20,13 @@ class DeviceDataBuilder implements BuilderInterface
     private static $deviceDataKey = 'deviceData';
 
     /**
-     * @var SubjectReader
+     * @var SubjectReader $subjectReader
      */
     private $subjectReader;
 
     /**
-     * DeviceDataBuilder constructor.
+     * DeviceDataBuilder constructor
+     *
      * @param SubjectReader $subjectReader
      */
     public function __construct(SubjectReader $subjectReader)
@@ -36,13 +37,13 @@ class DeviceDataBuilder implements BuilderInterface
     /**
      * @inheritdoc
      */
-    public function build(array $buildSubject)
+    public function build(array $buildSubject): array
     {
         $result = [];
         $paymentDO = $this->subjectReader->readPayment($buildSubject);
-
         $payment = $paymentDO->getPayment();
         $data = $payment->getAdditionalInformation();
+
         if (!empty($data[DataAssignObserver::DEVICE_DATA])) {
             $result[self::$deviceDataKey] = $data[DataAssignObserver::DEVICE_DATA];
         }

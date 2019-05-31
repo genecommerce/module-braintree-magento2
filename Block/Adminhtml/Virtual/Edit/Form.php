@@ -2,18 +2,21 @@
 
 namespace Magento\Braintree\Block\Adminhtml\Virtual\Edit;
 
+use Magento\Backend\Block\Widget\Form\Generic;
+use Magento\Framework\Exception\LocalizedException;
+
 /**
  * Class Form
  * @package Magento\Braintree\Block\Adminhtml\Virtual\Edit
  * @author Aidan Threadgold <aidan@gene.co.uk>
  */
-class Form extends \Magento\Backend\Block\Widget\Form\Generic
+class Form extends Generic
 {
     /**
-     * Prepare Form fields
-     * @return $this
+     * @return Generic
+     * @throws LocalizedException
      */
-    protected function _prepareForm() // @codingStandardsIgnoreLine
+    protected function _prepareForm(): Generic
     {
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create([
@@ -32,8 +35,13 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldset->addField(
             'amount',
             'text',
-            ['label' => __('Amount'), 'required' => true, 'name' => 'amount', 'placeholder' => '00.00',
-                'class' => 'not-negative-amount validate-greater-than-zero validate-number']
+            [
+                'label' => __('Amount'),
+                'required' => true,
+                'name' => 'amount',
+                'placeholder' => '00.00',
+                'class' => 'not-negative-amount validate-greater-than-zero validate-number'
+            ]
         );
 
         $fieldset->addField(
@@ -42,8 +50,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             [
                 'label' => __('Card Number'),
                 'required' => true,
-                'text' => '<div class="admin__control-text hosted-control hosted-control" id="braintree_cc_number">'
-                    . '</div>'
+                'text' => <<<'TEXT'
+<div class="admin__control-text hosted-control hosted-control" id="braintree_cc_number"></div>
+TEXT
             ]
         );
 
@@ -53,10 +62,12 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             [
                 'label' => __('Expiration Date'),
                 'required' => true,
-                'text' => '<div class="hosted-date-wrap">'
-                    . '<div class="admin__control-text hosted-control hosted-date" id="braintree_cc_exp_month">'
-                    . '</div><div class="admin__control-text hosted-control hosted-date" id="braintree_cc_exp_year">'
-                    . '</div></div>'
+                'text' => <<<'TEXT'
+<div class="hosted-date-wrap">
+    <div class="admin__control-text hosted-control hosted-date" id="braintree_cc_exp_month"></div>
+    <div class="admin__control-text hosted-control hosted-date" id="braintree_cc_exp_year"></div>
+</div>
+TEXT
             ]
         );
 
@@ -66,7 +77,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             [
                 'label' => __('Card Verification Number'),
                 'required' => true,
-                'text' => '<div class="admin__control-text hosted-control hosted-cid" id="braintree_cc_cid"></div>'
+                'text' => <<<'TEXT'
+<div class="admin__control-text hosted-control hosted-cid" id="braintree_cc_cid"></div>
+TEXT
             ]
         );
 

@@ -111,7 +111,7 @@ class Config implements ConfigInterface
      *
      * @return bool
      */
-    public function isActive()
+    public function isActive(): bool
     {
         // Only allowed on US and UK
         if (!$this->isUk() && !$this->isUS()) {
@@ -120,28 +120,27 @@ class Config implements ConfigInterface
 
         // Validate configuration if UK
         if ($this->isUk()) {
-            $merchantId = substr($this->getConfigValue("payment/braintree/merchant_id"), -4);
-            if ($merchantId == $this->getActivationCode() && $this->getMerchantName()) {
-                return true;
-            }
-            return false;
-        } else {
-            return (bool)$this->getValue(self::KEY_ACTIVE);
+            $merchantId = substr($this->getConfigValue('payment/braintree/merchant_id'), -4);
+            return $merchantId === $this->getActivationCode() && $this->getMerchantName();
         }
+
+        return (bool) $this->getValue(self::KEY_ACTIVE);
     }
 
     /**
      * Calculator is only used on UK view
+     *
      * @return bool
      */
-    public function isCalculatorEnabled()
+    public function isCalculatorEnabled(): bool
     {
         return ($this->isUk() && $this->isActive());
     }
 
     /**
      * UK Merchant Name
-     * @return string
+     *
+     * @return string|null
      */
     public function getMerchantName()
     {
@@ -150,7 +149,8 @@ class Config implements ConfigInterface
 
     /**
      * UK Activation Code
-     * @return string
+     *
+     * @return string|null
      */
     public function getActivationCode()
     {
@@ -159,16 +159,18 @@ class Config implements ConfigInterface
 
     /**
      * PayPal Sandbox mode
-     * @return bool
+     *
+     * @return string
      */
-    public function getSandbox()
+    public function getSandbox(): string
     {
         return $this->getConfigValue('payment/braintree/environment') === 'sandbox';
     }
 
     /**
      * Client ID
-     * @return string
+     *
+     * @return string|null
      */
     public function getClientId()
     {
@@ -177,7 +179,7 @@ class Config implements ConfigInterface
 
     /**
      * Secret Key
-     * @return string
+     * @return string|null
      */
     public function getSecret()
     {
@@ -188,25 +190,26 @@ class Config implements ConfigInterface
      * Merchant Country set to GB/UK
      * @return bool
      */
-    public function isUk()
+    public function isUk(): bool
     {
-        return $this->getMerchantCountry() == "GB";
+        return $this->getMerchantCountry() === 'GB';
     }
 
     /**
      * Merchant Country set to US
      * @return bool
      */
-    public function isUS()
+    public function isUS(): bool
     {
-        return $this->getMerchantCountry() == "US";
+        return $this->getMerchantCountry() === 'US';
     }
 
     /**
      * Merchant Country
-     * @return bool
+     *
+     * @return string
      */
-    public function getMerchantCountry()
+    public function getMerchantCountry(): string
     {
         return $this->getConfigValue('paypal/general/merchant_country');
     }

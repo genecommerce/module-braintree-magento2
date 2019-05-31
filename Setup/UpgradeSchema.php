@@ -2,9 +2,12 @@
 
 namespace Magento\Braintree\Setup;
 
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
+use Zend_Db_Exception;
 
 /**
  * Class UpgradeSchema
@@ -13,7 +16,7 @@ use Magento\Framework\Setup\SchemaSetupInterface;
 class UpgradeSchema implements UpgradeSchemaInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
@@ -32,7 +35,9 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
     /**
      * Create the braintree_transaction_details table
+     *
      * @param SchemaSetupInterface $installer
+     * @throws Zend_Db_Exception
      */
     private function braintreeTransactionDetails(SchemaSetupInterface $installer)
     {
@@ -43,21 +48,21 @@ class UpgradeSchema implements UpgradeSchemaInterface
             ->newTable($installer->getTable('braintree_transaction_details'))
             ->addColumn(
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                Table::TYPE_INTEGER,
                 null,
                 ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
                 'Entity ID'
             )
             ->addColumn(
                 'order_id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                Table::TYPE_INTEGER,
                 null,
                 ['unsigned' => true, 'nullable' => false],
                 'Order Id'
             )
             ->addColumn(
                 'transaction_source',
-                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                Table::TYPE_TEXT,
                 12,
                 ['nullable' => true],
                 'Transaction Source'
@@ -71,7 +76,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'order_id',
                 $installer->getTable('sales_order'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+                Table::ACTION_CASCADE
             )
             ->setComment('Braintree transaction details table');
         $installer->getConnection()->createTable($table);
@@ -79,7 +84,9 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
     /**
      * Create the braintree_credit_prices table
+     *
      * @param SchemaSetupInterface $installer
+     * @throws Zend_Db_Exception
      */
     private function braintreeCreditPrices(SchemaSetupInterface $installer)
     {
@@ -87,49 +94,49 @@ class UpgradeSchema implements UpgradeSchemaInterface
             ->newTable($installer->getTable('braintree_credit_prices'))
             ->addColumn(
                 'id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                Table::TYPE_INTEGER,
                 null,
                 ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
                 'Row ID'
             )
             ->addColumn(
                 'product_id',
-                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                Table::TYPE_INTEGER,
                 null,
                 ['unsigned' => true, 'nullable' => false],
                 'Product Id'
             )
             ->addColumn(
                 'term',
-                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                Table::TYPE_INTEGER,
                 4,
                 ['nullable' => false],
                 'Credit Term'
             )
             ->addColumn(
                 'monthly_payment',
-                \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+                Table::TYPE_DECIMAL,
                 '12,2',
                 ['nullable' => false],
                 'Monthly Payment'
             )
             ->addColumn(
                 'instalment_rate',
-                \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+                Table::TYPE_DECIMAL,
                 '12,2',
                 ['nullable' => false],
                 'Instalment Rate'
             )
             ->addColumn(
                 'cost_of_purchase',
-                \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+                Table::TYPE_DECIMAL,
                 '12,2',
                 ['nullable' => false],
                 'Cost of purchase'
             )
             ->addColumn(
                 'total_inc_interest',
-                \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+                Table::TYPE_DECIMAL,
                 '12,2',
                 ['nullable' => false],
                 'Total Inc Interest'
@@ -142,10 +149,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 $installer->getIdxName(
                     'braintree_credit_prices',
                     ['product_id', 'term'],
-                    \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+                    AdapterInterface::INDEX_TYPE_UNIQUE
                 ),
                 ['product_id', 'term'],
-                ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
+                ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
             )
             ->setComment('Braintree credit rates');
         $installer->getConnection()->createTable($table);

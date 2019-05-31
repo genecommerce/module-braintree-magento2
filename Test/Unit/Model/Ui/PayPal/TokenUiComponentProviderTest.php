@@ -52,7 +52,7 @@ class TokenUiComponentProviderTest extends \PHPUnit\Framework\TestCase
         $this->tokenComponent = $this->getMockForAbstractClass(TokenUiComponentInterface::class);
 
         $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
-        
+
         $this->paymentToken = $this->getMockForAbstractClass(PaymentTokenInterface::class);
 
         $this->componentProvider = new TokenUiComponentProvider(
@@ -78,15 +78,16 @@ class TokenUiComponentProviderTest extends \PHPUnit\Framework\TestCase
         $this->componentFactory->expects(static::once())
             ->method('create')
             ->willReturn($this->tokenComponent);
-        
+
         $this->paymentToken->expects(static::once())
             ->method('getPublicHash')
             ->willReturn($hash);
-        
+
         $this->urlBuilder->expects(static::once())
             ->method('getUrl');
 
         $actual = $this->componentProvider->getComponentForToken($this->paymentToken);
+
         static::assertEquals($this->tokenComponent, $actual);
     }
 }

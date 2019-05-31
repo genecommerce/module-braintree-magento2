@@ -10,9 +10,9 @@
  */
 ?>
 <div class="paypal-logo">
-    <script data-pp-pubid="<?= $block->escapeHtml($block->getPublisherId()) ?>"
-            data-pp-placementtype="<?= $block->escapeHtml($block->getSize()) ?>"
-    > (function (d, t) {
+    <script data-pp-pubid="<?= $block->escapeHtmlAttr($block->getPublisherId()) ?>"
+            data-pp-placementtype="<?= $block->escapeHtmlAttr($block->getSize()) ?>">
+        (function (d, t) {
             "use strict";
             var s = d.getElementsByTagName(t)[0], n = d.createElement(t);
             n.src = "//paypal.adtag.where.com/merchant.js";

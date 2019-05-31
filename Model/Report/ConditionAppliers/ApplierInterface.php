@@ -24,5 +24,5 @@ interface ApplierInterface
      * @param mixed $value
      * @return bool
      */
-    public function apply($field, $condition, $value);
+    public function apply($field, $condition, $value): bool;
 }

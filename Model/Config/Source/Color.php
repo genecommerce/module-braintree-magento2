@@ -2,19 +2,21 @@
 
 namespace Magento\Braintree\Model\Config\Source;
 
+use Magento\Framework\Option\ArrayInterface;
+
 /**
  * Class Color
  * @package Magento\Braintree\Model\Config\Source
  * @author Aidan Threadgold <aidan@gene.co.uk>
  */
-class Color implements \Magento\Framework\Option\ArrayInterface
+class Color implements ArrayInterface
 {
     /**
      * Options getter
      *
      * @return array
      */
-    public function toOptionArray()
+    public function toOptionArray(): array
     {
         return [
             ['value' => 0, 'label' => __('Blue')],
@@ -29,7 +31,7 @@ class Color implements \Magento\Framework\Option\ArrayInterface
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             0 => __('Blue'),
@@ -41,9 +43,10 @@ class Color implements \Magento\Framework\Option\ArrayInterface
 
     /**
      * Values in the format needed for the PayPal JS SDK
+     *
      * @return array
      */
-    public function toRawValues()
+    public function toRawValues(): array
     {
         return [
             0 => 'blue',
@@ -53,4 +56,3 @@ class Color implements \Magento\Framework\Option\ArrayInterface
         ];
     }
 }
-

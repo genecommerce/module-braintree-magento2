@@ -46,8 +46,6 @@ define([
                 totalAmount = quote.totals()['base_grand_total'],
                 billingAddress = quote.billingAddress();
 
-            console.log(quote.paymentMethod().method);
-
             // No 3d secure if using CVV verification on vaulted cards
             if (quote.paymentMethod().method.indexOf('braintree_cc_vault_') !== -1) {
                 if (this.config.useCvvVault === true) {

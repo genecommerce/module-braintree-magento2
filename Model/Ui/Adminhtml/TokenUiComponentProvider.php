@@ -24,7 +24,7 @@ class TokenUiComponentProvider implements TokenUiComponentProviderInterface
     private $componentFactory;
 
     /**
-     * @var \Magento\Framework\UrlInterface
+     * @var UrlInterface
      */
     private $urlBuilder;
 
@@ -66,7 +66,7 @@ class TokenUiComponentProvider implements TokenUiComponentProviderInterface
      * Get url to retrieve payment method nonce
      * @return string
      */
-    private function getNonceRetrieveUrl()
+    private function getNonceRetrieveUrl(): string
     {
         return $this->urlBuilder->getUrl(ConfigProvider::CODE . '/payment/getnonce', ['_secure' => true]);
     }

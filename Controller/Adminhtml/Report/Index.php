@@ -15,12 +15,12 @@ use Magento\Framework\View\Result\PageFactory;
  */
 class Index extends Action
 {
+    const ADMIN_RESOURCE = 'Magento_Braintree::settlement_report';
+
     /**
-     * @var PageFactory
+     * @var PageFactory $resultPageFactory
      */
     protected $resultPageFactory;
-
-    const ADMIN_RESOURCE = 'Magento_Braintree::settlement_report';
 
     /**
      * @param Context $context
@@ -39,15 +39,12 @@ class Index extends Action
      *
      * @return Page
      */
-    public function execute()
+    public function execute(): Page
     {
         /** @var Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu(static::ADMIN_RESOURCE);
-        $resultPage
-            ->getConfig()
-            ->getTitle()
-            ->prepend(__('Braintree Settlement Report'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Braintree Settlement Report'));
 
         return $resultPage;
     }

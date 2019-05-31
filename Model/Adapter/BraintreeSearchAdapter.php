@@ -21,7 +21,7 @@ class BraintreeSearchAdapter
      * @return TextNode
      * @SuppressWarnings(PHPMD.ShortMethodName)
      */
-    public function id()
+    public function id(): TextNode
     {
         return TransactionSearch::id();
     }
@@ -29,7 +29,7 @@ class BraintreeSearchAdapter
     /**
      * @return MultipleValueNode
      */
-    public function merchantAccountId()
+    public function merchantAccountId(): MultipleValueNode
     {
         return TransactionSearch::merchantAccountId();
     }
@@ -37,7 +37,7 @@ class BraintreeSearchAdapter
     /**
      * @return TextNode
      */
-    public function orderId()
+    public function orderId(): TextNode
     {
         return TransactionSearch::orderId();
     }
@@ -45,7 +45,7 @@ class BraintreeSearchAdapter
     /**
      * @return TextNode
      */
-    public function paypalPaymentId()
+    public function paypalPaymentId(): TextNode
     {
         return TransactionSearch::paypalPaymentId();
     }
@@ -53,7 +53,7 @@ class BraintreeSearchAdapter
     /**
      * @return MultipleValueNode
      */
-    public function createdUsing()
+    public function createdUsing(): MultipleValueNode
     {
         return TransactionSearch::createdUsing();
     }
@@ -61,7 +61,7 @@ class BraintreeSearchAdapter
     /**
      * @return MultipleValueNode
      */
-    public function type()
+    public function type(): MultipleValueNode
     {
         return TransactionSearch::type();
     }
@@ -69,7 +69,7 @@ class BraintreeSearchAdapter
     /**
      * @return RangeNode
      */
-    public function createdAt()
+    public function createdAt(): RangeNode
     {
         return TransactionSearch::createdAt();
     }
@@ -77,7 +77,7 @@ class BraintreeSearchAdapter
     /**
      * @return RangeNode
      */
-    public function amount()
+    public function amount(): RangeNode
     {
         return TransactionSearch::amount();
     }
@@ -85,7 +85,7 @@ class BraintreeSearchAdapter
     /**
      * @return MultipleValueNode
      */
-    public function status()
+    public function status(): MultipleValueNode
     {
         return TransactionSearch::status();
     }
@@ -93,7 +93,7 @@ class BraintreeSearchAdapter
     /**
      * @return TextNode
      */
-    public function settlementBatchId()
+    public function settlementBatchId(): TextNode
     {
         return TransactionSearch::settlementBatchId();
     }
@@ -101,7 +101,7 @@ class BraintreeSearchAdapter
     /**
      * @return MultipleValueNode
      */
-    public function paymentInstrumentType()
+    public function paymentInstrumentType(): MultipleValueNode
     {
         return TransactionSearch::paymentInstrumentType();
     }

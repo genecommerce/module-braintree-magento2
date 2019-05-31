@@ -6,6 +6,9 @@
 namespace Magento\Braintree\Gateway\Response\PayPal;
 
 use Braintree\Transaction;
+use DateInterval;
+use DateTimeZone;
+use Exception;
 use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Payment\Gateway\Response\HandlerInterface;
@@ -80,8 +83,9 @@ class VaultDetailsHandler implements HandlerInterface
     /**
      * Get vault payment token entity
      *
-     * @param \Braintree\Transaction $transaction
+     * @param Transaction $transaction
      * @return PaymentTokenInterface|null
+     * @throws Exception
      */
     private function getVaultPaymentToken(Transaction $transaction)
     {
@@ -105,11 +109,12 @@ class VaultDetailsHandler implements HandlerInterface
 
     /**
      * @return string
+     * @throws Exception
      */
-    private function getExpirationDate()
+    private function getExpirationDate(): string
     {
-        $expDate = $this->dateTimeFactory->create('now', new \DateTimeZone('UTC'));
-        $expDate->add(new \DateInterval('P1Y'));
+        $expDate = $this->dateTimeFactory->create('now', new DateTimeZone('UTC'));
+        $expDate->add(new DateInterval('P1Y'));
         return $expDate->format('Y-m-d 00:00:00');
     }
 
@@ -118,7 +123,7 @@ class VaultDetailsHandler implements HandlerInterface
      * @param InfoInterface $payment
      * @return OrderPaymentExtensionInterface
      */
-    private function getExtensionAttributes(InfoInterface $payment)
+    private function getExtensionAttributes(InfoInterface $payment): OrderPaymentExtensionInterface
     {
         $extensionAttributes = $payment->getExtensionAttributes();
         if ($extensionAttributes === null) {

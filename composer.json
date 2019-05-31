@@ -1,7 +1,7 @@
 {
     "name": "gene/module-braintree",
     "description": "Fork from the Magento Braintree 2.2.0 module by Gene Commerce for PayPal.",
-    "version": "3.1.1",
+    "version": "3.1.2",
     "require": {
         "magento/module-config": "101.0.*|101.1.*",
         "magento/module-directory": "100.2.*|100.3.*",
@@ -14,10 +14,12 @@
         "magento/module-catalog": "102.0.*|103.0.*",
         "magento/module-quote": "101.0.*|101.1.*",
         "magento/module-paypal": "100.2.*|100.3.*",
-        "magento/module-ui": "101.0.*|101.1.*"
+        "magento/module-ui": "101.0.*|101.1.*",
+        "guzzlehttp/psr7": "^1.5",
+        "ext-json": "*"
     },
     "replace": {
-	 "magento/module-braintree": "100.*.*"
+        "magento/module-braintree": "100.*.*"
     },
     "type": "magento2-module",
     "license": [
@@ -40,7 +42,13 @@
         {
             "name": "Aidan Threadgold",
             "email": "aidan@gene.co.uk",
-            "homepage": "http://www.gene.co.uk",
+            "homepage": "https://www.gene.co.uk",
+            "role": "Developer"
+        },
+        {
+            "name": "Paul Canning",
+            "email": "paul.canning@gene.co.uk",
+            "homepage": "https://www.gene.co.uk",
             "role": "Developer"
         }
     ]

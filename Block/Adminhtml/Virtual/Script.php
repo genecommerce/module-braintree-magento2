@@ -2,24 +2,35 @@
 
 namespace Magento\Braintree\Block\Adminhtml\Virtual;
 
+use Magento\Braintree\Block\Payment;
+
 /**
  * Class Script
  * @package Magento\Braintree\Block\Adminhtml\Virtual
  * @author Aidan Threadgold <aidan@gene.co.uk>
  */
-class Script extends \Magento\Braintree\Block\Payment
+class Script extends Payment
 {
-    public function getMethodCode()
+    /**
+     * @return string
+     */
+    public function getMethodCode(): string
     {
         return 'braintree';
     }
 
-    public function isVaultEnabled()
+    /**
+     * @return bool
+     */
+    public function isVaultEnabled(): bool
     {
         return false;
     }
 
-    public function hasVerification()
+    /**
+     * @return bool
+     */
+    public function hasVerification(): bool
     {
         return true;
     }

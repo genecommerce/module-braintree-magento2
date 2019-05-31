@@ -67,6 +67,7 @@ define(
                      */
                     onPaymentMethodReceived: function (response) {
                         this.handleNonce(response);
+                        this.isProcessing = false;
                     },
 
                     /**

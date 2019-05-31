@@ -5,10 +5,15 @@
  */
 namespace Magento\Braintree\Gateway\Response;
 
+use Braintree\Transaction;
 use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Sales\Model\Order\Payment;
 
+/**
+ * Class TransactionIdHandler
+ * @package Magento\Braintree\Gateway\Response
+ */
 class TransactionIdHandler implements HandlerInterface
 {
     /**
@@ -38,7 +43,7 @@ class TransactionIdHandler implements HandlerInterface
         $paymentDO = $this->subjectReader->readPayment($handlingSubject);
 
         if ($paymentDO->getPayment() instanceof Payment) {
-            /** @var \Braintree\Transaction $transaction */
+            /** @var Transaction $transaction */
             $transaction = $this->subjectReader->readTransaction($response);
 
             /** @var Payment $orderPayment */
@@ -56,10 +61,10 @@ class TransactionIdHandler implements HandlerInterface
 
     /**
      * @param Payment $orderPayment
-     * @param \Braintree\Transaction $transaction
+     * @param Transaction $transaction
      * @return void
      */
-    protected function setTransactionId(Payment $orderPayment, \Braintree\Transaction $transaction)
+    protected function setTransactionId(Payment $orderPayment, Transaction $transaction)
     {
         $orderPayment->setTransactionId($transaction->id);
     }
@@ -69,7 +74,7 @@ class TransactionIdHandler implements HandlerInterface
      *
      * @return bool
      */
-    protected function shouldCloseTransaction()
+    protected function shouldCloseTransaction(): bool
     {
         return false;
     }
@@ -81,7 +86,7 @@ class TransactionIdHandler implements HandlerInterface
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function shouldCloseParentTransaction(Payment $orderPayment)
+    protected function shouldCloseParentTransaction(Payment $orderPayment): bool
     {
         return false;
     }

@@ -14,6 +14,7 @@ use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
 
 /**
  * Class TokenUiComponentProvider
+ * @package Magento\Braintree\Model\Ui\PayPal
  */
 class TokenUiComponentProvider implements TokenUiComponentProviderInterface
 {
@@ -23,7 +24,7 @@ class TokenUiComponentProvider implements TokenUiComponentProviderInterface
     private $componentFactory;
 
     /**
-     * @var \Magento\Framework\UrlInterface
+     * @var UrlInterface
      */
     private $urlBuilder;
 
@@ -41,10 +42,11 @@ class TokenUiComponentProvider implements TokenUiComponentProviderInterface
 
     /**
      * Get UI component for token
+     *
      * @param PaymentTokenInterface $paymentToken
      * @return TokenUiComponentInterface
      */
-    public function getComponentForToken(PaymentTokenInterface $paymentToken)
+    public function getComponentForToken(PaymentTokenInterface $paymentToken): TokenUiComponentInterface
     {
         $jsonDetails = json_decode($paymentToken->getTokenDetails() ?: '{}', true);
         $component = $this->componentFactory->create(
@@ -64,10 +66,12 @@ class TokenUiComponentProvider implements TokenUiComponentProviderInterface
 
     /**
      * Get url to retrieve payment method nonce
-     * @return string
+     *
+     * @return string|null
      */
     private function getNonceRetrieveUrl()
     {
-        return $this->urlBuilder->getUrl(CommonConfigProvider::CODE . '/payment/getnonce', ['_secure' => true]);
+        $url = $this->urlBuilder->getUrl(CommonConfigProvider::CODE . '/payment/getnonce', ['_secure' => true]);
+        return $url;
     }
 }

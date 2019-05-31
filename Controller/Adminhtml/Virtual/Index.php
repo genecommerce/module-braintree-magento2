@@ -17,12 +17,13 @@ class Index extends Action
     const ADMIN_RESOURCE = 'Magento_Sales::create';
 
     /**
-     * @var PageFactory
+     * @var PageFactory $resultPageFactory
      */
     protected $resultPageFactory;
 
     /**
-     * Index constructor.
+     * Index constructor
+     *
      * @param Context $context
      * @param PageFactory $resultPageFactory
      */
@@ -37,15 +38,12 @@ class Index extends Action
     /**
      * @return Page
      */
-    public function execute()
+    public function execute(): Page
     {
         /** @var Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Magento_Braintree::virtual_terminal');
-        $resultPage
-            ->getConfig()
-            ->getTitle()
-            ->prepend(__('Braintree Virtual Terminal'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Braintree Virtual Terminal'));
 
         return $resultPage;
     }

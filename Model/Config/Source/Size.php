@@ -2,19 +2,21 @@
 
 namespace Magento\Braintree\Model\Config\Source;
 
+use Magento\Framework\Option\ArrayInterface;
+
 /**
  * Class Size
  * @package Magento\Braintree\Model\Config\Source
  * @author Muj <muj@gene.co.uk>
  */
-class Size implements \Magento\Framework\Option\ArrayInterface
+class Size implements ArrayInterface
 {
     /**
      * Options getter
      *
      * @return array
      */
-    public function toOptionArray()
+    public function toOptionArray(): array
     {
         return [
             ['value' => 0, 'label' => __('Medium')],
@@ -28,16 +30,20 @@ class Size implements \Magento\Framework\Option\ArrayInterface
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
-        return [0 => __('Medium'), 1 => __('Large'), 2 => __('Responsive')];
+        return [
+            0 => __('Medium'),
+            1 => __('Large'),
+            2 => __('Responsive')
+        ];
     }
 
     /**
      * Values in the format needed for the PayPal JS SDK
      * @return array
      */
-    public function toRawValues()
+    public function toRawValues(): array
     {
         return [
             0 => 'medium',
@@ -46,4 +52,3 @@ class Size implements \Magento\Framework\Option\ArrayInterface
         ];
     }
 }
-

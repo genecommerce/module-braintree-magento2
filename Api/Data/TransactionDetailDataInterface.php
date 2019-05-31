@@ -14,19 +14,19 @@ interface TransactionDetailDataInterface
     const TRANSACTION_SOURCE = 'transaction_source';
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getId();
 
     /**
      * @return int
      */
-    public function getOrderId();
+    public function getOrderId(): int;
 
     /**
      * @return string
      */
-    public function getTransactionSource();
+    public function getTransactionSource(): string;
 
     /**
      * @param $id
@@ -35,13 +35,13 @@ interface TransactionDetailDataInterface
     public function setId($id);
 
     /**
-     * @param $orderId int
+     * @param int $orderId
      * @return object
      */
     public function setOrderId($orderId);
 
     /**
-     * @param $transactionSource string
+     * @param string $transactionSource
      * @return object
      */
     public function setTransactionSource($transactionSource);

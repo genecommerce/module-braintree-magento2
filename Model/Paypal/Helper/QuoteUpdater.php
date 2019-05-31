@@ -5,6 +5,7 @@
  */
 namespace Magento\Braintree\Model\Paypal\Helper;
 
+use InvalidArgumentException;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Payment;
@@ -45,6 +46,8 @@ class QuoteUpdater extends AbstractHelper
      *
      * @param Config $config
      * @param CartRepositoryInterface $quoteRepository
+     * @param ManagerInterface $eventManager
+     * @param \Magento\Quote\Model\ResourceModel\Quote\Address $addressFactory
      */
     public function __construct(
         Config $config,
@@ -65,13 +68,13 @@ class QuoteUpdater extends AbstractHelper
      * @param array $details
      * @param Quote $quote
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws LocalizedException
      */
     public function execute($nonce, array $details, Quote $quote)
     {
         if (empty($nonce) || empty($details)) {
-            throw new \InvalidArgumentException('The "nonce" and "details" fields does not exists');
+            throw new InvalidArgumentException('The "nonce" and "details" fields do not exist.');
         }
 
         $payment = $quote->getPayment();
@@ -119,11 +122,14 @@ class QuoteUpdater extends AbstractHelper
         ]);
     }
 
-    // @todo "why is this needed"
+    /**
+     * @param Quote $quote
+     */
     private function cleanUpAddress(Quote $quote)
     {
+        $tableName = $this->addressFactory->getConnection()->getTableName('quote_address');
         $this->addressFactory->getConnection()->delete(
-            'quote_address',
+            $tableName,
             'quote_id = ' . (int) $quote->getId() . ' AND email IS NULL'
         );
     }
@@ -214,13 +220,11 @@ class QuoteUpdater extends AbstractHelper
      */
     private function updateAddressData(Address $address, array $addressData)
     {
-        $extendedAddress = isset($addressData['extendedAddress'])
-            ? $addressData['extendedAddress']
-            : null;
+        $extendedAddress = $addressData['extendedAddress'] ?? null;
 
         $address->setStreet([$addressData['streetAddress'], $extendedAddress]);
         $address->setCity($addressData['locality']);
-        $address->setRegionCode($addressData['region']);
+        $address->setRegion($addressData['region']);
         $address->setCountryId($addressData['countryCodeAlpha2']);
         $address->setPostcode($addressData['postalCode']);
 

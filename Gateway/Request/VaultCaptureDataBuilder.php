@@ -34,13 +34,13 @@ class VaultCaptureDataBuilder implements BuilderInterface
     /**
      * @inheritdoc
      */
-    public function build(array $buildSubject)
+    public function build(array $buildSubject): array
     {
         $paymentDO = $this->subjectReader->readPayment($buildSubject);
-
         $payment = $paymentDO->getPayment();
         $extensionAttributes = $payment->getExtensionAttributes();
         $paymentToken = $extensionAttributes->getVaultPaymentToken();
+
         return [
             'amount' => $this->formatPrice($this->subjectReader->readAmount($buildSubject)),
             'paymentMethodToken' => $paymentToken->getGatewayToken()

@@ -6,10 +6,14 @@
 namespace Magento\Braintree\Block\Customer;
 
 use Magento\Braintree\Model\Ui\ConfigProvider;
-use Magento\Framework\View\Element\Template;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Block\AbstractCardRenderer;
 
+/**
+ * Class CardRenderer
+ *
+ * @package Magento\Braintree\Block\Customer
+ */
 class CardRenderer extends AbstractCardRenderer
 {
     /**
@@ -18,7 +22,7 @@ class CardRenderer extends AbstractCardRenderer
      * @param PaymentTokenInterface $token
      * @return boolean
      */
-    public function canRender(PaymentTokenInterface $token)
+    public function canRender(PaymentTokenInterface $token): bool
     {
         return $token->getPaymentMethodCode() === ConfigProvider::CODE;
     }
@@ -26,7 +30,7 @@ class CardRenderer extends AbstractCardRenderer
     /**
      * @return string
      */
-    public function getNumberLast4Digits()
+    public function getNumberLast4Digits(): string
     {
         return $this->getTokenDetails()['maskedCC'];
     }
@@ -34,7 +38,7 @@ class CardRenderer extends AbstractCardRenderer
     /**
      * @return string
      */
-    public function getExpDate()
+    public function getExpDate(): string
     {
         return $this->getTokenDetails()['expirationDate'];
     }
@@ -42,7 +46,7 @@ class CardRenderer extends AbstractCardRenderer
     /**
      * @return string
      */
-    public function getIconUrl()
+    public function getIconUrl(): string
     {
         return $this->getIconForType($this->getTokenDetails()['type'])['url'];
     }
@@ -50,7 +54,7 @@ class CardRenderer extends AbstractCardRenderer
     /**
      * @return int
      */
-    public function getIconHeight()
+    public function getIconHeight(): int
     {
         return $this->getIconForType($this->getTokenDetails()['type'])['height'];
     }
@@ -58,7 +62,7 @@ class CardRenderer extends AbstractCardRenderer
     /**
      * @return int
      */
-    public function getIconWidth()
+    public function getIconWidth(): int
     {
         return $this->getIconForType($this->getTokenDetails()['type'])['width'];
     }

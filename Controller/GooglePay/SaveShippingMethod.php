@@ -5,6 +5,7 @@
  */
 namespace Magento\Braintree\Controller\GooglePay;
 
+use Exception;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\App\Action\Context;
@@ -37,6 +38,7 @@ class SaveShippingMethod extends AbstractAction
         ShippingMethodUpdater $shippingMethodUpdater
     ) {
         parent::__construct($context, $config, $checkoutSession);
+
         $this->shippingMethodUpdater = $shippingMethodUpdater;
     }
 
@@ -60,13 +62,12 @@ class SaveShippingMethod extends AbstractAction
                 /** @var Page $response */
                 $response = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
                 $layout = $response->addHandle('paypal_express_review_details')->getLayout();
-
                 $response = $layout->getBlock('page.block')->toHtml();
                 $this->getResponse()->setBody($response);
 
                 return;
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->messageManager->addExceptionMessage($e, $e->getMessage());
         }
 

@@ -5,6 +5,7 @@
  */
 namespace Magento\Braintree\Gateway\Response;
 
+use Braintree\Transaction;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
@@ -40,7 +41,7 @@ class PayPalDetailsHandler implements HandlerInterface
     {
         $paymentDO = $this->subjectReader->readPayment($handlingSubject);
 
-        /** @var \Braintree\Transaction $transaction */
+        /** @var Transaction $transaction */
         $transaction = $this->subjectReader->readTransaction($response);
 
         /** @var OrderPaymentInterface $payment */

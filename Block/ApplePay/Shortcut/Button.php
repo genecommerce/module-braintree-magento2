@@ -3,11 +3,15 @@
 namespace Magento\Braintree\Block\ApplePay\Shortcut;
 
 use Magento\Braintree\Block\ApplePay\AbstractButton;
+use Magento\Braintree\Model\ApplePay\Auth;
 use Magento\Checkout\Model\Session;
 use Magento\Catalog\Block\ShortcutInterface;
 use Magento\Checkout\Model\DefaultConfigProvider;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Payment\Model\MethodInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Class Button
@@ -21,24 +25,27 @@ class Button extends AbstractButton implements ShortcutInterface
     const BUTTON_ELEMENT_INDEX = 'button_id';
 
     /**
-     * @var DefaultConfigProvider
+     * @var DefaultConfigProvider $defaultConfigProvider
      */
     private $defaultConfigProvider;
 
     /**
-     * Button constructor.
+     * Button constructor
+     *
      * @param Context $context
      * @param Session $checkoutSession
      * @param MethodInterface $payment
-     * @param \Magento\Braintree\Model\ApplePay\Auth $auth
+     * @param Auth $auth
      * @param DefaultConfigProvider $defaultConfigProvider
      * @param array $data
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
     public function __construct(
         Context $context,
         Session $checkoutSession,
         MethodInterface $payment,
-        \Magento\Braintree\Model\ApplePay\Auth $auth,
+        Auth $auth,
         DefaultConfigProvider $defaultConfigProvider,
         array $data = []
     ) {
@@ -49,7 +56,7 @@ class Button extends AbstractButton implements ShortcutInterface
     /**
      * @inheritdoc
      */
-    public function getAlias()
+    public function getAlias(): string
     {
         return $this->getData(self::ALIAS_ELEMENT_INDEX);
     }
@@ -57,22 +64,39 @@ class Button extends AbstractButton implements ShortcutInterface
     /**
      * @return string
      */
-    public function getContainerId()
+    public function getContainerId(): string
     {
         return $this->getData(self::BUTTON_ELEMENT_INDEX);
     }
 
     /**
      * Current Quote ID for guests
-     * @return int
+     *
+     * @return string
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
-    public function getQuoteId()
+    public function getQuoteId(): string
     {
-        $config = $this->defaultConfigProvider->getConfig();
-        if (!empty($config['quoteData']['entity_id'])) {
-            return $config['quoteData']['entity_id'];
+        try {
+            $config = $this->defaultConfigProvider->getConfig();
+            if (!empty($config['quoteData']['entity_id'])) {
+                return $config['quoteData']['entity_id'];
+            }
+        } catch (NoSuchEntityException $e) {
+            if ($e->getMessage() !== 'No such entity with cartId = ') {
+                throw $e;
+            }
         }
-        
-        return 0;
+
+        return '';
+    }
+
+    /**
+     * @return string
+     */
+    public function getExtraClassname(): string
+    {
+        return $this->getIsCart() ? 'cart' : 'minicart';
     }
 }

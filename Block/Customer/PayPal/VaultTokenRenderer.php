@@ -70,16 +70,17 @@ class VaultTokenRenderer extends AbstractTokenRenderer
      * @param PaymentTokenInterface $token
      * @return boolean
      */
-    public function canRender(PaymentTokenInterface $token)
+    public function canRender(PaymentTokenInterface $token): bool
     {
         return $token->getPaymentMethodCode() === ConfigProvider::PAYPAL_CODE;
     }
 
     /**
      * Get email of PayPal payer
+     *
      * @return string
      */
-    public function getPayerEmail()
+    public function getPayerEmail(): string
     {
         return $this->getTokenDetails()['payerEmail'];
     }

@@ -2,10 +2,15 @@
 
 namespace Magento\Braintree\Controller\Adminhtml\Virtual;
 
+use Braintree\Result\Error;
+use Braintree\Result\Successful;
+use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Braintree\Gateway\Request\ChannelDataBuilder;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Class Save
@@ -44,9 +49,10 @@ class Save extends Action
 
     /**
      * Attempt to take the payment through the braintree api
-     * @return \Magento\Framework\Controller\Result\Redirect
+     *
+     * @return Redirect
      */
-    public function execute()
+    public function execute(): Redirect
     {
         $request = [
             'paymentMethodNonce' => $this->getRequest()->getParam('payment_method_nonce'),
@@ -59,12 +65,9 @@ class Save extends Action
 
         try {
             $response = $this->braintreeAdapter->sale($request);
-            if ($response instanceof \Braintree\Result\Successful) {
-                $message = "A payment has been made on the %s card ending %s for %s %s"
-                    . " (Braintree Transaction ID: %s)";
-
+            if ($response instanceof Successful) {
                 $message = sprintf(
-                    __($message),
+                    __('A payment has been made on the %s card ending %s for %s %s (Braintree Transaction ID: %s)'),
                     $response->transaction->creditCard['cardType'],
                     $response->transaction->creditCard['last4'],
                     $response->transaction->currencyIsoCode,
@@ -73,14 +76,14 @@ class Save extends Action
                 );
 
                 $this->messageManager->addSuccessMessage($message);
-            } elseif ($response instanceof \Braintree\Result\Error) {
-                throw new \Magento\Framework\Exception\LocalizedException(__($response->message));
+            } elseif ($response instanceof Error) {
+                throw new LocalizedException(__($response->message));
             } else {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __("The response from the Braintree server was incorrect. Please try again.")
+                throw new LocalizedException(
+                    __('The response from the Braintree server was incorrect. Please try again.')
                 );
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
         }
 

@@ -5,6 +5,8 @@
  */
 namespace Magento\Braintree\Model;
 
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Request\Http as RequestHttp;
 use Magento\Sales\Model\OrderRepository;
@@ -62,8 +64,8 @@ class StoreConfigResolver
      *
      * @return int|null
      *
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
     public function getStoreId()
     {
@@ -80,7 +82,6 @@ class StoreConfigResolver
             }
         }
 
-        return $currentStoreId ? $currentStoreId : $currentStoreIdInAdmin;
+        return $currentStoreId ?: $currentStoreIdInAdmin;
     }
-
 }

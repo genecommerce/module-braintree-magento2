@@ -2,7 +2,7 @@
 
 namespace Magento\Braintree\Gateway\Request\PayPal;
 
-use Magento\Braintree\Gateway\Config\Paypal\Config;
+use Magento\Braintree\Gateway\Config\PayPal\Config;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 
 /**
@@ -29,7 +29,7 @@ class PayeeDataBuilder implements BuilderInterface
     /**
      * @inheritdoc
      */
-    public function build(array $buildSubject)
+    public function build(array $buildSubject): array
     {
         $email = $this->config->getPayeeEmail();
         if ($email) {

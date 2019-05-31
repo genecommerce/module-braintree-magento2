@@ -5,13 +5,15 @@
  */
 namespace Magento\Braintree\Model\Report\ConditionAppliers;
 
+use InvalidArgumentException;
+
 /**
  * Class AppliersPool
  */
 class AppliersPool
 {
     /**
-     * @var \Magento\Braintree\Model\Report\ConditionAppliers\ApplierInterface[]
+     * @var ApplierInterface[]
      */
     private $appliersPool = [];
 
@@ -30,11 +32,11 @@ class AppliersPool
      *
      * @return bool
      */
-    private function checkAppliers()
+    private function checkAppliers(): bool
     {
         foreach ($this->appliersPool as $applier) {
             if (!($applier instanceof ApplierInterface)) {
-                throw new \InvalidArgumentException('Report filter applier must implement ApplierInterface');
+                throw new InvalidArgumentException('Report filter applier must implement ApplierInterface');
             }
         }
         return true;

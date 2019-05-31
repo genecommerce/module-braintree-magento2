@@ -19,12 +19,12 @@ class FraudDataBuilder implements BuilderInterface
     const SKIP_ADVANCED_FRAUD_CHECKING = 'skipAdvancedFraudChecking';
 
     /**
-     * @var \Magento\Braintree\Gateway\Config\Config
+     * @var Config $config
      */
     private $config;
 
     /**
-     * @var SubjectReader
+     * @var SubjectReader $subjectReader
      */
     private $subjectReader;
 
@@ -45,7 +45,7 @@ class FraudDataBuilder implements BuilderInterface
      * Skip advanced fraud checks if the order amount is equal to or greater than the defined threshold
      * @inheritdoc
      */
-    public function build(array $buildSubject)
+    public function build(array $buildSubject): array
     {
         $threshold = $this->config->getFraudProtectionThreshold();
         $amount = $this->formatPrice($this->subjectReader->readAmount($buildSubject));

@@ -9,8 +9,13 @@ use Braintree\Result\Error;
 use Braintree\Result\Successful;
 use Magento\Payment\Gateway\Validator\AbstractValidator;
 use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 
+/**
+ * Class GeneralResponseValidator
+ * @package Magento\Braintree\Gateway\Validator
+ */
 class GeneralResponseValidator extends AbstractValidator
 {
     /**
@@ -33,7 +38,7 @@ class GeneralResponseValidator extends AbstractValidator
     /**
      * @inheritdoc
      */
-    public function validate(array $validationSubject)
+    public function validate(array $validationSubject): ResultInterface
     {
         /** @var Successful|Error $response */
         $response = $this->subjectReader->readResponseObject($validationSubject);
@@ -46,7 +51,7 @@ class GeneralResponseValidator extends AbstractValidator
 
             if (!$validationResult[0]) {
                 $isValid = $validationResult[0];
-                $errorMessages = array_merge($errorMessages, $validationResult[1]);
+                $errorMessages[] = $validationResult[1];
             }
         }
 
@@ -56,10 +61,10 @@ class GeneralResponseValidator extends AbstractValidator
     /**
      * @return array
      */
-    protected function getResponseValidators()
+    protected function getResponseValidators(): array
     {
         return [
-            function ($response) {
+            static function ($response) {
                 return [
                     property_exists($response, 'success') && $response->success === true,
                     [__('Braintree error response.')]

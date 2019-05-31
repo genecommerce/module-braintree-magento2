@@ -4,6 +4,7 @@ namespace Magento\Braintree\Model;
 
 use Magento\Framework\Model\AbstractModel;
 use Magento\Braintree\Api\Data\TransactionDetailDataInterface;
+use Magento\Braintree\Model\ResourceModel\TransactionDetail as TransactionDetailResource;
 
 /**
  * Class Order
@@ -18,7 +19,7 @@ class TransactionDetail extends AbstractModel implements TransactionDetailDataIn
      */
     protected function _construct() // @codingStandardsIgnoreLine
     {
-        $this->_init('Magento\Braintree\Model\ResourceModel\TransactionDetail');
+        $this->_init(TransactionDetailResource::class);
     }
 
     /**
@@ -32,7 +33,7 @@ class TransactionDetail extends AbstractModel implements TransactionDetailDataIn
     /**
      * @inheritdoc
      */
-    public function getOrderId()
+    public function getOrderId(): int
     {
         return $this->getData(self::ORDER_ID);
     }
@@ -40,7 +41,7 @@ class TransactionDetail extends AbstractModel implements TransactionDetailDataIn
     /**
      * @inheritdoc
      */
-    public function getTransactionSource()
+    public function getTransactionSource(): string
     {
         return $this->getData(self::TRANSACTION_SOURCE);
     }

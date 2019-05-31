@@ -4,6 +4,8 @@ namespace Magento\Braintree\Model\ResourceModel;
 
 use Magento\Braintree\Api\CreditPriceRepositoryInterface;
 use Magento\Braintree\Api\Data\CreditPriceDataInterface;
+use Magento\Braintree\Model\ResourceModel\CreditPrice\CollectionFactory;
+use Magento\Framework\Data\Collection\AbstractDb;
 
 /**
  * Class CreditPriceRepository
@@ -22,7 +24,7 @@ class CreditPriceRepository implements CreditPriceRepositoryInterface
      * @param CreditPrice\CollectionFactory $collectionFactory
      */
     public function __construct(
-        \Magento\Braintree\Model\ResourceModel\CreditPrice\CollectionFactory $collectionFactory
+        CollectionFactory $collectionFactory
     ) {
         $this->collectionFactory = $collectionFactory;
     }
@@ -30,7 +32,7 @@ class CreditPriceRepository implements CreditPriceRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function save(CreditPriceDataInterface $entity)
+    public function save(CreditPriceDataInterface $entity): CreditPriceDataInterface
     {
         return $entity->getResource()->save($entity);
     }
@@ -43,7 +45,7 @@ class CreditPriceRepository implements CreditPriceRepositoryInterface
         /** @var CreditPrice\Collection $collection */
         $collection = $this->collectionFactory->create();
         $collection->addFieldToFilter('product_id', $productId);
-        $collection->setOrder('term', \Magento\Framework\Data\Collection\AbstractDb::SORT_ORDER_ASC);
+        $collection->setOrder('term', AbstractDb::SORT_ORDER_ASC);
         return $collection->getItems();
     }
 
@@ -55,7 +57,7 @@ class CreditPriceRepository implements CreditPriceRepositoryInterface
         /** @var CreditPrice\Collection $collection */
         $collection = $this->collectionFactory->create();
         $collection->addFieldToFilter('product_id', $productId);
-        $collection->setOrder('monthly_payment', \Magento\Framework\Data\Collection\AbstractDb::SORT_ORDER_ASC);
+        $collection->setOrder('monthly_payment', AbstractDb::SORT_ORDER_ASC);
         $collection->setPageSize(1);
 
         return $collection->getFirstItem();

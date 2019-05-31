@@ -19,16 +19,18 @@ class FilterMapper
     private $searchFieldsToFiltersMap = [];
 
     /**
-     * @var \Magento\Braintree\Model\Report\ConditionAppliers\AppliersPool
+     * @var AppliersPool
      */
     private $appliersPool;
 
     /**
-     * @var \Magento\Braintree\Model\Adapter\BraintreeSearchAdapter
+     * @var BraintreeSearchAdapter
      */
     private $braintreeSearchAdapter;
 
     /**
+     * @param AppliersPool $appliersPool
+     * @param BraintreeSearchAdapter $braintreeSearchAdapter
      */
     public function __construct(
         AppliersPool $appliersPool,
@@ -41,6 +43,7 @@ class FilterMapper
 
     /**
      * Init fields map with Braintree filters
+     *
      * @return void
      */
     private function initFieldsToFiltersMap()
@@ -87,7 +90,7 @@ class FilterMapper
      * @param array $conditionMap
      * @return bool
      */
-    private function applyConditions($fieldFilter, array $conditionMap)
+    private function applyConditions($fieldFilter, array $conditionMap): bool
     {
         $applier = $this->appliersPool->getApplier($fieldFilter);
 

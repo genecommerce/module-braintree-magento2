@@ -14,19 +14,19 @@ use Magento\Framework\App\ProductMetadataInterface;
 class ChannelDataBuilder implements BuilderInterface
 {
     /**
-     * @var string
+     * @var string $channel
      */
     private static $channel = 'channel';
 
     /**
-     * @var string
+     * @var string $channelValue
      */
     private static $channelValue = 'Magento2GeneBT';
 
     /**
      * @inheritdoc
      */
-    public function build(array $buildSubject)
+    public function build(array $buildSubject): array
     {
         return [
             self::$channel => self::$channelValue

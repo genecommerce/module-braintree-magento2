@@ -7,7 +7,9 @@ namespace Magento\Braintree\Gateway\Command;
 
 use Magento\Framework\Phrase;
 use Magento\Payment\Gateway\CommandInterface;
+use Magento\Payment\Gateway\Http\ClientException;
 use Magento\Payment\Gateway\Http\ClientInterface;
+use Magento\Payment\Gateway\Http\ConverterException;
 use Magento\Payment\Gateway\Http\TransferFactoryInterface;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Payment\Gateway\Response\HandlerInterface;
@@ -83,6 +85,8 @@ class GatewayCommand implements CommandInterface
      * @param array $commandSubject
      * @return void
      * @throws CommandException
+     * @throws ClientException
+     * @throws ConverterException
      */
     public function execute(array $commandSubject)
     {
@@ -114,23 +118,19 @@ class GatewayCommand implements CommandInterface
      * @param $response
      * @return Phrase
      */
-    private function getExceptionMessage($response)
+    private function getExceptionMessage($response): Phrase
     {
         if (!isset($response['object']) || empty($response['object']->message)) {
             return __('Your payment could not be taken. Please try again or use a different payment method.');
         }
 
-        $allowedMessages = [
-
-        ];
-
-        return __('Your payment could not be taken. Please try again or use a different payment method.' . $response['object']->message);
+        $allowedMessages = [];
 
         if (in_array($response['object']->message, $allowedMessages)) {
             return __('Your payment could not be taken. Please try again or use a different payment method.');
-        } else {
-            return __('Your payment could not be taken. Please try again or use a different payment method.');
         }
+
+        return __('Your payment could not be taken. Please try again or use a different payment method. ' . $response['object']->message);
     }
 
     /**

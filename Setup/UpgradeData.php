@@ -6,31 +6,39 @@
 
 namespace Magento\Braintree\Setup;
 
+use Magento\Framework\DB\DataConverter\SerializedToJson;
+use Magento\Framework\DB\FieldDataConversionException;
+use Magento\Framework\DB\FieldDataConverterFactory;
+use Magento\Framework\DB\Select\QueryModifierFactory;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 
+/**
+ * Class UpgradeData
+ * @package Magento\Braintree\Setup
+ */
 class UpgradeData implements UpgradeDataInterface
 {
     /**
-     * @var \Magento\Framework\DB\FieldDataConverterFactory
+     * @var FieldDataConverterFactory
      */
     private $fieldDataConverterFactory;
 
     /**
-     * @var \Magento\Framework\DB\Select\QueryModifierFactory
+     * @var QueryModifierFactory
      */
     private $queryModifierFactory;
 
     /**
      * UpgradeData constructor.
      *
-     * @param \Magento\Framework\DB\FieldDataConverterFactory $fieldDataConverterFactory
-     * @param \Magento\Framework\DB\Select\QueryModifierFactory $queryModifierFactory
+     * @param FieldDataConverterFactory $fieldDataConverterFactory
+     * @param QueryModifierFactory $queryModifierFactory
      */
     public function __construct(
-        \Magento\Framework\DB\FieldDataConverterFactory $fieldDataConverterFactory,
-        \Magento\Framework\DB\Select\QueryModifierFactory $queryModifierFactory
+        FieldDataConverterFactory $fieldDataConverterFactory,
+        QueryModifierFactory $queryModifierFactory
     ) {
         $this->fieldDataConverterFactory = $fieldDataConverterFactory;
         $this->queryModifierFactory = $queryModifierFactory;
@@ -42,6 +50,7 @@ class UpgradeData implements UpgradeDataInterface
      * @param ModuleDataSetupInterface $setup
      * @param ModuleContextInterface $context
      * @return void
+     * @throws FieldDataConversionException
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -56,11 +65,12 @@ class UpgradeData implements UpgradeDataInterface
      *
      * @param ModuleDataSetupInterface $setup
      * @return void
+     * @throws FieldDataConversionException
      */
     private function convertSerializedDataToJson(ModuleDataSetupInterface $setup)
     {
         $fieldDataConverter = $this->fieldDataConverterFactory->create(
-            \Magento\Framework\DB\DataConverter\SerializedToJson::class
+            SerializedToJson::class
         );
 
         $queryModifier = $this->queryModifierFactory->create(

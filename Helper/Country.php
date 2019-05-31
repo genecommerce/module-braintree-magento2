@@ -43,7 +43,7 @@ class Country
      *
      * @return array
      */
-    public function getCountries()
+    public function getCountries(): array
     {
         if (!$this->countries) {
             $this->countries = $this->collectionFactory->create()

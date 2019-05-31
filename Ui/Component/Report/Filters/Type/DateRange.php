@@ -5,10 +5,12 @@
  */
 namespace Magento\Braintree\Ui\Component\Report\Filters\Type;
 
+use Magento\Ui\Component\Filters\Type\Date;
+
 /**
  * Class DateRange
  */
-class DateRange extends \Magento\Ui\Component\Filters\Type\Date
+class DateRange extends Date
 {
     /**
      * Braintree date format

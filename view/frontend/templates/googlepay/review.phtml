@@ -27,24 +27,14 @@
                                     <div class="field shipping required">
                                         <select name="shipping_method" id="shipping-method" class="select">
                                             <?php if (!$currentRate): ?>
-                                                <option value=""><?= $block->escapeHtml(__(
-                                                        'Please select a shipping method...'
-                                                    )); ?></option>
+                                                <option value=""><?= $block->escapeHtml(__('Please select a shipping method...')) ?></option>
                                             <?php endif; ?>
                                             <?php foreach ($groups as $code => $rates): ?>
-                                                <optgroup label="<?= $block->escapeHtml($block->getCarrierName(
-                                                    $code
-                                                )); ?>">
+                                                <optgroup label="<?= $block->escapeHtml($block->getCarrierName($code)) ?>">
                                                     <?php foreach ($rates as $rate): ?>
-                                                        <option value="<?= $block->escapeHtml(
-                                                            $block->renderShippingRateValue($rate)
-                                                        ); ?>"
-                                                            <?= ($currentRate === $rate) ?
-                                                                ' selected="selected"' : '';
-                                                            ?>>
-                                                            <?php /* @noEscape */ echo
-                                                            $block->renderShippingRateOption($rate);
-                                                            ?>
+                                                        <option value="<?= $block->escapeHtml($block->renderShippingRateValue($rate)) ?>"
+                                                            <?= ($currentRate === $rate) ? ' selected="selected"' : '' ?>>
+                                                            <?= $block->renderShippingRateOption($rate) ?>
                                                         </option>
                                                     <?php endforeach; ?>
                                                 </optgroup>
@@ -63,16 +53,12 @@
                                     </div>
                                 <?php else: ?>
                                     <p>
-                                        <?= $block->escapeHtml(__(
-                                            'Sorry, no quotes are available for this order right now.'
-                                        )); ?>
+                                        <?= $block->escapeHtml(__('Sorry, no quotes are available for this order right now.')) ?>
                                     </p>
                                 <?php endif; ?>
                             <?php else: ?>
                                 <p>
-                                    <?php /* @noEscape */ echo $block->renderShippingRateOption(
-                                        $block->getCurrentShippingRate()
-                                    ); ?>
+                                    <?= $block->renderShippingRateOption($block->getCurrentShippingRate()) ?>
                                 </p>
                             <?php endif; ?>
                         </form>
@@ -84,10 +70,7 @@
                     </strong>
                     <div class="box-content">
                         <address>
-                            <?= $block->escapeHtml(
-                                $block->renderAddress($block->getShippingAddress()),
-                                ['br']
-                            );?>
+                            <?= $block->escapeHtml($block->renderAddress($block->getShippingAddress()), ['br']) ?>
                         </address>
                     </div>
                     <?php if ($block->getCanEditShippingAddress()): ?>
@@ -102,7 +85,7 @@
             <div class="box box-order-billing-address">
                 <strong class="box-title"><span><?= $block->escapeHtml(__('Payment Method')) ?></span></strong>
                 <div class="box-content">
-                    <?= $block->escapeHtml("Google Pay") ?><br>
+                    <?= $block->escapeHtml('Google Pay') ?><br>
                     <?= $block->escapeHtml($block->getEmail()) ?> <br>
                     <img src="<?php echo $this->getViewFileUrl('Magento_Braintree::images/GooglePay_AcceptanceMark_WhiteShape_WithStroke_RGB_62x38pt@4x.png')?>"
                          alt="<?= $block->escapeHtml(__('Buy now with Google Pay')) ?>"
@@ -156,8 +139,8 @@
                 "shippingSubmitFormSelector": "#shipping-method-form",
                 "shippingSelector": "#shipping-method",
                 "shippingMethodUpdateUrl": "<?= $block->escapeUrl($block->getUpdateShippingMethodsUrl()) ?>",
-                "isAjax": <?= /* @noEscape */ $block->getUseAjax() ? 'true' : 'false' ?>,
-                "canEditShippingMethod": <?= /* @noEscape */ $block->canEditShippingMethod() ? 'true' : 'false' ?>
+                "isAjax": <?= $block->getUseAjax() ? 'true' : 'false' ?>,
+                "canEditShippingMethod": <?= $block->canEditShippingMethod() ? 'true' : 'false' ?>
             }
         }
     }

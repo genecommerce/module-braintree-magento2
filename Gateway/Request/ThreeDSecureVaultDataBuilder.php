@@ -5,6 +5,9 @@
  */
 namespace Magento\Braintree\Gateway\Request;
 
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Braintree\Gateway\Config\Config;
 use Magento\Braintree\Gateway\Helper\SubjectReader;
@@ -18,18 +21,18 @@ class ThreeDSecureVaultDataBuilder extends ThreeDSecureDataBuilder
 {
 
     /**
-     * @var \Magento\Framework\App\RequestInterface
+     * @var RequestInterface
      */
     protected $request;
 
     /**
      * ThreeDSecureVaultDataBuilder constructor.
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param RequestInterface $request
      * @param Config $config
      * @param SubjectReader $subjectReader
      */
     public function __construct(
-        \Magento\Framework\App\RequestInterface $request,
+        RequestInterface $request,
         Config $config,
         SubjectReader $subjectReader
     ) {
@@ -42,8 +45,10 @@ class ThreeDSecureVaultDataBuilder extends ThreeDSecureDataBuilder
      * @param OrderAdapterInterface $order
      * @param float $amount
      * @return bool
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
-    protected function is3DSecureEnabled(OrderAdapterInterface $order, $amount)
+    protected function is3DSecureEnabled(OrderAdapterInterface $order, $amount): bool
     {
         if ($this->request->isSecure() && $this->config->isCvvEnabledVault()) {
             return false;

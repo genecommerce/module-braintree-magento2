@@ -11,6 +11,8 @@ use Magento\Braintree\Gateway\Request\RefundDataBuilder;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Model\Order\Payment;
+use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Log\LoggerInterface;
 
 class RefundDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
@@ -18,6 +20,11 @@ class RefundDataBuilderTest extends \PHPUnit\Framework\TestCase
      * @var SubjectReader | \PHPUnit_Framework_MockObject_MockObject
      */
     private $subjectReader;
+
+    /**
+     * @var LoggerInterface | MockObject
+     */
+    private $logger;
 
     /**
      * @var RefundDataBuilder
@@ -31,7 +38,9 @@ class RefundDataBuilderTest extends \PHPUnit\Framework\TestCase
         )->disableOriginalConstructor()
             ->getMock();
 
-        $this->dataBuilder = new RefundDataBuilder($this->subjectReader);
+        $this->logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+
+        $this->dataBuilder = new RefundDataBuilder($this->subjectReader, $this->logger);
     }
 
     public function testBuild()

@@ -48,12 +48,12 @@ class PaymentDataBuilder implements BuilderInterface
     const ORDER_ID = 'orderId';
 
     /**
-     * @var Config
+     * @var Config $config
      */
     private $config;
 
     /**
-     * @var SubjectReader
+     * @var SubjectReader $subjectReader
      */
     private $subjectReader;
 
@@ -72,7 +72,7 @@ class PaymentDataBuilder implements BuilderInterface
     /**
      * @inheritdoc
      */
-    public function build(array $buildSubject)
+    public function build(array $buildSubject): array
     {
         $paymentDO = $this->subjectReader->readPayment($buildSubject);
 

@@ -7,6 +7,9 @@ namespace Magento\Braintree\Gateway\Response;
 
 use Braintree\Transaction;
 use Magento\Braintree\Observer\DataAssignObserver;
+use Magento\Framework\App\Area;
+use Magento\Framework\App\State;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Gateway\Helper\ContextHelper;
 use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Response\HandlerInterface;
@@ -50,7 +53,7 @@ class PaymentDetailsHandler implements HandlerInterface
     private $subjectReader;
 
     /**
-     * @var \Magento\Framework\App\State
+     * @var State
      */
     private $state;
 
@@ -58,10 +61,11 @@ class PaymentDetailsHandler implements HandlerInterface
      * Constructor
      *
      * @param SubjectReader $subjectReader
+     * @param State $state
      */
     public function __construct(
         SubjectReader $subjectReader,
-        \Magento\Framework\App\State $state
+        State $state
     ) {
         $this->subjectReader = $subjectReader;
         $this->state = $state;
@@ -73,7 +77,7 @@ class PaymentDetailsHandler implements HandlerInterface
     public function handle(array $handlingSubject, array $response)
     {
         $paymentDO = $this->subjectReader->readPayment($handlingSubject);
-        /** @var \Braintree\Transaction $transaction */
+        /** @var Transaction $transaction */
         $transaction = $this->subjectReader->readTransaction($response);
         /** @var OrderPaymentInterface $payment */
         $payment = $paymentDO->getPayment();
@@ -95,12 +99,14 @@ class PaymentDetailsHandler implements HandlerInterface
 
     /**
      * When within admin area; assume MOTO transactionSource
-     * @param $payment OrderPaymentInterface
+     * @param OrderPaymentInterface $payment
+     * @throws LocalizedException
+     * @throws LocalizedException
      */
     public function setTransactionSource(OrderPaymentInterface $payment)
     {
-        if ($this->state->getAreaCode() == \Magento\Framework\App\Area::AREA_ADMINHTML) {
-            $payment->setAdditionalInformation(self::TRANSACTION_SOURCE, "MOTO");
+        if ($this->state->getAreaCode() === Area::AREA_ADMINHTML) {
+            $payment->setAdditionalInformation(self::TRANSACTION_SOURCE, 'MOTO');
         }
     }
 }

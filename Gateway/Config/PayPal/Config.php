@@ -5,6 +5,10 @@
  */
 namespace Magento\Braintree\Gateway\Config\PayPal;
 
+use Magento\Braintree\Model\Config\Source\Color;
+use Magento\Braintree\Model\Config\Source\Layout;
+use Magento\Braintree\Model\Config\Source\Shape;
+use Magento\Braintree\Model\Config\Source\Size;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Payment\Model\CcConfig;
 
@@ -42,22 +46,22 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     private $icon = [];
 
     /**
-     * @var \Magento\Braintree\Model\Config\Source\Size
+     * @var Size
      */
     private $sizeConfigSource;
 
     /**
-     * @var \Magento\Braintree\Model\Config\Source\Color
+     * @var Color
      */
     private $colorConfigSource;
 
     /**
-     * @var \Magento\Braintree\Model\Config\Source\Shape
+     * @var Shape
      */
     private $shapeConfigSource;
 
     /**
-     * @var \Magento\Braintree\Model\Config\Source\Layout
+     * @var Layout
      */
     private $layoutConfigSource;
 
@@ -65,16 +69,20 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Config constructor.
      * @param ScopeConfigInterface $scopeConfig
      * @param CcConfig $ccConfig
+     * @param Size $sizeConfigSource
+     * @param Color $colorConfigSource
+     * @param Shape $shapeConfigSource
+     * @param Layout $layoutConfigSource
      * @param null $methodCode
      * @param string $pathPattern
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         CcConfig $ccConfig,
-        \Magento\Braintree\Model\Config\Source\Size $sizeConfigSource,
-        \Magento\Braintree\Model\Config\Source\Color $colorConfigSource,
-        \Magento\Braintree\Model\Config\Source\Shape $shapeConfigSource,
-        \Magento\Braintree\Model\Config\Source\Layout $layoutConfigSource,
+        Size $sizeConfigSource,
+        Color $colorConfigSource,
+        Shape $shapeConfigSource,
+        Layout $layoutConfigSource,
         $methodCode = null,
         $pathPattern = self::DEFAULT_PATH_PATTERN
     ) {
@@ -91,7 +99,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      *
      * @return bool
      */
-    public function isActive()
+    public function isActive(): bool
     {
         return (bool) $this->getValue(self::KEY_ACTIVE);
     }
@@ -99,7 +107,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * @return bool
      */
-    public function isDisplayShoppingCart()
+    public function isDisplayShoppingCart(): bool
     {
         return (bool) $this->getValue(self::KEY_DISPLAY_ON_SHOPPING_CART);
     }
@@ -109,7 +117,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      *
      * @return bool
      */
-    public function isAllowToEditShippingAddress()
+    public function isAllowToEditShippingAddress(): bool
     {
         return (bool) $this->getValue(self::KEY_ALLOW_TO_EDIT_SHIPPING_ADDRESS);
     }
@@ -117,7 +125,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * Get merchant name to display in PayPal popup
      *
-     * @return string
+     * @return string|null
      */
     public function getMerchantName()
     {
@@ -129,7 +137,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      *
      * @return string
      */
-    public function isRequiredBillingAddress()
+    public function isRequiredBillingAddress(): string
     {
         return $this->getValue(self::KEY_REQUIRE_BILLING_ADDRESS);
     }
@@ -137,7 +145,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * Get title of payment
      *
-     * @return string
+     * @return string|null
      */
     public function getTitle()
     {
@@ -147,7 +155,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * Get payee email
      *
-     * @return string
+     * @return string|null
      */
     public function getPayeeEmail()
     {
@@ -156,15 +164,16 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     /**
      * Retrieve the button style config values
+     *
      * @param $area
      * @param $style
-     * @return mixed|string
+     * @return string|array
      */
     private function getButtonStyle($area, $style)
     {
-        $useCustom = $this->getValue("button_customise_" . $area);
+        $useCustom = $this->getValue('button_customise_' . $area);
         if ($useCustom) {
-            $value = $this->getValue("button_" . $style . "_" . $area);
+            $value = $this->getValue('button_' . $style . '_' . $area);
         } else {
             $defaults = [
                 'button_color_cart' => 2,
@@ -180,7 +189,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
                 'button_size_productpage' => 2,
                 'button_shape_productpage' => 1
             ];
-            $value = $defaults["button_" . $style . "_" . $area];
+            $value = $defaults['button_' . $style . '_' . $area];
         }
 
         return $value;
@@ -188,9 +197,11 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     /**
      * Get button color mapped to the value expected by the PayPal API
-     * @return string
+     *
+     * @param string $area
+     * @return string|null
      */
-    public function getButtonColor($area=self::BUTTON_AREA_CART)
+    public function getButtonColor($area = self::BUTTON_AREA_CART)
     {
         $value = $this->getButtonStyle($area, self::KEY_BUTTON_COLOR);
         $options = $this->colorConfigSource->toRawValues();
@@ -199,9 +210,11 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     /**
      * Get button shape mapped to the value expected by the PayPal API
+     *
+     * @param string $area
      * @return string
      */
-    public function getButtonShape($area=self::BUTTON_AREA_CART)
+    public function getButtonShape($area = self::BUTTON_AREA_CART)
     {
         $value = $this->getButtonStyle($area, self::KEY_BUTTON_SHAPE);
         $options = $this->shapeConfigSource->toRawValues();
@@ -210,9 +223,11 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     /**
      * Get button size mapped to the value expected by the PayPal API
+     *
+     * @param string $area
      * @return string
      */
-    public function getButtonSize($area=self::BUTTON_AREA_CART)
+    public function getButtonSize($area = self::BUTTON_AREA_CART)
     {
         $value = $this->getButtonStyle($area, self::KEY_BUTTON_SIZE);
         $options = $this->sizeConfigSource->toRawValues();
@@ -221,9 +236,10 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     /**
      * Get button layout mapped to the value expected by the PayPal API
+     * @param string $area
      * @return string
      */
-    public function getButtonLayout($area=self::BUTTON_AREA_CART)
+    public function getButtonLayout($area = self::BUTTON_AREA_CART)
     {
         $value = $this->getButtonStyle($area, self::KEY_BUTTON_LAYOUT);
         $options = $this->layoutConfigSource->toRawValues();
@@ -232,9 +248,10 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     /**
      * Get PayPal icon
+     *
      * @return array
      */
-    public function getPayPalIcon()
+    public function getPayPalIcon(): array
     {
         if (empty($this->icon)) {
             $asset = $this->ccConfig->createAsset('Magento_Braintree::images/paypal.png');
@@ -251,37 +268,39 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     /**
      * Disabled paypal funding options - Card
-     * @param $area self::KEY_PAYPAL_DISABLED_FUNDING_CHECKOUT or KEY_PAYPAL_DISABLED_FUNDING_CART
-     * @return string
+     *
+     * @param string|self $area
+     * @return bool
      */
-    public function getDisabledFundingOptionCard($area = null)
+    public function getDisabledFundingOptionCard($area = null): bool
     {
         if (!$area) {
             $area = self::KEY_PAYPAL_DISABLED_FUNDING_CHECKOUT;
         }
-        return strstr($this->getValue($area), "card") ? true : false;
+        return false !== strpos($this->getValue($area), 'card');
     }
 
     /**
      * Disabled paypal funding options - ELV
-     * @param $area self::KEY_PAYPAL_DISABLED_FUNDING_CHECKOUT or KEY_PAYPAL_DISABLED_FUNDING_CART
+     *
+     * @param string|self $area
      * @return bool
      */
-    public function getDisabledFundingOptionElv($area = null)
+    public function getDisabledFundingOptionElv($area = null): bool
     {
         if (!$area) {
             $area = self::KEY_PAYPAL_DISABLED_FUNDING_CHECKOUT;
         }
-        return strstr($this->getValue($area), "elv") ? true : false;
+        return false !== strpos($this->getValue($area), 'elv');
     }
 
     /**
      * PayPal btn enabled product page
+     *
      * @return bool
      */
-    public function getProductPageBtnEnabled()
+    public function getProductPageBtnEnabled(): bool
     {
         return $this->getValue('button_productpage_enabled');
     }
 }
-

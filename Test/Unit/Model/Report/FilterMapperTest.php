@@ -5,30 +5,34 @@
  */
 namespace Magento\Braintree\Test\Unit\Model\Report;
 
+use Braintree\RangeNode;
+use Braintree\TextNode;
 use Magento\Braintree\Model\Adapter\BraintreeSearchAdapter;
 use Magento\Braintree\Model\Report\ConditionAppliers\ApplierInterface;
 use Magento\Braintree\Model\Report\ConditionAppliers\AppliersPool;
 use Magento\Braintree\Model\Report\FilterMapper;
+use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_MockObject_MockObject;
 
 /**
  * Class FilterMapperTest
  *
  * Test for class \Magento\Braintree\Model\Report\FilterMapper
  */
-class FilterMapperTest extends \PHPUnit\Framework\TestCase
+class FilterMapperTest extends TestCase
 {
     /**
-     * @var BraintreeSearchAdapter|\PHPUnit_Framework_MockObject_MockObject
+     * @var BraintreeSearchAdapter|PHPUnit_Framework_MockObject_MockObject
      */
     private $braintreeSearchAdapterMock;
 
     /**
-     * @var AppliersPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var AppliersPool|PHPUnit_Framework_MockObject_MockObject
      */
     private $appliersPoolMock;
 
     /**
-     * @var ApplierInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ApplierInterface|PHPUnit_Framework_MockObject_MockObject
      */
     private $applierMock;
 
@@ -50,14 +54,11 @@ class FilterMapperTest extends \PHPUnit\Framework\TestCase
             'settlementBatchId',
             'paymentInstrumentType',
         ];
+
         $this->braintreeSearchAdapterMock = $this->getMockBuilder(BraintreeSearchAdapter::class)
             ->setMethods($methods)
             ->disableOriginalConstructor()
             ->getMock();
-        foreach ($methods as $method) {
-            $this->braintreeSearchAdapterMock->expects($this->once())->method($method)
-                ->willReturn(new BraintreeSearchNodeStub());
-        }
 
         $this->appliersPoolMock = $this->getMockBuilder(AppliersPool::class)
             ->setMethods(['getApplier'])
@@ -86,13 +87,13 @@ class FilterMapperTest extends \PHPUnit\Framework\TestCase
         $mapper = new FilterMapper($this->appliersPoolMock, $this->braintreeSearchAdapterMock);
 
         $result = $mapper->getFilter('id', ['eq' => 'value']);
-        $this->assertInstanceOf(BraintreeSearchNodeStub::class, $result);
+        $this->assertInstanceOf(TextNode::class, $result);
 
         $result = $mapper->getFilter('orderId', ['eq' => 'value']);
-        $this->assertInstanceOf(BraintreeSearchNodeStub::class, $result);
+        $this->assertInstanceOf(TextNode::class, $result);
 
         $result = $mapper->getFilter('amount', ['eq' => 'value']);
-        $this->assertInstanceOf(BraintreeSearchNodeStub::class, $result);
+        $this->assertInstanceOf(RangeNode::class, $result);
     }
 
     /**

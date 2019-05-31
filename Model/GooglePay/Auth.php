@@ -2,7 +2,10 @@
 
 namespace Magento\Braintree\Model\GooglePay;
 
+use Magento\Braintree\Api\Data\AuthDataInterfaceFactory;
 use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\UrlInterface;
 
 /**
@@ -13,7 +16,7 @@ use Magento\Framework\UrlInterface;
 class Auth
 {
     /**
-     * @var \Magento\Braintree\Api\Data\AuthDataInterfaceFactory
+     * @var AuthDataInterfaceFactory
      */
     private $authData;
 
@@ -23,7 +26,7 @@ class Auth
     private $configProvider;
 
     /**
-     * @var \Magento\Framework\UrlInterface
+     * @var UrlInterface
      */
     private $url;
 
@@ -33,14 +36,15 @@ class Auth
     private $customerSession;
 
     /**
-     * Auth constructor.
-     * @param \Magento\Braintree\Api\Data\AuthDataInterfaceFactory $authData
+     * Auth constructor
+     *
+     * @param AuthDataInterfaceFactory $authData
      * @param Ui\ConfigProvider $configProvider
      * @param UrlInterface $url
      * @param CustomerSession $customerSession
      */
     public function __construct(
-        \Magento\Braintree\Api\Data\AuthDataInterfaceFactory $authData,
+        AuthDataInterfaceFactory $authData,
         Ui\ConfigProvider $configProvider,
         UrlInterface $url,
         CustomerSession $customerSession
@@ -51,27 +55,46 @@ class Auth
         $this->customerSession = $customerSession;
     }
 
+    /**
+     * @return string|null
+     * @throws InputException
+     * @throws NoSuchEntityException
+     */
     public function getClientToken()
     {
         return $this->configProvider->getClientToken();
     }
 
-    public function getEnvironment()
+    /**
+     * @return string
+     * @throws InputException
+     * @throws NoSuchEntityException
+     */
+    public function getEnvironment(): string
     {
         return $this->configProvider->getEnvironment();
     }
 
-    public function getMerchantId()
+    /**
+     * @return string
+     */
+    public function getMerchantId(): string
     {
         return $this->configProvider->getMerchantId();
     }
 
-    public function getActionSuccess()
+    /**
+     * @return string
+     */
+    public function getActionSuccess(): string
     {
         return $this->url->getUrl('checkout/onepage/success', ['_secure' => true]);
     }
 
-    public function getAvailableCardTypes()
+    /**
+     * @return array
+     */
+    public function getAvailableCardTypes(): array
     {
         return $this->configProvider->getAvailableCardTypes();
     }

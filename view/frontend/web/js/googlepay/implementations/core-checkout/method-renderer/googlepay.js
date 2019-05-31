@@ -1,5 +1,5 @@
 /**
- * Braintre Google Pay payment method integration.
+ * Braintree Google Pay payment method integration.
  * @author Aidan Threadgold <aidan@gene.co.uk>
  */
 define([

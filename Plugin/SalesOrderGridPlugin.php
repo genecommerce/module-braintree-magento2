@@ -2,6 +2,7 @@
 
 namespace Magento\Braintree\Plugin;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Model\ResourceModel\Order\Grid\Collection;
 
 /**
@@ -14,6 +15,7 @@ class SalesOrderGridPlugin
     /**
      * @param Collection $subject
      * @return null
+     * @throws LocalizedException
      */
     public function beforeLoad(Collection $subject)
     {

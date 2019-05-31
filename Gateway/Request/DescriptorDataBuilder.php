@@ -36,7 +36,7 @@ class DescriptorDataBuilder implements BuilderInterface
      * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function build(array $buildSubject)
+    public function build(array $buildSubject): array
     {
         $values = $this->config->getDynamicDescriptors();
         return !empty($values) ? [self::$descriptorKey => $values] : [];

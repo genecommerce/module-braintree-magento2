@@ -12,5 +12,8 @@ use Magento\Paypal\Block\Express;
  */
 class Review extends Express\Review
 {
+    /**
+     * @var string
+     */
     protected $_controllerPath = 'braintree/googlepay'; // @codingStandardsIgnoreLine
 }

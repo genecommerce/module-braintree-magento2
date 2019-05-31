@@ -9,6 +9,10 @@ use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Config\ValueHandlerInterface;
 use Magento\Sales\Model\Order\Payment;
 
+/**
+ * Class CanVoidHandler
+ * @package Magento\Braintree\Gateway\Config
+ */
 class CanVoidHandler implements ValueHandlerInterface
 {
     /**

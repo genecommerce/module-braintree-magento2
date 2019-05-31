@@ -3,7 +3,11 @@
 namespace Magento\Braintree\Model\ApplePay;
 
 use Magento\Braintree\Api\AuthInterface;
+use Magento\Braintree\Api\Data\AuthDataInterface;
+use Magento\Braintree\Api\Data\AuthDataInterfaceFactory;
 use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -15,39 +19,41 @@ use Magento\Store\Model\StoreManagerInterface;
 class Auth implements AuthInterface
 {
     /**
-     * @var \Magento\Braintree\Api\Data\AuthDataInterfaceFactory
+     * @var AuthDataInterfaceFactory $authData
      */
     private $authData;
 
     /**
-     * @var Ui\ConfigProvider
+     * @var Ui\ConfigProvider $configProvider
      */
     private $configProvider;
 
     /**
-     * @var \Magento\Framework\UrlInterface
+     * @var UrlInterface $url
      */
     private $url;
 
     /**
-     * @var CustomerSession
+     * @var CustomerSession $customerSession
      */
     private $customerSession;
 
     /**
-     * @var StoreManagerInterface
+     * @var StoreManagerInterface $storeManager
      */
     private $storeManager;
 
     /**
-     * Auth constructor.
-     * @param \Magento\Braintree\Api\Data\AuthDataInterfaceFactory $authData
+     * Auth constructor
+     *
+     * @param AuthDataInterfaceFactory $authData
      * @param Ui\ConfigProvider $configProvider
      * @param UrlInterface $url
      * @param CustomerSession $customerSession
+     * @param StoreManagerInterface $storeManagerInterface
      */
     public function __construct(
-        \Magento\Braintree\Api\Data\AuthDataInterfaceFactory $authData,
+        AuthDataInterfaceFactory $authData,
         Ui\ConfigProvider $configProvider,
         UrlInterface $url,
         CustomerSession $customerSession,
@@ -62,41 +68,61 @@ class Auth implements AuthInterface
 
     /**
      * @inheritdoc
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
-    public function get()
+    public function get(): AuthDataInterface
     {
-        /** @var $data \Magento\Braintree\Api\Data\AuthDataInterface */
+        /** @var AuthDataInterface $data */
         $data = $this->authData->create();
         $data->setClientToken($this->getClientToken());
         $data->setDisplayName($this->getDisplayName());
         $data->setActionSuccess($this->getActionSuccess());
-        $data->setIsLoggedIn($this->getIsLoggedIn());
+        $data->setIsLoggedIn($this->isLoggedIn());
         $data->setStoreCode($this->getStoreCode());
 
         return $data;
     }
 
+    /**
+     * @return string|null
+     * @throws InputException
+     * @throws NoSuchEntityException
+     */
     protected function getClientToken()
     {
         return $this->configProvider->getClientToken();
     }
 
+    /**
+     * @return string|null
+     */
     protected function getDisplayName()
     {
         return $this->configProvider->getMerchantName();
     }
 
-    protected function getActionSuccess()
+    /**
+     * @return string
+     */
+    protected function getActionSuccess(): string
     {
         return $this->url->getUrl('checkout/onepage/success', ['_secure' => true]);
     }
 
-    protected function getIsLoggedIn()
+    /**
+     * @return bool
+     */
+    protected function isLoggedIn(): bool
     {
         return (bool) $this->customerSession->isLoggedIn();
     }
 
-    protected function getStoreCode()
+    /**
+     * @return string
+     * @throws NoSuchEntityException
+     */
+    protected function getStoreCode(): string
     {
         return $this->storeManager->getStore()->getCode();
     }

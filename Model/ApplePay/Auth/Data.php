@@ -12,27 +12,27 @@ use Magento\Braintree\Api\Data\AuthDataInterface;
 class Data implements AuthDataInterface
 {
     /**
-     * @var string
+     * @var string $clientToken
      */
     private $clientToken;
 
     /**
-     * @var string
+     * @var string $displayName
      */
     private $displayName;
 
     /**
-     * @var string
+     * @var string $actionSuccess
      */
     private $actionSuccess;
 
     /**
-     * @var bool
+     * @var bool $isLoggedIn
      */
     private $isLoggedIn;
 
     /**
-     * @var string
+     * @var string $storeCode
      */
     private $storeCode;
 
@@ -47,7 +47,7 @@ class Data implements AuthDataInterface
     /**
      * @inheritdoc
      */
-    public function getDisplayName()
+    public function getDisplayName(): string
     {
         return $this->displayName;
     }
@@ -55,7 +55,7 @@ class Data implements AuthDataInterface
     /**
      * @inheritdoc
      */
-    public function getActionSuccess()
+    public function getActionSuccess(): string
     {
         return $this->actionSuccess;
     }
@@ -63,7 +63,7 @@ class Data implements AuthDataInterface
     /**
      * @inheritdoc
      */
-    public function getIsLoggedIn()
+    public function isLoggedIn(): bool
     {
         return $this->isLoggedIn;
     }
@@ -71,7 +71,7 @@ class Data implements AuthDataInterface
     /**
      * @inheritdoc
      */
-    public function getStoreCode()
+    public function getStoreCode(): string
     {
         return $this->storeCode;
     }

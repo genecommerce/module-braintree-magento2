@@ -20,12 +20,12 @@ class CcType
     private $ccTypes = [];
 
     /**
-     * @var \Magento\Braintree\Model\Adminhtml\Source\CcType
+     * @var CcTypeSource
      */
     private $ccTypeSource;
 
     /**
-     * @param CcType $ccTypeSource
+     * @param CcTypeSource $ccTypeSource
      */
     public function __construct(CcTypeSource $ccTypeSource)
     {
@@ -37,7 +37,7 @@ class CcType
      *
      * @return array
      */
-    public function getCcTypes()
+    public function getCcTypes(): array
     {
         if (!$this->ccTypes) {
             $this->ccTypes = $this->ccTypeSource->toOptionArray();

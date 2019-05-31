@@ -10,14 +10,16 @@ namespace Magento\Braintree\Model\CustomFields;
 interface CustomFieldInterface
 {
     /**
-     * API Name as defined in the Braintree Control Panel.
+     * API Name as defined in the Braintree Control Panel
+     *
      * @return string
      */
-    public function getApiName();
+    public function getApiName(): string;
 
     /**
-     * Value for the field.
-     * @param $buildSubject array When used with SubjectReader this will return information about the order
+     * Value for the field
+     *
+     * @param array $buildSubject When used with SubjectReader this will return information about the order
      * @see \Magento\Braintree\Gateway\Helper\SubjectReader
      * @return mixed
      */

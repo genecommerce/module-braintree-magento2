@@ -7,6 +7,10 @@ namespace Magento\Braintree\Gateway\Response;
 
 use Magento\Sales\Model\Order\Payment;
 
+/**
+ * Class RefundHandler
+ * @package Magento\Braintree\Gateway\Response
+ */
 class RefundHandler extends VoidHandler
 {
     /**
@@ -16,7 +20,7 @@ class RefundHandler extends VoidHandler
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function shouldCloseParentTransaction(Payment $orderPayment)
+    protected function shouldCloseParentTransaction(Payment $orderPayment): bool
     {
         return !(bool)$orderPayment->getCreditmemo()->getInvoice()->canRefund();
     }

@@ -1,23 +1,21 @@
 <?php
-/**
- * @var $block \Magento\Braintree\Block\Credit\Calculator\Listing\Product
- */
+/** @var $block \Magento\Braintree\Block\Credit\Calculator\Listing\Product */
 
 $scopeId = 'ppcreditsummary-cart';
 ?>
-<div data-bind="scope: '<?php echo $scopeId; ?>'"><!-- ko template: getTemplate() --><!-- /ko --></div>
+<div data-bind="scope: '<?= $block->escapeHtmlAttr($scopeId) ?>'"><!-- ko template: getTemplate() --><!-- /ko --></div>
 <script type="text/x-magento-init">
     {
         "*": {
             "Magento_Ui/js/core/app":{
                 "components": {
-                    "<?php echo $scopeId; ?>": {
+                    "<?= $block->escapeHtml($scopeId) ?>": {
                         "component": "Magento_Braintree/js/paypal/credit/calculator",
                         "template": "Magento_Braintree/credit/calculator",
                         "displaySummary": false,
                         "displayInterestDetails": true,
-                        "endpoint": "<?php echo $block->escapeUrl($block->getUrl("braintree/paypal/cart")); ?>",
-                        "merchantName": "<?php echo $block->escapeHtmlAttr($block->getMerchantName()); ?>",
+                        "endpoint": "<?= $block->escapeUrl($block->getUrl('braintree/paypal/cart')) ?>",
+                        "merchantName": "<?= $block->escapeJs($block->getMerchantName()) ?>",
                         "instalments": []
                     }
                 }
