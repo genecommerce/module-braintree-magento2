@@ -1,5 +1,5 @@
 /**
- * Braintre Google Pay mini cart payment method integration.
+ * Braintree Google Pay mini cart payment method integration.
  * @author Aidan Threadgold <aidan@gene.co.uk>
  */
 define(

@@ -1,5 +1,5 @@
 /**
- * Braintre Apple Pay payment method integration.
+ * Braintree Apple Pay payment method integration.
  * @author Aidan Threadgold <aidan@gene.co.uk>
  */
 define([

@@ -1,5 +1,5 @@
 /**
- * Braintre Apple Pay button
+ * Braintree Apple Pay button
  * @author Aidan Threadgold <aidan@gene.co.uk>
  */
 define(
@@ -162,7 +162,7 @@ define(
              */
             deviceSupported: function () {
                 if (location.protocol != 'https:') {
-                    console.warn("Braintre Apple Pay: Apple Pay requires your checkout be served over HTTPS");
+                    console.warn("Braintree Apple Pay: Apple Pay requires your checkout be served over HTTPS");
                     return false;
                 }
 

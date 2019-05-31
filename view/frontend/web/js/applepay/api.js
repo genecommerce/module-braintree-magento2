@@ -59,10 +59,9 @@ define(
                 }
 
                 regionName = regionName.toLowerCase().replace(/[^A-Z0-9]/ig, '');
-                if (typeof this.countryDirectory[countryCode] !== 'undefined') {
-                    if (typeof this.countryDirectory[countryCode][regionName] !== 'undefined') {
-                        return this.countryDirectory[countryCode][regionName];
-                    }
+
+                if (typeof this.countryDirectory[countryCode] !== 'undefined' && typeof this.countryDirectory[countryCode][regionName] !== 'undefined') {
+                    return this.countryDirectory[countryCode][regionName];
                 }
 
                 return 0;
@@ -191,7 +190,7 @@ define(
                     // Stop if no shipping methods.
                     if (result.length === 0) {
                         session.abort();
-                        alert($t("There are no shipping methods available for you right now - please try an again or use an alternative payment method."));
+                        alert($t("There are no shipping methods available for you right now. Please try again or use an alternative payment method."));
                         return false;
                     }
 
@@ -259,14 +258,14 @@ define(
                         );
                     }.bind(this)).fail(function (result) {
                         session.abort();
-                        alert($t("We were unable to fetch the cart totals for you. Please try an alternative payment method."));
+                        alert($t("We're unable to fetch the cart totals for you. Please try an alternative payment method."));
                         console.error("Braintree ApplePay: Unable to get totals", result);
                         return false;
                     });
 
                 }.bind(this)).fail(function (result) {
                     session.abort();
-                    alert($t("We were unable to find any shipping methods for you. Please try an alternative payment method."));
+                    alert($t("We're unable to find any shipping methods for you. Please try an alternative payment method."));
                     console.error("Braintree ApplePay: Unable to find shipping methods for estimate-shipping-methods", result);
                     return false;
                 });
@@ -383,7 +382,7 @@ define(
                     }.bind(this)).fail(function (r) {
                         session.completePayment(ApplePaySession.STATUS_FAILURE);
                         session.abort();
-                        alert($t("We were unable to take your payment over Apple Pay - please try an again or use an alternative payment method."));
+                        alert($t("We're unable to take your payment through Apple Pay. Please try an again or use an alternative payment method."));
                         console.error("Braintree ApplePay Unable to take payment", r);
                         return false;
                     });

@@ -1,5 +1,5 @@
 /**
- * Braintre Google Pay button api
+ * Braintree Google Pay button api
  * @author Aidan Threadgold <aidan@gene.co.uk>
  */
 define([
