@@ -160,9 +160,9 @@ class Config implements ConfigInterface
     /**
      * PayPal Sandbox mode
      *
-     * @return string
+     * @return bool
      */
-    public function getSandbox(): string
+    public function getSandbox(): bool
     {
         return $this->getConfigValue('payment/braintree/environment') === 'sandbox';
     }
@@ -207,17 +207,17 @@ class Config implements ConfigInterface
     /**
      * Merchant Country
      *
-     * @return string
+     * @return string|null
      */
-    public function getMerchantCountry(): string
+    public function getMerchantCountry()
     {
         return $this->getConfigValue('paypal/general/merchant_country');
     }
 
     /**
      * Get Display option from stored config
-     * @param string $section
      *
+     * @param string $section
      * @return mixed
      */
     public function getBmlDisplay($section)
@@ -227,8 +227,8 @@ class Config implements ConfigInterface
 
     /**
      * Get Position option from stored config
+	 *
      * @param string $section
-     *
      * @return mixed
      */
     public function getBmlPosition($section)
@@ -238,8 +238,8 @@ class Config implements ConfigInterface
 
     /**
      * Get Size option from stored config
+	 *
      * @param string $section
-     *
      * @return mixed
      */
     public function getBmlSize($section)
