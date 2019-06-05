@@ -140,7 +140,7 @@ class GatewayCommand implements CommandInterface
     private function logExceptions(array $fails)
     {
         foreach ($fails as $failPhrase) {
-            $this->logger->critical((string) $failPhrase);
+            $this->logger->critical($failPhrase->getText());
         }
     }
 }
