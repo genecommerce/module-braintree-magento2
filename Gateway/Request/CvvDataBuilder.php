@@ -4,7 +4,6 @@ namespace Magento\Braintree\Gateway\Request;
 
 use Exception;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Braintree\Gateway\Config\Config;
 use Psr\Log\LoggerInterface;
@@ -16,22 +15,17 @@ use Psr\Log\LoggerInterface;
 class CvvDataBuilder implements BuilderInterface
 {
     /**
-     * @var RequestInterface
+     * @var RequestInterface $request
      */
     private $request;
 
     /**
-     * @var Config
+     * @var Config $config
      */
     private $config;
 
     /**
-     * @var DriverInterface
-     */
-    private $driver;
-
-    /**
-     * @var LoggerInterface
+     * @var LoggerInterface $logger
      */
     private $logger;
 
@@ -39,18 +33,15 @@ class CvvDataBuilder implements BuilderInterface
      * CvvDataBuilder constructor.
      * @param RequestInterface $request
      * @param Config $config
-     * @param DriverInterface $driver
      * @param LoggerInterface $logger
      */
     public function __construct(
         RequestInterface $request,
         Config $config,
-        DriverInterface $driver,
         LoggerInterface $logger
     ) {
         $this->request = $request;
         $this->config = $config;
-        $this->driver = $driver;
         $this->logger = $logger;
     }
 
@@ -64,7 +55,7 @@ class CvvDataBuilder implements BuilderInterface
         }
 
         try {
-            $input = $this->driver->fileGetContents('php://input');
+            $input = file_get_contents('php://input'); // @codingStandardsIgnoreLine
             if ($input) {
                 $input = json_decode($input, true);
                 if (!empty($input['paymentMethod']['additional_data']['cvv'])) {
