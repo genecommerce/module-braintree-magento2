@@ -97,7 +97,8 @@ class ProductPage extends Button
         if ($product) {
             /** @var Product $product */
             if ($product->getTypeId() === Configurable::TYPE_CODE) {
-                return $product->getPriceInfo()->getPrice('regular_price')->getAmount();
+                $price = $product->getPriceInfo()->getPrice('regular_price')->getAmount();
+                return $price->getBaseAmount();
             }
 
             return $product->getPrice();
