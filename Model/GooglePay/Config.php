@@ -60,11 +60,13 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     /**
      * Get allowed payment card types
+     *
      * @return array
      */
     public function getAvailableCardTypes(): array
     {
         $ccTypes = $this->getValue(self::KEY_CC_TYPES);
+
         return !empty($ccTypes) ? explode(',', $ccTypes) : [];
     }
 

@@ -56,11 +56,11 @@ class Auth
     }
 
     /**
-     * @return string|null
+     * @return string
      * @throws InputException
      * @throws NoSuchEntityException
      */
-    public function getClientToken()
+    public function getClientToken(): string
     {
         return $this->configProvider->getClientToken();
     }

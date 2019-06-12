@@ -83,11 +83,11 @@ class ConfigProvider implements ConfigProviderInterface
     /**
      * Generate a new client token if necessary
      *
-     * @return string|null
+     * @return string
      * @throws InputException
      * @throws NoSuchEntityException
      */
-    public function getClientToken()
+    public function getClientToken(): string
     {
         if (empty($this->clientToken)) {
             $params = [];
