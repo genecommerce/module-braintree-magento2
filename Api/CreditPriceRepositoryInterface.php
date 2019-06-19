@@ -14,26 +14,26 @@ use Magento\Framework\DataObject;
 interface CreditPriceRepositoryInterface
 {
     /**
-     * @param CreditPriceDataInterface $entity
-     * @return CreditPriceDataInterface
+     * @param \Magento\Braintree\Api\Data\CreditPriceDataInterface $entity
+     * @return \Magento\Braintree\Api\Data\CreditPriceDataInterface
      */
     public function save(CreditPriceDataInterface $entity): CreditPriceDataInterface;
 
     /**
      * @param int $productId
-     * @return CreditPriceDataInterface
+     * @return \Magento\Braintree\Api\Data\CreditPriceDataInterface
      */
     public function getByProductId($productId);
 
     /**
      * @param $productId
-     * @return Data\CreditPriceDataInterface|DataObject
+     * @return \Magento\Braintree\Api\Data\CreditPriceDataInterface|\Magento\Framework\DataObject
      */
     public function getCheapestByProductId($productId);
 
     /**
      * @param int $productId
-     * @return mixed
+     * @return \Magento\Braintree\Api\Data\CreditPriceDataInterface[]
      */
     public function deleteByProductId($productId);
 }
