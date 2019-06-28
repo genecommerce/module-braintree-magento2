@@ -100,7 +100,7 @@ class ConfigProvider implements ConfigProviderInterface
             $this->clientToken = $this->adapter->generate($params);
         }
 
-        return $this->clientToken;
+        return $this->clientToken ?: '';
     }
 
     /**
