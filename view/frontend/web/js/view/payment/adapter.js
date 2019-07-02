@@ -398,7 +398,11 @@ define([
                     if (typeof this.config.onPaymentMethodError === 'function') {
                         this.config.onPaymentMethodError();
                     }
-                }.bind(this));
+                }.bind(this)).then(function (data) {
+                    if (typeof events.onRender === 'function') {
+                        events.onRender(data);
+                    }
+                });
             }.bind(this));
         },
 

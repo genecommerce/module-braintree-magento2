@@ -291,7 +291,11 @@ define(
                                         ).submit();
                                     });
                             }
-                        }, '#' + this.id);
+                        }, '#' + this.id).then(function (data) {
+                            if (typeof events.onRender === 'function') {
+                                events.onRender(data);
+                            }
+                        });
                     }.bind(this));
                 }.bind(this));
             },
