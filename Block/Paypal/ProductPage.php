@@ -142,14 +142,6 @@ class ProductPage extends Button
     /**
      * @inheritDoc
      */
-    public function getButtonLayout(): string
-    {
-        return $this->config->getButtonLayout(Config::BUTTON_AREA_PDP);
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getButtonSize(): string
     {
         return $this->config->getButtonSize(Config::BUTTON_AREA_PDP);

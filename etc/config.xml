@@ -78,17 +78,14 @@
                 <!-- These are also defined in Gateway/Config/PayPal/Config.php::getButtonStyle() -->
                 <button_customise_cart>0</button_customise_cart>
                 <button_color_cart>2</button_color_cart>
-                <button_layout_cart>1</button_layout_cart>
                 <button_size_cart>2</button_size_cart>
                 <button_shape_cart>1</button_shape_cart>
                 <button_customise_checkout>0</button_customise_checkout>
                 <button_color_checkout>2</button_color_checkout>
-                <button_layout_checkout>1</button_layout_checkout>
                 <button_size_checkout>2</button_size_checkout>
                 <button_shape_checkout>1</button_shape_checkout>
                 <button_customise_productpage>0</button_customise_productpage>
                 <button_color_productpage>2</button_color_productpage>
-                <button_layout_productpage>0</button_layout_productpage>
                 <button_size_productpage>2</button_size_productpage>
                 <button_shape_productpage>1</button_shape_productpage>
             </braintree_paypal>

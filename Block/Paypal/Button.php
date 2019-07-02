@@ -203,14 +203,6 @@ class Button extends Template implements ShortcutInterface
     /**
      * @return string
      */
-    public function getButtonLayout(): string
-    {
-        return $this->config->getButtonLayout(Config::BUTTON_AREA_CART);
-    }
-
-    /**
-     * @return string
-     */
     public function getButtonSize(): string
     {
         return $this->config->getButtonSize(Config::BUTTON_AREA_CART);

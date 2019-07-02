@@ -323,14 +323,6 @@
                                     <field id="button_customise_cart">1</field>
                                 </depends>
                             </field>
-                            <field id="button_layout_cart" translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="0">
-                                <label>Layout</label>
-                                <source_model>Magento\Braintree\Model\Config\Source\Layout</source_model>
-                                <config_path>payment/braintree_paypal/button_layout_cart</config_path>
-                                <depends>
-                                    <field id="button_customise_cart">1</field>
-                                </depends>
-                            </field>
                             <field id="button_color_cart" translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="0">
                                 <label>Color</label>
                                 <source_model>Magento\Braintree\Model\Config\Source\Color</source_model>
@@ -367,14 +359,6 @@
                                 <label>Size</label>
                                 <source_model>Magento\Braintree\Model\Config\Source\Size</source_model>
                                 <config_path>payment/braintree_paypal/button_size_checkout</config_path>
-                                <depends>
-                                    <field id="button_customise_checkout">1</field>
-                                </depends>
-                            </field>
-                            <field id="button_layout_checkout" translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="0">
-                                <label>Layout</label>
-                                <source_model>Magento\Braintree\Model\Config\Source\Layout</source_model>
-                                <config_path>payment/braintree_paypal/button_layout_checkout</config_path>
                                 <depends>
                                     <field id="button_customise_checkout">1</field>
                                 </depends>
@@ -420,14 +404,6 @@
                                 <label>Size</label>
                                 <source_model>Magento\Braintree\Model\Config\Source\Size</source_model>
                                 <config_path>payment/braintree_paypal/button_size_productpage</config_path>
-                                <depends>
-                                    <field id="button_customise_productpage">1</field>
-                                </depends>
-                            </field>
-                            <field id="button_layout_productpage" translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="0">
-                                <label>Layout</label>
-                                <source_model>Magento\Braintree\Model\Config\Source\Layout</source_model>
-                                <config_path>payment/braintree_paypal/button_layout_productpage</config_path>
                                 <depends>
                                     <field id="button_customise_productpage">1</field>
                                 </depends>

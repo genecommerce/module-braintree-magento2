@@ -6,7 +6,6 @@
 namespace Magento\Braintree\Gateway\Config\PayPal;
 
 use Magento\Braintree\Model\Config\Source\Color;
-use Magento\Braintree\Model\Config\Source\Layout;
 use Magento\Braintree\Model\Config\Source\Shape;
 use Magento\Braintree\Model\Config\Source\Size;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -33,7 +32,6 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const KEY_BUTTON_COLOR = 'color';
     const KEY_BUTTON_SHAPE = 'shape';
     const KEY_BUTTON_SIZE = 'size';
-    const KEY_BUTTON_LAYOUT = 'layout';
 
     /**
      * @var CcConfig
@@ -61,18 +59,12 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     private $shapeConfigSource;
 
     /**
-     * @var Layout
-     */
-    private $layoutConfigSource;
-
-    /**
      * Config constructor.
      * @param ScopeConfigInterface $scopeConfig
      * @param CcConfig $ccConfig
      * @param Size $sizeConfigSource
      * @param Color $colorConfigSource
      * @param Shape $shapeConfigSource
-     * @param Layout $layoutConfigSource
      * @param null $methodCode
      * @param string $pathPattern
      */
@@ -82,7 +74,6 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         Size $sizeConfigSource,
         Color $colorConfigSource,
         Shape $shapeConfigSource,
-        Layout $layoutConfigSource,
         $methodCode = null,
         $pathPattern = self::DEFAULT_PATH_PATTERN
     ) {
@@ -91,7 +82,6 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         $this->sizeConfigSource = $sizeConfigSource;
         $this->colorConfigSource = $colorConfigSource;
         $this->shapeConfigSource = $shapeConfigSource;
-        $this->layoutConfigSource = $layoutConfigSource;
     }
 
     /**
@@ -177,15 +167,12 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         } else {
             $defaults = [
                 'button_color_cart' => 2,
-                'button_layout_cart' => 1,
                 'button_size_cart' => 2,
                 'button_shape_cart' => 1,
                 'button_color_checkout' => 2,
-                'button_layout_checkout' => 1,
                 'button_size_checkout' => 2,
                 'button_shape_checkout' => 1,
                 'button_color_productpage' => 2,
-                'button_layout_productpage' => 0,
                 'button_size_productpage' => 2,
                 'button_shape_productpage' => 1
             ];
@@ -231,18 +218,6 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     {
         $value = $this->getButtonStyle($area, self::KEY_BUTTON_SIZE);
         $options = $this->sizeConfigSource->toRawValues();
-        return $options[$value];
-    }
-
-    /**
-     * Get button layout mapped to the value expected by the PayPal API
-     * @param string $area
-     * @return string
-     */
-    public function getButtonLayout($area = self::BUTTON_AREA_CART)
-    {
-        $value = $this->getButtonStyle($area, self::KEY_BUTTON_LAYOUT);
-        $options = $this->layoutConfigSource->toRawValues();
         return $options[$value];
     }
 

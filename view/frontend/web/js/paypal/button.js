@@ -73,11 +73,6 @@ define(
                 size: null,
 
                 /**
-                 * {String}
-                 */
-                layout: null,
-
-                /**
                  * {Bool}
                  */
                 fundingicons: null,
@@ -180,7 +175,6 @@ define(
                         let style = {
                             color: this.color,
                             shape: this.shape,
-                            // layout: this.layout,
                             size: this.size
                         };
 

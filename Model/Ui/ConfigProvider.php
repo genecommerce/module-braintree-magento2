@@ -112,7 +112,6 @@ class ConfigProvider implements ConfigProviderInterface
                     'style' => [
                         'shape' => $this->paypalConfig->getButtonShape(PayPalConfig::BUTTON_AREA_CHECKOUT),
                         'size' => $this->paypalConfig->getButtonSize(PayPalConfig::BUTTON_AREA_CHECKOUT),
-                        'layout' => $this->paypalConfig->getButtonLayout(PayPalConfig::BUTTON_AREA_CHECKOUT),
                         'color' => $this->paypalConfig->getButtonColor(PayPalConfig::BUTTON_AREA_CHECKOUT)
                     ],
                     'disabledFunding' => [

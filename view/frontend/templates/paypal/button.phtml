@@ -31,7 +31,6 @@ $config = [
         'fundingicons' => $block->getDisabledFunding(),
         'shape' => $block->getButtonShape(),
         'size' => $block->getButtonSize(),
-        'layout' => $block->getButtonLayout(),
         'color' => $block->getButtonColor(),
         'disabledFunding' => $block->getDisabledFunding()
     ]
@@ -48,7 +47,6 @@ if ($block->isCreditActive()) {
             'offerCredit' => true,
             'shape' => $block->getButtonShape(),
             'size' => $block->getButtonSize(),
-            'layout' => $block->getButtonLayout(),
             'color' => 'darkblue'
         ]
     ];

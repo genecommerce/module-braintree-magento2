@@ -74,7 +74,6 @@ class ConfigProvider implements ConfigProviderInterface
                     'style' => [
                         'shape' => $this->config->getButtonShape(Config::BUTTON_AREA_CHECKOUT),
                         'size' => $this->config->getButtonSize(Config::BUTTON_AREA_CHECKOUT),
-                        'layout' => $this->config->getButtonLayout(Config::BUTTON_AREA_CHECKOUT),
                         'color' => $this->config->getButtonColor(Config::BUTTON_AREA_CHECKOUT)
                     ]
                 ],
@@ -92,7 +91,6 @@ class ConfigProvider implements ConfigProviderInterface
                     'style' => [
                         'shape' => $this->config->getButtonShape(Config::BUTTON_AREA_CHECKOUT),
                         'size' => $this->config->getButtonSize(Config::BUTTON_AREA_CHECKOUT),
-                        'layout' => $this->config->getButtonLayout(Config::BUTTON_AREA_CHECKOUT),
                         'color' => $this->config->getButtonColor(Config::BUTTON_AREA_CHECKOUT)
                     ]
                 ]
