@@ -8,14 +8,14 @@ use Magento\Braintree\Block\Paypal\Button;
 
 /** @var Button $block */
 try {
-    $paypalId = sprintf('paypal-%s-%d', $block->getContainerId(), random_int(PHP_INT_MIN, PHP_INT_MAX));
+    $paypalId = sprintf('%s-%d', $block->getContainerId(), random_int(PHP_INT_MIN, PHP_INT_MAX));
     $paypalCreditId = sprintf('paypalcredit-%s-%d', $block->getContainerId(), random_int(PHP_INT_MIN, PHP_INT_MAX));
 } catch (Exception $e) {
     /**
      * Exception only thrown if an appropriate source of randomness cannot be found.
      * https://www.php.net/manual/en/function.random-int.php
      */
-    $paypalId = sprintf('paypal-%s', $block->getContainerId());
+    $paypalId = sprintf('%s', $block->getContainerId());
     $paypalCreditId = sprintf('paypalcredit-%s', $block->getContainerId());
 }
 
