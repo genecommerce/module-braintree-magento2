@@ -186,7 +186,7 @@ define(
                     // stop loader when frame will be loaded
                     if ($('#braintree-hosted-field-number').length) {
                         clearInterval(intervalId);
-                        fullScreenLoader.stopLoader();
+                        fullScreenLoader.stopLoader(true);
                     }
                 }, 500);
 
