@@ -295,7 +295,7 @@ define([
         getShippingAddress: function () {
             var address = quote.shippingAddress();
 
-            if (address.postcode === null || typeof address.postcode === 'undefined') {
+            if (typeof address.postcode === 'undefined' || address.postcode === '*') {
                 return {};
             }
 
