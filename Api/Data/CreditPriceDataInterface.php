@@ -24,7 +24,7 @@ interface CreditPriceDataInterface
 
     /**
      * @param int $value
-     * @return CreditPriceDataInterface
+     * @return self
      */
     public function setId($value): CreditPriceDataInterface;
 
@@ -35,7 +35,7 @@ interface CreditPriceDataInterface
 
     /**
      * @param int $value
-     * @return CreditPriceDataInterface
+     * @return self
      */
     public function setProductId($value): CreditPriceDataInterface;
 
@@ -46,7 +46,7 @@ interface CreditPriceDataInterface
 
     /**
      * @param int $value
-     * @return CreditPriceDataInterface
+     * @return self
      */
     public function setTerm($value): CreditPriceDataInterface;
 
@@ -57,7 +57,7 @@ interface CreditPriceDataInterface
 
     /**
      * @param float $value
-     * @return CreditPriceDataInterface
+     * @return self
      */
     public function setMonthlyPayment($value): CreditPriceDataInterface;
 
@@ -68,7 +68,7 @@ interface CreditPriceDataInterface
 
     /**
      * @param float $value
-     * @return CreditPriceDataInterface
+     * @return self
      */
     public function setInstalmentRate($value): CreditPriceDataInterface;
 
@@ -79,7 +79,7 @@ interface CreditPriceDataInterface
 
     /**
      * @param float $value
-     * @return CreditPriceDataInterface
+     * @return self
      */
     public function setCostOfPurchase($value): CreditPriceDataInterface;
 
@@ -90,7 +90,7 @@ interface CreditPriceDataInterface
 
     /**
      * @param float $value
-     * @return CreditPriceDataInterface
+     * @return self
      */
     public function setTotalIncInterest($value): CreditPriceDataInterface;
 }

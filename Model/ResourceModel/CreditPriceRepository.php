@@ -68,6 +68,7 @@ class CreditPriceRepository implements CreditPriceRepositoryInterface
      */
     public function deleteByProductId($productId)
     {
+        /** @var CreditPrice\Collection $collection */
         $collection = $this->collectionFactory->create();
         $collection->addFieldToFilter('product_id', $productId);
         return $collection->walk('delete');

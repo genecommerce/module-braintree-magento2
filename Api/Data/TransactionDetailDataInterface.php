@@ -30,19 +30,19 @@ interface TransactionDetailDataInterface
 
     /**
      * @param $id
-     * @return object
+     * @return self
      */
     public function setId($id);
 
     /**
      * @param int $orderId
-     * @return object
+     * @return self
      */
     public function setOrderId($orderId);
 
     /**
      * @param string $transactionSource
-     * @return object
+     * @return self
      */
     public function setTransactionSource($transactionSource);
 }
