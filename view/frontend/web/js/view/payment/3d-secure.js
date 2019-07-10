@@ -63,6 +63,7 @@ define([
 
             var setup3d = function(clientInstance) {
                 threeDSecure.create({
+                    version: 2,
                     client: clientInstance
                 }, function (threeDSecureErr, threeDSecureInstance) {
                     if (threeDSecureErr) {
@@ -87,26 +88,32 @@ define([
                     threeDSecureInstance.verifyCard({
                         amount: totalAmount,
                         nonce: context.paymentMethodNonce,
-                        addFrame: function (err, iframe) {
-                            fullScreenLoader.stopLoader();
-
-                            if (err) {
-                                console.log("Unable to verify card over 3D Secure", err);
-                                return state.reject($t('Please try again with another form of payment.'));
-                            }
-
-                            tdbody.appendChild(iframe);
-                            document.body.appendChild(threeDSContainer);
+                        billingAddress: {
+                            givenName: billingAddress.firstname,
+                            surname: billingAddress.lastname,
+                            phoneNumber: billingAddress.telephone,
+                            streetAddress: billingAddress.street[0],
+                            extendedAddress: billingAddress.street[1],
+                            locality: billingAddress.city,
+                            region: billingAddress.region,
+                            postalCode: billingAddress.postcode,
+                            countryCodeAlpha2: billingAddress.countryId
                         },
-                        removeFrame: function () {
-                            fullScreenLoader.startLoader();
-                            document.body.removeChild(threeDSContainer);
+                        onLookupComplete: function (data, next) {
+                            console.log(data);
+                            if (data.paymentMethod.threeDSecureInfo.enrolled === 'Y'
+                                || data.threeDSecureInfo.liabilityShifted
+                                || (!data.threeDSecureInfo.liabilityShifted && !data.threeDSecureInfo.liabilityShiftPossible)) {
+                                next();
+                            } else {
+                                state.reject($t('Please try again with another form of payment.'));
+                            }
                         }
                     }, function (err, response) {
                         fullScreenLoader.stopLoader();
 
                         if (err) {
-                            console.log("3dsecure validation failed", err);
+                            console.error("3dsecure validation failed", err);
                             return state.reject($t('Please try again with another form of payment.'));
                         }
 
