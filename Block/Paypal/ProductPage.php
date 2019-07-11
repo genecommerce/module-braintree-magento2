@@ -13,6 +13,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\GroupedProduct\Model\Product\Type\Grouped;
 use Magento\Payment\Model\MethodInterface;
 
 /**
@@ -92,13 +93,16 @@ class ProductPage extends Button
      */
     public function getAmount(): float
     {
+        /** @var Product $product */
         $product = $this->registry->registry('product');
-
         if ($product) {
-            /** @var Product $product */
             if ($product->getTypeId() === Configurable::TYPE_CODE) {
                 $price = $product->getPriceInfo()->getPrice('regular_price')->getAmount();
                 return $price->getBaseAmount();
+            }
+            if ($product->getTypeId() === Grouped::TYPE_CODE) {
+                $groupedProducts = $product->getTypeInstance()->getAssociatedProducts($product);
+                return $groupedProducts[0]->getPrice();
             }
 
             return $product->getPrice();

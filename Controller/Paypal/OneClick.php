@@ -119,8 +119,7 @@ class OneClick extends Review
         }
 
         if (!empty($requestData['additionalData'])) {
-            // parse_str($requestData['additionalData'], $requestData['additionalData']); // @codingStandardsIgnoreLine
-            $requestData['additionalData'] = parse_query($requestData['additionalData']);
+            parse_str($requestData['additionalData'], $requestData['additionalData']); /* @codingStandardsIgnoreLine */
         }
 
         if (!empty($requestData['additionalData']['form_key'])) {
