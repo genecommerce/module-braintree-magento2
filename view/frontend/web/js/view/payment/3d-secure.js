@@ -108,6 +108,21 @@ define([
                             } else {
                                 state.reject($t('Please try again with another form of payment.'));
                             }
+                        },
+                        addFrame: function (err, iframe) {
+                            fullScreenLoader.stopLoader();
+
+                            if (err) {
+                                console.log("Unable to verify card over 3D Secure", err);
+                                return state.reject($t('Please try again with another form of payment.'));
+                            }
+
+                            tdbody.appendChild(iframe);
+                            document.body.appendChild(threeDSContainer);
+                        },
+                        removeFrame: function () {
+                            fullScreenLoader.startLoader();
+                            document.body.removeChild(threeDSContainer);
                         }
                     }, function (err, response) {
                         fullScreenLoader.stopLoader();
