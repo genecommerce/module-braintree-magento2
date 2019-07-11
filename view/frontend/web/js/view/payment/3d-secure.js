@@ -100,14 +100,7 @@ define([
                             countryCodeAlpha2: billingAddress.countryId
                         },
                         onLookupComplete: function (data, next) {
-                            console.log(data);
-                            if (data.paymentMethod.threeDSecureInfo.enrolled === 'Y'
-                                || data.threeDSecureInfo.liabilityShifted
-                                || (!data.threeDSecureInfo.liabilityShifted && !data.threeDSecureInfo.liabilityShiftPossible)) {
-                                next();
-                            } else {
-                                state.reject($t('Please try again with another form of payment.'));
-                            }
+                            next();
                         },
                         addFrame: function (err, iframe) {
                             fullScreenLoader.stopLoader();
