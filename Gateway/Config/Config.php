@@ -72,8 +72,8 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         $pathPattern = self::DEFAULT_PATH_PATTERN,
         Json $serializer = null
     ) {
-        $this->storeConfigResolver = $storeConfigResolver;
         parent::__construct($scopeConfig, $methodCode, $pathPattern);
+        $this->storeConfigResolver = $storeConfigResolver;
         $this->serializer = $serializer ?: ObjectManager::getInstance()
             ->get(Json::class);
     }

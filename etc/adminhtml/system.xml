@@ -620,6 +620,7 @@
                         <field id="name" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Name</label>
                             <config_path>payment/braintree/descriptor_name</config_path>
+                            <validate>validate-length maximum-length-22</validate>
                             <comment>
                                 The value in the business name field of a customer's statement. Company name/DBA section must be either 3, 7 or 12 characters
                                 and the product descriptor can be up to 18, 14, or 9 characters respectively (with an * in between for a total descriptor name of 22 characters).
@@ -628,6 +629,7 @@
                         <field id="phone" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Phone</label>
                             <config_path>payment/braintree/descriptor_phone</config_path>
+                            <validate>validate-length minimum-length-10 maximum-length-14</validate>
                             <comment>
                                 The value in the phone number field of a customer's statement. Phone must be 10-14 characters and can only contain numbers, dashes, parentheses and periods.
                             </comment>
@@ -635,6 +637,7 @@
                         <field id="url" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>URL</label>
                             <config_path>payment/braintree/descriptor_url</config_path>
+                            <validate>validate-length maximum-length-13</validate>
                             <comment>
                                 The value in the URL/web address field of a customer's statement. The URL must be 13 characters or shorter.
                             </comment>
