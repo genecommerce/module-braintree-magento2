@@ -113,8 +113,7 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
                             'style' => [
                                 'shape' => null,
                                 'size' => null,
-                                'layout' => null,
-                                'color' => null,
+                                'color' => null
                             ]
                         ],
 
@@ -133,8 +132,7 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
                             'style' => [
                                 'shape' => null,
                                 'size' => null,
-                                'layout' => null,
-                                'color' => null,
+                                'color' => null
                             ]
                         ]
                     ]

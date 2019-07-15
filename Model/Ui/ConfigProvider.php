@@ -25,11 +25,6 @@ class ConfigProvider implements ConfigProviderInterface
 {
     const CODE = 'braintree';
 
-    /**
-     * @deprecated
-     */
-    const PAYPAL_CODE = 'braintree_paypal';
-
     const CC_VAULT_CODE = 'braintree_cc_vault';
 
     /**
@@ -100,7 +95,6 @@ class ConfigProvider implements ConfigProviderInterface
                     'isActive' => $this->config->isActive(),
                     'clientToken' => $this->getClientToken(),
                     'ccTypesMapper' => $this->config->getCcTypesMapper(),
-                    'sdkUrl' => $this->config->getSdkUrl(),
                     'countrySpecificCardTypes' => $this->config->getCountrySpecificCardTypeConfig(),
                     'availableCardTypes' => $this->config->getAvailableCardTypes(),
                     'useCvv' => $this->config->isCvvEnabled(),

@@ -8,6 +8,7 @@ namespace Magento\Braintree\Test\Unit\Model\Ui;
 use Magento\Braintree\Gateway\Config\Config;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Braintree\Model\Ui\ConfigProvider;
+use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\Braintree\Gateway\Config\PayPal\Config as PayPalConfig;
 use Magento\Payment\Model\CcConfig;
@@ -18,7 +19,7 @@ use Magento\Framework\View\Asset\Source;
  *
  * Test for class \Magento\Braintree\Model\Ui\ConfigProvider
  */
-class ConfigProviderTest extends \PHPUnit\Framework\TestCase
+class ConfigProviderTest extends TestCase
 {
     const SDK_URL = 'https://js.braintreegateway.com/v2/braintree.js';
     const CLIENT_TOKEN = 'token';
@@ -148,7 +149,7 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
                     'getEnvironment' => 'test-environment',
                     'getKountMerchantId' => 'test-kount-merchant-id',
                     'getMerchantId' => 'test-merchant-id',
-                    'hasFraudProtection' => true,
+                    'hasFraudProtection' => true
                 ],
                 'expected' => [
                     'payment' => [
@@ -171,12 +172,11 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
                             'style' => [
                                 'shape' => null,
                                 'size' => null,
-                                'layout' => null,
-                                'color' => null,
+                                'color' => null
                             ],
                             'disabledFunding' => [
                                 'card' => null,
-                                'elv' => null,
+                                'elv' => null
                             ],
                             'icons' => []
                         ],
