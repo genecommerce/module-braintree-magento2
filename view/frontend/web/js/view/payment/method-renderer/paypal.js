@@ -237,6 +237,7 @@ define([
                 Braintree.setPayPalInstance(null);
             } else {
                 Braintree.setup();
+                this.enableButton();
             }
         },
 
@@ -392,7 +393,7 @@ define([
          */
         enableButton: function () {
             $('[data-button="place"]').removeAttr('disabled');
-            fullScreenLoader.stopLoader();
+            fullScreenLoader.stopLoader(true);
         },
 
         /**
