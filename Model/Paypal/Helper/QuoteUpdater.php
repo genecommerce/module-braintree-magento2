@@ -6,15 +6,15 @@
 namespace Magento\Braintree\Model\Paypal\Helper;
 
 use InvalidArgumentException;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Quote\Model\Quote;
-use Magento\Quote\Model\Quote\Address;
-use Magento\Quote\Model\Quote\Payment;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Braintree\Model\Ui\PayPal\ConfigProvider;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Braintree\Observer\DataAssignObserver;
 use Magento\Braintree\Gateway\Config\PayPal\Config;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Quote\Model\Quote\Address;
 
 /**
  * Class QuoteUpdater
@@ -32,14 +32,14 @@ class QuoteUpdater extends AbstractHelper
     private $quoteRepository;
 
     /**
-     * @var \Magento\Quote\Model\ResourceModel\Quote\Address
-     */
-    private $addressFactory;
-
-    /**
      * @var ManagerInterface
      */
     private $eventManager;
+
+    /**
+     * @var ResourceConnection
+     */
+    private $resource;
 
     /**
      * Constructor
@@ -47,18 +47,18 @@ class QuoteUpdater extends AbstractHelper
      * @param Config $config
      * @param CartRepositoryInterface $quoteRepository
      * @param ManagerInterface $eventManager
-     * @param \Magento\Quote\Model\ResourceModel\Quote\Address $addressFactory
+     * @param ResourceConnection $resource
      */
     public function __construct(
         Config $config,
         CartRepositoryInterface $quoteRepository,
         ManagerInterface $eventManager,
-        \Magento\Quote\Model\ResourceModel\Quote\Address $addressFactory
+        ResourceConnection $resource
     ) {
         $this->config = $config;
         $this->quoteRepository = $quoteRepository;
         $this->eventManager = $eventManager;
-        $this->addressFactory = $addressFactory;
+        $this->resource = $resource;
     }
 
     /**
@@ -127,8 +127,9 @@ class QuoteUpdater extends AbstractHelper
      */
     private function cleanUpAddress(Quote $quote)
     {
-        $tableName = $this->addressFactory->getConnection()->getTableName('quote_address');
-        $this->addressFactory->getConnection()->delete(
+        $connection = $this->resource->getConnection();
+        $tableName = $this->resource->getTableName('quote_address');
+        $connection->delete(
             $tableName,
             'quote_id = ' . (int) $quote->getId() . ' AND email IS NULL'
         );
