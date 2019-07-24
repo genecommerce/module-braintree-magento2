@@ -219,6 +219,7 @@
                         <field id="merchant_id" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Merchant ID</label>
                             <config_path>payment/braintree_googlepay/merchant_id</config_path>
+                            <validate>required-entry</validate>
                             <comment>
                                 <![CDATA[Your MerchantID, provided by Google.]]>
                             </comment>

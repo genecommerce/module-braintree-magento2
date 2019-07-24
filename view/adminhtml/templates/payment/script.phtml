@@ -18,7 +18,7 @@ $code = $block->escapeHtml($block->getCode());
             'jquery',
             'domReady!'
         ], function(Braintree, $) {
-            let config = <?= /* @noEscape */ $block->getPaymentConfig() ?>,
+            let config = <?= $block->escapeJs($block->getPaymentConfig()) ?>,
                 payment,
                 form = $('#payment_form_<?= $block->escapeJs($code) ?>');
 
