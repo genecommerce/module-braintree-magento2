@@ -14,6 +14,7 @@ use Magento\Braintree\Model\StoreConfigResolver;
 
 /**
  * Class Config
+ * @package Magento\Braintree\Gateway\Config
  */
 class Config extends \Magento\Payment\Gateway\Config\Config
 {
