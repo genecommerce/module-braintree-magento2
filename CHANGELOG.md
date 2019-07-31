@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Handling of exceptions in GatewayCommand class that would show "blank" errors on checkout
 - Broken CSS selector
 - Giftcards not working with PayPal
+- Reverted a change introduced in 3.1.2 where card details were only stored in the database if 
+the Vault config option was enabled. This is because partial invoicing, refunds etc need the stored card data. However,
+a bug in core Magento 2.3.1 means that if the Vault is turned off, cards are always shown in customer accounts
 
 ### Removed
 - Layout options for PayPal buttons, due to the buttons now being rendered separately
