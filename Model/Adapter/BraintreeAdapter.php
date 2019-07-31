@@ -124,14 +124,14 @@ class BraintreeAdapter
 
     /**
      * @param array $params
-     * @return Successful|Error|string|null
+     * @return string
      */
     public function generate(array $params = [])
     {
         try {
             return ClientToken::generate($params);
         } catch (Exception $e) {
-            return null;
+            return '';
         }
     }
 
@@ -215,10 +215,6 @@ class BraintreeAdapter
         return Transaction::cloneTransaction($transactionId, $attributes);
     }
 
-    /**
-     * @param $token
-     * @return mixed
-     */
     /**
      * @param $token
      * @return mixed

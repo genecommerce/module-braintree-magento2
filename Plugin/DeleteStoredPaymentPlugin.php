@@ -57,13 +57,13 @@ class DeleteStoredPaymentPlugin
      */
     public function beforeDelete(PaymentTokenRepositoryInterface $subject, PaymentTokenInterface $paymentToken)
     {
-        $token = $paymentToken->getGatewayToken();
-
-        if ($this->braintreeAdapter->deletePaymentMethod($token)) {
-            $this->logger->debug('vault payment deleted ' . $token);
-            return null;
+        try {
+            $token = $paymentToken->getGatewayToken();
+            $this->braintreeAdapter->deletePaymentMethod($token);
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
         }
 
-        return false;
+        return null;
     }
 }

@@ -63,6 +63,7 @@ define([
 
             var setup3d = function(clientInstance) {
                 threeDSecure.create({
+                    version: 2,
                     client: clientInstance
                 }, function (threeDSecureErr, threeDSecureInstance) {
                     if (threeDSecureErr) {
@@ -87,6 +88,20 @@ define([
                     threeDSecureInstance.verifyCard({
                         amount: totalAmount,
                         nonce: context.paymentMethodNonce,
+                        billingAddress: {
+                            givenName: billingAddress.firstname,
+                            surname: billingAddress.lastname,
+                            phoneNumber: billingAddress.telephone,
+                            streetAddress: billingAddress.street[0],
+                            extendedAddress: billingAddress.street[1],
+                            locality: billingAddress.city,
+                            region: billingAddress.region,
+                            postalCode: billingAddress.postcode,
+                            countryCodeAlpha2: billingAddress.countryId
+                        },
+                        onLookupComplete: function (data, next) {
+                            next();
+                        },
                         addFrame: function (err, iframe) {
                             fullScreenLoader.stopLoader();
 
@@ -106,7 +121,7 @@ define([
                         fullScreenLoader.stopLoader();
 
                         if (err) {
-                            console.log("3dsecure validation failed", err);
+                            console.error("3dsecure validation failed", err);
                             return state.reject($t('Please try again with another form of payment.'));
                         }
 

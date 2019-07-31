@@ -14,6 +14,7 @@ use Magento\Braintree\Model\StoreConfigResolver;
 
 /**
  * Class Config
+ * @package Magento\Braintree\Gateway\Config
  */
 class Config extends \Magento\Payment\Gateway\Config\Config
 {
@@ -26,7 +27,6 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const KEY_COUNTRY_CREDIT_CARD = 'countrycreditcard';
     const KEY_CC_TYPES = 'cctypes';
     const KEY_CC_TYPES_BRAINTREE_MAPPER = 'cctypes_braintree_mapper';
-    const KEY_SDK_URL = 'sdk_url';
     const KEY_USE_CVV = 'useccv';
     const KEY_USE_CVV_VAULT = 'useccv_vault';
     const KEY_VERIFY_3DSECURE = 'verify_3dsecure';
@@ -72,8 +72,8 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         $pathPattern = self::DEFAULT_PATH_PATTERN,
         Json $serializer = null
     ) {
-        $this->storeConfigResolver = $storeConfigResolver;
         parent::__construct($scopeConfig, $methodCode, $pathPattern);
+        $this->storeConfigResolver = $storeConfigResolver;
         $this->serializer = $serializer ?: ObjectManager::getInstance()
             ->get(Json::class);
     }
@@ -271,21 +271,6 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     {
         return $this->getValue(
             self::KEY_MERCHANT_ID,
-            $this->storeConfigResolver->getStoreId()
-        );
-    }
-
-    /**
-     * Get Sdk Url
-     *
-     * @return string
-     * @throws InputException
-     * @throws NoSuchEntityException
-     */
-    public function getSdkUrl(): string
-    {
-        return $this->getValue(
-            self::KEY_SDK_URL,
             $this->storeConfigResolver->getStoreId()
         );
     }

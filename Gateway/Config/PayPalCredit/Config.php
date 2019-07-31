@@ -9,6 +9,7 @@ use \Magento\Paypal\Model\Config as PPConfig;
 
 /**
  * Class Config
+ * @package Magento\Braintree\Gateway\Config\PayPalCredit
  */
 class Config implements ConfigInterface
 {
@@ -18,7 +19,6 @@ class Config implements ConfigInterface
     const KEY_CLIENT_ID = 'client_id';
     const KEY_SECRET = 'secret';
     const KEY_SANDBOX = 'sandbox';
-
     const DEFAULT_PATH_PATTERN = 'payment/%s/%s';
 
     /**
@@ -83,7 +83,7 @@ class Config implements ConfigInterface
      */
     public function getValue($field, $storeId = null)
     {
-        if ($this->methodCode === null || $this->pathPattern === null) {
+        if (null === $this->methodCode || null === $this->pathPattern) {
             return null;
         }
 
@@ -164,7 +164,7 @@ class Config implements ConfigInterface
      */
     public function getSandbox(): bool
     {
-        return $this->getConfigValue('payment/braintree/environment') === 'sandbox';
+        return 'sandbox' === $this->getConfigValue('payment/braintree/environment');
     }
 
     /**
@@ -192,7 +192,7 @@ class Config implements ConfigInterface
      */
     public function isUk(): bool
     {
-        return $this->getMerchantCountry() === 'GB';
+        return 'GB' === $this->getMerchantCountry();
     }
 
     /**
@@ -201,7 +201,7 @@ class Config implements ConfigInterface
      */
     public function isUS(): bool
     {
-        return $this->getMerchantCountry() === 'US';
+        return 'US' === $this->getMerchantCountry();
     }
 
     /**
@@ -227,7 +227,7 @@ class Config implements ConfigInterface
 
     /**
      * Get Position option from stored config
-	 *
+     *
      * @param string $section
      * @return mixed
      */
@@ -238,7 +238,7 @@ class Config implements ConfigInterface
 
     /**
      * Get Size option from stored config
-	 *
+     *
      * @param string $section
      * @return mixed
      */

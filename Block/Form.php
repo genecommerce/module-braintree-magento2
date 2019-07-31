@@ -177,7 +177,7 @@ class Form extends Cc
      */
     private function getPaymentDataHelper(): Data
     {
-        if ($this->paymentDataHelper === null) {
+        if (null === $this->paymentDataHelper) {
             $this->paymentDataHelper = ObjectManager::getInstance()->get(Data::class);
         }
 
