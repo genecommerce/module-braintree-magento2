@@ -263,9 +263,6 @@ define([
                 amount: parseFloat(this.grandTotalAmount).toFixed(2),
                 currency: totals['base_currency_code'],
                 locale: this.getLocale(),
-                enableShippingAddress: true,
-                shippingAddressEditable: false,
-                shippingAddressOverride: this.getShippingAddress(),
 
                 /**
                  * Triggers on any Braintree error
@@ -282,6 +279,12 @@ define([
                 }
             };
 
+            if (!quote.isVirtual()) {
+                config.paypal.enableShippingAddress = true;
+                config.paypal.shippingAddressEditable = false;
+                config.paypal.shippingAddressOverride = this.getShippingAddress();
+            }
+
             if (this.getMerchantName()) {
                 config.paypal.displayName = this.getMerchantName();
             }
@@ -295,10 +298,6 @@ define([
          */
         getShippingAddress: function () {
             var address = quote.shippingAddress();
-
-            if (typeof address.postcode === 'undefined' || address.postcode === '*') {
-                return {};
-            }
 
             return {
                 recipientName: address.firstname + ' ' + address.lastname,
