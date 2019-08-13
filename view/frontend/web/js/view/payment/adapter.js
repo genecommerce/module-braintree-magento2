@@ -309,7 +309,9 @@ define([
                     },
                     funding = {
                         allowed: [],
-                        disallowed: []
+                        disallowed: [
+                            paypal.FUNDING.VENMO
+                        ]
                     };
 
                 if (this.getLabel()) {
