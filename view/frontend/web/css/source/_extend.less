@@ -1,3 +1,10 @@
+// Colour Variables for branding
+@venmo-blue: #3d95ce;
+@venmo-lightest-grey: #dce0e6;
+@venmo-light-grey: #bcc2cc;
+@venmo-dark-grey: #73777d;
+@venmo-darkest-grey: #343538;
+
 /**
  * 3D Secure Container
  */
@@ -249,4 +256,11 @@
 
 .braintree-paypal-logo.oneclick-container {
     width: 100%;
+}
+
+// Venmo
+.braintree-venmo-button {
+    background-color: @venmo-blue;
+    background-image: url('@{baseDir}Magento_Braintree/images/venmo_logo_white.png');
+    min-width: 48px;
 }

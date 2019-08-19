@@ -153,6 +153,12 @@
                 <cctypes>VISA,MASTERCARD,AMEX</cctypes>
                 <merchant_id>testmode</merchant_id>
             </braintree_googlepay>
+            <braintree_venmo>
+                <model>Magento\Braintree\Model\Venmo</model>
+                <active>1</active>
+                <title>Venmo</title>
+                <can_use_checkout>1</can_use_checkout>
+            </braintree_venmo>
         </payment>
     </default>
 </config>

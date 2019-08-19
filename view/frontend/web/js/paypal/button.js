@@ -194,9 +194,7 @@ define(
                         // PayPal Credit funding options
                         var funding = {
                             allowed: [],
-                            disallowed: [
-                                paypal.FUNDING.VENMO
-                            ]
+                            disallowed: []
                         };
                         if (this.offerCredit === true) {
                             //funding.allowed.push(paypal.FUNDING.CREDIT);

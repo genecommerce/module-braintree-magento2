@@ -16,6 +16,7 @@ var config = {
         "braintreeThreeDSecure": "https://js.braintreegateway.com/web/3.47.0/js/three-d-secure.min",
         "braintreeApplePay": 'https://js.braintreegateway.com/web/3.47.0/js/apple-pay.min',
         "braintreeGooglePay": 'https://js.braintreegateway.com/web/3.47.0/js/google-payment.min',
+        "braintreeVenmo": 'https://js.braintreegateway.com/web/3.47.0/js/venmo.min',
         "googlePayLibrary": "https://pay.google.com/gp/p/js/pay"
     }
 };
