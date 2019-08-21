@@ -4,11 +4,13 @@
  * @var Magento\Braintree\Block\PayPal\Shopping $block
  */
 ?>
-<script src="https://www.paypal.com/sdk/js?client-id=<?= $block->getClientId() ?>&currency=USD&components=buttons,tracker,messaging"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=<?= $block->getClientId() ?>&merchant-id=<?= $block->getMerchantId() ?>&currency=USD&components=tracker"></script>
 <script type="text/x-magento-init">
     {
         "*": {
-            "Magento_Braintree/js/paypal/shopping": {}
+            "Magento_Braintree/js/paypal/shopping": {
+                "propertyId": "<?= $block->getPropertyId() ?>"
+            }
         }
     }
 </script>
