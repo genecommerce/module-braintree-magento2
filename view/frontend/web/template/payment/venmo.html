@@ -1,4 +1,5 @@
 <!-- Venmo -->
+<!-- ko if: isBrowserSupported() -->
 <div class="payment-method" data-bind="css: {'_active': (getCode() == isChecked())}" id="payment-method-braintree-venmo">
     <div class="payment-method-title field choice">
         <input type="radio"
@@ -32,3 +33,4 @@
         </div>
     </div>
 </div>
+<!-- /ko -->

@@ -18,6 +18,10 @@ define(
                 template: 'Magento_Braintree/payment/venmo'
             },
 
+            isBrowserSupported: function () {
+                return venmo.isBrowserSupported();
+            },
+
             getCode: function() {
                 return 'braintree_venmo';
             },
