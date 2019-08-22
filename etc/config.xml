@@ -154,6 +154,12 @@
                 <merchant_id>testmode</merchant_id>
             </braintree_googlepay>
         </payment>
+        <paypal>
+            <cart_recovery>
+                <active>0</active>
+                <environment>sandbox</environment>
+            </cart_recovery>
+        </paypal>
     </default>
 </config>
 

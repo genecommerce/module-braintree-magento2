@@ -14,6 +14,13 @@
                         <resource id="Magento_Braintree::settlement_report" title="Braintree Settlement" sortOrder="80" />
                     </resource>
                 </resource>
+                <resource id="Magento_Backend::stores">
+                    <resource id="Magento_Backend::stores_settings">
+                        <resource id="Magento_Config::config">
+                            <resource id="Magento_Braintree::cart_recovery" title="PayPal Cart Recovery" sortOrder="50" />
+                        </resource>
+                    </resource>
+                </resource>
             </resource>
         </resources>
     </acl>

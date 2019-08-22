@@ -647,5 +647,27 @@
                 </group>
             </group>
         </section>
+        <section id="paypal_cart_recovery" type="text" sortOrder="999" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>PayPal Cart Recovery</label>
+            <tab>sales</tab>
+            <resource>Magento_Braintree::cart_recovery</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>On-Boarding</label>
+                <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Enable Cart Recovery</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <config_path>paypal/cart_recovery/active</config_path>
+                </field>
+                <field id="environment" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Environment</label>
+                    <source_model>Magento\Braintree\Model\Adminhtml\Source\Environment</source_model>
+                    <config_path>paypal/cart_recovery/environment</config_path>
+                    <comment model="Magento\Braintree\Model\PayPal\CartRecoveryComment"/>
+                    <depends>
+                        <field id="active">1</field>
+                    </depends>
+                </field>
+            </group>
+        </section>
     </system>
 </config>

@@ -13,6 +13,8 @@ use Magento\Framework\View\Element\Template;
  */
 class Shopping extends Template
 {
+    const CLIENT_ID = 'AdPWs8J0wllNP9uWfAoL2Olq4vwnVYphzKDegxUDAa_M8gtCdVT4SM6SB45CDBgfIJuVLHfkPAgUmov3';
+
     /**
      * Client ID from PayPal account.
      * Passed as a GET param when loading the PayPal JS SDK.
@@ -21,7 +23,7 @@ class Shopping extends Template
      */
     public function getClientId(): string
     {
-        return 'AYkryi9mte23ZuKo62tAXnyDikAYXCJcnMDcvOqspH8KmhORaSP6tqu3eCNWE3-twi1YIFXV-4Xwoibb';
+        return self::CLIENT_ID;
     }
 
     /**
