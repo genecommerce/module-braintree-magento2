@@ -55,13 +55,29 @@ define(
                         }
 
                         if (!venmoInstance.isBrowserSupported()) {
-                            console.log('Browser does not support Venmo');
+                            console.warn('Browser does not support Venmo');
                             return;
                         }
 
-                        console.log(venmoInstance);
+                        if (venmoInstance.hasTokenizationResult()) {
+                            venmoInstance.tokenize(function (tokenizeErr, payload) {
+                                if (tokenizeErr) {
+                                    console.error(tokenizeErr);
+                                } else {
+                                    this.handleVenmoSuccess(payload);
+                                }
+                            });
+                            return;
+                        }
                     });
                 });
+            },
+
+            handleVenmoSuccess: function (payload) {
+                // Send payload.nonce to your server.
+                console.log('Got a payment method nonce:', payload.nonce);
+                // Display the Venmo username in your checkout UI.
+                console.log('Venmo user:', payload.details.username);
             },
 
             getClientToken: function () {

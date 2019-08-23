@@ -155,7 +155,7 @@
             </braintree_googlepay>
             <braintree_venmo>
                 <model>Magento\Braintree\Model\Venmo</model>
-                <active>1</active>
+                <active>0</active>
                 <title>Venmo</title>
                 <can_use_checkout>1</can_use_checkout>
             </braintree_venmo>
