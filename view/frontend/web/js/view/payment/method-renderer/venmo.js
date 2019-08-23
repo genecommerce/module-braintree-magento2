@@ -66,16 +66,13 @@ define(
                             return;
                         }
 
-                        if (venmoInstance.hasTokenizationResult()) {
-                            venmoInstance.tokenize(function (tokenizeErr, payload) {
-                                if (tokenizeErr) {
-                                    console.error(tokenizeErr);
-                                } else {
-                                    this.handleVenmoSuccess(payload);
-                                }
-                            });
-                            return;
-                        }
+                        venmoInstance.tokenize(function (tokenizeErr, payload) {
+                            if (tokenizeErr) {
+                                console.error(tokenizeErr);
+                            } else {
+                                this.handleVenmoSuccess(payload);
+                            }
+                         });
                     });
                 });
             },
@@ -96,6 +93,15 @@ define(
                     console.log('Got device data:', dataCollectorInstance.deviceData);
                     this.deviceData = dataCollectorInstance.deviceData;
                 });
+            },
+
+            getData: function () {
+                return {
+                    'method': this.getCode(),
+                    'additional_data': {
+                        'payment_method_nonce': this.paymentMethodNonce
+                    }
+                };
             },
 
             handleVenmoSuccess: function (payload) {
