@@ -2,20 +2,25 @@ define(
     [
         'Magento_Checkout/js/view/payment/default',
         'braintree',
+        'braintreeDataCollector',
         'braintreeVenmo',
+        'Magento_Braintree/js/form-builder',
         'mage/translate'
     ],
     function (
         Component,
         braintree,
+        dataCollector,
         venmo,
+        formBuilder,
         $t
     ) {
         'use strict';
 
         return Component.extend({
             defaults: {
-                template: 'Magento_Braintree/payment/venmo'
+                template: 'Magento_Braintree/payment/venmo',
+                deviceData: null
             },
 
             isBrowserSupported: function () {
@@ -45,6 +50,8 @@ define(
                         return;
                     }
 
+                    this.deviceData = this.collectDeviceData(clientInstance);
+
                     venmo.create({
                         client: clientInstance,
                         allowNewBrowserTab: true
@@ -73,11 +80,32 @@ define(
                 });
             },
 
+            collectDeviceData: function (clientInstance) {
+                dataCollector.create({
+                    client: clientInstance,
+                    paypal: true
+                }, function (dataCollectorErr, dataCollectorInstance) {
+                    if (dataCollectorErr) {
+                        // Handle error in creation of data collector.
+                        console.error('Error collecting device data:', dataCollectorErr);
+                        return;
+                    }
+
+                    // At this point, you should access the deviceData value and provide it
+                    // to your server, e.g. by injecting it into your form as a hidden input.
+                    console.log('Got device data:', dataCollectorInstance.deviceData);
+                    this.deviceData = dataCollectorInstance.deviceData;
+                });
+            },
+
             handleVenmoSuccess: function (payload) {
                 // Send payload.nonce to your server.
                 console.log('Got a payment method nonce:', payload.nonce);
                 // Display the Venmo username in your checkout UI.
                 console.log('Venmo user:', payload.details.username);
+
+                this.setPaymentMethodNonce(payload.nonce);
+                this.placeOrder();
             },
 
             getClientToken: function () {
