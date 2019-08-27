@@ -194,6 +194,12 @@ define([
          * @returns {boolean}
          */
         validateCvvNumber: function () {
+            var self = this;
+            
+            if (self.hasVerification() === false) {
+                return true;
+            }
+            
             return this.validateField(
                 'cc_cid',
                 (this.isValidCvvNumber === true)
