@@ -115,6 +115,10 @@ define(
 
             getClientToken: function () {
                 return window.checkoutConfig.payment['braintree'].clientToken; // use braintree token for the time being, should be fine?
+            },
+
+            getPaymentMarkSrc: function () {
+                return window.checkoutConfig.payment[this.getCode()].paymentMarkSrc;
             }
         });
     }
