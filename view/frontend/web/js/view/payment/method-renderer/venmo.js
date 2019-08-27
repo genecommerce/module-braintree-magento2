@@ -42,15 +42,17 @@ define(
             },
 
             clickVenmoBtn: function () {
+                let self = this;
+
                 braintree.create({
-                    authorization: this.getClientToken()
+                    authorization: self.getClientToken()
                 }, function (clientErr, clientInstance) {
                     if (clientErr) {
                         console.error('Error creating Client:', clientErr);
                         return;
                     }
 
-                    this.deviceData = this.collectDeviceData(clientInstance);
+                    self.collectDeviceData(clientInstance);
 
                     venmo.create({
                         client: clientInstance,
@@ -78,20 +80,17 @@ define(
             },
 
             collectDeviceData: function (clientInstance) {
+                let self = this;
                 dataCollector.create({
                     client: clientInstance,
                     paypal: true
                 }, function (dataCollectorErr, dataCollectorInstance) {
                     if (dataCollectorErr) {
-                        // Handle error in creation of data collector.
                         console.error('Error collecting device data:', dataCollectorErr);
                         return;
                     }
-
-                    // At this point, you should access the deviceData value and provide it
-                    // to your server, e.g. by injecting it into your form as a hidden input.
                     console.log('Got device data:', dataCollectorInstance.deviceData);
-                    this.deviceData = dataCollectorInstance.deviceData;
+                    self.deviceData = dataCollectorInstance.deviceData;
                 });
             },
 
