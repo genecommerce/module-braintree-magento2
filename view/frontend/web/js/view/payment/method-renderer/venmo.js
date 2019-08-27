@@ -56,7 +56,7 @@ define(
 
                     venmo.create({
                         client: clientInstance,
-                        allowNewBrowserTab: true
+                        allowNewBrowserTab: false
                     }, function (venmoErr, venmoInstance) {
                         if (venmoErr) {
                             console.error('Error creating Venmo:', venmoErr);
