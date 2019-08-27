@@ -20,7 +20,8 @@ define(
         return Component.extend({
             defaults: {
                 template: 'Magento_Braintree/payment/venmo',
-                deviceData: null
+                deviceData: null,
+                paymentMethodNonce: null
             },
 
             isBrowserSupported: function () {
@@ -72,7 +73,7 @@ define(
                             if (tokenizeErr) {
                                 console.error(tokenizeErr);
                             } else {
-                                this.handleVenmoSuccess(payload);
+                                self.handleVenmoSuccess(payload);
                             }
                          });
                     });
@@ -119,7 +120,11 @@ define(
 
             getPaymentMarkSrc: function () {
                 return window.checkoutConfig.payment[this.getCode()].paymentMarkSrc;
-            }
+            },
+
+            setPaymentMethodNonce: function (nonce) {
+                this.paymentMethodNonce = nonce;
+            },
         });
     }
 );
