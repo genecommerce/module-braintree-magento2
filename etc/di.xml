@@ -807,6 +807,7 @@
             <argument name="validatorPool" xsi:type="object">BraintreeVenmoValidatorPool</argument>
             <argument name="commandPool" xsi:type="object">BraintreeVenmoCommandPool</argument>
             <argument name="formBlockType" xsi:type="object">Magento\Payment\Block\Form</argument>
+            <argument name="infoBlockType" xsi:type="string">Magento\Braintree\Block\Info</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Braintree\Model\Venmo\Config">
