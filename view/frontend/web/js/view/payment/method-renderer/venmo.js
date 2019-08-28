@@ -5,6 +5,8 @@ define(
         'braintreeDataCollector',
         'braintreeVenmo',
         'Magento_Braintree/js/form-builder',
+        'Magento_Ui/js/model/messageList',
+        'Magento_Checkout/js/model/full-screen-loader',
         'mage/translate'
     ],
     function (
@@ -13,23 +15,72 @@ define(
         dataCollector,
         venmo,
         formBuilder,
+        messageList,
+        fullScreenLoader,
         $t
     ) {
         'use strict';
 
         return Component.extend({
             defaults: {
-                template: 'Magento_Braintree/payment/venmo',
                 deviceData: null,
-                paymentMethodNonce: null
+                paymentMethodNonce: null,
+                template: 'Magento_Braintree/payment/venmo',
+                venmoInstance: null
             },
 
-            isBrowserSupported: function () {
-                return venmo.isBrowserSupported();
+            clickVenmoBtn: function () {
+                let self = this;
+
+                if (!this.venmoInstance) {
+                    this.setErrorMsg('Venmo not initialized, please try reloading');
+                    return;
+                }
+
+                this.venmoInstance.tokenize(function (tokenizeErr, payload) {
+                    if (tokenizeErr) {
+                        self.setErrorMsg(tokenizeErr);
+                    } else {
+                        self.handleVenmoSuccess(payload);
+                    }
+                });
+            },
+
+            collectDeviceData: function (clientInstance, callback) {
+                let self = this;
+                dataCollector.create({
+                    client: clientInstance,
+                    paypal: true
+                }, function (dataCollectorErr, dataCollectorInstance) {
+                    if (dataCollectorErr) {
+                        console.error('Error collecting device data:', dataCollectorErr);
+                        return;
+                    }
+                    self.deviceData = dataCollectorInstance.deviceData;
+                    callback();
+                });
+            },
+
+            getClientToken: function () {
+                return window.checkoutConfig.payment['braintree'].clientToken; // use braintree token for the time being, should be fine?
             },
 
             getCode: function() {
                 return 'braintree_venmo';
+            },
+
+            getData: function () {
+                return {
+                    'method': this.getCode(),
+                    'additional_data': {
+                        'payment_method_nonce': this.paymentMethodNonce,
+                        'device_data': this.deviceData
+                    }
+                };
+            },
+
+            getPaymentMarkSrc: function () {
+                return window.checkoutConfig.payment[this.getCode()].paymentMarkSrc;
             },
 
             getTitle: function() {
@@ -42,89 +93,71 @@ define(
                 return button.outerHTML;
             },
 
-            clickVenmoBtn: function () {
-                let self = this;
-
-                braintree.create({
-                    authorization: self.getClientToken()
-                }, function (clientErr, clientInstance) {
-                    if (clientErr) {
-                        console.error('Error creating Client:', clientErr);
-                        return;
-                    }
-
-                    self.collectDeviceData(clientInstance);
-
-                    venmo.create({
-                        client: clientInstance,
-                        allowNewBrowserTab: false
-                    }, function (venmoErr, venmoInstance) {
-                        if (venmoErr) {
-                            console.error('Error creating Venmo:', venmoErr);
-                            return;
-                        }
-
-                        if (!venmoInstance.isBrowserSupported()) {
-                            console.warn('Browser does not support Venmo');
-                            return;
-                        }
-
-                        venmoInstance.tokenize(function (tokenizeErr, payload) {
-                            if (tokenizeErr) {
-                                console.error(tokenizeErr);
-                            } else {
-                                self.handleVenmoSuccess(payload);
-                            }
-                         });
-                    });
-                });
-            },
-
-            collectDeviceData: function (clientInstance) {
-                let self = this;
-                dataCollector.create({
-                    client: clientInstance,
-                    paypal: true
-                }, function (dataCollectorErr, dataCollectorInstance) {
-                    if (dataCollectorErr) {
-                        console.error('Error collecting device data:', dataCollectorErr);
-                        return;
-                    }
-                    console.log('Got device data:', dataCollectorInstance.deviceData);
-                    self.deviceData = dataCollectorInstance.deviceData;
-                });
-            },
-
-            getData: function () {
-                return {
-                    'method': this.getCode(),
-                    'additional_data': {
-                        'payment_method_nonce': this.paymentMethodNonce
-                    }
-                };
-            },
-
             handleVenmoSuccess: function (payload) {
-                // Send payload.nonce to your server.
-                console.log('Got a payment method nonce:', payload.nonce);
-                // Display the Venmo username in your checkout UI.
-                console.log('Venmo user:', payload.details.username);
-
                 this.setPaymentMethodNonce(payload.nonce);
                 this.placeOrder();
             },
 
-            getClientToken: function () {
-                return window.checkoutConfig.payment['braintree'].clientToken; // use braintree token for the time being, should be fine?
+            initialize: function () {
+                this._super();
+
+                let self = this;
+
+                braintree.create({
+                    authorization: self.getClientToken()
+                }, function (clientError, clientInstance) {
+                    if (clientError) {
+                        this.setErrorMsg('Unable to initialize Braintree Client.');
+                        return;
+                    }
+
+                    // Collect device data
+                    self.collectDeviceData(clientInstance, function () {
+                        // callback from collectDeviceData
+                        venmo.create({
+                            client: clientInstance,
+                            allowNewBrowserTab: false
+                        }, function (venmoErr, venmoInstance) {
+                            if (venmoErr) {
+                                self.setErrorMsg('Error initializing Venmo ' + venmoErr);
+                                return;
+                            }
+
+                            if (!venmoInstance.isBrowserSupported()) {
+                                self.setErrorMsg('Browser does not support Venmo.');
+                                return;
+                            }
+
+                            self.setVenmoInstance(venmoInstance);
+                        });
+                    });
+                });
+
+                return this;
             },
 
-            getPaymentMarkSrc: function () {
-                return window.checkoutConfig.payment[this.getCode()].paymentMarkSrc;
+            initObservable: function () {
+                this._super();
+                return this;
+            },
+
+            isBrowserSupported: function () {
+                return venmo.isBrowserSupported();
+            },
+
+            setErrorMsg: function (message) {
+                messageList.addErrorMessage({
+                    message: $t(message)
+                });
             },
 
             setPaymentMethodNonce: function (nonce) {
                 this.paymentMethodNonce = nonce;
             },
+
+            setVenmoInstance: function (instance) {
+                this.venmoInstance = instance;
+            }
         });
     }
 );
