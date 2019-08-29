@@ -91,12 +91,6 @@ define(
                 return 'Venmo';
             },
 
-            getVenmoBtn: function () {
-                let button = document.createElement('button');
-                button.innerHTML = $t('Pay with Venmo');
-                return button.outerHTML;
-            },
-
             handleVenmoSuccess: function (payload) {
                 this.setPaymentMethodNonce(payload.nonce);
                 this.placeOrder();
@@ -140,9 +134,8 @@ define(
                 return this;
             },
 
-            initObservable: function () {
-                this._super();
-                return this;
+            isAllowed: function () {
+                return window.checkoutConfig.payment[this.getCode()].isAllowed;
             },
 
             isBrowserSupported: function () {

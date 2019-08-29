@@ -7,9 +7,11 @@ use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Braintree\Model\Venmo\Config;
 use Magento\Checkout\Model\ConfigProviderInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Asset\Repository;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Class ConfigProvider
@@ -37,6 +39,10 @@ class ConfigProvider implements ConfigProviderInterface
      */
     private $braintreeConfig;
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+    /**
      * @var string
      */
     private $clientToken = '';
@@ -48,17 +54,20 @@ class ConfigProvider implements ConfigProviderInterface
      * @param BraintreeAdapter $adapter
      * @param Repository $assetRepo
      * @param \Magento\Braintree\Gateway\Config\Config $braintreeConfig
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         Config $config,
         BraintreeAdapter $adapter,
         Repository $assetRepo,
-        \Magento\Braintree\Gateway\Config\Config $braintreeConfig
+        \Magento\Braintree\Gateway\Config\Config $braintreeConfig,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->config = $config;
         $this->adapter = $adapter;
         $this->assetRepo = $assetRepo;
         $this->braintreeConfig = $braintreeConfig;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -73,12 +82,28 @@ class ConfigProvider implements ConfigProviderInterface
         return [
             'payment' => [
                 self::METHOD_CODE => [
+                    'isAllowed' => $this->isAllowed(),
                     'environment' => $this->getEnvironment(),
                     'clientToken' => $this->getClientToken(),
                     'paymentMarkSrc' => $this->getPaymentMarkSrc()
                 ]
             ]
         ];
+    }
+
+    /**
+     * Venmo is for the US only.
+     * Logic based on Merchant Country Location config option.
+     * @return bool
+     */
+    public function isAllowed(): bool
+    {
+        $merchantCountry = $this->scopeConfig->getValue(
+            'paypal/general/merchant_country',
+            ScopeInterface::SCOPE_STORE
+        );
+
+        return 'US' === $merchantCountry;
     }
 
     /**
