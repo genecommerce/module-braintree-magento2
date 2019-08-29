@@ -4,13 +4,11 @@ define([
 ], function (wrapper, $) {
     'use strict';
 
-    var mixin = {
+    let mixin = {
         handleHash: function (originalFn) {
-            console.log('foo');
-
             let hashString = window.location.hash.replace('#', '');
 
-            if ($.inArray(hashString, 'venmo')) {
+            if (hashString.indexOf('venmo') >= 0) {
                 return false;
             } else {
                 originalFn();
