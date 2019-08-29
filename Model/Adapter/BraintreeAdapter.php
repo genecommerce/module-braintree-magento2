@@ -139,7 +139,6 @@ class BraintreeAdapter
         try {
             return ClientToken::generate($params);
         } catch (Exception $e) {
-            $this->logger->error($e->getMessage());
             return '';
         }
     }
@@ -153,7 +152,6 @@ class BraintreeAdapter
         try {
             return CreditCard::find($token);
         } catch (Exception $e) {
-            $this->logger->error($e->getMessage());
             return null;
         }
     }
@@ -182,7 +180,6 @@ class BraintreeAdapter
      */
     public function sale(array $attributes)
     {
-        $this->logger->debug($attributes);
         return Transaction::sale($attributes);
     }
 
@@ -193,8 +190,6 @@ class BraintreeAdapter
      */
     public function submitForSettlement($transactionId, $amount = null)
     {
-        $this->logger->debug($transactionId);
-        $this->logger->debug($amount);
         return Transaction::submitForSettlement($transactionId, $amount);
     }
 
