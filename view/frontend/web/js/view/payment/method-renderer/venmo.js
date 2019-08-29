@@ -70,13 +70,17 @@ define(
             },
 
             getData: function () {
-                return {
+                let data = {
                     'method': this.getCode(),
                     'additional_data': {
                         'payment_method_nonce': this.paymentMethodNonce,
                         'device_data': this.deviceData
                     }
                 };
+
+                data['additional_data'] = _.extend(data['additional_data'], this.additionalData);
+
+                return data;
             },
 
             getPaymentMarkSrc: function () {
