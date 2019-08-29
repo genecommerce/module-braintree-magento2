@@ -1,9 +1,9 @@
 <?php
 namespace Magento\Braintree\Model\GooglePay\Ui;
 
+use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
 use Magento\Braintree\Model\GooglePay\Config;
-use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;

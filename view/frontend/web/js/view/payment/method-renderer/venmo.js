@@ -62,7 +62,7 @@ define(
             },
 
             getClientToken: function () {
-                return window.checkoutConfig.payment['braintree'].clientToken; // use braintree token for the time being, should be fine?
+                return window.checkoutConfig.payment[this.getCode()].clientToken;
             },
 
             getCode: function() {

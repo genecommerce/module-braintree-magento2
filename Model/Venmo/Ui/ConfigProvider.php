@@ -3,9 +3,12 @@ declare(strict_types=1);
 
 namespace Magento\Braintree\Model\Venmo\Ui;
 
+use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Braintree\Model\Venmo\Config;
 use Magento\Checkout\Model\ConfigProviderInterface;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Asset\Repository;
 
 /**
@@ -29,33 +32,49 @@ class ConfigProvider implements ConfigProviderInterface
      * @var Repository
      */
     private $assetRepo;
+    /**
+     * @var \Magento\Braintree\Gateway\Config\Config
+     */
+    private $braintreeConfig;
+    /**
+     * @var string
+     */
+    private $clientToken = '';
 
     /**
      * ConfigProvider constructor.
      *
      * @param Config $config
      * @param BraintreeAdapter $adapter
+     * @param Repository $assetRepo
+     * @param \Magento\Braintree\Gateway\Config\Config $braintreeConfig
      */
-    public function __construct(Config $config, BraintreeAdapter $adapter, Repository $assetRepo)
-    {
+    public function __construct(
+        Config $config,
+        BraintreeAdapter $adapter,
+        Repository $assetRepo,
+        \Magento\Braintree\Gateway\Config\Config $braintreeConfig
+    ) {
         $this->config = $config;
         $this->adapter = $adapter;
         $this->assetRepo = $assetRepo;
+        $this->braintreeConfig = $braintreeConfig;
     }
 
     /**
      * Retrieve assoc array of checkout configuration
      *
      * @return array
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
-    public function getConfig()
+    public function getConfig(): array
     {
         return [
             'payment' => [
                 self::METHOD_CODE => [
                     'environment' => $this->getEnvironment(),
+                    'clientToken' => $this->getClientToken(),
                     'paymentMarkSrc' => $this->getPaymentMarkSrc()
                 ]
             ]
@@ -64,12 +83,33 @@ class ConfigProvider implements ConfigProviderInterface
 
     /**
      * @return string
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
     public function getEnvironment(): string
     {
         return $this->config->getEnvironment();
+    }
+
+    /**
+     * @return string
+     * @throws InputException
+     * @throws NoSuchEntityException
+     */
+    public function getClientToken(): string
+    {
+        if (empty($this->clientToken)) {
+            $params = [];
+
+            $merchantAccountId = $this->braintreeConfig->getMerchantAccountId();
+            if (!empty($merchantAccountId)) {
+                $params[PaymentDataBuilder::MERCHANT_ACCOUNT_ID] = $merchantAccountId;
+            }
+
+            $this->clientToken = $this->adapter->generate($params);
+        }
+
+        return $this->clientToken;
     }
 
     /**
