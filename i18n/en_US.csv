@@ -173,3 +173,4 @@ Debug,Debug
 "Unable to initialize Braintree Client.","Unable to initialize Braintree Client."
 "Browser does not support Venmo.","Browser does not support Venmo."
 "Error initializing Venmo: %1","Error initializing Venmo: %1"
+"Pay with Venmo","Pay with Venmo"
