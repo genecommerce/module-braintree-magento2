@@ -6,13 +6,8 @@ define([
 
     let mixin = {
         handleHash: function (originalFn) {
-            let hashString = window.location.hash.replace('#', '');
-
-            if (hashString.indexOf('venmo') >= 0) {
-                return false;
-            } else {
-                originalFn();
-            }
+            var hashString = window.location.hash.replace('#', '');
+            return (hashString.includes('venmo')) ? false : originalFn();
         }
     };
 

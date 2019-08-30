@@ -30,7 +30,7 @@ define(
             },
 
             clickVenmoBtn: function () {
-                let self = this;
+                var self = this;
 
                 if (!this.venmoInstance) {
                     this.setErrorMsg($t('Venmo not initialized, please try reloading.'));
@@ -53,7 +53,7 @@ define(
             },
 
             collectDeviceData: function (clientInstance, callback) {
-                let self = this;
+                var self = this;
                 dataCollector.create({
                     client: clientInstance,
                     paypal: true
@@ -105,7 +105,7 @@ define(
             initialize: function () {
                 this._super();
 
-                let self = this;
+                var self = this;
 
                 braintree.create({
                     authorization: self.getClientToken()
