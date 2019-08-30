@@ -1,8 +1,6 @@
 <?php
-/**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Gateway\Request;
 
 use Magento\Braintree\Gateway\Helper\SubjectReader;
@@ -15,7 +13,7 @@ use Magento\Payment\Gateway\Request\BuilderInterface;
 class DeviceDataBuilder implements BuilderInterface
 {
     /**
-     * @var string
+     * @var string $deviceDataKey
      */
     private static $deviceDataKey = 'deviceData';
 

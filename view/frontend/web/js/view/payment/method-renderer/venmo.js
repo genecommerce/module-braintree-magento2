@@ -33,13 +33,19 @@ define(
                 let self = this;
 
                 if (!this.venmoInstance) {
-                    this.setErrorMsg('Venmo not initialized, please try reloading');
+                    this.setErrorMsg($t('Venmo not initialized, please try reloading.'));
                     return;
                 }
 
                 this.venmoInstance.tokenize(function (tokenizeErr, payload) {
                     if (tokenizeErr) {
-                        self.setErrorMsg(tokenizeErr);
+                        if (tokenizeErr.code === 'VENMO_CANCELED') {
+                            self.setErrorMsg($t('Venmo app is not available or the payment flow was cancelled.'));
+                        } else if (tokenizeErr.code === 'VENMO_APP_CANCELED') {
+                            self.setErrorMsg($t('Venmo payment flow cancelled.'));
+                        } else {
+                            self.setErrorMsg(tokenizeErr.message);
+                        }
                     } else {
                         self.handleVenmoSuccess(payload);
                     }
@@ -105,7 +111,7 @@ define(
                     authorization: self.getClientToken()
                 }, function (clientError, clientInstance) {
                     if (clientError) {
-                        this.setErrorMsg('Unable to initialize Braintree Client.');
+                        this.setErrorMsg($t('Unable to initialize Braintree Client.'));
                         return;
                     }
 
@@ -117,12 +123,12 @@ define(
                             allowNewBrowserTab: false
                         }, function (venmoErr, venmoInstance) {
                             if (venmoErr) {
-                                self.setErrorMsg('Error initializing Venmo ' + venmoErr);
+                                self.setErrorMsg($t('Error initializing Venmo: %1').replace('%1', venmoErr));
                                 return;
                             }
 
                             if (!venmoInstance.isBrowserSupported()) {
-                                self.setErrorMsg('Browser does not support Venmo.');
+                                self.setErrorMsg($t('Browser does not support Venmo.'));
                                 return;
                             }
 
@@ -144,7 +150,7 @@ define(
 
             setErrorMsg: function (message) {
                 messageList.addErrorMessage({
-                    message: $t(message)
+                    message: message
                 });
             },
 

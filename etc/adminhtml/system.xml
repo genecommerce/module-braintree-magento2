@@ -243,10 +243,10 @@
                             <label>Payment Action</label>
                             <source_model>Magento\Braintree\Model\Adminhtml\Source\PaymentAction</source_model>
                             <config_path>payment/braintree_venmo/payment_action</config_path>
+                            <depends>
+                                <field id="active">1</field>
+                            </depends>
                         </field>
-                        <depends>
-                            <field id="payment/account/merchant_country">US</field>
-                        </depends>
                     </group>
                     <group id="braintree_paypal" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="40">
                         <label>PayPal through Braintree</label>

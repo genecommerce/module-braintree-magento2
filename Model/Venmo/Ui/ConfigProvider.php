@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Magento\Braintree\Model\Venmo\Ui;
 
+use Magento\Braintree\Gateway\Config\Config as BraintreeConfig;
 use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
-use Magento\Braintree\Model\Venmo\Config;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\InputException;
@@ -15,55 +15,50 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Class ConfigProvider
- *
- * @package Magento\Braintree\Model\Venmo\Ui
- * @author Paul Canning <paul.canning@gene.co.uk>
  */
 class ConfigProvider implements ConfigProviderInterface
 {
     const METHOD_CODE = 'braintree_venmo';
+
+    const MERCHANT_COUNTRY_CONFIG_VALUE = 'paypal/general/merchant_country';
+
+    const ALLOWED_MERCHANT_COUNTRIES = ['US'];
+
     /**
-     * @var Config
-     */
-    private $config;
-    /**
-     * @var BraintreeAdapter
+     * @var BraintreeAdapter $adapter
      */
     private $adapter;
     /**
-     * @var Repository
+     * @var Repository $assetRepo
      */
     private $assetRepo;
     /**
-     * @var \Magento\Braintree\Gateway\Config\Config
+     * @var BraintreeConfig $braintreeConfig
      */
     private $braintreeConfig;
     /**
-     * @var ScopeConfigInterface
+     * @var ScopeConfigInterface $scopeConfig
      */
     private $scopeConfig;
     /**
-     * @var string
+     * @var string $clientToken
      */
     private $clientToken = '';
 
     /**
      * ConfigProvider constructor.
      *
-     * @param Config $config
      * @param BraintreeAdapter $adapter
      * @param Repository $assetRepo
-     * @param \Magento\Braintree\Gateway\Config\Config $braintreeConfig
+     * @param BraintreeConfig $braintreeConfig
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        Config $config,
         BraintreeAdapter $adapter,
         Repository $assetRepo,
-        \Magento\Braintree\Gateway\Config\Config $braintreeConfig,
+        BraintreeConfig $braintreeConfig,
         ScopeConfigInterface $scopeConfig
     ) {
-        $this->config = $config;
         $this->adapter = $adapter;
         $this->assetRepo = $assetRepo;
         $this->braintreeConfig = $braintreeConfig;
@@ -83,7 +78,6 @@ class ConfigProvider implements ConfigProviderInterface
             'payment' => [
                 self::METHOD_CODE => [
                     'isAllowed' => $this->isAllowed(),
-                    'environment' => $this->getEnvironment(),
                     'clientToken' => $this->getClientToken(),
                     'paymentMarkSrc' => $this->getPaymentMarkSrc()
                 ]
@@ -92,28 +86,19 @@ class ConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Venmo is for the US only.
+     * Venmo is (currently) for the US only.
      * Logic based on Merchant Country Location config option.
+     *
      * @return bool
      */
     public function isAllowed(): bool
     {
         $merchantCountry = $this->scopeConfig->getValue(
-            'paypal/general/merchant_country',
+            self::MERCHANT_COUNTRY_CONFIG_VALUE,
             ScopeInterface::SCOPE_STORE
         );
 
-        return 'US' === $merchantCountry;
-    }
-
-    /**
-     * @return string
-     * @throws InputException
-     * @throws NoSuchEntityException
-     */
-    public function getEnvironment(): string
-    {
-        return $this->config->getEnvironment();
+        return in_array($merchantCountry, self::ALLOWED_MERCHANT_COUNTRIES, true);
     }
 
     /**
@@ -138,9 +123,9 @@ class ConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getPaymentMarkSrc()
+    public function getPaymentMarkSrc(): string
     {
         return $this->assetRepo->getUrl('Magento_Braintree::images/venmo_logo_blue.png');
     }

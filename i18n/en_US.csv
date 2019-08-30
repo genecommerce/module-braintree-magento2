@@ -88,7 +88,7 @@ No,No
 Edit,Edit
 "Place Order","Place Order"
 "Credit Card Information","Credit Card Information"
-"An error occured with payment processing.","An error occured with payment processing."
+"An error occurred with payment processing.","An error occurred with payment processing."
 "Can not initialize PayPal (Braintree)","Can not initialize PayPal (Braintree)"
 "Please try again with another form of payment.","Please try again with another form of payment."
 Braintree,Braintree
@@ -167,3 +167,9 @@ Debug,Debug
 "apple_pay_card","Apple pay card"
 "android_pay_card","Android pay card"
 "Accept credit/debit cards and PayPal in your Magento store.<br/>No setup or monthly fees and your customers never leave your store to complete the purchase.","Accept credit/debit cards and PayPal in your Magento store.<br/>No setup or monthly fees and your customers never leave your store to complete the purchase."
+"Venmo not initialized, please try reloading.","Venmo not initialized, please try reloading."
+"Venmo app is not available or the payment flow was cancelled.","Venmo app is not available or the payment flow was cancelled."
+"Venmo payment flow cancelled.","Venmo payment flow cancelled."
+"Unable to initialize Braintree Client.","Unable to initialize Braintree Client."
+"Browser does not support Venmo.","Browser does not support Venmo."
+"Error initializing Venmo: %1","Error initializing Venmo: %1"
