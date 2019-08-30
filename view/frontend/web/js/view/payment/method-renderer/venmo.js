@@ -59,7 +59,6 @@ define(
                     paypal: true
                 }, function (dataCollectorErr, dataCollectorInstance) {
                     if (dataCollectorErr) {
-                        console.error('Error collecting device data:', dataCollectorErr);
                         return;
                     }
                     self.deviceData = dataCollectorInstance.deviceData;
