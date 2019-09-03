@@ -171,6 +171,9 @@
                 <privateInfoKeys>processorAuthorizationCode,processorResponseCode,processorResponseText</privateInfoKeys>
                 <paymentInfoKeys>processorAuthorizationCode,processorResponseCode,processorResponseText</paymentInfoKeys>
             </braintree_venmo>
+            <braintree_ach_direct_debit>
+                <active>0</active>
+            </braintree_ach_direct_debit>
         </payment>
     </default>
 </config>
