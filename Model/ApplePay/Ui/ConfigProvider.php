@@ -70,8 +70,7 @@ class ConfigProvider implements ConfigProviderInterface
         return [
             'payment' => [
                 'braintree_applepay' => [
-                    'clientToken' => $this->
-                    getClientToken(),
+                    'clientToken' => $this->getClientToken(),
                     'merchantName' => $this->getMerchantName(),
                     'paymentMarkSrc' => $this->getPaymentMarkSrc()
                 ]

@@ -20,6 +20,7 @@ use Magento\Braintree\Model\Adminhtml\Source\Environment;
 use Magento\Braintree\Model\StoreConfigResolver;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class BraintreeAdapter
@@ -36,22 +37,30 @@ class BraintreeAdapter
      * @var StoreConfigResolver
      */
     private $storeConfigResolver;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * BraintreeAdapter constructor.
      *
-     * @param Config              $config              Braintree configurator
+     * @param Config $config Braintree configurator
      * @param StoreConfigResolver $storeConfigResolver StoreId resolver model
      *
+     * @param LoggerInterface $logger
      * @throws InputException
      * @throws NoSuchEntityException
      */
     public function __construct(
         Config $config,
-        StoreConfigResolver $storeConfigResolver
+        StoreConfigResolver $storeConfigResolver,
+        LoggerInterface $logger
     ) {
         $this->config = $config;
         $this->storeConfigResolver = $storeConfigResolver;
+        $this->logger = $logger;
+
         $this->initCredentials();
     }
 
@@ -66,8 +75,7 @@ class BraintreeAdapter
     protected function initCredentials()
     {
         $storeId = $this->storeConfigResolver->getStoreId();
-        $environmentIdentifier = $this->config
-            ->getValue(Config::KEY_ENVIRONMENT, $storeId);
+        $environmentIdentifier = $this->config->getValue(Config::KEY_ENVIRONMENT, $storeId);
 
         $this->environment(Environment::ENVIRONMENT_SANDBOX);
 

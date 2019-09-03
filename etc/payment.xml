@@ -7,5 +7,8 @@
         <method name="braintree_googlepay">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
+        <method name="braintree_venmo">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
     </methods>
 </payment>

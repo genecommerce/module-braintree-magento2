@@ -47,8 +47,14 @@ define(
             );
         }
 
+        rendererList.push(
+            {
+                type: 'braintree_venmo',
+                component: 'Magento_Braintree/js/view/payment/method-renderer/venmo'
+            }
+        );
+
         /** Add view logic here if needed */
         return Component.extend({});
     }
 );
-
