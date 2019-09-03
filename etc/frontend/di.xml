@@ -13,9 +13,11 @@
                 <item name="braintree_paypal_config_provider" xsi:type="object">Magento\Braintree\Model\Ui\PayPal\ConfigProvider</item>
                 <item name="braintree_applepay_config_provider" xsi:type="object">Magento\Braintree\Model\ApplePay\Ui\ConfigProvider</item>
                 <item name="braintree_googlepay_config_provider" xsi:type="object">Magento\Braintree\Model\GooglePay\Ui\ConfigProvider</item>
+                <item name="braintree_venmo_config_provider" xsi:type="object">Magento\Braintree\Model\Venmo\Ui\ConfigProvider</item>
             </argument>
         </arguments>
     </type>
+
     <type name="Magento\Payment\Model\CcGenericConfigProvider">
         <arguments>
             <argument name="methodCodes" xsi:type="array">
@@ -23,6 +25,7 @@
             </argument>
         </arguments>
     </type>
+
     <type name="Magento\Braintree\Block\Info">
         <arguments>
             <argument name="data" xsi:type="array">

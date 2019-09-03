@@ -1,79 +1,84 @@
 <?php
-namespace Magento\Braintree\Model\GooglePay\Ui;
+declare(strict_types=1);
 
-use Magento\Checkout\Model\ConfigProviderInterface;
+namespace Magento\Braintree\Model\Venmo\Ui;
+
+use Magento\Braintree\Gateway\Config\Config as BraintreeConfig;
 use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
-use Magento\Braintree\Model\GooglePay\Config;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
+use Magento\Checkout\Model\ConfigProviderInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Asset\Repository;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Class ConfigProvider
- * @package Magento\Braintree\Model\GooglePay\Ui
- * @author Aidan Threadgold <aidan@gene.co.uk>
  */
 class ConfigProvider implements ConfigProviderInterface
 {
-    const METHOD_CODE = 'braintree_googlepay';
+    const METHOD_CODE = 'braintree_venmo';
+
+    const MERCHANT_COUNTRY_CONFIG_VALUE = 'paypal/general/merchant_country';
+
+    const ALLOWED_MERCHANT_COUNTRIES = ['US'];
 
     /**
-     * @var Config
-     */
-    private $config;
-
-    /**
-     * @var BraintreeAdapter
+     * @var BraintreeAdapter $adapter
      */
     private $adapter;
-
     /**
-     * @var Repository
+     * @var Repository $assetRepo
      */
     private $assetRepo;
-
     /**
-     * @var \Magento\Braintree\Gateway\Config\Config
+     * @var BraintreeConfig $braintreeConfig
      */
     private $braintreeConfig;
-
     /**
-     * @var string
+     * @var ScopeConfigInterface $scopeConfig
+     */
+    private $scopeConfig;
+    /**
+     * @var string $clientToken
      */
     private $clientToken = '';
 
     /**
      * ConfigProvider constructor.
-     * @param Config $config
+     *
      * @param BraintreeAdapter $adapter
      * @param Repository $assetRepo
-     * @param \Magento\Braintree\Gateway\Config\Config $braintreeConfig
+     * @param BraintreeConfig $braintreeConfig
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        Config $config,
         BraintreeAdapter $adapter,
         Repository $assetRepo,
-        \Magento\Braintree\Gateway\Config\Config $braintreeConfig
+        BraintreeConfig $braintreeConfig,
+        ScopeConfigInterface $scopeConfig
     ) {
-        $this->config = $config;
         $this->adapter = $adapter;
         $this->assetRepo = $assetRepo;
         $this->braintreeConfig = $braintreeConfig;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
-     * @inheritDoc
+     * Retrieve assoc array of checkout configuration
+     *
+     * @return array
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
     public function getConfig(): array
     {
         return [
             'payment' => [
-                'braintree_googlepay' => [
-                    'environment' => $this->getEnvironment(),
+                self::METHOD_CODE => [
+                    'isAllowed' => $this->isAllowed(),
                     'clientToken' => $this->getClientToken(),
-                    'merchantId' => $this->getMerchantId(),
-                    'cardTypes' => $this->getAvailableCardTypes(),
                     'paymentMarkSrc' => $this->getPaymentMarkSrc()
                 ]
             ]
@@ -81,8 +86,22 @@ class ConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Generate a new client token if necessary
+     * Venmo is (currently) for the US only.
+     * Logic based on Merchant Country Location config option.
      *
+     * @return bool
+     */
+    public function isAllowed(): bool
+    {
+        $merchantCountry = $this->scopeConfig->getValue(
+            self::MERCHANT_COUNTRY_CONFIG_VALUE,
+            ScopeInterface::SCOPE_STORE
+        );
+
+        return in_array($merchantCountry, self::ALLOWED_MERCHANT_COUNTRIES, true);
+    }
+
+    /**
      * @return string
      * @throws InputException
      * @throws NoSuchEntityException
@@ -104,42 +123,10 @@ class ConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Get environment
-     * @return string
-     * @throws InputException
-     * @throws NoSuchEntityException
-     */
-    public function getEnvironment(): string
-    {
-        return $this->config->getEnvironment();
-    }
-
-    /**
-     * Get merchant name
-     *
      * @return string
      */
-    public function getMerchantId(): string
+    public function getPaymentMarkSrc(): string
     {
-        return $this->config->getMerchantId();
-    }
-
-    /**
-     * @return array
-     */
-    public function getAvailableCardTypes(): array
-    {
-        return $this->config->getAvailableCardTypes();
-    }
-
-    /**
-     * Get the url to the payment mark image
-     *
-     * @return mixed
-     */
-    public function getPaymentMarkSrc()
-    {
-        $fileId = 'Magento_Braintree::images/GooglePay_AcceptanceMark_WhiteShape_WithStroke_RGB_62x38pt@4x.png';
-        return $this->assetRepo->getUrl($fileId);
+        return $this->assetRepo->getUrl('Magento_Braintree::images/venmo_logo_blue.png');
     }
 }
