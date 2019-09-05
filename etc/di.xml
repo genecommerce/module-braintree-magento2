@@ -222,6 +222,7 @@
                 <item name="3dsecure" xsi:type="string">Magento\Braintree\Gateway\Request\ThreeDSecureDataBuilder</item>
                 <item name="device_data" xsi:type="string">Magento\Braintree\Gateway\Request\KountPaymentDataBuilder</item>
                 <item name="dynamic_descriptor" xsi:type="string">Magento\Braintree\Gateway\Request\DescriptorDataBuilder</item>
+                <item name="level_2_3_processing" xsi:type="string">Magento\Braintree\Gateway\Request\Level23ProcessingDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
@@ -280,6 +281,7 @@
                 <item name="3dsecurevault" xsi:type="string">Magento\Braintree\Gateway\Request\ThreeDSecureVaultDataBuilder</item>
                 <item name="device_data" xsi:type="string">Magento\Braintree\Gateway\Request\KountPaymentDataBuilder</item>
                 <item name="dynamic_descriptor" xsi:type="string">Magento\Braintree\Gateway\Request\DescriptorDataBuilder</item>
+                <item name="level_2_3_processing" xsi:type="string">Magento\Braintree\Gateway\Request\Level23ProcessingDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
@@ -338,6 +340,7 @@
                 <item name="device_data" xsi:type="string">Magento\Braintree\Gateway\Request\PayPal\DeviceDataBuilder</item>
                 <item name="dynamic_descriptor" xsi:type="string">Magento\Braintree\Gateway\Request\DescriptorDataBuilder</item>
                 <item name="address" xsi:type="string">Magento\Braintree\Gateway\Request\AddressDataBuilder</item>
+                <item name="level_2_3_processing" xsi:type="string">Magento\Braintree\Gateway\Request\Level23ProcessingDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
@@ -374,6 +377,7 @@
                 <item name="address" xsi:type="string">Magento\Braintree\Gateway\Request\AddressDataBuilder</item>
                 <item name="dynamic_descriptor" xsi:type="string">Magento\Braintree\Gateway\Request\DescriptorDataBuilder</item>
                 <item name="payee" xsi:type="string">Magento\Braintree\Gateway\Request\PayPal\PayeeDataBuilder</item>
+                <item name="level_2_3_processing" xsi:type="string">Magento\Braintree\Gateway\Request\Level23ProcessingDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
@@ -675,6 +679,7 @@
                 <item name="channel" xsi:type="string">Magento\Braintree\Gateway\Request\ChannelDataBuilder</item>
                 <item name="address" xsi:type="string">Magento\Braintree\Gateway\Request\AddressDataBuilder</item>
                 <item name="dynamic_descriptor" xsi:type="string">Magento\Braintree\Gateway\Request\DescriptorDataBuilder</item>
+                <item name="level_2_3_processing" xsi:type="string">Magento\Braintree\Gateway\Request\Level23ProcessingDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
@@ -782,6 +787,7 @@
                 <item name="channel" xsi:type="string">Magento\Braintree\Gateway\Request\ChannelDataBuilder</item>
                 <item name="address" xsi:type="string">Magento\Braintree\Gateway\Request\AddressDataBuilder</item>
                 <item name="dynamic_descriptor" xsi:type="string">Magento\Braintree\Gateway\Request\DescriptorDataBuilder</item>
+                <item name="level_2_3_processing" xsi:type="string">Magento\Braintree\Gateway\Request\Level23ProcessingDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
@@ -887,6 +893,7 @@
                 <item name="address" xsi:type="string">Magento\Braintree\Gateway\Request\AddressDataBuilder</item>
                 <item name="dynamic_descriptor" xsi:type="string">Magento\Braintree\Gateway\Request\DescriptorDataBuilder</item>
                 <item name="device_data" xsi:type="string">Magento\Braintree\Gateway\Request\DeviceDataBuilder</item>
+                <item name="level_2_3_processing" xsi:type="string">Magento\Braintree\Gateway\Request\Level23ProcessingDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
@@ -912,4 +919,6 @@
     <preference for="Magento\Braintree\Api\Data\AuthDataInterface" type="Magento\Braintree\Model\ApplePay\Auth\Data" />
     <preference for="Magento\Braintree\Api\Data\CreditPriceDataInterface" type="Magento\Braintree\Model\CreditPrice" />
     <preference for="Magento\Braintree\Api\CreditPriceRepositoryInterface" type="Magento\Braintree\Model\ResourceModel\CreditPriceRepository" />
+
+    <preference for="Magento\Payment\Gateway\Data\Order\OrderAdapter" type="Magento\Braintree\Gateway\Data\Order\OrderAdapter"/>
 </config>

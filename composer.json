@@ -20,7 +20,8 @@
         "magento/module-ui": "101.0.*||101.1.*",
         "guzzlehttp/psr7": "^1.5",
         "ext-json": "*",
-        "php": "^7.0"
+        "php": "^7.0",
+        "league/iso3166": "^2.1"
     },
     "replace": {
         "magento/module-braintree": "100.*.*"
