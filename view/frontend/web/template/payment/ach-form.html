@@ -1,0 +1,136 @@
+<fieldset data-bind="attr: {class: 'fieldset payment items ach ' + getCode(), id: 'payment_form_' + getCode()}">
+    <div class="field">
+        <div class="control">
+            <div class="fields group group-2">
+                <div class="field number required">
+                    <label data-bind="attr: {for: getCode() + '_routing_number'}" class="label">
+                        <span><!-- ko i18n: 'Routing Number'--><!-- /ko --></span>
+                    </label>
+                    <div class="control">
+                        <input
+                                class="input-text"
+                                data-bind="value: routingNumber"
+                                name="payment[routing_number]"
+                                placeholder="011000015"
+                                type="number"
+                        />
+                    </div>
+                </div>
+                <div class="field number required">
+                    <label data-bind="attr: {for: getCode() + '_account_number'}" class="label">
+                        <span><!-- ko i18n: 'Account Number'--><!-- /ko --></span>
+                    </label>
+                    <div class="control">
+                        <input
+                                class="input-text"
+                                data-bind="value: accountNumber"
+                                name="payment[account_number]"
+                                placeholder="1000000000"
+                                type="number"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="field">
+        <div class="control">
+            <div class="fields group group-2">
+                <div class="field required">
+                    <label data-bind="attr: {for: getCode() + '_account_type'}" class="label">
+                        <span data-bind="i18n: 'Account Type'"></span>
+                    </label>
+                    <div class="control">
+                        <select class="select"
+                                data-bind="value: accountType"
+                                name="payment[account_type]">
+                            <option value="checking">Checking</option>
+                            <option value="savings">Savings</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="field required">
+                    <label data-bind="attr: {for: getCode() + '_ownership_type'}" class="label">
+                        <span data-bind="i18n: 'Ownership Type'"></span>
+                    </label>
+                    <div class="control">
+                        <select class="select"
+                                data-bind="event: { change: changeOwnershipType }, value: ownershipType"
+                                name="payment[ownership_type]">
+                            <option value="personal">Personal</option>
+                            <option value="business">Business</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Personal Account -->
+    <!-- ko if: (isPersonal()) -->
+    <div class="field">
+        <div class="control">
+            <div class="fields group group-2">
+                <div class="field required">
+                    <label data-bind="attr: {for: getCode() + '_first_name'}" class="label">
+                        <span data-bind="i18n: 'First Name'"></span>
+                    </label>
+                    <div class="control">
+                        <input class="input-text"
+                               data-bind="attr: { id: getCode() + '_first_name' }, value: firstName"
+                               name="payment[first_name]"
+                               placeholder="Joe"
+                               type="text"
+                        />
+                    </div>
+                </div>
+                <div class="field required">
+                    <label data-bind="attr: {for: getCode() + '_last_name'}" class="label">
+                        <span data-bind="i18n: 'Last Name'"></span>
+                    </label>
+                    <div class="control">
+                        <input class="input-text"
+                               data-bind="attr: { id: getCode() + '_last_name' }, value: lastName"
+                               name="payment[last_name]"
+                               placeholder="Bloggs"
+                               type="text"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /ko -->
+
+    <!-- Business Account -->
+    <!-- ko if: isBusiness() -->
+    <div class="field required">
+        <label data-bind="attr: {for: getCode() + '_business_name'}" class="label">
+            <span data-bind="i18n: 'Business Name'"></span>
+        </label>
+        <div class="control">
+            <input class="input-text"
+                   data-bind="attr: { id: getCode() + '_business_name' }, value: businessName"
+                   type="text"
+                   name="payment[business_name]"
+            />
+        </div>
+    </div>
+    <!-- /ko -->
+
+    <div class="field required">
+        <label class="label">
+            <span data-bind="i18n: 'Proof of Authorization'"></span>
+        </label>
+        <input
+                class="checkbox"
+                data-bind="checked: hasAuthorization"
+                name="payment[authorization_proof]"
+                type="checkbox"
+        />
+        <p id="braintree-ach-mandate">
+            By clicking "Pay with ACH", I authorize Braintree, a service of PayPal, on behalf of <span data-bind="text: getStoreName() "></span>
+            (i) to verify my bank account information using bank information and consumer reports and (ii) to debit my bank account.
+        </p>
+    </div>
+</fieldset>

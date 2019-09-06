@@ -907,6 +907,114 @@
         </arguments>
     </virtualType>
 
+    <!-- Payment Method: ACH Direct Debit -->
+    <virtualType name="BraintreeAch" type="Magento\Payment\Model\Method\Adapter">
+        <arguments>
+            <argument name="code" xsi:type="const">Magento\Braintree\Model\Ach\Ui\ConfigProvider::METHOD_CODE</argument>
+            <argument name="valueHandlerPool" xsi:type="object">BraintreeAchValueHandlerPool</argument>
+            <argument name="validatorPool" xsi:type="object">BraintreeAchValidatorPool</argument>
+            <argument name="commandPool" xsi:type="object">BraintreeAchCommandPool</argument>
+            <argument name="formBlockType" xsi:type="object">Magento\Payment\Block\Form</argument>
+            <argument name="infoBlockType" xsi:type="string">Magento\Braintree\Block\Info</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Braintree\Model\Ach\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">Magento\Braintree\Model\Ach\Ui\ConfigProvider::METHOD_CODE</argument>
+        </arguments>
+    </type>
+    <!-- valueHandlerPool -->
+    <virtualType name="BraintreeAchValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">BraintreeAchConfigValueHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="BraintreeAchConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">BraintreeAchConfig</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="BraintreeAchConfig" type="Magento\Payment\Gateway\Config\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">Magento\Braintree\Model\Ach\Ui\ConfigProvider::METHOD_CODE</argument>
+        </arguments>
+    </virtualType>
+    <!-- validatorPool -->
+    <virtualType name="BraintreeAchValidatorPool" type="Magento\Payment\Gateway\Validator\ValidatorPool">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="country" xsi:type="string">BraintreeCountryValidator</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <!-- commandPool -->
+    <virtualType name="BraintreeAchCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="authorize" xsi:type="string">BraintreeAchAuthorizeCommand</item>
+                <item name="sale" xsi:type="string">BraintreeAchSaleCommand</item>
+                <item name="capture" xsi:type="string">BraintreeAchCaptureStrategyCommand</item>
+                <item name="settlement" xsi:type="string">BraintreeCaptureCommand</item>
+                <item name="void" xsi:type="string">BraintreeVoidCommand</item>
+                <item name="refund" xsi:type="string">BraintreeRefundCommand</item>
+                <item name="cancel" xsi:type="string">BraintreeVoidCommand</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="BraintreeAchAuthorizeCommand" type="Magento\Braintree\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">BraintreeAchAuthorizeRequest</argument>
+            <argument name="transferFactory" xsi:type="object">Magento\Braintree\Gateway\Http\TransferFactory</argument>
+            <argument name="client" xsi:type="object">Magento\Braintree\Gateway\Http\Client\TransactionSale</argument>
+            <argument name="handler" xsi:type="object">BraintreeAchAuthorizationHandler</argument>
+            <argument name="validator" xsi:type="object">Magento\Braintree\Gateway\Validator\ResponseValidator</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="BraintreeAchSaleCommand" type="Magento\Braintree\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="transferFactory" xsi:type="object">Magento\Braintree\Gateway\Http\TransferFactory</argument>
+            <argument name="client" xsi:type="object">Magento\Braintree\Gateway\Http\Client\TransactionSale</argument>
+            <argument name="handler" xsi:type="object">BraintreeAchAuthorizationHandler</argument>
+            <argument name="validator" xsi:type="object">Magento\Braintree\Gateway\Validator\ResponseValidator</argument>
+            <argument name="requestBuilder" xsi:type="object">BraintreeAchSaleRequest</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="BraintreeAchCaptureStrategyCommand" type="Magento\Braintree\Gateway\Command\CaptureStrategyCommand">
+        <arguments>
+            <argument name="commandPool" xsi:type="object">BraintreeAchCommandPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="BraintreeAchAuthorizeRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="customer" xsi:type="string">Magento\Braintree\Gateway\Request\CustomerDataBuilder</item>
+                <item name="payment" xsi:type="string">Magento\Braintree\Gateway\Request\PaymentDataBuilder</item>
+                <item name="channel" xsi:type="string">Magento\Braintree\Gateway\Request\ChannelDataBuilder</item>
+                <item name="address" xsi:type="string">Magento\Braintree\Gateway\Request\AddressDataBuilder</item>
+                <item name="dynamic_descriptor" xsi:type="string">Magento\Braintree\Gateway\Request\DescriptorDataBuilder</item>
+                <item name="ach" xsi:type="string">Magento\Braintree\Gateway\Request\AchDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="BraintreeAchAuthorizationHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="payment_details" xsi:type="string">Magento\Braintree\Model\Ach\PaymentDetailsHandler</item>
+                <item name="txn_id" xsi:type="string">Magento\Braintree\Gateway\Response\TransactionIdHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="BraintreeAchSaleRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="authorize" xsi:type="string">BraintreeAchAuthorizeRequest</item>
+                <item name="settlement" xsi:type="string">Magento\Braintree\Gateway\Request\SettlementDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
     <!-- Preferences -->
     <preference for="Magento\Braintree\Api\AuthInterface" type="Magento\Braintree\Model\ApplePay\Auth" />
     <preference for="Magento\Braintree\Api\Data\AuthDataInterface" type="Magento\Braintree\Model\ApplePay\Auth\Data" />

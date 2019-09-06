@@ -10,5 +10,8 @@
         <method name="braintree_venmo">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
+        <method name="braintree_ach_direct_debit">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
     </methods>
 </payment>

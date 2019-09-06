@@ -18,7 +18,8 @@ define(
         let config = window.checkoutConfig.payment,
             braintreeType = 'braintree',
             payPalType = 'braintree_paypal',
-            payPalCreditType = 'braintree_paypal_credit';
+            payPalCreditType = 'braintree_paypal_credit',
+            braintreeAchDirectDebit = 'braintree_ach_direct_debit';
 
         if (config[braintreeType].isActive) {
             rendererList.push(
@@ -53,6 +54,15 @@ define(
                 component: 'Magento_Braintree/js/view/payment/method-renderer/venmo'
             }
         );
+
+        if (config[braintreeAchDirectDebit].isActive) {
+            rendererList.push(
+                {
+                    type: braintreeAchDirectDebit,
+                    component: 'Magento_Braintree/js/view/payment/method-renderer/ach'
+                }
+            );
+        }
 
         /** Add view logic here if needed */
         return Component.extend({});
