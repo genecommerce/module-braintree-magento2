@@ -7,6 +7,7 @@ use Braintree\PaymentMethod;
 use Braintree\Result\UsBankAccountVerification;
 use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Braintree\Observer\DataAssignObserver;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 
 /**
@@ -30,13 +31,15 @@ class AchDataBuilder implements BuilderInterface
     {
         $this->subjectReader = $subjectReader;
     }
+
     /**
      * Builds ENV request
      *
      * @param array $buildSubject
      * @return array
+     * @throws LocalizedException
      */
-    public function build(array $buildSubject): array
+    public function build(array $buildSubject)
     {
         $paymentDO = $this->subjectReader->readPayment($buildSubject);
         $customerId = '218686684';
@@ -54,6 +57,13 @@ class AchDataBuilder implements BuilderInterface
             ]
         ]);
 
-        return [];
+        if ($result->success) {
+            return [
+                'paymentMethodNonce' => null,
+                'paymentMethodToken' => $result->paymentMethod->token
+            ];
+        }
+
+        throw new LocalizedException(__('Failed to create payment token.'));
     }
 }

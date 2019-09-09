@@ -53,7 +53,6 @@ define(
                     routingNumber: self.routingNumber(),
                     accountNumber: self.accountNumber(),
                     accountType: self.accountType(),
-                    // displayName: 'My Store',
                     ownershipType: self.ownershipType(),
                     billingAddress: {
                         streetAddress: billingAddress.street[0],
@@ -103,7 +102,6 @@ define(
                     'method': this.getCode(),
                     'additional_data': {
                         'payment_method_nonce': this.paymentMethodNonce,
-                        'device_data': this.deviceData
                     }
                 };
 
