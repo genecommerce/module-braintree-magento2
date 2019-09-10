@@ -52,11 +52,15 @@ define(
                     return;
                 }
 
+                fullScreenLoader.startLoader();
+
                 var self = this;
 
                 var billingAddress = quote.billingAddress();
 
-                var bankDetails = {
+                let regionCode;
+
+                let bankDetails = {
                     routingNumber: self.routingNumber(),
                     accountNumber: self.accountNumber(),
                     accountType: self.accountType(),
@@ -79,6 +83,28 @@ define(
 
                 var mandateText = document.getElementById('braintree-ach-mandate').textContent;
 
+                // if no region code is available, lets find one!
+                if (typeof billingAddress.regionCode === 'undefined') {
+                    $.get('/rest/V1/directory/countries/' + billingAddress.countryId).done(function (data) {
+                        if (typeof data.available_regions !== 'undefined') {
+                            for (var i = 0; i < data.available_regions.length; ++i) {
+                                if (data.available_regions[i].id === billingAddress.regionId) {
+                                    regionCode = data.available_regions[i].code;
+                                    bankDetails.billingAddress.region = regionCode;
+                                    self.tokenizeAch(bankDetails, mandateText);
+                                }
+                            }
+                        }
+                    }).fail(function() {
+                        fullScreenLoader.stopLoader();
+                    });
+                } else {
+                    self.tokenizeAch(bankDetails, mandateText);
+                }
+            },
+
+            tokenizeAch: function (bankDetails, mandateText) {
+                var self = this;
                 this.achInstance.tokenize({
                     bankDetails: bankDetails,
                     mandateText: mandateText
@@ -87,6 +113,7 @@ define(
                         self.setErrorMsg($t('There was an error with the provided bank details. Please check and try again.'));
                         self.hasAuthorization(false);
                     } else {
+                        fullScreenLoader.stopLoader();
                         self.handleAchSuccess(tokenizedPayload);
                     }
                 });
