@@ -2,6 +2,7 @@ define(
     [
         'Magento_Checkout/js/view/payment/default',
         'ko',
+        'jquery',
         'braintree',
         'braintreeDataCollector',
         'braintreeAch',
@@ -15,6 +16,7 @@ define(
     function (
         Component,
         ko,
+        $,
         braintree,
         dataCollector,
         ach,
@@ -46,7 +48,12 @@ define(
             },
 
             clickAchBtn: function () {
+                if (!this.validateForm('#' + this.getCode() + '-form')) {
+                    return;
+                }
+
                 var self = this;
+
                 var billingAddress = quote.billingAddress();
 
                 var bankDetails = {
@@ -182,6 +189,10 @@ define(
 
             setAchInstance: function (instance) {
                 this.achInstance = instance;
+            },
+
+            validateForm: function (form) {
+                return $(form).validation() && $(form).validation('isValid');
             }
         });
     }
