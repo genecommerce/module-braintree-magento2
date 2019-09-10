@@ -23,6 +23,8 @@ class ConfigProvider implements ConfigProviderInterface
 
     const CONFIG_STORE_NAME = 'general/store_information/name';
 
+    const CONFIG_STORE_URL = 'web/unsecure/base_url';
+
     const ALLOWED_MERCHANT_COUNTRIES = ['US'];
 
     /**
@@ -117,14 +119,22 @@ class ConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getStoreName()
+    public function getStoreName(): string
     {
         $storeName = $this->scopeConfig->getValue(
             self::CONFIG_STORE_NAME,
             ScopeInterface::SCOPE_STORE
         );
-        return $storeName ?: 'this store';
+
+        // If store name is empty, use the base URL
+        if (!$storeName) {
+            $storeName = $this->scopeConfig->getValue(
+                self::CONFIG_STORE_URL,
+                ScopeInterface::SCOPE_STORE
+            );
+        }
+        return $storeName;
     }
 }
