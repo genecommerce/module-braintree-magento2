@@ -184,7 +184,7 @@
                 <is_gateway>1</is_gateway>
                 <model>BraintreeAch</model>
                 <order_status>processing</order_status>
-                <payment_action>authorize</payment_action>
+                <payment_action>authorize_capture</payment_action>
                 <title>ACH Direct Debit</title>
                 <privateInfoKeys>processorAuthorizationCode,processorResponseCode,processorResponseText</privateInfoKeys>
                 <paymentInfoKeys>processorAuthorizationCode,processorResponseCode,processorResponseText</paymentInfoKeys>
