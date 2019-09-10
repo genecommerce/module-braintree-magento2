@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Magento\Braintree\Gateway\Request;
 
+use Braintree\Customer;
+use Braintree\CustomerSearch;
 use Braintree\PaymentMethod;
 use Braintree\Result\UsBankAccountVerification;
 use Magento\Braintree\Gateway\Helper\SubjectReader;
@@ -42,12 +44,33 @@ class AchDataBuilder implements BuilderInterface
     public function build(array $buildSubject)
     {
         $paymentDO = $this->subjectReader->readPayment($buildSubject);
-        $customerId = '218686684';
-
         $payment = $paymentDO->getPayment();
         $nonce = $payment->getAdditionalInformation(
             DataAssignObserver::PAYMENT_METHOD_NONCE
         );
+
+        // Get customer details from the billing address
+        $order = $paymentDO->getOrder();
+        $billingAddress = $order->getBillingAddress();
+
+        // lets search for an existing customer
+        $customers = Customer::search([
+            CustomerSearch::email()->is($billingAddress->getEmail()),
+            CustomerSearch::firstName()->is($billingAddress->getFirstname()),
+            CustomerSearch::lastName()->is($billingAddress->getLastname())
+        ]);
+
+        if (empty($customers->getIds())) {
+            // create customer and get ID
+            $result = Customer::create([
+                'email' => $billingAddress->getEmail(),
+                'firstName' => $billingAddress->getFirstname(),
+                'lastName' => $billingAddress->getLastname()
+            ]);
+            $customerId = $result->customer->id;
+        } else {
+            $customerId = $customers->getIds()[0];
+        }
 
         $result = PaymentMethod::create([
             'customerId' => $customerId,
