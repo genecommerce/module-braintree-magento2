@@ -84,7 +84,7 @@ class Level23ProcessingDataBuilder implements BuilderInterface
 
         /** @var OrderPaymentInterface $payment */
         $payment = $paymentDO->getPayment();
-        
+
         /**
          * Override in di.xml so we can add extra public methods.
          * In this instance, so we can eventually get the discount amount.
@@ -101,19 +101,30 @@ class Level23ProcessingDataBuilder implements BuilderInterface
             /** @var OrderItemInterface $item */
             $tax += $item->getTaxAmount();
 
+            // Regex to replace all unsupported characters.
+            $filteredFields = preg_replace(
+                '/[^a-zA-Z0-9\s\-.\']/',
+                '',
+                [
+                    'name' => substr($item->getName(), 0, 35),
+                    'unit_of_measure' => substr($item->getProductType(), 0, 12),
+                    'sku' => substr($item->getSku(), 0, 12)
+                ]
+            );
+
             $lineItems[] = array_combine(
                 self::LINE_ITEMS_ARRAY,
                 [
-                    $item->getName(),
+                    $filteredFields['name'],
                     TransactionLineItem::DEBIT,
                     $item->getQtyOrdered(),
                     $item->getPrice(),
-                    $item->getProductType(),
+                    $filteredFields['unit_of_measure'],
                     $item->getQtyOrdered() * $item->getPrice(),
                     $item->getTaxAmount(),
                     $item->getDiscountAmount(),
-                    $item->getSku(),
-                    $item->getSku()
+                    $filteredFields['sku'],
+                    $filteredFields['sku']
                 ]
             );
         }
