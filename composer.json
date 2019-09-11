@@ -30,6 +30,9 @@
         "files": [
             "registration.php"
         ],
+        "psr-0": {
+            "Braintree": "braintree_php/lib/"
+        },
         "psr-4": {
             "Magento\\Braintree\\": "",
             "Braintree\\": "braintree_php/lib/Braintree"
