@@ -3,7 +3,6 @@
 namespace Magento\Braintree\Controller\Paypal;
 
 use Exception;
-use function GuzzleHttp\Psr7\parse_query;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Context;
