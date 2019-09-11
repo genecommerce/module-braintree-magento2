@@ -23,14 +23,16 @@
         "league/iso3166": "^2.1"
     },
     "replace": {
-        "magento/module-braintree": "100.*.*"
+        "magento/module-braintree": "100.*.*",
+        "braintree/braintree_php": "3.*"
     },
     "autoload": {
         "files": [
             "registration.php"
         ],
         "psr-4": {
-            "Magento\\Braintree\\": ""
+            "Magento\\Braintree\\": "",
+            "Braintree\\": "braintree_php/lib/Braintree"
         }
     },
     "authors": [
