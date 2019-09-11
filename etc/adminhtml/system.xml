@@ -175,7 +175,22 @@
                             <config_path>payment/braintree/countrycreditcard</config_path>
                         </field>
                     </group>
-                    <group id="braintree_applepay" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="31">
+                    <group id="braintree_ach_direct_debit" translate="label" showInDefault="1" showInWebsite="1" sortOrder="35">
+                        <label>ACH through Braintree</label>
+                        <comment>
+                            <![CDATA[
+                            ACH is currently only available in the United States and you must qualify as an eligible merchant.
+                            Please see <a href="https://articles.braintreepayments.com/guides/payment-methods/ach#availability" target="_blank">here</a> for more information.
+                            ]]>
+                        </comment>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
+                        <field id="active" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1">
+                            <label>Enable ACH Direct Debit</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/braintree_ach_direct_debit/active</config_path>
+                        </field>
+                    </group>
+                    <group id="braintree_applepay" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="40">
                         <label>ApplePay through Braintree</label>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                         <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -200,7 +215,7 @@
                             </comment>
                         </field>
                     </group>
-                    <group id="braintree_googlepay" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="32">
+                    <group id="braintree_googlepay" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="45">
                         <label>GooglePay through Braintree</label>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                         <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -230,7 +245,7 @@
                             <config_path>payment/braintree_googlepay/cctypes</config_path>
                         </field>
                     </group>
-                    <group id="braintree_venmo" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="33">
+                    <group id="braintree_venmo" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="50">
                         <label>Venmo through Braintree</label>
                         <comment>Venmo is currently only available in the United States and Venmo must be enabled on your Braintree account.</comment>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
@@ -248,7 +263,7 @@
                             </depends>
                         </field>
                     </group>
-                    <group id="braintree_paypal" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="40">
+                    <group id="braintree_paypal" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="55">
                         <label>PayPal through Braintree</label>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                         <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -437,7 +452,7 @@
                             </field>
                         </group>
                     </group>
-                    <group id="braintree_paypal_credit" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="40">
+                    <group id="braintree_paypal_credit" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="60">
                         <label>PayPal Credit through Braintree</label>
                         <comment><![CDATA[PayPal Credit is currently only available in the United States and United Kingdom, and must have been enabled on your PayPal account.]]></comment>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
@@ -605,7 +620,7 @@
                             <field id="braintree_paypal_credit_active">1</field>
                         </depends>
                     </group>
-                    <group id="braintree_3dsecure" translate="label" showInDefault="1" showInWebsite="1" sortOrder="42">
+                    <group id="braintree_3dsecure" translate="label" showInDefault="1" showInWebsite="1" sortOrder="65">
                         <label>3D Secure Verification Settings</label>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                         <field id="verify_3dsecure" translate="label" type="select" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -629,7 +644,7 @@
                             <config_path>payment/braintree/verify_specific_countries</config_path>
                         </field>
                     </group>
-                    <group id="braintree_dynamic_descriptor" translate="label" showInDefault="1" showInWebsite="1" sortOrder="50">
+                    <group id="braintree_dynamic_descriptor" translate="label" showInDefault="1" showInWebsite="1" sortOrder="70">
                         <label>Dynamic Descriptors</label>
                         <comment><![CDATA[Dynamic descriptors are sent on a per-transaction basis and define what will appear on your customers credit card statements for a specific purchase.
                             The clearer the description of your product, the less likely customers will issue chargebacks due to confusion or non-recognition.

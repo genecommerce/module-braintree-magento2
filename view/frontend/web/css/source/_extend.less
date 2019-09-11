@@ -250,3 +250,26 @@
 .braintree-paypal-logo.oneclick-container {
     width: 100%;
 }
+
+#payment_form_braintree_ach_direct_debit {
+    .field > .fields {
+        .field {
+            .label {
+                font-weight: 600;
+            }
+            &.required > .label:after {
+                content: '*';
+                color: #e02b27;
+                font-size: 1.2rem;
+                margin: 0 0 0 5px;
+            }
+            .control {
+                margin: 10px 10px 0 0;
+
+                input[type="text"]::placeholder, input[type="number"]::placeholder {
+                    color: lightgrey;
+                }
+            }
+        }
+    }
+}

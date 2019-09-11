@@ -49,7 +49,7 @@ class Countries extends Select
      * @param string $value
      * @return $this
      */
-    public function setInputName($value): self
+    public function setInputName($value)
     {
         return $this->setName($value);
     }

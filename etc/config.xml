@@ -171,6 +171,24 @@
                 <privateInfoKeys>processorAuthorizationCode,processorResponseCode,processorResponseText</privateInfoKeys>
                 <paymentInfoKeys>processorAuthorizationCode,processorResponseCode,processorResponseText</paymentInfoKeys>
             </braintree_venmo>
+            <braintree_ach_direct_debit>
+                <active>0</active>
+                <can_authorize>1</can_authorize>
+                <can_cancel>1</can_cancel>
+                <can_capture>1</can_capture>
+                <can_capture_partial>1</can_capture_partial>
+                <can_refund>1</can_refund>
+                <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
+                <can_use_checkout>1</can_use_checkout>
+                <can_void>1</can_void>
+                <is_gateway>1</is_gateway>
+                <model>BraintreeAch</model>
+                <order_status>processing</order_status>
+                <payment_action>authorize_capture</payment_action>
+                <title>ACH Direct Debit</title>
+                <privateInfoKeys>processorAuthorizationCode,processorResponseCode,processorResponseText</privateInfoKeys>
+                <paymentInfoKeys>processorAuthorizationCode,processorResponseCode,processorResponseText</paymentInfoKeys>
+            </braintree_ach_direct_debit>
         </payment>
     </default>
 </config>

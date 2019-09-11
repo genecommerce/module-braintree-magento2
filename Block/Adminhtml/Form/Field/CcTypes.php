@@ -38,7 +38,7 @@ class CcTypes extends Select
     /**
      * @inheritDoc
      */
-    protected function _toHtml(): string
+    protected function _toHtml()
     {
         if (!$this->getOptions()) {
             $this->setOptions($this->ccTypeHelper->getCcTypes());
@@ -54,7 +54,7 @@ class CcTypes extends Select
      * @param string $value
      * @return $this
      */
-    public function setInputName($value): self
+    public function setInputName($value)
     {
         return $this->setName($value . '[]');
     }

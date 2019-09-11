@@ -29,7 +29,7 @@ class ResponseValidator extends GeneralResponseValidator
                         && isset($response->transaction)
                         && in_array(
                             $response->transaction->status,
-                            [Transaction::AUTHORIZED, Transaction::SUBMITTED_FOR_SETTLEMENT, Transaction::SETTLING]
+                            [Transaction::AUTHORIZED, Transaction::SUBMITTED_FOR_SETTLEMENT, Transaction::SETTLING, Transaction::SETTLEMENT_PENDING]
                         ),
                         [__('Wrong transaction status')]
                     ];
