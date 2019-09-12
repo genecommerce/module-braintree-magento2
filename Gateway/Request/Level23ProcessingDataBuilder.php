@@ -98,6 +98,12 @@ class Level23ProcessingDataBuilder implements BuilderInterface
         $addressData = $this->iso3166->alpha2($billingAddress->getCountryId());
 
         foreach ($order->getItems() as $item) {
+
+            // Skip configurable parent items and items with a base price of 0
+            if ($item->getParentItem() || 0.0 === $item->getPrice()) {
+                continue;
+            }
+
             /** @var OrderItemInterface $item */
             $tax += $item->getTaxAmount();
 
