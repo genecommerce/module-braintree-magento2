@@ -30,6 +30,11 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $this->braintreeCreditPrices($installer);
         }
 
+        // Local Payment methods (intended 3.4.0)
+        if (version_compare($context->getVersion(), '3.4.0', '<')) {
+            $this->braintreeLpmPivotTable($installer);
+        }
+
         $installer->endSetup();
     }
 
@@ -155,6 +160,58 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
             )
             ->setComment('Braintree credit rates');
+        $installer->getConnection()->createTable($table);
+    }
+
+    /**
+     * @param SchemaSetupInterface $installer
+     * @throws Zend_Db_Exception
+     */
+    private function braintreeLpmPivotTable(SchemaSetupInterface $installer)
+    {
+        $table = $installer->getConnection()
+            ->newTable(
+                $installer->getTable('braintree_lpm')
+            )
+            ->addColumn(
+                'id',
+                Table::TYPE_INTEGER,
+                null,
+                ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
+                'Row ID'
+            )
+            ->addColumn(
+                'payment_id',
+                Table::TYPE_TEXT, // ID is defined as `string` in the Braintree docs
+                255,
+                [
+                    'nullable' => false
+                ],
+                'Payment ID'
+            )
+            ->addColumn(
+                'quote_id',
+                Table::TYPE_INTEGER,
+                10,
+                [
+                    'nullable' => false,
+                    'unsigned' => true
+                ],
+                'Quote ID'
+            )
+            ->addForeignKey(
+                $installer->getFkName(
+                    $installer->getTable('braintree_lpm'),
+                    'id',
+                    $installer->getTable('quote'),
+                    'entity_id'
+                ),
+                'id',
+                $installer->getTable('quote'),
+                'entity_id'
+            )
+            ->setComment('Pivot table for Braintree Local Payments');
+
         $installer->getConnection()->createTable($table);
     }
 }
