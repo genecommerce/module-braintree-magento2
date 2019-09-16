@@ -4,7 +4,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [3.2.0]
+## [3.3.0] - 2019-09
+### Added
+- New payment methods; Venmo and ACH Direct Debit
+- Both new payment methods are for merchants based in the US and will require you to speak with your Braintree Account 
+Manager to enable the services on your account
+- Level 2 /3 Processing information. For more details, see [here](https://developers.braintreepayments.com/reference/general/level-2-and-3-processing/overview)
+- Braintree PHP SDK (3.40.0) is now included as part of the module in order to maintain BC with Magento 2.2
+
+### Fixed
+- PayPal not working with virtual products
+- CVV validation bug (https://github.com/nicholasscottfish)
+- Google Pay library now correctly excluded from JS minification
+
+### Removed
+- Unused Guzzle PSR7 library
+
+## [3.2.1] - 2019-07-31
+### Fixed
+- Bug in backend create order
+
+## [3.2.0] - 2019-07-31
 ### Added
 - 3DS 2 now supported
 - Basic validation to Dynamic Descriptor configuration options to alleviate errors in checkout
@@ -61,6 +81,8 @@ a bug in core Magento 2.3.1 means that if the Vault is turned off, cards are alw
 ### Fixed
 - Vaulted cards now work correctly
 
+[3.3.0]: https://github.com/genecommerce/module-braintree-magento2/compare/3.2.1...3.3.0
+[3.2.1]: https://github.com/genecommerce/module-braintree-magento2/compare/3.2.0...3.2.1
 [3.2.0]: https://github.com/genecommerce/module-braintree-magento2/compare/3.1.3...3.2.0
 [3.1.3]: https://github.com/genecommerce/module-braintree-magento2/compare/3.1.2...3.1.3
 [3.1.2]: https://github.com/genecommerce/module-braintree-magento2/compare/3.1.1...3.1.2
