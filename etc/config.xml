@@ -10,7 +10,7 @@
         <dev>
             <js>
                 <minify_exclude>
-                    https://pay.google.com/gp/p/js/pay
+                    <braintree>pay\.google\.com</braintree>
                 </minify_exclude>
             </js>
         </dev>
