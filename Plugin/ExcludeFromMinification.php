@@ -20,7 +20,7 @@ class ExcludeFromMinification
     public function afterGetExcludes(Minification $subject, array $result, $contentType): array
     {
         if ('js' === $contentType) {
-            $result[] = 'Vendor_Module/js/your-js-filename';
+            $result[] = 'https://pay.google.com/gp/p/js/pay.js';
         }
         return $result;
     }
