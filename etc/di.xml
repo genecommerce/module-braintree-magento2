@@ -1030,4 +1030,8 @@
     <preference for="Magento\Braintree\Api\CreditPriceRepositoryInterface" type="Magento\Braintree\Model\ResourceModel\CreditPriceRepository" />
 
     <preference for="Magento\Payment\Gateway\Data\Order\OrderAdapter" type="Magento\Braintree\Gateway\Data\Order\OrderAdapter"/>
+
+    <type name="Magento\Framework\View\Asset\Minification">
+        <plugin name="braintreeExcludeFromMinification" type="Magento\Braintree\Plugin\ExcludeFromMinification"/>
+    </type>
 </config>

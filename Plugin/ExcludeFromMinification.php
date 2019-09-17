@@ -19,9 +19,7 @@ class ExcludeFromMinification
      */
     public function afterGetExcludes(Minification $subject, array $result, $contentType): array
     {
-        if ('js' === $contentType) {
-            $result[] = 'https://pay.google.com/gp/p/js/pay.js';
-        }
+        $result[] = '/pay.google.com/';
         return $result;
     }
 }
