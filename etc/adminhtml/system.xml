@@ -215,6 +215,19 @@
                             </comment>
                         </field>
                     </group>
+                    <group id="braintree_local_payment" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="42">
+                        <label>Local Payment Methods</label>
+                        <comment>Enabling Local Payment Methods will show all available methods for the stores locale</comment>
+                        <field id="active" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Enable Local Payment Methods</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/braintree_local_payment/active</config_path>
+                        </field>
+                        <field id="title" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Title</label>
+                            <config_path>payment/braintree_local_payment/title</config_path>
+                        </field>
+                    </group>
                     <group id="braintree_googlepay" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="45">
                         <label>GooglePay through Braintree</label>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>

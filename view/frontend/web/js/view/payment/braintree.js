@@ -19,7 +19,8 @@ define(
             braintreeType = 'braintree',
             payPalType = 'braintree_paypal',
             payPalCreditType = 'braintree_paypal_credit',
-            braintreeAchDirectDebit = 'braintree_ach_direct_debit';
+            braintreeAchDirectDebit = 'braintree_ach_direct_debit',
+            braintreeLpm = 'braintree_local_payment';
 
         if (config[braintreeType].isActive) {
             rendererList.push(
@@ -60,6 +61,15 @@ define(
                 {
                     type: braintreeAchDirectDebit,
                     component: 'Magento_Braintree/js/view/payment/method-renderer/ach'
+                }
+            );
+        }
+
+        if (config[braintreeLpm].isActive) {
+            rendererList.push(
+                {
+                    type: braintreeLpm,
+                    component: 'Magento_Braintree/js/view/payment/method-renderer/lpm'
                 }
             );
         }

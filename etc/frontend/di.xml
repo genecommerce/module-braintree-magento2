@@ -15,6 +15,7 @@
                 <item name="braintree_googlepay_config_provider" xsi:type="object">Magento\Braintree\Model\GooglePay\Ui\ConfigProvider</item>
                 <item name="braintree_venmo_config_provider" xsi:type="object">Magento\Braintree\Model\Venmo\Ui\ConfigProvider</item>
                 <item name="braintree_ach_config_provider" xsi:type="object">Magento\Braintree\Model\Ach\Ui\ConfigProvider</item>
+                <item name="braintree_lpm_config_provider" xsi:type="object">Magento\Braintree\Model\Lpm\Ui\ConfigProvider</item>
             </argument>
         </arguments>
     </type>
