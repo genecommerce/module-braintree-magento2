@@ -65,14 +65,12 @@ define(
             );
         }
 
-        if (config[braintreeLpm].isActive) {
-            rendererList.push(
-                {
-                    type: braintreeLpm,
-                    component: 'Magento_Braintree/js/view/payment/method-renderer/lpm'
-                }
-            );
-        }
+        rendererList.push(
+            {
+                type: braintreeLpm,
+                component: 'Magento_Braintree/js/view/payment/method-renderer/lpm'
+            }
+        );
 
         /** Add view logic here if needed */
         return Component.extend({});
