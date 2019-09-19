@@ -261,7 +261,15 @@
                     </group>
                     <group id="braintree_venmo" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="50">
                         <label>Venmo through Braintree</label>
-                        <comment>Venmo is currently only available in the United States and Venmo must be enabled on your Braintree account.</comment>
+                        <comment>
+                            <![CDATA[
+                                Merchants need to be approved to be able to use Venmo for payments.
+                                Please click on this
+                                <a href="https://articles.braintreepayments.com/guides/payment-methods/venmo?_ga=1.158025594.1943497021.1564012603#availability" target="_blank">link</a>
+                                and go to the "Go Live" section to get details around approval process.
+                                You can apply for it immediately. Please note currently Venmo is available in US only.
+                            ]]>
+                        </comment>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                         <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Enable Venmo through Braintree</label>

@@ -226,7 +226,12 @@ define([
         reInitPayPal: function () {
             this.disableButton();
             this.clientConfig.paypal.amount = parseFloat(this.grandTotalAmount).toFixed(2);
-            this.clientConfig.paypal.shippingAddressOverride = this.getShippingAddress();
+
+            if (!quote.isVirtual()) {
+                this.clientConfig.paypal.enableShippingAddress = true;
+                this.clientConfig.paypal.shippingAddressEditable = false;
+                this.clientConfig.paypal.shippingAddressOverride = this.getShippingAddress();
+            }
 
             Braintree.setConfig(this.clientConfig);
 
