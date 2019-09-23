@@ -10,6 +10,7 @@ define(
         'Magento_Checkout/js/action/select-billing-address',
         'Magento_Checkout/js/model/full-screen-loader',
         'Magento_Checkout/js/model/quote',
+        'Magento_Checkout/js/model/payment/additional-validators',
         'mage/translate'
     ],
     function (
@@ -23,6 +24,7 @@ define(
         selectBillingAddress,
         fullScreenLoader,
         quote,
+        additionalValidators,
         $t
     ) {
         'use strict';
@@ -31,7 +33,97 @@ define(
             defaults: {
                 code: 'braintree_local_payment',
                 paymentMethodNonce: null,
-                template: 'Magento_Braintree/payment/lpm',
+                template: 'Magento_Braintree/payment/lpm'
+            },
+
+            clickPaymentBtn: function (method) {
+                var self = this;
+
+                fullScreenLoader.startLoader();
+
+                if (additionalValidators.validate()) {
+                    braintree.create({
+                        authorization: self.getClientToken()
+                    }, function (clientError, clientInstance) {
+                        if (clientError) {
+                            self.setErrorMsg($t('Unable to initialize Braintree Client.'));
+                            fullScreenLoader.stopLoader();
+                            return;
+                        }
+
+                        lpm.create({
+                            client: clientInstance
+                        }, function (lpmError, lpmInstance) {
+                            if (lpmError) {
+                                self.setErrorMsg(lpmError);
+                                fullScreenLoader.stopLoader();
+                                return;
+                            }
+
+                            lpmInstance.startPayment({
+                                amount: self.getAmount(),
+                                currencyCode: self.getCurrencyCode(),
+                                email: self.getCustomerDetails().email,
+                                phone: self.getCustomerDetails().phone,
+                                givenName: self.getCustomerDetails().firstName,
+                                surname: self.getCustomerDetails().lastName,
+                                shippingAddressRequired: !quote.isVirtual(),
+                                address: self.getAddress(),
+                                fallback: {
+                                    url: 'https://multistore.test',
+                                    buttonText: $t('Complete Payment')
+                                },
+                                paymentType: method,
+                                onPaymentStart: function (data, start) {
+                                    console.log(data);
+                                    // TODO AJAX request to web API to store payment ID in pivot table with quote ID
+                                    start();
+                                }
+                            }, function (startPaymentError, payload) {
+                                if (startPaymentError) {
+                                    if (startPaymentError.code === 'LOCAL_PAYMENT_POPUP_CLOSED') {
+                                        self.setErrorMsg($t('Local Payment popup was closed unexpectedly.'));
+                                    } else if(startPaymentError.code === 'LOCAL_PAYMENT_WINDOW_OPEN_FAILED') {
+                                        self.setErrorMsg($t('Local Payment popup failed to open.'));
+                                    } else if(startPaymentError.code === 'LOCAL_PAYMENT_WINDOW_CLOSED') {
+                                        self.setErrorMsg($t('Local Payment popup was closed. Payment cancelled.'));
+                                    } else {
+                                        console.error('Error!', startPaymentError);
+                                    }
+                                    fullScreenLoader.stopLoader();
+                                } else {
+                                    fullScreenLoader.stopLoader();
+                                    // Send the nonce to your server to create a transaction
+                                    self.setPaymentMethodNonce(payload.nonce);
+                                    self.placeOrder();
+                                }
+                            });
+                        });
+                    });
+                }
+            },
+
+            getAddress: function () {
+                var shippingAddress = quote.shippingAddress();
+
+                if (quote.isVirtual()) {
+                    return {
+                        countryCode: shippingAddress.countryId
+                    }
+                }
+
+                return {
+                    streetAddress: shippingAddress.street[0],
+                    extendedAddress: shippingAddress.street[1],
+                    locality: shippingAddress.city,
+                    postalCode: shippingAddress.postcode,
+                    region: shippingAddress.region,
+                    countryCode: shippingAddress.countryId
+                }
+            },
+
+            getAmount: function () {
+                return quote.totals()['base_grand_total'].toString();
             },
 
             getClientToken: function () {
@@ -40,6 +132,20 @@ define(
 
             getCode: function () {
                 return this.code;
+            },
+
+            getCurrencyCode: function () {
+                return quote.totals()['base_currency_code'];
+            },
+
+            getCustomerDetails: function() {
+                var billingAddress = quote.billingAddress();
+                return {
+                    firstName: billingAddress.firstname,
+                    lastName: billingAddress.lastname,
+                    phone: billingAddress.telephone,
+                    email: typeof quote.guestEmail === 'string' ? quote.guestEmail : billingAddress.email
+                }
             },
 
             getData: function () {
@@ -55,6 +161,24 @@ define(
                 return data;
             },
 
+            getMerchantId: function () {
+                return window.checkoutConfig.payment[this.getCode()].merchantId;
+            },
+
+            getPaymentMethod: function(method) {
+                var methods = window.checkoutConfig.payment[this.getCode()].allowedMethods;
+
+                for (var i = 0; i < methods.length; i++) {
+                    if (methods[i].method === method) {
+                        return methods[i]
+                    }
+                }
+            },
+
+            getPaymentMethods: function() {
+                return window.checkoutConfig.payment[this.getCode()].allowedMethods;
+            },
+
             getTitle: function() {
                 return window.checkoutConfig.payment[this.getCode()].title;
             },
@@ -65,6 +189,23 @@ define(
                 var self = this;
 
                 return this;
+            },
+
+            isActive: function() {
+                return true;
+            },
+
+            isValidCountryAndCurrency: function (method) {
+                var quoteCurrency = quote.totals()['quote_currency_code'];
+                var billingAddress = quote.billingAddress();
+                var countryId = billingAddress.countryId;
+                var paymentMethodDetails = this.getPaymentMethod(method);
+
+                if (paymentMethodDetails.countries.includes(countryId) && quoteCurrency === 'EUR') {
+                    return true;
+                }
+
+                return false;
             },
 
             setErrorMsg: function (message) {

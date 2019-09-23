@@ -199,6 +199,7 @@
                 <paymentInfoKeys>processorAuthorizationCode,processorResponseCode,processorResponseText</paymentInfoKeys>
                 <privateInfoKeys>processorAuthorizationCode,processorResponseCode,processorResponseText</privateInfoKeys>
                 <title>Local Payments</title>
+                <allowed_methods>bancontact,eps,giropay,ideal,sofort,mybank,p24,sepa</allowed_methods>
             </braintree_local_payment>
         </payment>
     </default>

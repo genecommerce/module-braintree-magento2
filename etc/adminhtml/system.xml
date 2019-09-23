@@ -217,7 +217,9 @@
                     </group>
                     <group id="braintree_local_payment" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="42">
                         <label>Local Payment Methods</label>
-                        <comment>Enabling Local Payment Methods will show all available methods for the stores locale</comment>
+                        <comment>
+                            All payments made with a Local Payment Method will be treated as an "Intent Sale" payment action.
+                        </comment>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                         <field id="active" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1">
                             <label>Enable Local Payment Methods</label>
@@ -227,6 +229,22 @@
                         <field id="title" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1">
                             <label>Title</label>
                             <config_path>payment/braintree_local_payment/title</config_path>
+                            <depends>
+                                <field id="active">1</field>
+                            </depends>
+                        </field>
+                        <field id="allowed_methods" translate="label" type="multiselect" sortOrder="10" showInDefault="1" showInWebsite="1">
+                            <label>Allowed Payment Methods</label>
+                            <comment>
+                                Any particular payment method will only be visible to customers who's billing address is
+                                valid for that method, regardless of the method being enabled here.
+                            </comment>
+                            <source_model>Magento\Braintree\Model\Adminhtml\Source\LpmMethods</source_model>
+                            <can_be_empty>1</can_be_empty>
+                            <config_path>payment/braintree_local_payment/allowed_methods</config_path>
+                            <depends>
+                                <field id="active">1</field>
+                            </depends>
                         </field>
                     </group>
                     <group id="braintree_googlepay" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="45">

@@ -1,4 +1,5 @@
 <!-- Local Payment Methods -->
+<!-- ko if: isActive() -->
 <div class="payment-method" data-bind="css: {'_active': (getCode() == isChecked())}" id="payment-method-braintree-lpm">
     <div class="payment-method-title field choice">
         <input type="radio"
@@ -26,14 +27,18 @@
             <!--/ko-->
         </div>
 
-        <div class="actions-toolbar">
+        <div class="actions-toolbar" data-bind="foreach: getPaymentMethods()">
+            <!-- ko if: $parent.isValidCountryAndCurrency(method) -->
             <div class="primary">
                 <button class="action primary checkout"
-                        data-bind=""
-                        type="submit">
-                    <span data-bind="i18n: 'Pay with LPM'"></span>
+                        data-bind="click: function () { $parent.clickPaymentBtn(method) },
+                            css: { disabled: !$parent.isPlaceOrderActionAllowed() }
+                            enable: ($parent.getCode() == $parent.isChecked())">
+                    <span data-bind="text: 'Pay with ' + label"></span>
                 </button>
             </div>
+            <!-- /ko -->
         </div>
     </div>
 </div>
+<!-- /ko -->

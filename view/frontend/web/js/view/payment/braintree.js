@@ -19,8 +19,7 @@ define(
             braintreeType = 'braintree',
             payPalType = 'braintree_paypal',
             payPalCreditType = 'braintree_paypal_credit',
-            braintreeAchDirectDebit = 'braintree_ach_direct_debit',
-            braintreeLpm = 'braintree_local_payment';
+            braintreeAchDirectDebit = 'braintree_ach_direct_debit';
 
         if (config[braintreeType].isActive) {
             rendererList.push(
@@ -67,7 +66,7 @@ define(
 
         rendererList.push(
             {
-                type: braintreeLpm,
+                type: 'braintree_local_payment',
                 component: 'Magento_Braintree/js/view/payment/method-renderer/lpm'
             }
         );

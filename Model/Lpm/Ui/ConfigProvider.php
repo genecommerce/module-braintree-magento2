@@ -5,6 +5,8 @@ namespace Magento\Braintree\Model\Lpm\Ui;
 
 use Magento\Braintree\Model\Lpm\Config;
 use Magento\Checkout\Model\ConfigProviderInterface;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Class ConfigProvider
@@ -29,24 +31,20 @@ class ConfigProvider implements ConfigProviderInterface
 
     /**
      * @return array
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
     public function getConfig(): array
     {
         return [
             'payment' => [
                 self::METHOD_CODE => [
-                    'isActive' => $this->isActive(),
+                    'allowedMethods' => $this->config->getAllowedMethods(),
+                    'clientToken' => $this->config->getClientToken(),
+                    'merchantId' => $this->config->getMerchantAccountId(),
                     'title' => $this->config->getTitle()
                 ]
             ]
         ];
-    }
-
-    /**
-     * @return bool
-     */
-    public function isActive(): bool
-    {
-        return true;
     }
 }
