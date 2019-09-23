@@ -126,6 +126,10 @@ define(
                 return quote.totals()['base_grand_total'].toString();
             },
 
+            getBillingAddress: function () {
+                return quote.billingAddress();
+            },
+
             getClientToken: function () {
                 return window.checkoutConfig.payment[this.getCode()].clientToken;
             },
@@ -166,7 +170,7 @@ define(
             },
 
             getPaymentMethod: function(method) {
-                var methods = window.checkoutConfig.payment[this.getCode()].allowedMethods;
+                var methods = this.getPaymentMethods();
 
                 for (var i = 0; i < methods.length; i++) {
                     if (methods[i].method === method) {
@@ -192,11 +196,20 @@ define(
             },
 
             isActive: function() {
-                return true;
+                var billingAddress = this.getBillingAddress();
+                var methods = this.getPaymentMethods();
+
+                for (var i = 0; i < methods.length; i++) {
+                    if (methods[i].countries.includes(billingAddress.countryId)) {
+                        return true;
+                    }
+                }
+
+                return false;
             },
 
             isValidCountryAndCurrency: function (method) {
-                var quoteCurrency = quote.totals()['quote_currency_code'];
+                var quoteCurrency = quote.totals()['base_currency_code'];
                 var billingAddress = quote.billingAddress();
                 var countryId = billingAddress.countryId;
                 var paymentMethodDetails = this.getPaymentMethod(method);
