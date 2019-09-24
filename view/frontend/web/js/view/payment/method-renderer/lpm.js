@@ -33,10 +33,11 @@ define(
 
         return Component.extend({
             defaults: {
-                ajaxUrl: url.build('braintree/lpm/savepaymentid'),
                 code: 'braintree_local_payment',
+                deleteUrl: url.build('braintree/lpm/delete'),
                 fallbackUrl: url.build('braintree/lpm/fallback'),
                 paymentMethodNonce: null,
+                saveUrl: url.build('braintree/lpm/save'),
                 template: 'Magento_Braintree/payment/lpm'
             },
 
@@ -79,8 +80,8 @@ define(
                                 },
                                 paymentType: method,
                                 onPaymentStart: function (data, start) {
-                                    self.savePaymentId(data.paymentId, quote.getQuoteId());
-                                    start();
+                                    self.savePaymentId(data.paymentId, quote.getQuoteId(), start);
+                                    // start();
                                 }
                             }, function (startPaymentError, payload) {
                                 fullScreenLoader.stopLoader();
@@ -94,7 +95,7 @@ define(
                                     } else {
                                         console.error('Error!', startPaymentError);
                                     }
-                                    // TODO delete payment ID record is lpm failed
+                                    // TODO delete payment ID record if lpm failed
                                 } else {
                                     // Send the nonce to your server to create a transaction
                                     self.setPaymentMethodNonce(payload.nonce);
@@ -228,13 +229,17 @@ define(
                 return false;
             },
 
-            savePaymentId: function (paymentId, quoteId) {
+            savePaymentId: function (paymentId, quoteId, callback) {
                 $.ajax({
-                    url: this.ajaxUrl,
+                    url: this.saveUrl,
                     data: { payment_id: paymentId, quote_id: quoteId },
                     type: 'POST'
                 }).done(function (data) {
-                    console.log(data);
+                    if (data.success === true) {
+                        callback();
+                    } else {
+                        console.error(data.message);
+                    }
                 });
             },
 

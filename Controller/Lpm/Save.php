@@ -18,7 +18,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Class SavePaymentId
  */
-class SavePaymentId extends Action
+class Save extends Action
 {
     /**
      * @var LocalPaymentFactory
@@ -40,10 +40,6 @@ class SavePaymentId extends Action
      * @var LoggerInterface
      */
     private $logger;
-    /**
-     * @var \Magento\Quote\Model\QuoteIdMask
-     */
-    private $quoteIdMask;
 
     /**
      * SavePaymentId constructor.
@@ -59,7 +55,6 @@ class SavePaymentId extends Action
         Context $context,
         LocalPaymentFactory $localPaymentFactory,
         LocalPaymentResource $localPaymentResource,
-        \Magento\Quote\Model\QuoteIdMask $quoteIdMaskModel,
         QuoteIdMaskFactory $quoteIdMaskFactory,
         QuoteIdMask $quoteIdMaskResource,
         LoggerInterface $logger
@@ -67,7 +62,6 @@ class SavePaymentId extends Action
         parent::__construct($context);
         $this->localPaymentFactory = $localPaymentFactory;
         $this->localPaymentResource = $localPaymentResource;
-        $this->quoteIdMask = $quoteIdMaskModel;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
         $this->quoteIdMaskResource = $quoteIdMaskResource;
         $this->logger = $logger;
