@@ -11,6 +11,7 @@ define(
         'Magento_Checkout/js/model/full-screen-loader',
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/payment/additional-validators',
+        'mage/url',
         'mage/translate'
     ],
     function (
@@ -25,13 +26,16 @@ define(
         fullScreenLoader,
         quote,
         additionalValidators,
+        url,
         $t
     ) {
         'use strict';
 
         return Component.extend({
             defaults: {
+                ajaxUrl: url.build('braintree/lpm/savepaymentid'),
                 code: 'braintree_local_payment',
+                fallbackUrl: url.build('braintree/lpm/fallback'),
                 paymentMethodNonce: null,
                 template: 'Magento_Braintree/payment/lpm'
             },
@@ -70,16 +74,16 @@ define(
                                 shippingAddressRequired: !quote.isVirtual(),
                                 address: self.getAddress(),
                                 fallback: {
-                                    url: 'https://multistore.test',
+                                    url: self.fallbackUrl,
                                     buttonText: $t('Complete Payment')
                                 },
                                 paymentType: method,
                                 onPaymentStart: function (data, start) {
-                                    console.log(data);
-                                    // TODO AJAX request to web API to store payment ID in pivot table with quote ID
+                                    self.savePaymentId(data.paymentId, quote.getQuoteId());
                                     start();
                                 }
                             }, function (startPaymentError, payload) {
+                                fullScreenLoader.stopLoader();
                                 if (startPaymentError) {
                                     if (startPaymentError.code === 'LOCAL_PAYMENT_POPUP_CLOSED') {
                                         self.setErrorMsg($t('Local Payment popup was closed unexpectedly.'));
@@ -90,9 +94,8 @@ define(
                                     } else {
                                         console.error('Error!', startPaymentError);
                                     }
-                                    fullScreenLoader.stopLoader();
+                                    // TODO delete payment ID record is lpm failed
                                 } else {
-                                    fullScreenLoader.stopLoader();
                                     // Send the nonce to your server to create a transaction
                                     self.setPaymentMethodNonce(payload.nonce);
                                     self.placeOrder();
@@ -223,6 +226,16 @@ define(
                 }
 
                 return false;
+            },
+
+            savePaymentId: function (paymentId, quoteId) {
+                $.ajax({
+                    url: this.ajaxUrl,
+                    data: { payment_id: paymentId, quote_id: quoteId },
+                    type: 'POST'
+                }).done(function (data) {
+                    console.log(data);
+                });
             },
 
             setErrorMsg: function (message) {
