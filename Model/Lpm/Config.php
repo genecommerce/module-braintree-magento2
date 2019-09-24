@@ -10,6 +10,7 @@ use Magento\Braintree\Model\StoreConfigResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\View\Asset\Repository;
 
 /**
  * Class Config
@@ -89,10 +90,16 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @var BraintreeConfig
      */
     private $braintreeConfig;
+
     /**
      * @var array
      */
     private $allowedMethods;
+
+    /**
+     * @var Repository
+     */
+    private $assetRepo;
 
     /**
      * @param StoreConfigResolver $storeConfigResolver
@@ -102,14 +109,16 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         BraintreeAdapter $adapter,
         BraintreeConfig $braintreeConfig,
         StoreConfigResolver $storeConfigResolver,
+        Repository $assetRepo,
         ScopeConfigInterface $scopeConfig,
         $methodCode = null,
         $pathPattern = \Magento\Payment\Gateway\Config\Config::DEFAULT_PATH_PATTERN
     ) {
         parent::__construct($scopeConfig, $methodCode, $pathPattern);
         $this->adapter = $adapter;
-        $this->storeConfigResolver = $storeConfigResolver;
         $this->braintreeConfig = $braintreeConfig;
+        $this->storeConfigResolver = $storeConfigResolver;
+        $this->assetRepo = $assetRepo;
     }
 
     /**
@@ -168,12 +177,36 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         return $this->clientToken;
     }
 
+    /**
+     * @return string
+     * @throws InputException
+     * @throws NoSuchEntityException
+     */
     public function getMerchantAccountId(): string
     {
         return $this->getValue(
             self::KEY_TITLE,
             $this->storeConfigResolver->getStoreId()
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function getPaymentIcons(): array
+    {
+        $icons = [
+            'bancontact' => $this->assetRepo->getUrl('Magento_Braintree::images/bancontact.svg'),
+            'eps' => $this->assetRepo->getUrl('Magento_Braintree::images/eps.svg'),
+            'giropay' => $this->assetRepo->getUrl('Magento_Braintree::images/giropay.svg'),
+            'ideal' => $this->assetRepo->getUrl('Magento_Braintree::images/ideal.svg'),
+            'sofort' => $this->assetRepo->getUrl('Magento_Braintree::images/sofort.svg'),
+            'mybank' => $this->assetRepo->getUrl('Magento_Braintree::images/mybank.svg'),
+            'p24' => $this->assetRepo->getUrl('Magento_Braintree::images/p24.svg'),
+            'sepa' => $this->assetRepo->getUrl('Magento_Braintree::images/sepa.svg')
+        ];
+
+        return $icons;
     }
 
     /**

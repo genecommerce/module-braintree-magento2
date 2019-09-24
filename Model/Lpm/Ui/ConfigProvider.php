@@ -42,6 +42,7 @@ class ConfigProvider implements ConfigProviderInterface
                     'allowedMethods' => $this->config->getAllowedMethods(),
                     'clientToken' => $this->config->getClientToken(),
                     'merchantId' => $this->config->getMerchantAccountId(),
+                    'paymentIcons' => $this->config->getPaymentIcons(),
                     'title' => $this->config->getTitle()
                 ]
             ]

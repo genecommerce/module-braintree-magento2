@@ -39,9 +39,9 @@ define(
             clickPaymentBtn: function (method) {
                 var self = this;
 
-                fullScreenLoader.startLoader();
-
                 if (additionalValidators.validate()) {
+                    fullScreenLoader.startLoader();
+
                     braintree.create({
                         authorization: self.getClientToken()
                     }, function (clientError, clientInstance) {
@@ -181,6 +181,10 @@ define(
 
             getPaymentMethods: function() {
                 return window.checkoutConfig.payment[this.getCode()].allowedMethods;
+            },
+
+            getPaymentMarkSrc: function () {
+                return window.checkoutConfig.payment[this.getCode()].paymentIcons;
             },
 
             getTitle: function() {
