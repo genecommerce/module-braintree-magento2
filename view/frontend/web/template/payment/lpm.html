@@ -30,12 +30,11 @@
         <div class="actions-toolbar" each="getPaymentMethods()">
             <if args="$parent.isValidCountryAndCurrency(method)">
                 <div class="primary">
-                    <button class="action primary checkout"
+                    <button class="action checkout"
                             click="function () { $parent.clickPaymentBtn(method) }"
                             css="$data.method, { disabled: !$parent.isPlaceOrderActionAllowed() }"
                             enabled="($parent.getCode() == $parent.isChecked())">
-                        <img data-bind="attr: { src: $parent.getPaymentMarkSrc()[method] }" />
-                        <span text="'Pay with ' + label"></span>
+                        <img attr="{ src: $parent.getPaymentMarkSrc()[method], alt: 'Pay with' + label }" />
                     </button>
                 </div>
             </if>
