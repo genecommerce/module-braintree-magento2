@@ -113,6 +113,14 @@ class Config implements ConfigInterface
      */
     public function isActive(): bool
     {
+        $paypalActive = $this->getConfigValue("payment/braintree_paypal/active");
+        $paypalCreditActive = $this->getConfigValue("payment/braintree_paypal_credit/active");
+
+        // If PayPal or PayPal Credit is disabled in the admin
+        if (!$paypalActive || !$paypalCreditActive) {
+            return false;
+        }
+
         // Only allowed on US and UK
         if (!$this->isUk() && !$this->isUS()) {
             return false;
