@@ -8,12 +8,14 @@ namespace Magento\Braintree\Model\Adapter;
 use Braintree\ClientToken;
 use Braintree\Configuration;
 use Braintree\CreditCard;
+use Braintree\Exception\InvalidSignature;
 use Braintree\PaymentMethod;
 use Braintree\PaymentMethodNonce;
 use Braintree\ResourceCollection;
 use Braintree\Result\Error;
 use Braintree\Result\Successful;
 use Braintree\Transaction;
+use Braintree\WebhookNotification;
 use Exception;
 use Magento\Braintree\Gateway\Config\Config;
 use Magento\Braintree\Model\Adminhtml\Source\Environment;
@@ -230,5 +232,16 @@ class BraintreeAdapter
     public function deletePaymentMethod($token)
     {
         return PaymentMethod::delete($token)->success;
+    }
+
+    /**
+     * @param $signature
+     * @param $payload
+     * @return WebhookNotification
+     * @throws InvalidSignature
+     */
+    public function webhookNotification($signature, $payload): WebhookNotification
+    {
+        return WebhookNotification::parse($signature, $payload);
     }
 }

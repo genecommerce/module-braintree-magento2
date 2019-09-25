@@ -1138,8 +1138,36 @@
     <preference for="Magento\Braintree\Api\Data\AuthDataInterface" type="Magento\Braintree\Model\ApplePay\Auth\Data" />
     <preference for="Magento\Braintree\Api\Data\CreditPriceDataInterface" type="Magento\Braintree\Model\CreditPrice" />
     <preference for="Magento\Braintree\Api\CreditPriceRepositoryInterface" type="Magento\Braintree\Model\ResourceModel\CreditPriceRepository" />
+    <preference for="Magento\Braintree\Api\WebhookInterface" type="Magento\Braintree\Model\Webhook"/>
 
     <preference for="Magento\Payment\Gateway\Data\Order\OrderAdapter" type="Magento\Braintree\Gateway\Data\Order\OrderAdapter"/>
+
+    <type name="Magento\Framework\Webapi\Rest\Request\DeserializerFactory">
+        <arguments>
+            <argument name="deserializers" xsi:type="array">
+                <item name="application_x-www-form-urlencoded" xsi:type="array">
+                    <item name="type" xsi:type="string">application/x-www-form-urlencoded</item>
+                    <item name="model" xsi:type="string">Magento\Braintree\Webapi\Rest\Request\Deserializer\XWwwFormUrlencoded</item>
+                </item>
+                <item name="application_json" xsi:type="array">
+                    <item name="type" xsi:type="string">application/json</item>
+                    <item name="model" xsi:type="string">Magento\Framework\Webapi\Rest\Request\Deserializer\Json</item>
+                </item>
+                <item name="application_xml" xsi:type="array">
+                    <item name="type" xsi:type="string">application/xml</item>
+                    <item name="model" xsi:type="string">Magento\Framework\Webapi\Rest\Request\Deserializer\Xml</item>
+                </item>
+                <item name="application_xhtml_xml" xsi:type="array">
+                    <item name="type" xsi:type="string">application/xhtml+xml</item>
+                    <item name="model" xsi:type="string">Magento\Framework\Webapi\Rest\Request\Deserializer\Xml</item>
+                </item>
+                <item name="text_xml" xsi:type="array">
+                    <item name="type" xsi:type="string">text/xml</item>
+                    <item name="model" xsi:type="string">Magento\Framework\Webapi\Rest\Request\Deserializer\Xml</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 
     <type name="Magento\Framework\View\Asset\Minification">
         <plugin name="braintreeExcludeFromMinification" type="Magento\Braintree\Plugin\ExcludeFromMinification"/>
