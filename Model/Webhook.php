@@ -8,6 +8,8 @@ use Braintree\WebhookNotification;
 use Braintree\WebhookTesting;
 use Magento\Braintree\Api\WebhookInterface;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Event\ManagerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -28,30 +30,49 @@ class Webhook implements WebhookInterface
      */
     protected $webhookNotification;
     /**
+     * @var ManagerInterface
+     */
+    private $eventManager;
+
+    /**
      * Webhook constructor.
      *
      * @param BraintreeAdapter $adapter
      * @param LoggerInterface $logger
      */
-    public function __construct(BraintreeAdapter $adapter, LoggerInterface $logger)
-    {
+    public function __construct(
+        BraintreeAdapter $adapter,
+        ManagerInterface $eventManager,
+        LoggerInterface $logger
+    ) {
         $this->adapter = $adapter;
         $this->logger = $logger;
+        $this->eventManager = $eventManager;
     }
 
     /**
      * @param string $signature
      * @param string $payload
-     * @return mixed|string|void
+     * @return void
+     * @throws InvalidSignature
      */
     public function getData(string $signature, string $payload)
     {
-        try {
-            $this->webhookNotification = $this->adapter->webhookNotification($signature, $payload);
-        } catch (InvalidSignature $e) {
-            $this->logger->error($e->getMessage());
-            return;
+        $sampleNotification = WebhookTesting::sampleNotification(
+            WebhookNotification::LOCAL_PAYMENT_COMPLETED,
+            'my_id'
+        );
+
+        $this->webhookNotification = $this->adapter->webhookNotification(
+            $sampleNotification['bt_signature'],
+            $sampleNotification['bt_payload']
+        );
+
+//        $this->webhookNotification = $this->adapter->webhookNotification($signature, $payload);
+
+        if ($this->webhookNotification->kind) {
+            // dispatch event
+            $this->eventManager->dispatch('braintree_webhook_handler', ['eventData' => $this->webhookNotification]);
         }
-        return \GuzzleHttp\json_encode($this->webhookNotification);
     }
 }

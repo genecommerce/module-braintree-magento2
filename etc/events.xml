@@ -34,4 +34,7 @@
     <event name="sales_order_save_after">
         <observer name="braintree_sales_order_save_after" instance="Magento\Braintree\Observer\SalesOrderSaveObserver" />
     </event>
+    <event name="braintree_webhook_handler">
+        <observer name="braintree_webhook_observer" instance="Magento\Braintree\Observer\WebhookObserver" />
+    </event>
 </config>
