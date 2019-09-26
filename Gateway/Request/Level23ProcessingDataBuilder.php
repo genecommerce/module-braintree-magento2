@@ -92,14 +92,9 @@ class Level23ProcessingDataBuilder implements BuilderInterface
          */
         $order = $paymentDO->getOrder();
 
-        $billingAddress = $order->getBillingAddress();
-
-        // use Magento's Alpha2 code to get the Alpha3 code.
-        $addressData = $this->iso3166->alpha2($billingAddress->getCountryId());
-
         foreach ($order->getItems() as $item) {
 
-            // Skip configurable parent items and items with a base price of 0
+            // Skip configurable parent items and items with a base price of 0.
             if ($item->getParentItem() || 0.0 === $item->getPrice()) {
                 continue;
             }
@@ -135,22 +130,32 @@ class Level23ProcessingDataBuilder implements BuilderInterface
             );
         }
 
-        $storePostalCode = $this->scopeConfig->getValue(
-            'general/store_information/postcode',
-            ScopeInterface::SCOPE_STORE
-        );
-
-        return [
+        $processingData = [
             self::KEY_PURCHASE_ORDER_NUMBER => $order->getOrderIncrementId(), // Level 2.
             self::KEY_TAX_AMT => $this->numberToString($tax, 2), // Level 2.
-            self::KEY_SHIPPING_AMT => $this->numberToString($payment->getShippingAmount(), 2), // Level 3.
             self::KEY_DISCOUNT_AMT => $this->numberToString(abs($order->getBaseDiscountAmount()), 2), // Level 3.
-            self::KEY_SHIPS_FROM_POSTAL_CODE => $storePostalCode, // Level 3.
             self::KEY_LINE_ITEMS => $lineItems, // Level 3.
-            self::KEY_SHIPPING => [ // Level 3.
-                self::KEY_COUNTRY_CODE_ALPHA_3 => $addressData['alpha3']
-            ]
         ];
+
+        // Only add these shipping related details if a shipping address is present.
+        if ($order->getShippingAddress()) {
+            $storePostalCode = $this->scopeConfig->getValue(
+                'general/store_information/postcode',
+                ScopeInterface::SCOPE_STORE
+            );
+
+            $address = $order->getShippingAddress();
+            // use Magento's Alpha2 code to get the Alpha3 code.
+            $addressData = $this->iso3166->alpha2($address->getCountryId());
+
+            $processingData[self::KEY_SHIPPING_AMT] = $this->numberToString($payment->getShippingAmount(), 2); // Level 3.
+            $processingData[self::KEY_SHIPS_FROM_POSTAL_CODE] = $storePostalCode; // Level 3.
+            $processingData[self::KEY_SHIPPING] = [ // Level 3.
+                self::KEY_COUNTRY_CODE_ALPHA_3 => $addressData['alpha3']
+            ];
+        }
+
+        return $processingData;
     }
 
     /**
