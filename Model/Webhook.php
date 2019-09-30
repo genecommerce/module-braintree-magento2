@@ -58,6 +58,8 @@ class Webhook implements WebhookInterface
      */
     public function getData(string $signature, string $payload)
     {
+        $this->logger->debug($payload);
+
         $sampleNotification = WebhookTesting::sampleNotification(
             WebhookNotification::LOCAL_PAYMENT_COMPLETED,
             'my_id'

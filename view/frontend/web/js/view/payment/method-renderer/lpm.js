@@ -205,6 +205,11 @@ define(
 
             isActive: function() {
                 var billingAddress = this.getBillingAddress();
+
+                if (!billingAddress) {
+                    return false;
+                }
+
                 var methods = this.getPaymentMethods();
 
                 for (var i = 0; i < methods.length; i++) {

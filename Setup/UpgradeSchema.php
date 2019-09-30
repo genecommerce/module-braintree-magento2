@@ -202,11 +202,11 @@ class UpgradeSchema implements UpgradeSchemaInterface
             ->addForeignKey(
                 $installer->getFkName(
                     $installer->getTable('braintree_lpm'),
-                    'id',
+                    'quote_id',
                     $installer->getTable('quote'),
                     'entity_id'
                 ),
-                'id',
+                'quote_id',
                 $installer->getTable('quote'),
                 'entity_id'
             )
