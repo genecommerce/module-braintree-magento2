@@ -256,7 +256,9 @@ define(
                     billingAddress = this.lastBillingAddress;
                 }
 
-                billingCountryId = billingAddress.countryId;
+                if (billingAddress) {
+                    billingCountryId = billingAddress.countryId;
+                }
 
                 if (billingCountryId && validator.getCountrySpecificCardTypes(billingCountryId)) {
                     return validator.collectTypes(
