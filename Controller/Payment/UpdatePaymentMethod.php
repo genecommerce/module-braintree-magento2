@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Magento\Braintree\Controller\Payment;
 
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
-use Magento\Customer\Model\SessionFactory;
+use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
@@ -27,9 +27,9 @@ class UpdatePaymentMethod extends Action implements HttpGetActionInterface
      */
     private $tokenManagement;
     /**
-     * @var SessionFactory
+     * @var Session
      */
-    private $sessionFactory;
+    private $session;
 
     /**
      * UpdatePaymentMethod constructor.
@@ -37,17 +37,18 @@ class UpdatePaymentMethod extends Action implements HttpGetActionInterface
      * @param Context $context
      * @param BraintreeAdapter $adapter
      * @param PaymentTokenManagementInterface $tokenManagement
+     * @param Session $session
      */
     public function __construct(
         Context $context,
         BraintreeAdapter $adapter,
         PaymentTokenManagementInterface $tokenManagement,
-        SessionFactory $sessionFactory
+        Session $session
     ) {
         parent::__construct($context);
         $this->adapter = $adapter;
         $this->tokenManagement = $tokenManagement;
-        $this->sessionFactory = $sessionFactory;
+        $this->session = $session;
     }
 
     /**
@@ -60,12 +61,21 @@ class UpdatePaymentMethod extends Action implements HttpGetActionInterface
         $publicHash = $this->getRequest()->getParam('public_hash');
         $nonce = $this->getRequest()->getParam('nonce');
 
-        $customerSession = $this->sessionFactory->create();
-        $customerId = $customerSession->getCustomerId();
+        $customerId = $this->session->getCustomerId();
 
         $paymentToken = $this->tokenManagement->getByPublicHash($publicHash, $customerId);
 
-        $result = $this->adapter->updatePaymentMethod($paymentToken->getGatewayToken(), ['paymentMethodNonce' => $nonce]);
+        $result = $this->adapter->updatePaymentMethod(
+            $paymentToken->getGatewayToken(),
+            [
+                'paymentMethodNonce' => $nonce,
+                'options' => [
+                    'verifyCard' => true
+                ]
+            ]
+        );
+
+        $response->setData(['success' => (bool) $result->success]);
 
         return $response;
     }

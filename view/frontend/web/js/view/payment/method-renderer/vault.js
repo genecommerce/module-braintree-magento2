@@ -113,9 +113,13 @@ define([
          */
         placeOrder: function () {
             var self = this;
+
+            fullScreenLoader.startLoader();
+
             self.hostedFieldsInstance.tokenize({}, function (error, payload) {
                 if (error) {
                     console.log(error);
+                    fullScreenLoader.stopLoader();
                 }
                 $.getJSON(
                     self.updatePaymentUrl,
@@ -125,6 +129,13 @@ define([
                     }
                 ).done(function (response) {
                     console.log(response);
+                    if (response.success === false) {
+                        console.error('CVV verification failed');
+                        fullScreenLoader.stopLoader();
+                        return;
+                    }
+
+                    self.getPaymentMethodNonce();
                 })
             });
 
