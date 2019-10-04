@@ -11,7 +11,10 @@ define([
     'Magento_Braintree/js/view/payment/adapter',
     'Magento_Ui/js/model/messageList',
     'Magento_Braintree/js/view/payment/validator-handler',
-    'Magento_Checkout/js/model/full-screen-loader'
+    'Magento_Checkout/js/model/full-screen-loader',
+    'braintree',
+    'braintreeHostedFields',
+    'mage/url'
 ], function (
     ko,
     $,
@@ -19,7 +22,10 @@ define([
     Braintree,
     globalMessageList,
     validatorManager,
-    fullScreenLoader
+    fullScreenLoader,
+    client,
+    hostedFields,
+    url
 ) {
     'use strict';
 
@@ -30,15 +36,44 @@ define([
                 hostedFields: '${ $.parentName }.braintree'
             },
             vaultedCVV: ko.observable(""),
-            validatorManager: validatorManager
+            validatorManager: validatorManager,
+            hostedFieldsInstance: null,
+            updatePaymentUrl: url.build('braintree/payment/updatepaymentmethod')
         },
 
         initObservable: function () {
-            this._super()
-                .observe(['active']);
+            this._super().observe(['active']);
             this.validatorManager.initialize();
 
+            if (this.showCvvVerify()) {
+                var self = this;
+                client.create({
+                    authorization: Braintree.getClientToken()
+                }, function (clientError, clientInstance) {
+                    hostedFields.create({
+                        client: clientInstance,
+                        fields: {
+                            cvv: {
+                                selector: '#' + self.getCode() + '_cid',
+                                placeholder: '123'
+                            }
+                        }
+                    }, function (hostedError, hostedFieldsInstance) {
+                        if (hostedError) {
+                            console.log(hostedError);
+                            return;
+                        }
+
+                        self.hostedFieldsInstance = hostedFieldsInstance;
+                    });
+                });
+            }
+
             return this;
+        },
+
+        getCode: function () {
+            return 'braintree_cc_vault';
         },
 
         /**
@@ -69,15 +104,31 @@ define([
          * Get show CVV Field
          * @returns {Boolean}
          */
-        getShowCvv: function () {
-            return window.checkoutConfig.payment[this.code].useCvvVault;
+        showCvvVerify: function () {
+            return window.checkoutConfig.payment[this.code].cvvVerify;
         },
 
         /**
          * Place order
          */
         placeOrder: function () {
-            this.getPaymentMethodNonce();
+            var self = this;
+            self.hostedFieldsInstance.tokenize({}, function (error, payload) {
+                if (error) {
+                    console.log(error);
+                }
+                $.getJSON(
+                    self.updatePaymentUrl,
+                    {
+                        'nonce': payload.nonce,
+                        'public_hash': self.publicHash
+                    }
+                ).done(function (response) {
+                    console.log(response);
+                })
+            });
+
+            // this.getPaymentMethodNonce();
         },
 
         /**

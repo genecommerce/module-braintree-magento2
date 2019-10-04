@@ -231,4 +231,9 @@ class BraintreeAdapter
     {
         return PaymentMethod::delete($token)->success;
     }
+
+    public function updatePaymentMethod($token, $attribs)
+    {
+        return PaymentMethod::update($token, $attribs);
+    }
 }

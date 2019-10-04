@@ -10,6 +10,7 @@
         <arguments>
             <argument name="configProviders" xsi:type="array">
                 <item name="braintree_config_provider" xsi:type="object">Magento\Braintree\Model\Ui\ConfigProvider</item>
+                <item name="braintree_vault_config_provider" xsi:type="object">Magento\Braintree\Model\Ui\Vault\ConfigProvider</item>
                 <item name="braintree_paypal_config_provider" xsi:type="object">Magento\Braintree\Model\Ui\PayPal\ConfigProvider</item>
                 <item name="braintree_applepay_config_provider" xsi:type="object">Magento\Braintree\Model\ApplePay\Ui\ConfigProvider</item>
                 <item name="braintree_googlepay_config_provider" xsi:type="object">Magento\Braintree\Model\GooglePay\Ui\ConfigProvider</item>

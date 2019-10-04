@@ -33,17 +33,16 @@
     <div class="payment-method-content">
         <each args="getRegion('messages')" render=""></each>
 
-        <!-- ko if: getShowCvv() -->
-            <div class="payment-method-braintree fieldset">
-                <div class="field cvv required">
-                    <label data-bind="attr: {for: getId() + '_cvv'}" class="label">
-                        <span><!-- ko i18n: 'Card Verification Number'--><!-- /ko --></span>
-                    </label>
-                    <div class="control">
-                        <input type="text" placeholder="123" data-bind="attr:{id:getId() + '_cvv'}, value: vaultedCVV" class="hosted-control hosted-cid" />
-                    </div>
-                </div>
+        <!-- ko if: showCvvVerify() -->
+        <div class="field cvv required" data-bind="attr: {id: getCode() + '_cvv_div'}">
+            <label data-bind="attr: {for: getCode() + '_cid'}" class="label">
+                <span><!-- ko i18n: 'Card Verification Number'--><!-- /ko --></span>
+            </label>
+            <div class="control">
+                <div data-bind="attr: {id: getCode() + '_cid'}" class="hosted-control hosted-cid"></div>
+                <div class="hosted-error"><!-- ko i18n: 'Please, enter valid Card Verification Number'--><!-- /ko --></div>
             </div>
+        </div>
         <!-- /ko -->
 
         <div class="checkout-agreements-block">
