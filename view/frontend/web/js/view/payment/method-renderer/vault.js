@@ -31,45 +31,71 @@ define([
 
     return VaultComponent.extend({
         defaults: {
-            template: 'Magento_Braintree/payment/cc/vault',
+            active: false,
+            hostedFieldsInstance: null,
+            imports: {
+                onActiveChange: 'active'
+            },
             modules: {
                 hostedFields: '${ $.parentName }.braintree'
             },
+            template: 'Magento_Braintree/payment/cc/vault',
+            updatePaymentUrl: url.build('braintree/payment/updatepaymentmethod'),
             vaultedCVV: ko.observable(""),
-            validatorManager: validatorManager,
-            hostedFieldsInstance: null,
-            updatePaymentUrl: url.build('braintree/payment/updatepaymentmethod')
+            validatorManager: validatorManager
         },
 
         initObservable: function () {
             this._super().observe(['active']);
             this.validatorManager.initialize();
+            return this;
+        },
 
-            if (this.showCvvVerify()) {
-                var self = this;
-                client.create({
-                    authorization: Braintree.getClientToken()
-                }, function (clientError, clientInstance) {
-                    hostedFields.create({
-                        client: clientInstance,
-                        fields: {
-                            cvv: {
-                                selector: '#' + self.getCode() + '_cid',
-                                placeholder: '123'
-                            }
-                        }
-                    }, function (hostedError, hostedFieldsInstance) {
-                        if (hostedError) {
-                            console.log(hostedError);
-                            return;
-                        }
+        isActive: function () {
+            var active = this.getId() === this.isChecked();
+            this.active(active);
+            return active;
+        },
 
-                        self.hostedFieldsInstance = hostedFieldsInstance;
-                    });
-                });
+        onActiveChange: function (isActive) {
+            if (!isActive) {
+                return;
             }
 
-            return this;
+            if (this.showCvvVerify()) {
+                this.initHostedCvvField();
+            }
+        },
+
+        initHostedCvvField: function () {
+            var self = this;
+            client.create({
+                authorization: Braintree.getClientToken()
+            }, function (clientError, clientInstance) {
+                if (clientError) {
+                    globalMessageList.addErrorMessage({
+                        message: clientError.message
+                    });
+                }
+                hostedFields.create({
+                    client: clientInstance,
+                    fields: {
+                        cvv: {
+                            selector: '#' + self.getCode() + '_cid',
+                            placeholder: '123'
+                        }
+                    }
+                }, function (hostedError, hostedFieldsInstance) {
+                    if (hostedError) {
+                        globalMessageList.addErrorMessage({
+                            message: hostedError.message
+                        });
+                        return;
+                    }
+
+                    self.hostedFieldsInstance = hostedFieldsInstance;
+                });
+            });
         },
 
         getCode: function () {
@@ -116,30 +142,36 @@ define([
 
             fullScreenLoader.startLoader();
 
-            self.hostedFieldsInstance.tokenize({}, function (error, payload) {
-                if (error) {
-                    console.log(error);
-                    fullScreenLoader.stopLoader();
-                }
-                $.getJSON(
-                    self.updatePaymentUrl,
-                    {
-                        'nonce': payload.nonce,
-                        'public_hash': self.publicHash
-                    }
-                ).done(function (response) {
-                    console.log(response);
-                    if (response.success === false) {
-                        console.error('CVV verification failed');
+            if (self.showCvvVerify() && typeof self.hostedFieldsInstance !== 'undefined') {
+                self.hostedFieldsInstance.tokenize({}, function (error, payload) {
+                    if (error) {
                         fullScreenLoader.stopLoader();
+                        globalMessageList.addErrorMessage({
+                            message: error.message
+                        });
                         return;
                     }
+                    $.getJSON(
+                        self.updatePaymentUrl,
+                        {
+                            'nonce': payload.nonce,
+                            'public_hash': self.publicHash
+                        }
+                    ).done(function (response) {
+                        if (response.success === false) {
+                            fullScreenLoader.stopLoader();
+                            globalMessageList.addErrorMessage({
+                                message: 'CVV verification failed.'
+                            });
+                            return;
+                        }
 
-                    self.getPaymentMethodNonce();
-                })
-            });
-
-            // this.getPaymentMethodNonce();
+                        self.getPaymentMethodNonce();
+                    })
+                });
+            } else {
+                self.getPaymentMethodNonce();
+            }
         },
 
         /**
@@ -163,9 +195,11 @@ define([
                     }
 
                     self.validatorManager.validate(formComponent, function () {
+                        fullScreenLoader.stopLoader();
                         return formComponent.placeOrder('parent');
                     }, function() {
                         // No teardown actions required.
+                        fullScreenLoader.stopLoader();
                         formComponent.setPaymentMethodNonce(null);
                     });
 
