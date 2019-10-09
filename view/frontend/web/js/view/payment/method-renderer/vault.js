@@ -80,7 +80,9 @@ define([
                 if (self.hostedFieldsInstance) {
                     self.hostedFieldsInstance.teardown(function (teardownError) {
                         if (teardownError) {
-                            console.error(teardownError);
+                            globalMessageList.addErrorMessage({
+                                message: teardownError.message
+                            });
                         }
                         self.hostedFieldsInstance = null;
                         self.initHostedCvvField();
@@ -178,7 +180,7 @@ define([
         placeOrder: function () {
             var self = this;
 
-            if (!self.validateCvv('#' + self.getId() + '_cid', self.isValidCvv) && !additionalValidators.validate()) {
+            if (!self.validateCvv('#' + self.getId() + '_cid', self.isValidCvv) || !additionalValidators.validate()) {
                 return;
             }
 
