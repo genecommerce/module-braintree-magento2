@@ -178,42 +178,42 @@ define([
         placeOrder: function () {
             var self = this;
 
-            if (!self.validateCvv('#' + self.getId() + '_cid', self.isValidCvv) && !additionalValidators.validate()) {
-                return;
-            }
+            if (self.validateCvv('#' + self.getId() + '_cid', self.isValidCvv) && additionalValidators.validate()) {
+                fullScreenLoader.startLoader();
 
-            fullScreenLoader.startLoader();
-
-            if (self.showCvvVerify() && typeof self.hostedFieldsInstance !== 'undefined') {
-                self.hostedFieldsInstance.tokenize({}, function (error, payload) {
-                    if (error) {
-                        fullScreenLoader.stopLoader();
-                        globalMessageList.addErrorMessage({
-                            message: error.message
-                        });
-                        return;
-                    }
-                    $.getJSON(
-                        self.updatePaymentUrl,
-                        {
-                            'nonce': payload.nonce,
-                            'public_hash': self.publicHash
-                        }
-                    ).done(function (response) {
-                        if (response.success === false) {
+                if (self.showCvvVerify() && typeof self.hostedFieldsInstance !== 'undefined') {
+                    self.hostedFieldsInstance.tokenize({}, function (error, payload) {
+                        if (error) {
                             fullScreenLoader.stopLoader();
                             globalMessageList.addErrorMessage({
-                                message: 'CVV verification failed.'
+                                message: error.message
                             });
                             return;
                         }
+                        $.getJSON(
+                            self.updatePaymentUrl,
+                            {
+                                'nonce': payload.nonce,
+                                'public_hash': self.publicHash
+                            }
+                        ).done(function (response) {
+                            if (response.success === false) {
+                                fullScreenLoader.stopLoader();
+                                globalMessageList.addErrorMessage({
+                                    message: 'CVV verification failed.'
+                                });
+                                return;
+                            }
 
-                        self.getPaymentMethodNonce();
-                    })
-                });
-            } else {
-                self.getPaymentMethodNonce();
+                            self.getPaymentMethodNonce();
+                        })
+                    });
+                } else {
+                    self.getPaymentMethodNonce();
+                }
             }
+
+            return;
         },
 
         /**
