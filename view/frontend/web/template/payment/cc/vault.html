@@ -31,15 +31,22 @@
     </div>
 
     <div class="payment-method-content">
-        <each args="getRegion('messages')" render=""></each>
+        <!-- ko foreach: getRegion('messages') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
+        <div class="payment-method-billing-address">
+            <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        </div>
 
         <!-- ko if: showCvvVerify() -->
-        <div class="field cvv required" data-bind="attr: {id: getCode() + '_cvv_div'}">
-            <label data-bind="attr: {for: getCode() + '_cid'}" class="label">
+        <div class="field cvv required" data-bind="attr: {id: getId() + '_cvv_div'}">
+            <label data-bind="attr: {for: getId() + '_cid'}" class="label">
                 <span><!-- ko i18n: 'Card Verification Number'--><!-- /ko --></span>
             </label>
             <div class="control">
-                <div data-bind="attr: {id: getCode() + '_cid'}" class="hosted-control hosted-cid"></div>
+                <div data-bind="attr: {id: getId() + '_cid'}" class="hosted-control hosted-cid"></div>
                 <div class="hosted-error"><!-- ko i18n: 'Please, enter valid Card Verification Number'--><!-- /ko --></div>
             </div>
         </div>
