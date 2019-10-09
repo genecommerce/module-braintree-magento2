@@ -54,6 +54,17 @@
                     </field>
                     <field id="braintree_cc_vault_cvv" translate="label" type="select" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Enable Vault CVV Re-verification</label>
+                        <comment>
+                            <![CDATA[
+                            In order for CVV re-verification to work, you must enable CVV rules in your Braintree account.
+                            Please see the guide
+                            <a href="https://articles.braintreepayments.com/guides/fraud-tools/basic/avs-cvv-rules#enabling-avs-and-cvv-rules" target="_blank">here</a>
+                            on how to do so.
+                            <br/>
+                            <br/>
+                            <strong>Please enable "CVV does not match" and "CVV is not verified" and "Issuer does not participate" only</strong>
+                            ]]>
+                        </comment>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/braintree_cc_vault/cvv</config_path>
                         <depends>
