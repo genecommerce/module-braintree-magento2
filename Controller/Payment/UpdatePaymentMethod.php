@@ -7,7 +7,6 @@ use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
@@ -16,7 +15,7 @@ use Magento\Vault\Api\PaymentTokenManagementInterface;
 /**
  * Class UpdatePaymentMethod
  */
-class UpdatePaymentMethod extends Action implements HttpGetActionInterface
+class UpdatePaymentMethod extends Action
 {
     /**
      * @var BraintreeAdapter
