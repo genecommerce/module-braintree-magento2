@@ -119,25 +119,92 @@
                             <label>Vault Title</label>
                             <config_path>payment/braintree_cc_vault/title</config_path>
                         </field>
-                        <field id="merchant_account_id" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <field id="merchant_account_id" translate="label" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Merchant Account ID</label>
                             <comment>If you don't specify the merchant account to use to process a transaction, Braintree will process it using your default merchant account.</comment>
                             <config_path>payment/braintree/merchant_account_id</config_path>
                         </field>
-                        <field id="fraudprotection" translate="label" type="select" sortOrder="34" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <field id="fraudprotection" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Advanced Fraud Protection</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <comment>Be sure to Enable Advanced Fraud Protection in Your Braintree Account in Settings/Processing Section</comment>
                             <config_path>payment/braintree/fraudprotection</config_path>
                         </field>
-                        <field id="kount_id" translate="label" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Kount Merchant ID</label>
-                            <comment><![CDATA[Used for direct fraud tool integration. Make sure you also contact <a href="mailto:accounts@braintreepayments.com">accounts@braintreepayments.com</a> to setup your Kount account.]]></comment>
+
+                        <group id="kount" translate="label" sortOrder="32" showInDefault="1" showInWebsite="1">
+                            <label>Kount Settings</label>
+                            <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                             <depends>
                                 <field id="fraudprotection">1</field>
                             </depends>
-                            <config_path>payment/braintree/kount_id</config_path>
-                        </field>
+                            <field id="kount_ens_url" translate="label" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+                                <label>ENS URL</label>
+                                <comment>
+                                    This is the ENS URL you will need to add into your website in the Kount AWC control panel.
+                                    This URL must be publicly accessible for the ENS to function correctly.
+                                    You'll need to add this ENS URL to the 'OPT-IN' website.
+                                </comment>
+                                <frontend_model>Magento\Braintree\Model\Config\Source\KountEnsUrl</frontend_model>
+                            </field>
+                            <field id="kount_id" translate="label" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                                <label>Merchant ID</label>
+                                <comment>
+                                    <![CDATA[
+                                    Used for direct fraud tool integration. Make sure you also contact
+                                    <a href="mailto:accounts@braintreepayments.com">accounts@braintreepayments.com</a> to setup your Kount account.
+                                    ]]>
+                                </comment>
+                                <config_path>payment/braintree/kount_id</config_path>
+                            </field>
+                            <field id="kount_environment" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Environment</label>
+                                <comment>Please specify which Kount environment you're using.</comment>
+                                <source_model>Magento\Braintree\Model\Config\Source\KountEnvironment</source_model>
+                                <config_path>payment/braintree/kount_environment</config_path>
+                            </field>
+                            <field id="kount_api_key" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>API Key</label>
+                                <comment>
+                                    Your Kount API authentication token. This can be located through the Kount AWC panel,
+                                    via Admin > API Keys. Please ensure it has all permissions.
+                                </comment>
+                                <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                                <config_path>payment/braintree/kount_api_key</config_path>
+                                <depends>
+                                    <field id="kount_environment">production</field>
+                                </depends>
+                            </field>
+                            <field id="kount_api_key_sandbox" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>API Key (Sandbox)</label>
+                                <comment>
+                                    Your Kount API authentication token. This can be located through the Kount AWC panel,
+                                    via Admin > API Keys. Please ensure it has all permissions.
+                                </comment>
+                                <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                                <config_path>payment/braintree/kount_api_key_sandbox</config_path>
+                                <depends>
+                                    <field id="kount_environment">sandbox</field>
+                                </depends>
+                            </field>
+                            <field id="kount_skip_admin" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Skip Fraud Checks on Admin Orders</label>
+                                <comment>
+                                    Prevents the transaction from being sent to Kount for evaluation as part of Advanced
+                                    Fraud Tools checks, on orders placed through the admin only.
+                                </comment>
+                                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                                <config_path>payment/braintree/kount_skip_admin</config_path>
+                            </field>
+                            <field id="kount_allowed_ips" translate="label" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>ENS Allowed IPs</label>
+                                <comment>
+                                    The IPs that have access to the ENS endpoint above. These can be individual IP's or
+                                    ranges separated with commas. To allow from all IPs leave this field empty (not recommended).
+                                </comment>
+                                <config_path>payment/braintree/kount_allowed_ips</config_path>
+                            </field>
+                        </group>
+
                         <field id="fraudprotection_threshold" translate="label" type="text" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Bypass Fraud Protection Threshold</label>
                             <comment>Advanced fraud protection checks will be bypassed if this threshold is met or exceeded. Leaving this field blank will disable this option.</comment>
