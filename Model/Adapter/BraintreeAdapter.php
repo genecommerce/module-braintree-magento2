@@ -139,6 +139,7 @@ class BraintreeAdapter
         try {
             return ClientToken::generate($params);
         } catch (Exception $e) {
+            $this->logger->error($e->getMessage());
             return '';
         }
     }
@@ -152,6 +153,7 @@ class BraintreeAdapter
         try {
             return CreditCard::find($token);
         } catch (Exception $e) {
+            $this->logger->error($e->getMessage());
             return null;
         }
     }
