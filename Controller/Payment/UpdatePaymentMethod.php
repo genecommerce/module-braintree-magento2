@@ -4,12 +4,12 @@ declare(strict_types=1);
 namespace Magento\Braintree\Controller\Payment;
 
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
-use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Vault\Api\PaymentTokenManagementInterface;
 
 /**
@@ -26,7 +26,7 @@ class UpdatePaymentMethod extends Action
      */
     private $tokenManagement;
     /**
-     * @var Session
+     * @var SessionManagerInterface
      */
     private $session;
 
@@ -36,13 +36,13 @@ class UpdatePaymentMethod extends Action
      * @param Context $context
      * @param BraintreeAdapter $adapter
      * @param PaymentTokenManagementInterface $tokenManagement
-     * @param Session $session
+     * @param SessionManagerInterface $session
      */
     public function __construct(
         Context $context,
         BraintreeAdapter $adapter,
         PaymentTokenManagementInterface $tokenManagement,
-        Session $session
+        SessionManagerInterface $session
     ) {
         parent::__construct($context);
         $this->adapter = $adapter;
