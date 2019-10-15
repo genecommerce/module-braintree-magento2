@@ -31,4 +31,7 @@
     <event name="sales_order_save_after">
         <observer name="braintree_sales_order_save_after" instance="Magento\Braintree\Observer\SalesOrderSaveObserver" />
     </event>
+    <event name="braintree_kount_ens_event">
+        <observer name="braintree_kount_ens_event_observer" instance="Magento\Braintree\Observer\KountEnsObserver" />
+    </event>
 </config>
