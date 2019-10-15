@@ -51,24 +51,40 @@ define([
             }
         },
 
+        /**
+         * Event fired by Braintree SDK whenever input value length matches the validation length.
+         * In the case of a CVV, this is 3, or 4 for AMEX.
+         * @param event
+         */
         onValidityChange: function (event) {
             if (event.emittedBy === 'cvv') {
                 this.isValidCvv = event.fields.cvv.isValid;
             }
         },
 
+        /**
+         * @returns {exports}
+         */
         initObservable: function () {
             this._super().observe(['active']);
             this.validatorManager.initialize();
             return this;
         },
 
+        /**
+         * Is payment option active?
+         * @returns {boolean}
+         */
         isActive: function () {
             var active = this.getId() === this.isChecked();
             this.active(active);
             return active;
         },
 
+        /**
+         * Fired whenever a payment option is changed.
+         * @param isActive
+         */
         onActiveChange: function (isActive) {
             var self = this;
 
@@ -93,6 +109,9 @@ define([
             }
         },
 
+        /**
+         * Initialize the CVV input field with the Braintree Hosted Fields SDK.
+         */
         initHostedCvvField: function () {
             var self = this;
             client.create({
@@ -125,6 +144,10 @@ define([
             });
         },
 
+        /**
+         * Return the payment method code.
+         * @returns {string}
+         */
         getCode: function () {
             return 'braintree_cc_vault';
         },
@@ -161,6 +184,12 @@ define([
             return window.checkoutConfig.payment[this.code].cvvVerify;
         },
 
+        /**
+         * Show or hide the error message.
+         * @param selector
+         * @param state
+         * @returns {boolean}
+         */
         validateCvv: function (selector, state) {
             var $selector = $(selector),
                 invalidClass = 'braintree-hosted-fields-invalid';
