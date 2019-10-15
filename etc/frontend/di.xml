@@ -51,6 +51,12 @@
         </arguments>
     </type>
 
+    <type name="Magento\Braintree\Controller\Payment\UpdatePaymentMethod">
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+
     <type name="Magento\Braintree\Block\Paypal\Button">
         <arguments>
             <argument name="data" xsi:type="array">
