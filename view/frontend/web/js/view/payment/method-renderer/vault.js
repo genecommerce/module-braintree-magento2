@@ -11,7 +11,11 @@ define([
     'Magento_Braintree/js/view/payment/adapter',
     'Magento_Ui/js/model/messageList',
     'Magento_Braintree/js/view/payment/validator-handler',
-    'Magento_Checkout/js/model/full-screen-loader'
+    'Magento_Checkout/js/model/payment/additional-validators',
+    'Magento_Checkout/js/model/full-screen-loader',
+    'braintree',
+    'braintreeHostedFields',
+    'mage/url'
 ], function (
     ko,
     $,
@@ -19,26 +23,133 @@ define([
     Braintree,
     globalMessageList,
     validatorManager,
-    fullScreenLoader
+    additionalValidators,
+    fullScreenLoader,
+    client,
+    hostedFields,
+    url
 ) {
     'use strict';
 
     return VaultComponent.extend({
         defaults: {
-            template: 'Magento_Braintree/payment/cc/vault',
+            active: false,
+            hostedFieldsInstance: null,
+            imports: {
+                onActiveChange: 'active'
+            },
             modules: {
                 hostedFields: '${ $.parentName }.braintree'
             },
+            template: 'Magento_Braintree/payment/cc/vault',
+            updatePaymentUrl: url.build('braintree/payment/updatepaymentmethod'),
             vaultedCVV: ko.observable(""),
-            validatorManager: validatorManager
+            validatorManager: validatorManager,
+            isValidCvv: false,
+            onInstanceReady: function (instance) {
+                instance.on('validityChange', this.onValidityChange.bind(this));
+            }
         },
 
-        initObservable: function () {
-            this._super()
-                .observe(['active']);
-            this.validatorManager.initialize();
+        /**
+         * Event fired by Braintree SDK whenever input value length matches the validation length.
+         * In the case of a CVV, this is 3, or 4 for AMEX.
+         * @param event
+         */
+        onValidityChange: function (event) {
+            if (event.emittedBy === 'cvv') {
+                this.isValidCvv = event.fields.cvv.isValid;
+            }
+        },
 
+        /**
+         * @returns {exports}
+         */
+        initObservable: function () {
+            this._super().observe(['active']);
+            this.validatorManager.initialize();
             return this;
+        },
+
+        /**
+         * Is payment option active?
+         * @returns {boolean}
+         */
+        isActive: function () {
+            var active = this.getId() === this.isChecked();
+            this.active(active);
+            return active;
+        },
+
+        /**
+         * Fired whenever a payment option is changed.
+         * @param isActive
+         */
+        onActiveChange: function (isActive) {
+            var self = this;
+
+            if (!isActive) {
+                return;
+            }
+
+            if (self.showCvvVerify()) {
+                if (self.hostedFieldsInstance) {
+                    self.hostedFieldsInstance.teardown(function (teardownError) {
+                        if (teardownError) {
+                            globalMessageList.addErrorMessage({
+                                message: teardownError.message
+                            });
+                        }
+                        self.hostedFieldsInstance = null;
+                        self.initHostedCvvField();
+                    });
+                    return;
+                }
+                self.initHostedCvvField();
+            }
+        },
+
+        /**
+         * Initialize the CVV input field with the Braintree Hosted Fields SDK.
+         */
+        initHostedCvvField: function () {
+            var self = this;
+            client.create({
+                authorization: Braintree.getClientToken()
+            }, function (clientError, clientInstance) {
+                if (clientError) {
+                    globalMessageList.addErrorMessage({
+                        message: clientError.message
+                    });
+                }
+                hostedFields.create({
+                    client: clientInstance,
+                    fields: {
+                        cvv: {
+                            selector: '#' + self.getId() + '_cid',
+                            placeholder: '123'
+                        }
+                    }
+                }, function (hostedError, hostedFieldsInstance) {
+                    if (hostedError) {
+                        globalMessageList.addErrorMessage({
+                            message: hostedError.message
+                        });
+                        return;
+                    }
+
+                    self.hostedFieldsInstance = hostedFieldsInstance;
+                    self.onInstanceReady(self.hostedFieldsInstance);
+                });
+            });
+        },
+
+        /**
+         * Return the payment method code.
+         * @returns {string}
+         */
+        getCode: function () {
+            return 'braintree_cc_vault';
         },
 
         /**
@@ -69,15 +180,71 @@ define([
          * Get show CVV Field
          * @returns {Boolean}
          */
-        getShowCvv: function () {
-            return window.checkoutConfig.payment[this.code].useCvvVault;
+        showCvvVerify: function () {
+            return window.checkoutConfig.payment[this.code].cvvVerify;
+        },
+
+        /**
+         * Show or hide the error message.
+         * @param selector
+         * @param state
+         * @returns {boolean}
+         */
+        validateCvv: function (selector, state) {
+            var $selector = $(selector),
+                invalidClass = 'braintree-hosted-fields-invalid';
+
+            if (state === true) {
+                $selector.removeClass(invalidClass);
+                return true;
+            }
+
+            $selector.addClass(invalidClass);
+            return false;
         },
 
         /**
          * Place order
          */
         placeOrder: function () {
-            this.getPaymentMethodNonce();
+            var self = this;
+
+            if (!self.validateCvv('#' + self.getId() + '_cid', self.isValidCvv) || !additionalValidators.validate()) {
+                return;
+            }
+
+            fullScreenLoader.startLoader();
+
+            if (self.showCvvVerify() && typeof self.hostedFieldsInstance !== 'undefined') {
+                self.hostedFieldsInstance.tokenize({}, function (error, payload) {
+                    if (error) {
+                        fullScreenLoader.stopLoader();
+                        globalMessageList.addErrorMessage({
+                            message: error.message
+                        });
+                        return;
+                    }
+                    $.getJSON(
+                        self.updatePaymentUrl,
+                        {
+                            'nonce': payload.nonce,
+                            'public_hash': self.publicHash
+                        }
+                    ).done(function (response) {
+                        if (response.success === false) {
+                            fullScreenLoader.stopLoader();
+                            globalMessageList.addErrorMessage({
+                                message: 'CVV verification failed.'
+                            });
+                            return;
+                        }
+
+                        self.getPaymentMethodNonce();
+                    })
+                });
+            } else {
+                self.getPaymentMethodNonce();
+            }
         },
 
         /**
@@ -101,9 +268,11 @@ define([
                     }
 
                     self.validatorManager.validate(formComponent, function () {
+                        fullScreenLoader.stopLoader();
                         return formComponent.placeOrder('parent');
                     }, function() {
                         // No teardown actions required.
+                        fullScreenLoader.stopLoader();
                         formComponent.setPaymentMethodNonce(null);
                     });
 

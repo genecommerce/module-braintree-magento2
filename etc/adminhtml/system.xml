@@ -10,11 +10,16 @@
         <section id="payment">
             <group id="braintree_section" sortOrder="6" showInDefault="0" showInWebsite="1" showInStore="1">
                 <group id="braintree" translate="label comment" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+<<<<<<< HEAD
+                    <label><![CDATA[Braintree Payments (by <a href="https://www.gene.co.uk/braintree-payments/" target="_blank" rel="noopener noreferrer">GENE Commerce</a>)]]></label>
+                    <comment><![CDATA[Accept credit/debit cards and PayPal in your Magento store.<br />No setup or monthly fees and your customers never leave your store to complete the purchase.]]></comment>
+=======
                     <label><![CDATA[Braintree Payments (by <a href="https://www.gene.co.uk/braintree-payments/" target="_blank">GENE Commerce</a>)]]></label>
                     <comment>
                         <![CDATA[
                         Accept credit/debit cards and PayPal in your Magento store.<br />No setup or monthly fees and your customers never leave your store to complete the purchase.
                     ]]></comment>
+>>>>>>> master
                     <fieldset_css>complex braintree-section</fieldset_css>
                     <frontend_model>Magento\Braintree\Block\System\Config\Form\Fieldset</frontend_model>
                     <attribute type="activity_path">payment/braintree/active</attribute>
@@ -55,25 +60,44 @@
                             <group id="braintree_required"/>
                         </requires>
                     </field>
+                    <field id="braintree_cc_vault_cvv" translate="label" type="select" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Enable Vault CVV Re-verification</label>
+                        <comment>
+                            <![CDATA[
+                            In order for CVV re-verification to work, you must enable CVV rules in your Braintree account.
+                            Please see the guide
+                            <a href="https://articles.braintreepayments.com/guides/fraud-tools/basic/avs-cvv-rules#enabling-avs-and-cvv-rules" target="_blank" rel="noopener noreferrer">here</a>
+                            on how to do so.
+                            <br/>
+                            <br/>
+                            <strong>Please enable "CVV does not match" and "CVV is not verified" and "Issuer does not participate" only</strong>
+                            ]]>
+                        </comment>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/braintree_cc_vault/cvv</config_path>
+                        <depends>
+                            <field id="braintree_cc_vault_active">1</field>
+                        </depends>
+                    </field>
                     <group id="braintree_required" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="5">
                         <comment>
                             <![CDATA[
-                            <a href="https://www.braintreegateway.com/login" target="_blank">Click here to login to your
+                            <a href="https://www.braintreegateway.com/login" target="_blank" rel="noopener noreferrer">Click here to login to your
                             existing Braintree account</a>. Or to setup a new account and accept payments on your website,
-                            <a href="https://apply.braintreegateway.com/signup/us" target="_blank">click here to signup
+                            <a href="https://apply.braintreegateway.com/signup/us" target="_blank" rel="noopener noreferrer">click here to signup
                             for a Braintree account</a>.
                             <br/><br/>
-                            Powered by <a href="https://www.braintreepayments.com/features/hosted-fields" target="_blank">Braintree v.zero with Hosted Fields</a>
+                            Powered by <a href="https://www.braintreepayments.com/features/hosted-fields" target="_blank" rel="noopener noreferrer">Braintree v.zero with Hosted Fields</a>
                             latest technology. Hosted Fields are small, transparent iframes that replace the sensitive
                             credit card inputs in your checkout flow - helping you meet the latest data security
                             requirements while ensuring your customization doesn't suffer.
                             <br/><br/>
-                            If you would like to add <a href="https://articles.braintreepayments.com/control-panel/custom-fields" target="_blank">Custom Fields</a>
+                            If you would like to add <a href="https://articles.braintreepayments.com/control-panel/custom-fields" target="_blank" rel="noopener noreferrer">Custom Fields</a>
                             to your Braintree transactions, we provide an example module
-                            <a href="https://github.com/genecommerce/module-braintree-customfields-example" target="_blank">here</a>
+                            <a href="https://github.com/genecommerce/module-braintree-customfields-example" target="_blank" rel="noopener noreferrer">here</a>
                             that can be used to create a custom module for your store to add these fields.
                             <br/><br/>
-                            <a href="https://www.braintreepayments.com/features/hosted-fields" target="_blank">Find out more</a>.
+                            <a href="https://www.braintreepayments.com/features/hosted-fields" target="_blank" rel="noopener noreferrer">Find out more</a>.
                             ]]>
                         </comment>
                         <label>Basic Braintree Settings</label>
@@ -202,7 +226,7 @@
                         <comment>
                             <![CDATA[
                             ACH is currently only available in the United States and you must qualify as an eligible merchant.
-                            Please see <a href="https://articles.braintreepayments.com/guides/payment-methods/ach#availability" target="_blank">here</a> for more information.
+                            Please see <a href="https://articles.braintreepayments.com/guides/payment-methods/ach#availability" target="_blank" rel="noopener noreferrer">here</a> for more information.
                             ]]>
                         </comment>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
@@ -235,7 +259,7 @@
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/braintree_applepay/active</config_path>
                             <comment>
-                                <![CDATA[You need to <a href="https://developers.braintreepayments.com/guides/apple-pay/configuration/javascript/v3" target="_blank">verify your domain name</a> in your Braintree account first.]]>
+                                <![CDATA[You need to <a href="https://developers.braintreepayments.com/guides/apple-pay/configuration/javascript/v3" target="_blank" rel="noopener noreferrer">verify your domain name</a> in your Braintree account first.]]>
                             </comment>
                         </field>
                         <field id="payment_action" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -288,7 +312,7 @@
                             <![CDATA[
                                 Merchants need to be approved to be able to use Venmo for payments.
                                 Please click on this
-                                <a href="https://articles.braintreepayments.com/guides/payment-methods/venmo?_ga=1.158025594.1943497021.1564012603#availability" target="_blank">link</a>
+                                <a href="https://articles.braintreepayments.com/guides/payment-methods/venmo?_ga=1.158025594.1943497021.1564012603#availability" target="_blank" rel="noopener noreferrer">link</a>
                                 and go to the "Go Live" section to get details around approval process.
                                 You can apply for it immediately. Please note currently Venmo is available in US only.
                             ]]>

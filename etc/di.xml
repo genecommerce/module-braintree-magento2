@@ -92,6 +92,11 @@
             <argument name="methodCode" xsi:type="const">Magento\Braintree\Model\Ui\ConfigProvider::CODE</argument>
         </arguments>
     </type>
+    <type name="Magento\Braintree\Gateway\Config\Vault\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">Magento\Braintree\Model\Ui\Vault\ConfigProvider::CODE</argument>
+        </arguments>
+    </type>
     <type name="Magento\Braintree\Gateway\Config\PayPalCredit\Config">
         <arguments>
             <argument name="methodCode" xsi:type="const">Magento\Braintree\Model\Ui\PayPal\ConfigProvider::PAYPAL_CREDIT_CODE</argument>

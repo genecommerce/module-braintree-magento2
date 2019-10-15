@@ -255,12 +255,12 @@
     .field > .fields {
         .field {
             .label {
-                font-weight: 600;
+                font-weight: @font-weight__semibold;
             }
             &.required > .label:after {
                 content: '*';
                 color: #e02b27;
-                font-size: 1.2rem;
+                .lib-font-size(18px);
                 margin: 0 0 0 5px;
             }
             .control {
@@ -269,6 +269,51 @@
                 input[type="text"]::placeholder, input[type="number"]::placeholder {
                     color: lightgrey;
                 }
+            }
+        }
+    }
+}
+
+& when (@media-common = true) {
+    #payment-method-braintree-cc-vault {
+        .field {
+            &.required {
+                .label {
+                    font-weight: @font-weight__semibold;
+                    &:after {
+                        content: '*';
+                        color: #e02b27;
+                        .lib-font-size(18px);
+                        margin: 0 0 0 5px;
+                    }
+                }
+            }
+            .hosted-control {
+                background: #ffffff;
+                background-clip: padding-box;
+                border: 1px solid #c2c2c2;
+                border-radius: 1px;
+                font-family: @font-family__base;
+                .lib-font-size(14px);
+                height: 32px;
+                padding: 0 9px;
+                vertical-align: baseline;
+                box-sizing: border-box;
+                position: relative;
+                width: 5rem;
+
+                &.braintree-hosted-fields-invalid:not(.braintree-hosted-fields-focused) ~ .hosted-error {
+                    height: auto;
+                    opacity: 1;
+                }
+            }
+            .hosted-error {
+                clear: both;
+                color: #e02b27;
+                .lib-font-size(18px);
+                height: 0;
+                margin-top: 7px;
+                opacity: 0;
             }
         }
     }

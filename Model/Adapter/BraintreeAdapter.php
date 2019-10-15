@@ -139,6 +139,7 @@ class BraintreeAdapter
         try {
             return ClientToken::generate($params);
         } catch (Exception $e) {
+            $this->logger->error($e->getMessage());
             return '';
         }
     }
@@ -152,6 +153,7 @@ class BraintreeAdapter
         try {
             return CreditCard::find($token);
         } catch (Exception $e) {
+            $this->logger->error($e->getMessage());
             return null;
         }
     }
@@ -230,5 +232,15 @@ class BraintreeAdapter
     public function deletePaymentMethod($token)
     {
         return PaymentMethod::delete($token)->success;
+    }
+
+    /**
+     * @param $token
+     * @param $attribs
+     * @return mixed
+     */
+    public function updatePaymentMethod($token, $attribs)
+    {
+        return PaymentMethod::update($token, $attribs);
     }
 }
