@@ -132,7 +132,7 @@ class Level23ProcessingDataBuilder implements BuilderInterface
 
         $processingData = [
             self::KEY_PURCHASE_ORDER_NUMBER => $order->getOrderIncrementId(), // Level 2.
-            self::KEY_TAX_AMT => $this->numberToString($tax, 2), // Level 2.
+            self::KEY_TAX_AMT => $this->numberToString($order->getBaseTaxAmount(), 2), // Level 2.
             self::KEY_DISCOUNT_AMT => $this->numberToString(abs($order->getBaseDiscountAmount()), 2), // Level 3.
             self::KEY_LINE_ITEMS => $lineItems, // Level 3.
         ];

@@ -150,8 +150,19 @@ class OrderAdapter implements OrderAdapterInterface
         return $this->order->getRemoteIp();
     }
 
+    /**
+     * @return float|null
+     */
     public function getBaseDiscountAmount()
     {
         return $this->order->getBaseDiscountAmount();
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getBaseTaxAmount()
+    {
+        return $this->order->getBaseTaxAmount();
     }
 }
