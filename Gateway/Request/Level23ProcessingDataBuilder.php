@@ -122,8 +122,8 @@ class Level23ProcessingDataBuilder implements BuilderInterface
                     $this->numberToString($item->getPrice(), 2),
                     $filteredFields['unit_of_measure'],
                     $this->numberToString($item->getQtyOrdered() * $item->getPrice(), 2),
-                    $this->numberToString($item->getTaxAmount(), 2),
-                    $this->numberToString($item->getDiscountAmount(), 2),
+                    $item->getTaxAmount() === null ? '0.00' : $this->numberToString($item->getTaxAmount(), 2),
+                    $item->getTaxAmount() === null ? '0.00' : $this->numberToString($item->getDiscountAmount(), 2),
                     $filteredFields['sku'],
                     $filteredFields['sku']
                 ]
