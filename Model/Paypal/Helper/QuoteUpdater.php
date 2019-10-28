@@ -6,6 +6,7 @@
 namespace Magento\Braintree\Model\Paypal\Helper;
 
 use InvalidArgumentException;
+use Magento\Directory\Model\Region;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -40,6 +41,10 @@ class QuoteUpdater extends AbstractHelper
      * @var ResourceConnection
      */
     private $resource;
+    /**
+     * @var Region
+     */
+    private $region;
 
     /**
      * Constructor
@@ -48,17 +53,20 @@ class QuoteUpdater extends AbstractHelper
      * @param CartRepositoryInterface $quoteRepository
      * @param ManagerInterface $eventManager
      * @param ResourceConnection $resource
+     * @param Region $region
      */
     public function __construct(
         Config $config,
         CartRepositoryInterface $quoteRepository,
         ManagerInterface $eventManager,
-        ResourceConnection $resource
+        ResourceConnection $resource,
+        Region $region
     ) {
         $this->config = $config;
         $this->quoteRepository = $quoteRepository;
         $this->eventManager = $eventManager;
         $this->resource = $resource;
+        $this->region = $region;
     }
 
     /**
@@ -225,7 +233,13 @@ class QuoteUpdater extends AbstractHelper
 
         $address->setStreet([$addressData['streetAddress'], $extendedAddress]);
         $address->setCity($addressData['locality']);
+
         $address->setRegion($addressData['region']);
+
+        // Setting the region is not enough, we have to set the region ID.
+        $regionId = $this->region->loadByCode($addressData['region'], $addressData['countryCodeAlpha2'])->getId();
+        $address->setRegionId($regionId);
+
         $address->setCountryId($addressData['countryCodeAlpha2']);
         $address->setPostcode($addressData['postalCode']);
 
