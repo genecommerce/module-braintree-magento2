@@ -77,7 +77,6 @@ class Level23ProcessingDataBuilder implements BuilderInterface
      */
     public function build(array $buildSubject): array
     {
-        $tax = 0;
         $lineItems = [];
 
         $paymentDO = $this->subjectReader->readPayment($buildSubject);
@@ -98,9 +97,6 @@ class Level23ProcessingDataBuilder implements BuilderInterface
             if ($item->getParentItem() || 0.0 === $item->getPrice()) {
                 continue;
             }
-
-            /** @var OrderItemInterface $item */
-            $tax += $item->getTaxAmount();
 
             // Regex to replace all unsupported characters.
             $filteredFields = preg_replace(
