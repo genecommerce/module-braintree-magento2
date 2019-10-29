@@ -341,7 +341,6 @@
                 <item name="source" xsi:type="string">Magento\Braintree\Gateway\Request\TransactionSourceDataBuilder</item>
                 <item name="customFields" xsi:type="string">Magento\Braintree\Gateway\Request\CustomFieldsDataBuilder</item>
                 <item name="vault" xsi:type="string">Magento\Braintree\Gateway\Request\PayPal\VaultDataBuilder</item>
-                <item name="payee" xsi:type="string">Magento\Braintree\Gateway\Request\PayPal\PayeeDataBuilder</item>
                 <item name="device_data" xsi:type="string">Magento\Braintree\Gateway\Request\PayPal\DeviceDataBuilder</item>
                 <item name="dynamic_descriptor" xsi:type="string">Magento\Braintree\Gateway\Request\DescriptorDataBuilder</item>
                 <item name="address" xsi:type="string">Magento\Braintree\Gateway\Request\AddressDataBuilder</item>
@@ -380,7 +379,6 @@
                 <item name="customFields" xsi:type="string">Magento\Braintree\Gateway\Request\CustomFieldsDataBuilder</item>
                 <item name="address" xsi:type="string">Magento\Braintree\Gateway\Request\AddressDataBuilder</item>
                 <item name="dynamic_descriptor" xsi:type="string">Magento\Braintree\Gateway\Request\DescriptorDataBuilder</item>
-                <item name="payee" xsi:type="string">Magento\Braintree\Gateway\Request\PayPal\PayeeDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
