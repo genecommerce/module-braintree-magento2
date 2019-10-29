@@ -177,14 +177,6 @@ class Button extends Template implements ShortcutInterface
     }
 
     /**
-     * @return string|null
-     */
-    public function getPayeeEmail()
-    {
-        return $this->config->getPayeeEmail();
-    }
-
-    /**
      * @return string
      */
     public function getButtonShape(): string
