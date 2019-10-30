@@ -12,6 +12,7 @@ define([
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/model/full-screen-loader',
     'Magento_Checkout/js/model/payment/additional-validators',
+    'Magento_Checkout/js/model/step-navigator',
     'Magento_Vault/js/view/payment/vault-enabler',
     'Magento_Checkout/js/action/create-billing-address',
     'Magento_Checkout/js/action/select-billing-address',
@@ -23,6 +24,7 @@ define([
     quote,
     fullScreenLoader,
     additionalValidators,
+    stepNavigator,
     VaultEnabler,
     createBillingAddress,
     selectBillingAddress
@@ -94,6 +96,12 @@ define([
 
             this._super()
                 .observe(['active', 'isReviewRequired', 'customerEmail']);
+
+            window.addEventListener('hashchange', function (e) {
+                if (e.newURL.indexOf('payment') > 0 && self.grandTotalAmount !== null) {
+                    self.reInitPayPal();
+                }
+            });
 
             this.vaultEnabler = new VaultEnabler();
             this.vaultEnabler.setPaymentCode(this.getVaultCode());
