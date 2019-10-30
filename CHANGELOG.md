@@ -4,11 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [master] - 2019-09
+## [master] - 2019-10
 ### Added
 - CVV Re-verification for Stored Cards
   - This option can be enabled so that registered Customers need to provide the CVV in order to use a Stored Card
 - Information about Apple Pay on-boarding
+
+### Fixed
+- Level 2/3 Processing data now only used for Credit/Debit card transactions and now includes shipping tax
+- Correct state now set on the PayPal Onclick review page
+- Bug where PayPal was not using updated shipping address if the customer changed it during checkout
+- Bug that stopped Admins creating orders in the backend when Braintree was the only payment method
+- API validation check now uses correct Store IDs when a multi-store is being used
 
 ## [3.3.2] - 2019-09-26
 ### Fixed
