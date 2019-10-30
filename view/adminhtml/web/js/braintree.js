@@ -111,6 +111,8 @@ define([
             var self = this;
             this.scriptLoaded(true);
 
+            self.disableEventListeners();
+
             try {
                 $('body').trigger('processStart');
 
@@ -133,6 +135,7 @@ define([
                         }
 
                         self.hostedFieldsInstance = hostedFieldsInstance;
+                        self.enableEventListeners();
 
                         $('body').trigger('processStop');
                     }.bind(this));
