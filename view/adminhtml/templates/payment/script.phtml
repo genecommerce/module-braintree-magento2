@@ -20,7 +20,7 @@ $code = $block->escapeHtml($block->getCode());
         ], function(Braintree, $) {
             let config = <?= /* @noEscape */ $block->getPaymentConfig() ?>,
                 payment,
-                form = $('#payment_form_<?= $block->escapeJs($code) ?>');
+                form = $('#payment_form_<?= /* @noEscape */ $code ?>');
 
             config.active = form.length > 0 && !form.is(':hidden');
             payment = new Braintree(config);

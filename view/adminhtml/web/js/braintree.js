@@ -234,7 +234,7 @@ define([
          * Place order
          */
         placeOrder: function () {
-            $('#' + this.container).find('[type="submit"]').trigger('click');
+            $('#' + this.selector).trigger('realOrder');
         },
 
         /**
@@ -312,7 +312,7 @@ define([
                     }
                 } else {
                     this.setPaymentDetails(payload.nonce);
-                    this.placeOrder();
+                    $('#' + this.container).find('[type="submit"]').trigger('click');
                 }
             }.bind(this));
         }
