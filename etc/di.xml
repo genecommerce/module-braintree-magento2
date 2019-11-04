@@ -1033,4 +1033,12 @@
     <type name="Magento\Framework\View\Asset\Minification">
         <plugin name="braintreeExcludeFromMinification" type="Magento\Braintree\Plugin\ExcludeFromMinification"/>
     </type>
+
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="braintreeMigrate" xsi:type="object">Magento\Braintree\Console\VaultMigrate</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
