@@ -65,7 +65,6 @@ class ConfigProvider implements ConfigProviderInterface
                     'title' => $this->config->getTitle(),
                     'isAllowShippingAddressOverride' => $this->config->isAllowToEditShippingAddress(),
                     'merchantName' => $this->config->getMerchantName(),
-                    'payeeEmail' => $this->config->getPayeeEmail(),
                     'locale' => $this->resolver->getLocale(),
                     'paymentAcceptanceMarkSrc' =>
                         'https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-medium.png',
@@ -83,7 +82,6 @@ class ConfigProvider implements ConfigProviderInterface
                     'title' => __('PayPal Credit'),
                     'isAllowShippingAddressOverride' => $this->config->isAllowToEditShippingAddress(),
                     'merchantName' => $this->config->getMerchantName(),
-                    'payeeEmail' => $this->config->getPayeeEmail(),
                     'locale' => $this->resolver->getLocale(),
                     'paymentAcceptanceMarkSrc' =>
                         'https://www.paypalobjects.com/webstatic/en_US/i/buttons/ppc-acceptance-medium.png',
