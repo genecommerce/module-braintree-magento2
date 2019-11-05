@@ -4,12 +4,14 @@ declare(strict_types=1);
 namespace Magento\Braintree\Console;
 
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
+use Magento\Catalog\Helper\Output;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\ResourceConnection\ConnectionFactory;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Vault\Api\PaymentTokenRepositoryInterface;
 use Magento\Vault\Model\PaymentTokenFactory;
 use Symfony\Component\Console\Command\Command;
@@ -19,6 +21,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class VaultMigrate
+ *
+ * This class aims to migrate Magento 1 stored cards to Magento 2
  */
 class VaultMigrate extends Command
 {
@@ -47,11 +51,9 @@ class VaultMigrate extends Command
     ];
 
     /**
-     * Array to store M1 customer details
-     *
-     * @var array $customers
+     * @var $customers
      */
-    private $customers = [];
+    private $customers;
     /**
      * @var ConnectionFactory
      */
@@ -73,7 +75,7 @@ class VaultMigrate extends Command
      */
     private $paymentTokenRepository;
     /**
-     * @var Json
+     * @var SerializerInterface
      */
     private $json;
     /**
@@ -90,7 +92,7 @@ class VaultMigrate extends Command
      * @param PaymentTokenFactory $paymentToken
      * @param PaymentTokenRepositoryInterface $paymentTokenRepository
      * @param EncryptorInterface $encryptor
-     * @param Json $json
+     * @param SerializerInterface $json
      * @param string|null $name
      */
     public function __construct(
@@ -100,7 +102,7 @@ class VaultMigrate extends Command
         PaymentTokenFactory $paymentToken,
         PaymentTokenRepositoryInterface $paymentTokenRepository,
         EncryptorInterface $encryptor,
-        Json $json,
+        SerializerInterface $json,
         string $name = null
     ) {
         parent::__construct($name);
@@ -109,27 +111,15 @@ class VaultMigrate extends Command
         $this->customerRepository = $customerRepository;
         $this->paymentToken = $paymentToken;
         $this->paymentTokenRepository = $paymentTokenRepository;
-        $this->json = $json;
         $this->encryptor = $encryptor;
+        $this->json = $json;
     }
 
     protected function configure()
     {
-        $options = [
-            new InputOption(self::HOST, null, InputOption::VALUE_REQUIRED, 'Hostname/IP. Port is optional'),
-            new InputOption(self::DBNAME, null, InputOption::VALUE_REQUIRED, 'Database name'),
-            new InputOption(
-                self::USERNAME,
-                null,
-                InputOption::VALUE_REQUIRED,
-                'Database username. Must have read access'
-            ),
-            new InputOption(self::PASSWORD, null, InputOption::VALUE_REQUIRED, 'Password')
-        ];
-
         $this->setName('braintree:migrate');
         $this->setDescription('Migrate stored cards from a Magento 1 database');
-        $this->setDefinition($options);
+        $this->setDefinition($this->getOptionsList());
 
         parent::configure();
     }
@@ -146,31 +136,125 @@ class VaultMigrate extends Command
         $username = $input->getOption(self::USERNAME);
         $password = $input->getOption(self::PASSWORD);
 
-        // Set DB connection details
-        $db = $this->createDbConnection($host, $databaseName, $username, $password);
+        // Create connection to Magento 1 database
+        $db = $this->getDbConnection($host, $databaseName, $username, $password ?? '');
 
         // Get the `braintree_customer_id` attribute ID
         $eavAttributeId = $this->getEavAttributeId($db);
 
-        // Find all instances of `braintree_customer_id` in the customer entity table
-        $results = $this->getBraintreeCustomers($db, $eavAttributeId);
+        if (!$eavAttributeId) {
+            $output->writeln('<error>Could not find `braintree_customer_id` attribute.</error>');
+            return;
+        }
 
-        $output->writeln('<info>'. count($results) .' stored cards found</info>');
+        // Find all instances of `braintree_customer_id` in the customer entity table
+        $storedCards = $this->getStoredCards($db, $output, $eavAttributeId);
+
+        if (!$storedCards) {
+            $output->writeln('<error>Could not find any stored cards.</error>');
+            return;
+        }
 
         // For each record, look up the Braintree ID
-        foreach ($results as $result) {
+        $this->customers = $this->findBraintreeCustomers($output, $storedCards);
 
-            $this->
+        if (!$this->customers) {
+            $output->writeln('<error>Could not find any matching customers in Magento 2.</error>');
+            return;
+        }
 
-            $output->write('<info>Search Braintree for Customer ID ' . $result['braintree_id'] . '...</info>');
-            $customer = $this->braintreeAdapter->getCustomerById($result['braintree_id']);
+        // For each customer, locate them in the M2 database and save their stored cards
+        $this->migrateStoredCards($output, $this->customers);
+    }
+
+    /**
+     * @return array
+     */
+    public function getOptionsList()
+    {
+        return [
+            new InputOption(self::HOST, null, InputOption::VALUE_REQUIRED, 'Hostname/IP. Port is optional'),
+            new InputOption(self::DBNAME, null, InputOption::VALUE_REQUIRED, 'Database name'),
+            new InputOption(
+                self::USERNAME,
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Database username. Must have read access'
+            ),
+            new InputOption(self::PASSWORD, null, InputOption::VALUE_REQUIRED, 'Password')
+        ];
+    }
+
+    /**
+     * @param string $host
+     * @param string $databaseName
+     * @param string $username
+     * @param string $password
+     * @return AdapterInterface
+     */
+    private function getDbConnection(
+        string $host,
+        string $databaseName,
+        string $username,
+        string $password
+    ): AdapterInterface {
+        return $this->connectionFactory->create([
+            'host' => $host,
+            'dbname' => $databaseName,
+            'username' => $username,
+            'password' => $password
+        ]);
+    }
+
+    /**
+     * @param $db
+     * @return string
+     */
+    private function getEavAttributeId(AdapterInterface $db)
+    {
+        $select = $db->select()
+            ->where('attribute_code = ?', 'braintree_customer_id')
+            ->from(self::EAV_ATTRIBUTE_TABLE, self::ATTRIBUTE_ID);
+        return $db->fetchOne($select);
+    }
+
+    /**
+     * @param $db
+     * @param $eavAttributeId
+     * @return mixed
+     */
+    private function getStoredCards(AdapterInterface $db, OutputInterface $output, $eavAttributeId)
+    {
+        $select = $db->select()
+            ->join('customer_entity', 'customer_entity.entity_id = customer_entity_varchar.entity_id')
+            ->where(self::ATTRIBUTE_ID . ' = ?', $eavAttributeId)
+            ->from(self::CUSTOMER_ENTITY_TABLE, self::VALUE . ' as braintree_id');
+        $result = $db->fetchAll($select);
+
+        if ($result) {
+            $output->writeln('<info>'. count($result) .' stored cards found</info>');
+            return $result;
+        }
+    }
+
+    /**
+     * @param $output
+     * @param $storedCards
+     * @return array
+     */
+    private function findBraintreeCustomers(OutputInterface $output, $storedCards): array
+    {
+        $customers = [];
+        foreach ($storedCards as $storedCard) {
+            $output->write('<info>Search Braintree for Customer ID ' . $storedCard['braintree_id'] . '...</info>');
+            $customer = $this->braintreeAdapter->getCustomerById($storedCard['braintree_id']);
 
             // If we find customer records, grab the important data
             if ($customer) {
                 $output->writeln('<info>Customer found!</info>');
 
                 $customerData = [
-                    'braintree_id' => $result['braintree_id'],
+                    'braintree_id' => $storedCard['braintree_id'],
                     'email' => $customer->email
                 ];
 
@@ -188,14 +272,21 @@ class VaultMigrate extends Command
                 }
 
                 // Add customer data to the main customer array
-                $this->customers[] = $customerData;
+                $customers[] = $customerData;
             } else {
                 $output->writeln('<error>No records found</error>');
             }
         }
 
-        // For each customer, locate them in the M2 database
-        foreach ($this->customers as $customer) {
+        return $customers;
+    }
+
+    /**
+     * @param array $customers
+     */
+    private function migrateStoredCards(OutputInterface $output, array $customers)
+    {
+        foreach ($customers as $customer) {
             try {
                 // Customer entity can only have one unique email assigned, so this method is acceptable to use.
                 $m2Customer = $this->customerRepository->get($customer['email']);
@@ -243,48 +334,5 @@ class VaultMigrate extends Command
         }
 
         $output->writeln('<info>Migration complete</info>');
-    }
-
-    /**
-     * @param $host
-     * @param $databaseName
-     * @param $username
-     * @param null $password
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    protected function createDbConnection($host, $databaseName, $username, $password = null)
-    {
-        return $this->connectionFactory->create([
-            'host' => $host,
-            'dbname' => $databaseName,
-            'username' => $username,
-            'password' => $password ?? null
-        ]);
-    }
-
-    /**
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface $db
-     * @return string
-     */
-    private function getEavAttributeId(\Magento\Framework\DB\Adapter\AdapterInterface $db)
-    {
-        $select = $db->select()
-            ->where('attribute_code = ?', 'braintree_customer_id')
-            ->from(self::EAV_ATTRIBUTE_TABLE, self::ATTRIBUTE_ID);
-        return $db->fetchOne($select);
-    }
-
-    /**
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface $db
-     * @param string $eavAttributeId
-     * @return array
-     */
-    private function getBraintreeCustomers(\Magento\Framework\DB\Adapter\AdapterInterface $db, string $eavAttributeId)
-    {
-        $select = $db->select()
-            ->join('customer_entity', 'customer_entity.entity_id = customer_entity_varchar.entity_id')
-            ->where(self::ATTRIBUTE_ID . ' = ?', $eavAttributeId)
-            ->from(self::CUSTOMER_ENTITY_TABLE, self::VALUE . ' as braintree_id');
-        return $db->fetchAll($select);
     }
 }
