@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Magento\Braintree\Console;
 
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
-use Magento\Catalog\Helper\Output;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\ResourceConnection\ConnectionFactory;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -30,14 +29,11 @@ class VaultMigrate extends Command
     const DBNAME = 'dbname';
     const USERNAME = 'username';
     const PASSWORD = 'password';
-
     const EAV_ATTRIBUTE_TABLE = 'eav_attribute';
     const ATTRIBUTE_ID = 'attribute_id';
     const ATTRIBUTE_CODE = 'attribute_code';
-
     const CUSTOMER_ENTITY_TABLE = 'customer_entity_varchar';
     const VALUE = 'value';
-
     const CC_MAPPER = [
         'american-express' => 'AE',
         'discover' => 'DI',
@@ -156,10 +152,17 @@ class VaultMigrate extends Command
         }
 
         // For each record, look up the Braintree ID
-        $this->customers = $this->findBraintreeCustomers($output, $storedCards);
+        $braintreeCustomers = $this->findBraintreeCustomers($output, $storedCards);
+
+        if (!$braintreeCustomers) {
+            $output->writeln('<error>Could not find any matching customers in Magento 2.</error>');
+            return;
+        }
+
+        $this->customers = $this->remapCustomerData($braintreeCustomers);
 
         if (!$this->customers) {
-            $output->writeln('<error>Could not find any matching customers in Magento 2.</error>');
+            $output->writeln('<error>Could not remap Customer data.</error>');
             return;
         }
 
@@ -170,7 +173,7 @@ class VaultMigrate extends Command
     /**
      * @return array
      */
-    public function getOptionsList()
+    public function getOptionsList(): array
     {
         return [
             new InputOption(self::HOST, null, InputOption::VALUE_REQUIRED, 'Hostname/IP. Port is optional'),
@@ -246,39 +249,45 @@ class VaultMigrate extends Command
     {
         $customers = [];
         foreach ($storedCards as $storedCard) {
-            $output->write('<info>Search Braintree for Customer ID ' . $storedCard['braintree_id'] . '...</info>');
-            $customer = $this->braintreeAdapter->getCustomerById($storedCard['braintree_id']);
-
-            // If we find customer records, grab the important data
-            if ($customer) {
-                $output->writeln('<info>Customer found!</info>');
-
-                $customerData = [
-                    'braintree_id' => $storedCard['braintree_id'],
-                    'email' => $customer->email
-                ];
-
-                if ($customer->creditCards) {
-                    // grab each stored credit card
-                    foreach ($customer->creditCards as $creditCard) {
-                        $customerData['storedCards'][] = [
-                            'token' => $creditCard->token,
-                            'expirationMonth' => $creditCard->expirationMonth,
-                            'expirationYear' => $creditCard->expirationYear,
-                            'last4' => $creditCard->last4,
-                            'cardType' => self::CC_MAPPER[str_replace(' ', '-', strtolower($creditCard->cardType))]
-                        ];
-                    }
-                }
-
-                // Add customer data to the main customer array
-                $customers[] = $customerData;
-            } else {
-                $output->writeln('<error>No records found</error>');
-            }
+            $output->writeln('<info>Search Braintree for Customer ID ' . $storedCard['braintree_id'] . '...</info>');
+            $customers[] = $this->braintreeAdapter->getCustomerById($storedCard['braintree_id']);
         }
 
         return $customers;
+    }
+
+    /**
+     * @param $customers
+     * @return array
+     */
+    public function remapCustomerData($customers): array
+    {
+        $remappedCustomerData = [];
+
+        foreach ($customers as $customer) {
+            $customerData = [
+                'braintree_id' => $customer->id,
+                'email' => $customer->email
+            ];
+
+            if ($customer->creditCards) {
+                // grab each stored credit card
+                foreach ($customer->creditCards as $creditCard) {
+                    $customerData['storedCards'][] = [
+                        'token' => $creditCard->token,
+                        'expirationMonth' => $creditCard->expirationMonth,
+                        'expirationYear' => $creditCard->expirationYear,
+                        'last4' => $creditCard->last4,
+                        'cardType' => self::CC_MAPPER[str_replace(' ', '-', strtolower($creditCard->cardType))]
+                    ];
+                }
+            }
+
+            // Add customer data to the main customer array
+            $remappedCustomerData[] = $customerData;
+        }
+
+        return $remappedCustomerData;
     }
 
     /**
