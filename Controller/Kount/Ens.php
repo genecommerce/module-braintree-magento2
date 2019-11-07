@@ -9,7 +9,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 
 /**
@@ -17,6 +17,7 @@ use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
  */
 class Ens extends Action
 {
+    const KOUNT_MERCHANT_ID = 'payment/braintree/kount_id';
     /**
      * @var EnsConfig
      */
@@ -25,10 +26,6 @@ class Ens extends Action
      * @var RemoteAddress
      */
     private $remoteAddress;
-    /**
-     * @var ManagerInterface
-     */
-    private $eventManager;
 
     /**
      * Index constructor.
@@ -36,22 +33,20 @@ class Ens extends Action
      * @param Context $context
      * @param EnsConfig $ensConfig
      * @param RemoteAddress $remoteAddress
-     * @param ManagerInterface $eventManager
      */
     public function __construct(
         Context $context,
         EnsConfig $ensConfig,
-        RemoteAddress $remoteAddress,
-        ManagerInterface $eventManager
+        RemoteAddress $remoteAddress
     ) {
         parent::__construct($context);
         $this->ensConfig = $ensConfig;
         $this->remoteAddress = $remoteAddress;
-        $this->eventManager = $eventManager;
     }
 
     /**
      * @return ResponseInterface|ResultInterface
+     * @throws LocalizedException
      */
     public function execute()
     {
@@ -64,8 +59,16 @@ class Ens extends Action
         $request = file_get_contents('php://input'); // @codingStandardsIgnoreLine
         $xml = simplexml_load_string($request);
 
+        if (empty($xml['merchant'])) {
+            throw new LocalizedException(__('Invalid ENS XML'));
+        }
+
+        if (!$this->ensConfig->validateMerchantId((int)$xml['merchant'])) {
+            throw new LocalizedException(__('Invalid Merchant ID'));
+        }
+
         foreach ($xml->children() as $event) {
-            $this->eventManager->dispatch('braintree_kount_ens_event', ['event' => $event]);
+            $this->ensConfig->processEvent($event);
         }
 
         return $response;
