@@ -7,10 +7,4 @@
             <resource ref="anonymous" />
         </resources>
     </route>
-    <route method="POST" url="/V1/braintree/webhook">
-        <service class="Magento\Braintree\Api\WebhookInterface" method="getData"/>
-        <resources>
-            <resource ref="anonymous"/>
-        </resources>
-    </route>
 </routes>

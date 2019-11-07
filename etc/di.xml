@@ -1138,7 +1138,6 @@
     <preference for="Magento\Braintree\Api\Data\AuthDataInterface" type="Magento\Braintree\Model\ApplePay\Auth\Data" />
     <preference for="Magento\Braintree\Api\Data\CreditPriceDataInterface" type="Magento\Braintree\Model\CreditPrice" />
     <preference for="Magento\Braintree\Api\CreditPriceRepositoryInterface" type="Magento\Braintree\Model\ResourceModel\CreditPriceRepository" />
-    <preference for="Magento\Braintree\Api\WebhookInterface" type="Magento\Braintree\Model\Webhook"/>
 
     <preference for="Magento\Payment\Gateway\Data\Order\OrderAdapter" type="Magento\Braintree\Gateway\Data\Order\OrderAdapter"/>
 
