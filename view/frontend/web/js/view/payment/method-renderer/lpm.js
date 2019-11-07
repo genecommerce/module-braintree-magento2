@@ -74,15 +74,7 @@ define(
                                 surname: self.getCustomerDetails().lastName,
                                 shippingAddressRequired: !quote.isVirtual(),
                                 address: self.getAddress(),
-                                fallback: {
-                                    url: self.fallbackUrl,
-                                    buttonText: $t('Complete Payment')
-                                },
-                                paymentType: method,
-                                onPaymentStart: function (data, start) {
-                                    self.savePaymentId(data.paymentId, quote.getQuoteId(), start);
-                                    // start();
-                                }
+                                paymentType: method
                             }, function (startPaymentError, payload) {
                                 fullScreenLoader.stopLoader();
                                 if (startPaymentError) {
@@ -95,7 +87,6 @@ define(
                                     } else {
                                         console.error('Error!', startPaymentError);
                                     }
-                                    // TODO delete payment ID record if lpm failed
                                 } else {
                                     // Send the nonce to your server to create a transaction
                                     self.setPaymentMethodNonce(payload.nonce);
@@ -232,20 +223,6 @@ define(
                 }
 
                 return false;
-            },
-
-            savePaymentId: function (paymentId, quoteId, callback) {
-                $.ajax({
-                    url: this.saveUrl,
-                    data: { payment_id: paymentId, quote_id: quoteId },
-                    type: 'POST'
-                }).done(function (data) {
-                    if (data.success === true) {
-                        callback();
-                    } else {
-                        console.error(data.message);
-                    }
-                });
             },
 
             setErrorMsg: function (message) {
