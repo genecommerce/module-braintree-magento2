@@ -166,6 +166,15 @@ class BraintreeAdapter
     }
 
     /**
+     * @param string $id
+     * @return Transaction|null
+     */
+    public function findById(string $id)
+    {
+        return Transaction::find($id);
+    }
+
+    /**
      * @param string $token
      * @return Successful|Error
      */

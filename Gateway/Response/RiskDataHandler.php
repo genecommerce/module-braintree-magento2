@@ -6,9 +6,11 @@
 namespace Magento\Braintree\Gateway\Response;
 
 use Braintree\Transaction;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Gateway\Helper\ContextHelper;
 use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Response\HandlerInterface;
+use Magento\Sales\Model\Order\Payment;
 
 /**
  * Class RiskDataHandler
@@ -51,6 +53,7 @@ class RiskDataHandler implements HandlerInterface
      * @param array $handlingSubject
      * @param array $response
      * @return void
+     * @throws LocalizedException
      */
     public function handle(array $handlingSubject, array $response)
     {
@@ -63,14 +66,17 @@ class RiskDataHandler implements HandlerInterface
             return;
         }
 
+        /** @var Payment $payment */
         $payment = $paymentDO->getPayment();
         ContextHelper::assertOrderPayment($payment);
 
         $payment->setAdditionalInformation(self::RISK_DATA_ID, $transaction->riskData->id);
         $payment->setAdditionalInformation(self::RISK_DATA_DECISION, $transaction->riskData->decision);
 
-        // mark payment as fraud
+        // Mark payment as fraud
         if ($transaction->riskData->decision === self::$statusReview) {
+            // We have to set the transaction to pending, so it is not captured right away.
+            $payment->setIsTransactionPending(true);
             $payment->setIsFraudDetected(true);
         }
     }

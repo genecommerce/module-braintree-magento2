@@ -3,14 +3,23 @@ declare(strict_types=1);
 
 namespace Magento\Braintree\Model\Kount;
 
+use Braintree\Transaction;
+use Exception;
+use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\DB\TransactionFactory;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\CreditmemoFactory;
+use Magento\Sales\Model\Order\Invoice;
+use Magento\Sales\Model\Order\Payment;
+use Magento\Sales\Model\Service\CreditmemoService;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Class EnsConfig
+ * Class EnsConfig - Contains methods for dealing with Kount ENS Notifications.
  */
 class EnsConfig
 {
@@ -35,20 +44,48 @@ class EnsConfig
      * @var OrderInterface
      */
     private $order;
+    /**
+     * @var BraintreeAdapter
+     */
+    private $braintreeAdapter;
+    /**
+     * @var TransactionFactory
+     */
+    private $transactionFactory;
+    /**
+     * @var CreditmemoFactory
+     */
+    private $creditmemoFactory;
+    /**
+     * @var CreditmemoService
+     */
+    private $creditmemoService;
 
     /**
      * @param StoreManagerInterface $storeManager
      * @param ScopeConfigInterface $scopeConfig
      * @param OrderInterface $order
+     * @param BraintreeAdapter $braintreeAdapter
+     * @param TransactionFactory $transactionFactory
+     * @param CreditmemoFactory $creditmemoFactory
+     * @param CreditmemoService $creditmemoService
      */
     public function __construct(
         StoreManagerInterface $storeManager,
         ScopeConfigInterface $scopeConfig,
-        OrderInterface $order
+        OrderInterface $order,
+        BraintreeAdapter $braintreeAdapter,
+        TransactionFactory $transactionFactory,
+        CreditmemoFactory $creditmemoFactory,
+        CreditmemoService $creditmemoService
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;
         $this->order = $order;
+        $this->braintreeAdapter = $braintreeAdapter;
+        $this->transactionFactory = $transactionFactory;
+        $this->creditmemoFactory = $creditmemoFactory;
+        $this->creditmemoService = $creditmemoService;
     }
 
     /**
@@ -134,6 +171,7 @@ class EnsConfig
     /**
      * @param $event
      * @return bool
+     * @throws Exception
      */
     public function processEvent($event): bool
     {
@@ -147,6 +185,7 @@ class EnsConfig
     /**
      * @param $event
      * @return bool
+     * @throws Exception
      */
     public function workflowStatusEdit($event): bool
     {
@@ -158,6 +197,7 @@ class EnsConfig
             $order = $this->order->loadByIncrementId($incrementId);
 
             if ($order) {
+                /** @var Payment $payment */
                 $payment = $order->getPayment();
                 $paymentKountId = $payment->getAdditionalInformation('riskDataId');
 
@@ -207,22 +247,117 @@ class EnsConfig
     }
 
     /**
-     * @param \Magento\Sales\Api\Data\OrderInterface $order
+     * @param OrderInterface $order
+     * @return bool
+     * @throws Exception
      */
-    private function approveOrder(\Magento\Sales\Api\Data\OrderInterface $order)
+    private function approveOrder(OrderInterface $order): bool
     {
+        /** @var Order $order */
         if ($order->getStatus() === Order::STATE_PAYMENT_REVIEW) {
             $invoices = $order->getInvoiceCollection();
+
+            foreach ($invoices as $invoice) {
+                /** @var Invoice $invoice */
+                if ($invoice->canCapture()) {
+                    $invoice->capture();
+                    $invoice->getOrder()->setStatus(Order::STATE_PROCESSING);
+                    $invoice->getOrder()->addCommentToStatusHistory(
+                        'Order approved through Kount, pending invoice(s) captured.'
+                    );
+
+                    $this->transactionFactory->create()
+                        ->addObject($invoice)
+                        ->save();
+
+                    return true;
+                }
+            }
         }
 
         return false;
     }
 
     /**
-     * @param \Magento\Sales\Api\Data\OrderInterface $order
+     * @param OrderInterface $order
+     * @return bool
+     * @throws Exception
      */
-    private function declineOrder(\Magento\Sales\Api\Data\OrderInterface $order)
+    private function declineOrder(OrderInterface $order): bool
     {
+        /** @var Order $order */
+        if ($order->getStatus() === Order::STATE_PAYMENT_REVIEW) {
+            $braintreeId = $order->getPayment()->getCcTransId();
+
+            /** @var Transaction $braintreeTransaction */
+            $braintreeTransaction = $this->braintreeAdapter->findById($braintreeId);
+
+            if ($braintreeTransaction) {
+                if ($braintreeTransaction->status === Transaction::AUTHORIZED
+                    || $braintreeTransaction->status === Transaction::SUBMITTED_FOR_SETTLEMENT) {
+                    return $this->voidOrder($order);
+                }
+
+                if ($braintreeTransaction->status === Transaction::SETTLED) {
+                    return $this->refundOrder($order);
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param OrderInterface $order
+     * @return bool
+     * @throws Exception
+     */
+    private function voidOrder(OrderInterface $order): bool
+    {
+        /** @var Order $order */
+        foreach ($order->getInvoiceCollection() as $invoice) {
+            /** @var Invoice $invoice */
+            $invoice->void();
+            $invoice->getOrder()->setStatus(Order::STATE_CANCELED);
+            $invoice->getOrder()->addCommentToStatusHistory(
+                'Order declined through Kount, order voided in Magento.'
+            );
+
+            $this->transactionFactory->create()
+                ->addObject($invoice)
+                ->save();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param OrderInterface $order
+     * @return bool
+     * @throws LocalizedException
+     */
+    private function refundOrder(OrderInterface $order): bool
+    {
+        /** @var Order $order */
+        foreach ($order->getInvoiceCollection() as $invoice) {
+            /** @var Invoice $invoice */
+            if ($invoice->getState() !== Order\Invoice::STATE_PAID) {
+                $invoice->pay();
+            }
+
+            if ($invoice->canRefund()) {
+                $creditMemo = $this->creditmemoFactory->createByInvoice($invoice);
+                $creditMemo->setInvoice($invoice);
+                $this->creditmemoService->refund($creditMemo);
+
+                return true;
+            }
+
+            return false;
+        }
+
         return false;
     }
 }
