@@ -10,10 +10,12 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DB\TransactionFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\CreditmemoFactory;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Payment;
+use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection;
 use Magento\Sales\Model\Service\CreditmemoService;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -60,6 +62,10 @@ class EnsConfig
      * @var CreditmemoService
      */
     private $creditmemoService;
+    /**
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
 
     /**
      * @param StoreManagerInterface $storeManager
@@ -74,6 +80,7 @@ class EnsConfig
         StoreManagerInterface $storeManager,
         ScopeConfigInterface $scopeConfig,
         OrderInterface $order,
+        OrderRepositoryInterface $orderRepository,
         BraintreeAdapter $braintreeAdapter,
         TransactionFactory $transactionFactory,
         CreditmemoFactory $creditmemoFactory,
@@ -86,6 +93,7 @@ class EnsConfig
         $this->transactionFactory = $transactionFactory;
         $this->creditmemoFactory = $creditmemoFactory;
         $this->creditmemoService = $creditmemoService;
+        $this->orderRepository = $orderRepository;
     }
 
     /**
@@ -254,25 +262,10 @@ class EnsConfig
     private function approveOrder(OrderInterface $order): bool
     {
         /** @var Order $order */
-        if ($order->getStatus() === Order::STATE_PAYMENT_REVIEW) {
-            $invoices = $order->getInvoiceCollection();
-
-            foreach ($invoices as $invoice) {
-                /** @var Invoice $invoice */
-                if ($invoice->canCapture()) {
-                    $invoice->capture();
-                    $invoice->getOrder()->setStatus(Order::STATE_PROCESSING);
-                    $invoice->getOrder()->addCommentToStatusHistory(
-                        'Order approved through Kount, pending invoice(s) captured.'
-                    );
-
-                    $this->transactionFactory->create()
-                        ->addObject($invoice)
-                        ->save();
-
-                    return true;
-                }
-            }
+        if ($order->getStatus() === Order::STATUS_FRAUD || $order->getStatus() === Order::STATE_PAYMENT_REVIEW) {
+            $order->getPayment()->accept();
+            $this->orderRepository->save($order);
+            return true;
         }
 
         return false;
@@ -286,7 +279,7 @@ class EnsConfig
     private function declineOrder(OrderInterface $order): bool
     {
         /** @var Order $order */
-        if ($order->getStatus() === Order::STATE_PAYMENT_REVIEW) {
+        if ($order->getStatus() === Order::STATUS_FRAUD || $order->getStatus() === Order::STATE_PAYMENT_REVIEW) {
             $braintreeId = $order->getPayment()->getCcTransId();
 
             /** @var Transaction $braintreeTransaction */
@@ -314,19 +307,29 @@ class EnsConfig
      */
     private function voidOrder(OrderInterface $order): bool
     {
-        /** @var Order $order */
-        foreach ($order->getInvoiceCollection() as $invoice) {
-            /** @var Invoice $invoice */
-            $invoice->void();
-            $invoice->getOrder()->setStatus(Order::STATE_CANCELED);
-            $invoice->getOrder()->addCommentToStatusHistory(
-                'Order declined through Kount, order voided in Magento.'
-            );
+        /** @var Collection $invoices */
+        $invoices = $order->getInvoiceCollection();
 
-            $this->transactionFactory->create()
-                ->addObject($invoice)
-                ->save();
+        if (count($invoices->getItems()) > 0) {
+            /** @var Order $order */
+            foreach ($invoices as $invoice) {
+                /** @var Invoice $invoice */
+                $invoice->void();
+                $invoice->getOrder()->setStatus(Order::STATE_CANCELED);
+                $invoice->getOrder()->addCommentToStatusHistory(
+                    'Order declined through Kount, order voided in Magento.'
+                );
 
+                $this->transactionFactory->create()
+                    ->addObject($invoice)
+                    ->addObject($invoice->getOrder())
+                    ->save();
+
+            }
+            return true;
+        } else {
+            $order->getPayment()->deny();
+            $this->orderRepository->save($order);
             return true;
         }
 
