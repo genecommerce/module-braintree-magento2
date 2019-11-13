@@ -156,36 +156,6 @@
                                 </comment>
                                 <config_path>payment/braintree/kount_id</config_path>
                             </field>
-                            <field id="kount_environment" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
-                                <label>Environment</label>
-                                <comment>Please specify which Kount environment you're using.</comment>
-                                <source_model>Magento\Braintree\Model\Config\Source\KountEnvironment</source_model>
-                                <config_path>payment/braintree/kount_environment</config_path>
-                            </field>
-                            <field id="kount_api_key" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
-                                <label>API Key</label>
-                                <comment>
-                                    Your Kount API authentication token. This can be located through the Kount AWC panel,
-                                    via Admin > API Keys. Please ensure it has all permissions.
-                                </comment>
-                                <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
-                                <config_path>payment/braintree/kount_api_key</config_path>
-                                <depends>
-                                    <field id="kount_environment">production</field>
-                                </depends>
-                            </field>
-                            <field id="kount_api_key_sandbox" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
-                                <label>API Key (Sandbox)</label>
-                                <comment>
-                                    Your Kount API authentication token. This can be located through the Kount AWC panel,
-                                    via Admin > API Keys. Please ensure it has all permissions.
-                                </comment>
-                                <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
-                                <config_path>payment/braintree/kount_api_key_sandbox</config_path>
-                                <depends>
-                                    <field id="kount_environment">sandbox</field>
-                                </depends>
-                            </field>
                             <field id="kount_skip_admin" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
                                 <label>Skip Fraud Checks on Admin Orders</label>
                                 <comment>
