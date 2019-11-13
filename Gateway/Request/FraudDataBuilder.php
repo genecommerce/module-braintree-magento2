@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Magento\Braintree\Gateway\Request;
 
@@ -12,8 +13,8 @@ use Magento\Payment\Helper\Formatter;
 
 /**
  * Class FraudDataBuilder
- * @package Magento\Braintree\Gateway\Request
- * @author Aidan Threadgold <aidan@gene.co.uk>
+ *
+ * Add logical checks to enable/disable fraud checks.
  */
 class FraudDataBuilder implements BuilderInterface
 {
