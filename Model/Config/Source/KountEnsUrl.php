@@ -15,6 +15,8 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
  */
 class KountEnsUrl extends Field
 {
+    const ENS_URL = '/braintree/kount/ens';
+
     /**
      * @var ScopeConfigInterface
      */
@@ -44,6 +46,6 @@ class KountEnsUrl extends Field
     public function _getElementHtml(AbstractElement $element): string
     {
         $baseUrl = $this->scopeConfig->getValue('web/secure/base_url');
-        return $baseUrl . '/braintree/kount/ens';
+        return $baseUrl . self::ENS_URL;
     }
 }

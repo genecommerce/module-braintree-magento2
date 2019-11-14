@@ -5,6 +5,7 @@ namespace Magento\Braintree\Model\Kount;
 
 use Braintree\Transaction;
 use Exception;
+use Magento\Braintree\Api\EnsManagementInterface;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DB\TransactionFactory;
@@ -19,21 +20,15 @@ use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection;
 use Magento\Sales\Model\Service\CreditmemoService;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use SimpleXMLElement;
 
 /**
- * Class EnsConfig - Contains methods for dealing with Kount ENS Notifications.
+ * Class EnsConfig
+ *
+ * Contains methods for dealing with Kount ENS Notifications.
  */
-class EnsConfig
+class EnsConfig implements EnsManagementInterface
 {
-    const CONFIG_KOUNT_ID = 'payment/braintree/kount_id';
-    const CONFIG_ALLOWED_IPS = 'payment/braintree/kount_allowed_ips';
-    const CONFIG_ENVIRONMENT = 'payment/braintree/kount_environment';
-
-    const RESPONSE_DECLINE = 'D';
-    const RESPONSE_APPROVE = 'A';
-    const RESPONSE_REVIEW = 'R';
-    const RESPONSE_ESCALATE = 'E';
-
     /**
      * @var StoreManagerInterface
      */
@@ -107,17 +102,21 @@ class EnsConfig
     }
 
     /**
+     * This method will check if a given IP (as a string) falls into a valid range, e.g "192.168.0.0/255".
+     *
      * @param $ip
      * @param $range
      * @return bool
      */
-    private function isIpInRange($ip, $range): bool
+    public function isIpInRange($ip, $range): bool
     {
+        // If no "range" is set, add the full range of 255.
         if (strpos($range, '/') === false) {
             $range .= '/255';
         }
+
         // $range is in IP/CIDR format eg 127.0.0.1/255
-        list($range, $netmask) = explode('/', $range, 2);
+        list($range, $netmask) = explode('/', $range, 2); // Get the starting IP and the netmask of the IP range.
 
         $range_decimal = ip2long($range);
         $ip_decimal = ip2long($ip);
@@ -128,10 +127,10 @@ class EnsConfig
     }
 
     /**
-     * @param $remoteAddress
+     * @param string $remoteAddress
      * @return bool
      */
-    public function isAllowed($remoteAddress): bool
+    public function isAllowed(string $remoteAddress): bool
     {
         $allowedIps = $this->getAllowedIps();
 
@@ -172,13 +171,13 @@ class EnsConfig
     }
 
     /**
-     * @param $event
+     * @param SimpleXMLElement $event
      * @return bool
      * @throws Exception
      */
-    public function processEvent($event): bool
+    public function processEvent(SimpleXMLElement $event): bool
     {
-        if ((string) $event->name === 'WORKFLOW_STATUS_EDIT') {
+        if ((string) $event->name === self::ENS_WORKFLOW_EDIT) {
             return $this->workflowStatusEdit($event);
         }
 
@@ -254,7 +253,7 @@ class EnsConfig
      * @return bool
      * @throws Exception
      */
-    private function approveOrder(OrderInterface $order): bool
+    public function approveOrder(OrderInterface $order): bool
     {
         /** @var Order $order */
         if ($order->getStatus() === Order::STATUS_FRAUD || $order->getStatus() === Order::STATE_PAYMENT_REVIEW) {
@@ -271,7 +270,7 @@ class EnsConfig
      * @return bool
      * @throws Exception
      */
-    private function declineOrder(OrderInterface $order): bool
+    public function declineOrder(OrderInterface $order): bool
     {
         /** @var Order $order */
         if ($order->getStatus() === Order::STATUS_FRAUD || $order->getStatus() === Order::STATE_PAYMENT_REVIEW) {
@@ -300,7 +299,7 @@ class EnsConfig
      * @return bool
      * @throws Exception
      */
-    private function voidOrder(OrderInterface $order): bool
+    public function voidOrder(OrderInterface $order): bool
     {
         /** @var Collection $invoices */
         $invoices = $order->getInvoiceCollection();
@@ -335,7 +334,7 @@ class EnsConfig
      * @return bool
      * @throws LocalizedException
      */
-    private function refundOrder(OrderInterface $order): bool
+    public function refundOrder(OrderInterface $order): bool
     {
         /** @var Collection $invoices */
         $invoices = $order->getInvoiceCollection();

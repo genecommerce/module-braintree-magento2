@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Magento\Braintree\Controller\Kount;
 
+use Exception;
 use Magento\Braintree\Model\Kount\EnsConfig;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
@@ -13,7 +14,9 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 
 /**
- * Class Index
+ * Class Ens
+ *
+ * Acts as the entry point for the Kount ENS.
  */
 class Ens extends Action
 {
@@ -47,7 +50,7 @@ class Ens extends Action
     /**
      * @return ResponseInterface|ResultInterface
      * @throws LocalizedException
-     * @throws \Exception
+     * @throws Exception
      */
     public function execute()
     {
@@ -57,7 +60,7 @@ class Ens extends Action
             $response->setHttpResponseCode(401);
         }
 
-        $request = file_get_contents('php://input'); // @codingStandardsIgnoreLine
+        $request = $this->getRequest()->getContent();
         $xml = simplexml_load_string($request);
 
         if (empty($xml['merchant'])) {
