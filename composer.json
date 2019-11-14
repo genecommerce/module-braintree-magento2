@@ -19,6 +19,7 @@
         "magento/module-theme": "100.2.*||101.0.*",
         "magento/module-ui": "101.0.*||101.1.*",
         "ext-json": "*",
+        "ext-simplexml": "*",
         "php": "^7.0",
         "league/iso3166": "^2.1"
     },
