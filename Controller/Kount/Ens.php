@@ -47,6 +47,7 @@ class Ens extends Action
     /**
      * @return ResponseInterface|ResultInterface
      * @throws LocalizedException
+     * @throws \Exception
      */
     public function execute()
     {
@@ -63,7 +64,7 @@ class Ens extends Action
             throw new LocalizedException(__('Invalid ENS XML'));
         }
 
-        if (!$this->ensConfig->validateMerchantId((int)$xml['merchant'])) {
+        if (!$this->ensConfig->validateMerchantId((int) $xml['merchant'])) {
             throw new LocalizedException(__('Invalid Merchant ID'));
         }
 
@@ -79,6 +80,6 @@ class Ens extends Action
      */
     public function isAllowed(): bool
     {
-        return $this->ensConfig->isSandbox() || $this->ensConfig->isAllowed($this->remoteAddress->getRemoteAddress());
+        return $this->ensConfig->isAllowed($this->remoteAddress->getRemoteAddress());
     }
 }

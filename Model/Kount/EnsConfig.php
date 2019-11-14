@@ -71,6 +71,7 @@ class EnsConfig
      * @param StoreManagerInterface $storeManager
      * @param ScopeConfigInterface $scopeConfig
      * @param OrderInterface $order
+     * @param OrderRepositoryInterface $orderRepository
      * @param BraintreeAdapter $braintreeAdapter
      * @param TransactionFactory $transactionFactory
      * @param CreditmemoFactory $creditmemoFactory
@@ -148,14 +149,6 @@ class EnsConfig
     }
 
     /**
-     * @return bool
-     */
-    public function isSandbox(): bool
-    {
-        return $this->scopeConfig->getValue(self::CONFIG_ENVIRONMENT) === 'sandbox';
-    }
-
-    /**
      * @param $merchantId
      * @return bool
      */
@@ -170,7 +163,9 @@ class EnsConfig
                 $store->getId()
             );
 
-            return ((int) $storeMerchantId === $merchantId);
+            if ((int) $storeMerchantId === $merchantId) {
+                return true;
+            }
         }
 
         return false;
@@ -311,7 +306,6 @@ class EnsConfig
         $invoices = $order->getInvoiceCollection();
 
         if (count($invoices->getItems()) > 0) {
-            /** @var Order $order */
             foreach ($invoices as $invoice) {
                 /** @var Invoice $invoice */
                 $invoice->void();
@@ -326,14 +320,14 @@ class EnsConfig
                     ->save();
 
             }
-            return true;
         } else {
-            $order->getPayment()->deny();
-            $this->orderRepository->save($order);
-            return true;
+            if ($order->getPayment()) {
+                $order->getPayment()->deny();
+                $this->orderRepository->save($order);
+            }
         }
 
-        return false;
+        return true;
     }
 
     /**
@@ -343,22 +337,24 @@ class EnsConfig
      */
     private function refundOrder(OrderInterface $order): bool
     {
-        /** @var Order $order */
-        foreach ($order->getInvoiceCollection() as $invoice) {
-            /** @var Invoice $invoice */
-            if ($invoice->getState() !== Order\Invoice::STATE_PAID) {
-                $invoice->pay();
+        /** @var Collection $invoices */
+        $invoices = $order->getInvoiceCollection();
+
+        if (count($invoices->getItems()) > 0) {
+            foreach ($invoices as $invoice) {
+                /** @var Invoice $invoice */
+                if ($invoice->getState() !== Order\Invoice::STATE_PAID) {
+                    $invoice->pay();
+                }
+
+                if ($invoice->canRefund()) {
+                    $creditMemo = $this->creditmemoFactory->createByInvoice($invoice);
+                    $creditMemo->setInvoice($invoice);
+                    $this->creditmemoService->refund($creditMemo);
+                }
             }
 
-            if ($invoice->canRefund()) {
-                $creditMemo = $this->creditmemoFactory->createByInvoice($invoice);
-                $creditMemo->setInvoice($invoice);
-                $this->creditmemoService->refund($creditMemo);
-
-                return true;
-            }
-
-            return false;
+            return true;
         }
 
         return false;
