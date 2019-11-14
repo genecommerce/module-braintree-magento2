@@ -12,6 +12,7 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
+use Magento\Framework\Xml\Security;
 
 /**
  * Class Ens
@@ -29,6 +30,10 @@ class Ens extends Action
      * @var RemoteAddress
      */
     private $remoteAddress;
+    /**
+     * @var Security
+     */
+    private $xmlSecurity;
 
     /**
      * Index constructor.
@@ -36,15 +41,18 @@ class Ens extends Action
      * @param Context $context
      * @param EnsConfig $ensConfig
      * @param RemoteAddress $remoteAddress
+     * @param Security $xmlSecurity
      */
     public function __construct(
         Context $context,
         EnsConfig $ensConfig,
-        RemoteAddress $remoteAddress
+        RemoteAddress $remoteAddress,
+        Security $xmlSecurity
     ) {
         parent::__construct($context);
         $this->ensConfig = $ensConfig;
         $this->remoteAddress = $remoteAddress;
+        $this->xmlSecurity = $xmlSecurity;
     }
 
     /**
@@ -58,16 +66,23 @@ class Ens extends Action
 
         if (!$this->isAllowed()) {
             $response->setHttpResponseCode(401);
+            return $response;
         }
 
         $request = $this->getRequest()->getContent();
+
+        if (!$this->xmlSecurity->scan($request)) {
+            $response->setHttpResponseCode(400);
+            return $response;
+        }
+
         $xml = simplexml_load_string($request);
 
         if (empty($xml['merchant'])) {
             throw new LocalizedException(__('Invalid ENS XML'));
         }
 
-        if (!$this->ensConfig->validateMerchantId((int) $xml['merchant'])) {
+        if (!$this->ensConfig->validateMerchantId((string) $xml['merchant'])) {
             throw new LocalizedException(__('Invalid Merchant ID'));
         }
 

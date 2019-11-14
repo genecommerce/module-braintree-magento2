@@ -104,11 +104,11 @@ class EnsConfig implements EnsManagementInterface
     /**
      * This method will check if a given IP (as a string) falls into a valid range, e.g "192.168.0.0/255".
      *
-     * @param $ip
-     * @param $range
+     * @param string $ip
+     * @param string $range
      * @return bool
      */
-    public function isIpInRange($ip, $range): bool
+    public function isIpInRange(string $ip, string $range): bool
     {
         // If no "range" is set, add the full range of 255.
         if (strpos($range, '/') === false) {
@@ -148,10 +148,10 @@ class EnsConfig implements EnsManagementInterface
     }
 
     /**
-     * @param $merchantId
+     * @param string $merchantId
      * @return bool
      */
-    public function validateMerchantId($merchantId): bool
+    public function validateMerchantId(string $merchantId): bool
     {
         $stores = $this->storeManager->getStores();
 
@@ -162,7 +162,7 @@ class EnsConfig implements EnsManagementInterface
                 $store->getId()
             );
 
-            if ((int) $storeMerchantId === $merchantId) {
+            if ($storeMerchantId === $merchantId) {
                 return true;
             }
         }
@@ -310,7 +310,7 @@ class EnsConfig implements EnsManagementInterface
                 $invoice->void();
                 $invoice->getOrder()->setStatus(Order::STATE_CANCELED);
                 $invoice->getOrder()->addCommentToStatusHistory(
-                    'Order declined through Kount, order voided in Magento.'
+                    __('Order declined through Kount, order voided in Magento.')
                 );
 
                 $this->transactionFactory->create()
