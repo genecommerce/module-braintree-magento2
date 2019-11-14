@@ -319,11 +319,9 @@ class EnsConfig implements EnsManagementInterface
                     ->save();
 
             }
-        } else {
-            if ($order->getPayment()) {
-                $order->getPayment()->deny();
-                $this->orderRepository->save($order);
-            }
+        } elseif ($order->getPayment()) {
+            $order->getPayment()->deny();
+            $this->orderRepository->save($order);
         }
 
         return true;
