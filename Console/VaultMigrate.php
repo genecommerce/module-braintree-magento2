@@ -14,9 +14,11 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Vault\Api\PaymentTokenRepositoryInterface;
 use Magento\Vault\Model\PaymentTokenFactory;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
 
 /**
  * Class VaultMigrate
@@ -111,6 +113,9 @@ class VaultMigrate extends Command
         $this->json = $json;
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function configure()
     {
         $this->setName('braintree:migrate');
@@ -118,6 +123,28 @@ class VaultMigrate extends Command
         $this->setDefinition($this->getOptionsList());
 
         parent::configure();
+    }
+
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
+    protected function interact(InputInterface $input, OutputInterface $output)
+    {
+        /** @var QuestionHelper $questionHelper */
+        $questionHelper = $this->getHelper('question');
+
+        if (!$input->getOption(self::USERNAME)) {
+            $question = new Question('<question>Please enter the database username:</question>', null);
+            $question->setHidden(true);
+            $input->setOption(self::USERNAME, $questionHelper->ask($input, $output, $question));
+        }
+
+        if (!$input->getOption(self::PASSWORD)) {
+            $question = new Question('<question>Please enter the database user password:</question>', null);
+            $question->setHidden(true);
+            $input->setOption(self::PASSWORD, $questionHelper->ask($input, $output, $question));
+        }
     }
 
     /**
@@ -213,7 +240,7 @@ class VaultMigrate extends Command
      * @param $db
      * @return string
      */
-    private function getEavAttributeId(AdapterInterface $db)
+    private function getEavAttributeId(AdapterInterface $db): string
     {
         $select = $db->select()
             ->where('attribute_code = ?', 'braintree_customer_id')
@@ -222,7 +249,8 @@ class VaultMigrate extends Command
     }
 
     /**
-     * @param $db
+     * @param AdapterInterface $db
+     * @param OutputInterface $output
      * @param $eavAttributeId
      * @return mixed
      */
@@ -241,7 +269,7 @@ class VaultMigrate extends Command
     }
 
     /**
-     * @param $output
+     * @param OutputInterface $output
      * @param $storedCards
      * @return array
      */
@@ -291,6 +319,7 @@ class VaultMigrate extends Command
     }
 
     /**
+     * @param OutputInterface $output
      * @param array $customers
      */
     private function migrateStoredCards(OutputInterface $output, array $customers)
