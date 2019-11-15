@@ -23,6 +23,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bug that stopped Admins creating orders in the backend when Braintree was the only payment method
 - API validation check now uses correct Store IDs when a multi-store is being used
 
+### Removed
+- Removed old PayPal `payee email` configuration option as it has been deprecated by Braintree
+
 ## [3.3.3]
 ### Fixed
 - Updated PayPal Credit APR percentages
