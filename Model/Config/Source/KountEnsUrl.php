@@ -15,7 +15,7 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
  */
 class KountEnsUrl extends Field
 {
-    const ENS_URL = '/braintree/kount/ens';
+    const ENS_URL = 'braintree/kount/ens';
 
     /**
      * @var ScopeConfigInterface
