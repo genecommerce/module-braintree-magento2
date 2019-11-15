@@ -153,7 +153,7 @@
                             <depends>
                                 <field id="fraudprotection">1</field>
                             </depends>
-                            <field id="kount_ens_url" translate="label" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <field id="kount_ens_url" translate="label" sortOrder="0" showInDefault="1" showInWebsite="1">
                                 <label>ENS URL</label>
                                 <comment>
                                     This is the ENS URL you will need to add into your website in the Kount AWC control panel.
@@ -162,7 +162,7 @@
                                 </comment>
                                 <frontend_model>Magento\Braintree\Model\Config\Source\KountEnsUrl</frontend_model>
                             </field>
-                            <field id="kount_id" translate="label" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <field id="kount_id" translate="label" sortOrder="5" showInDefault="1" showInWebsite="1">
                                 <label>Merchant ID</label>
                                 <comment>
                                     <![CDATA[
@@ -172,7 +172,7 @@
                                 </comment>
                                 <config_path>payment/braintree/kount_id</config_path>
                             </field>
-                            <field id="kount_skip_admin" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <field id="kount_skip_admin" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1">
                                 <label>Skip Fraud Checks on Admin Orders</label>
                                 <comment>
                                     Prevents the transaction from being sent to Kount for evaluation as part of Advanced
@@ -181,7 +181,7 @@
                                 <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                                 <config_path>payment/braintree/kount_skip_admin</config_path>
                             </field>
-                            <field id="kount_allowed_ips" translate="label" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <field id="kount_allowed_ips" translate="label" sortOrder="25" showInDefault="1" showInWebsite="1">
                                 <label>ENS Allowed IPs</label>
                                 <comment>
                                     The IPs that have access to the ENS endpoint above. These can be individual IP's or

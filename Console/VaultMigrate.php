@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Magento\Braintree\Console;
 
 use Braintree\Exception\NotFound;
-use Magento\Braintree\Model\Adapter\BraintreeAdapter\Proxy as BraintreeAdapterProxy;
+use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\ResourceConnection\ConnectionFactory;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -59,7 +59,7 @@ class VaultMigrate extends Command
      */
     private $connectionFactory;
     /**
-     * @var BraintreeAdapterProxy
+     * @var BraintreeAdapter
      */
     private $braintreeAdapter;
     /**
@@ -91,7 +91,7 @@ class VaultMigrate extends Command
      * VaultMigrate constructor.
      *
      * @param ConnectionFactory $connectionFactory
-     * @param BraintreeAdapterProxy $braintreeAdapter
+     * @param BraintreeAdapter $braintreeAdapter
      * @param CustomerRepositoryInterface $customerRepository
      * @param PaymentTokenFactory $paymentToken
      * @param PaymentTokenRepositoryInterface $paymentTokenRepository
@@ -101,7 +101,7 @@ class VaultMigrate extends Command
      */
     public function __construct(
         ConnectionFactory $connectionFactory,
-        BraintreeAdapterProxy $braintreeAdapter,
+        BraintreeAdapter $braintreeAdapter,
         CustomerRepositoryInterface $customerRepository,
         PaymentTokenFactory $paymentToken,
         PaymentTokenRepositoryInterface $paymentTokenRepository,

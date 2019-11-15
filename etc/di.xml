@@ -1039,4 +1039,10 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Braintree\Console\VaultMigrate">
+        <arguments>
+            <argument name="braintreeAdapter" xsi:type="object">Magento\Braintree\Model\Adapter\BraintreeAdapter\Proxy</argument>
+        </arguments>
+    </type>
 </config>
