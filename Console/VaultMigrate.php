@@ -159,6 +159,7 @@ class VaultMigrate extends Command
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int|void|null
+     * @throws NotFound
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
