@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Magento\Braintree\Console;
 
 use Braintree\Exception\NotFound;
-use Magento\Braintree\Model\Adapter\BraintreeAdapter;
+use Magento\Braintree\Model\Adapter\BraintreeAdapter\Proxy as BraintreeAdapterProxy;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\ResourceConnection\ConnectionFactory;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -59,7 +59,7 @@ class VaultMigrate extends Command
      */
     private $connectionFactory;
     /**
-     * @var BraintreeAdapter
+     * @var BraintreeAdapterProxy
      */
     private $braintreeAdapter;
     /**
@@ -91,27 +91,24 @@ class VaultMigrate extends Command
      * VaultMigrate constructor.
      *
      * @param ConnectionFactory $connectionFactory
-     * @param BraintreeAdapter $braintreeAdapter
+     * @param BraintreeAdapterProxy $braintreeAdapter
      * @param CustomerRepositoryInterface $customerRepository
      * @param PaymentTokenFactory $paymentToken
      * @param PaymentTokenRepositoryInterface $paymentTokenRepository
      * @param EncryptorInterface $encryptor
      * @param SerializerInterface $json
      * @param StoreManagerInterface $storeManager
-     * @param string|null $name
      */
     public function __construct(
         ConnectionFactory $connectionFactory,
-        BraintreeAdapter $braintreeAdapter,
+        BraintreeAdapterProxy $braintreeAdapter,
         CustomerRepositoryInterface $customerRepository,
         PaymentTokenFactory $paymentToken,
         PaymentTokenRepositoryInterface $paymentTokenRepository,
         EncryptorInterface $encryptor,
         SerializerInterface $json,
-        StoreManagerInterface $storeManager,
-        string $name = null
+        StoreManagerInterface $storeManager
     ) {
-        parent::__construct($name);
         $this->connectionFactory = $connectionFactory;
         $this->braintreeAdapter = $braintreeAdapter;
         $this->customerRepository = $customerRepository;
@@ -120,6 +117,8 @@ class VaultMigrate extends Command
         $this->encryptor = $encryptor;
         $this->json = $json;
         $this->storeManager = $storeManager;
+
+        parent::__construct();
     }
 
     /**
