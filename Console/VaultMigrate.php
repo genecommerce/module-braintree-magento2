@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Magento\Braintree\Console;
 
+use Braintree\Exception\NotFound;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\ResourceConnection\ConnectionFactory;
@@ -11,6 +12,7 @@ use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Api\PaymentTokenRepositoryInterface;
 use Magento\Vault\Model\PaymentTokenFactory;
 use Symfony\Component\Console\Command\Command;
@@ -80,6 +82,10 @@ class VaultMigrate extends Command
      * @var EncryptorInterface
      */
     private $encryptor;
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
 
     /**
      * VaultMigrate constructor.
@@ -101,6 +107,7 @@ class VaultMigrate extends Command
         PaymentTokenRepositoryInterface $paymentTokenRepository,
         EncryptorInterface $encryptor,
         SerializerInterface $json,
+        StoreManagerInterface $storeManager,
         string $name = null
     ) {
         parent::__construct($name);
@@ -111,6 +118,7 @@ class VaultMigrate extends Command
         $this->paymentTokenRepository = $paymentTokenRepository;
         $this->encryptor = $encryptor;
         $this->json = $json;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -272,6 +280,7 @@ class VaultMigrate extends Command
      * @param OutputInterface $output
      * @param $storedCards
      * @return array
+     * @throws NotFound
      */
     private function findBraintreeCustomers(OutputInterface $output, $storedCards): array
     {
@@ -324,53 +333,58 @@ class VaultMigrate extends Command
      */
     private function migrateStoredCards(OutputInterface $output, array $customers)
     {
-        foreach ($customers as $customer) {
-            try {
-                // Customer entity can only have one unique email assigned, so this method is acceptable to use.
-                $m2Customer = $this->customerRepository->get($customer['email']);
+        $websites = $this->storeManager->getWebsites();
 
-                $output->write('<info>Customer ' . $customer['braintree_id'] . ' found in Magento 2 store...</info>');
+        foreach ($websites as $website) {
+            foreach ($customers as $customer) {
+                try {
+                    $m2Customer = $this->customerRepository->get($customer['email'], $website->getId());
 
-                foreach ($customer['storedCards'] as $storedCard) {
-                    // Create new vault payment token.
-                    $vaultPaymentToken = $this->paymentToken->create(PaymentTokenFactory::TOKEN_TYPE_CREDIT_CARD);
-                    $vaultPaymentToken->setCustomerId($m2Customer->getId());
-                    $vaultPaymentToken->setPaymentMethodCode('braintree');
-                    $vaultPaymentToken->setExpiresAt(
-                        sprintf(
-                            '%s-%s-01 00:00:00',
-                            $storedCard['expirationYear'],
-                            $storedCard['expirationMonth']
-                        )
-                    );
-                    $vaultPaymentToken->setGatewayToken($storedCard['token']);
-                    $vaultPaymentToken->setTokenDetails($this->json->serialize([
-                        'type' => $storedCard['cardType'],
-                        'maskedCC' => $storedCard['last4'],
-                        'expirationDate' => $storedCard['expirationMonth'] .'/' . $storedCard['expirationYear']
-                    ]));
-                    $vaultPaymentToken->setPublicHash(
-                        $this->encryptor->getHash(
-                            $m2Customer->getId()
-                            . $vaultPaymentToken->getPaymentMethodCode()
-                            . $vaultPaymentToken->getType()
-                            . $vaultPaymentToken->getTokenDetails()
-                        )
+                    $output->write(
+                        "<info>Customer {$customer['braintree_id']} found in {$website->getName()}...</info>"
                     );
 
-                    if ($this->paymentTokenRepository->save($vaultPaymentToken)) {
-                        $output->writeln('<info>Card stored successfully!</info>');
+                    foreach ($customer['storedCards'] as $storedCard) {
+                        // Create new vault payment token.
+                        $vaultPaymentToken = $this->paymentToken->create(PaymentTokenFactory::TOKEN_TYPE_CREDIT_CARD);
+                        $vaultPaymentToken->setCustomerId($m2Customer->getId());
+                        $vaultPaymentToken->setPaymentMethodCode('braintree');
+                        $vaultPaymentToken->setExpiresAt(
+                            sprintf(
+                                '%s-%s-01 00:00:00',
+                                $storedCard['expirationYear'],
+                                $storedCard['expirationMonth']
+                            )
+                        );
+                        $vaultPaymentToken->setGatewayToken($storedCard['token']);
+                        $vaultPaymentToken->setTokenDetails($this->json->serialize([
+                            'type' => $storedCard['cardType'],
+                            'maskedCC' => $storedCard['last4'],
+                            'expirationDate' => $storedCard['expirationMonth'] . '/' . $storedCard['expirationYear']
+                        ]));
+                        $vaultPaymentToken->setPublicHash(
+                            $this->encryptor->getHash(
+                                $m2Customer->getId()
+                                . $vaultPaymentToken->getPaymentMethodCode()
+                                . $vaultPaymentToken->getType()
+                                . $vaultPaymentToken->getTokenDetails()
+                            )
+                        );
+
+                        if ($this->paymentTokenRepository->save($vaultPaymentToken)) {
+                            $output->writeln('<info>Card stored successfully!</info>');
+                        }
                     }
+                } catch (NoSuchEntityException $e) {
+                    $output->writeln(
+                        "<error>Customer {$customer['braintree_id']} not found in {$website->getName()}.</error>"
+                    );
+                } catch (LocalizedException $e) {
+                    $output->writeln('<error>Failed to store card details.</error>');
                 }
-            } catch (NoSuchEntityException $e) {
-                $output->writeln(
-                    '<error>Customer ' . $customer['braintree_id'] . ' not found in Magento 2 store</error>'
-                );
-            } catch (LocalizedException $e) {
-                $output->writeln('<error>Failed to store card details.</error>');
             }
         }
 
-        $output->writeln('<info>Migration complete</info>');
+        $output->writeln('<info>Migration complete!</info>');
     }
 }

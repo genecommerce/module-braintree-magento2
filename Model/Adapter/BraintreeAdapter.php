@@ -10,6 +10,7 @@ use Braintree\Configuration;
 use Braintree\CreditCard;
 use Braintree\Customer;
 use Braintree\CustomerSearch;
+use Braintree\Exception\NotFound;
 use Braintree\PaymentMethod;
 use Braintree\PaymentMethodNonce;
 use Braintree\ResourceCollection;
@@ -246,6 +247,11 @@ class BraintreeAdapter
         return PaymentMethod::update($token, $attribs);
     }
 
+    /**
+     * @param $id
+     * @return Customer
+     * @throws NotFound
+     */
     public function getCustomerById($id)
     {
         return Customer::find($id);
