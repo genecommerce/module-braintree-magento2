@@ -97,6 +97,7 @@ class VaultMigrate extends Command
      * @param PaymentTokenRepositoryInterface $paymentTokenRepository
      * @param EncryptorInterface $encryptor
      * @param SerializerInterface $json
+     * @param StoreManagerInterface $storeManager
      * @param string|null $name
      */
     public function __construct(
@@ -275,6 +276,8 @@ class VaultMigrate extends Command
             $output->writeln('<info>'. count($result) .' stored cards found</info>');
             return $result;
         }
+
+        return false;
     }
 
     /**
