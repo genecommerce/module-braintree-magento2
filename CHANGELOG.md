@@ -4,11 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [master] - 2019-10
+## [3.4.0] - 2019-11-15
 ### Added
+- M1 to M2 Stored Card migration tool
+  - New `bin/magento` console command to connect to your remote M1 database and potentially copy across customers
+    stored cards. This should be run whilst Braintree is in Production mode.
+- Kount ENS webhook
+  - Allow "suspected fraud" orders in Magento to be accepted or decline by changing status in your Kount portal
 - CVV Re-verification for Stored Cards
   - This option can be enabled so that registered Customers need to provide the CVV in order to use a Stored Card
 - Information about Apple Pay on-boarding
+- Information about Custom Fields
 
 ### Fixed
 - Level 2/3 Processing data now only used for Credit/Debit card transactions and now includes shipping tax
@@ -16,6 +22,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bug where PayPal was not using updated shipping address if the customer changed it during checkout
 - Bug that stopped Admins creating orders in the backend when Braintree was the only payment method
 - API validation check now uses correct Store IDs when a multi-store is being used
+
+## [3.3.3]
+### Fixed
+- Updated PayPal Credit APR percentages
 
 ## [3.3.2] - 2019-09-26
 ### Fixed
@@ -102,7 +112,8 @@ a bug in core Magento 2.3.1 means that if the Vault is turned off, cards are alw
 ### Fixed
 - Vaulted cards now work correctly
 
-[master]: https://github.com/genecommerce/module-braintree-magento2/compare/3.3.2...master
+[3.4.0]: https://github.com/genecommerce/module-braintree-magento2/compare/3.3.3...3.4.0
+[3.3.3]: https://github.com/genecommerce/module-braintree-magento2/compare/3.3.2...3.3.3
 [3.3.2]: https://github.com/genecommerce/module-braintree-magento2/compare/3.3.1...3.3.2
 [3.3.1]: https://github.com/genecommerce/module-braintree-magento2/compare/3.3.0...3.3.1
 [3.3.0]: https://github.com/genecommerce/module-braintree-magento2/compare/3.2.1...3.3.0
