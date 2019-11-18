@@ -25,7 +25,7 @@
         "league/iso3166": "^2.1"
     },
     "replace": {
-        "magento/module-braintree": "100.*.*",
+        "magento/module-braintree": "100.*.*"
     },
     "autoload": {
         "files": [
