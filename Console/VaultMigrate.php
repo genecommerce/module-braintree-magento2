@@ -383,7 +383,7 @@ class VaultMigrate extends Command
                         "<error>Customer {$customer['braintree_id']} not found in {$website->getName()}.</error>"
                     );
                 } catch (LocalizedException $e) {
-                    $output->writeln('<error>Failed to store card details.</error>');
+                    $output->writeln("<error>{$e->getMessage()}</error>");
                 }
             }
         }
