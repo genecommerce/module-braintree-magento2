@@ -5,6 +5,7 @@ namespace Magento\Braintree\Block\Adminhtml\Form\Field;
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Store\Model\Store;
 
 /**
  * Class Validation
@@ -43,7 +44,9 @@ class Validation extends Field
         if ($this->getRequest()->getParam('website')) {
             $website = $this->_storeManager->getWebsite($this->getRequest()->getParam('website'));
             if ($website->getId()) {
-                $storeId = $website->getId();
+                /** @var Store $store */
+                $store = $website->getDefaultStore();
+                $storeId = $store->getStoreId();
             }
         }
 

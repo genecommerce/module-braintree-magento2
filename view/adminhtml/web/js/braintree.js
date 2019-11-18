@@ -111,6 +111,8 @@ define([
             var self = this;
             this.scriptLoaded(true);
 
+            self.disableEventListeners();
+
             try {
                 $('body').trigger('processStart');
 
@@ -133,6 +135,7 @@ define([
                         }
 
                         self.hostedFieldsInstance = hostedFieldsInstance;
+                        self.enableEventListeners();
 
                         $('body').trigger('processStop');
                     }.bind(this));
@@ -231,7 +234,7 @@ define([
          * Place order
          */
         placeOrder: function () {
-            $('#' + this.container).find('[type="submit"]').trigger('click');
+            $('#' + this.selector).trigger('realOrder');
         },
 
         /**
@@ -309,7 +312,7 @@ define([
                     }
                 } else {
                     this.setPaymentDetails(payload.nonce);
-                    this.placeOrder();
+                    $('#' + this.container).find('[type="submit"]').trigger('click');
                 }
             }.bind(this));
         }

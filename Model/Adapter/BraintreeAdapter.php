@@ -8,7 +8,8 @@ namespace Magento\Braintree\Model\Adapter;
 use Braintree\ClientToken;
 use Braintree\Configuration;
 use Braintree\CreditCard;
-use Braintree\Exception\InvalidSignature;
+use Braintree\Customer;
+use Braintree\Exception\NotFound;
 use Braintree\PaymentMethod;
 use Braintree\PaymentMethodNonce;
 use Braintree\ResourceCollection;
@@ -25,7 +26,6 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class BraintreeAdapter
- * @codeCoverageIgnore
  */
 class BraintreeAdapter
 {
@@ -140,6 +140,7 @@ class BraintreeAdapter
         try {
             return ClientToken::generate($params);
         } catch (Exception $e) {
+            $this->logger->error($e->getMessage());
             return '';
         }
     }
@@ -153,6 +154,7 @@ class BraintreeAdapter
         try {
             return CreditCard::find($token);
         } catch (Exception $e) {
+            $this->logger->error($e->getMessage());
             return null;
         }
     }
@@ -164,6 +166,15 @@ class BraintreeAdapter
     public function search(array $filters)
     {
         return Transaction::search($filters);
+    }
+
+    /**
+     * @param string $id
+     * @return Transaction|null
+     */
+    public function findById(string $id)
+    {
+        return Transaction::find($id);
     }
 
     /**
@@ -231,5 +242,25 @@ class BraintreeAdapter
     public function deletePaymentMethod($token)
     {
         return PaymentMethod::delete($token)->success;
+    }
+
+    /**
+     * @param $token
+     * @param $attribs
+     * @return mixed
+     */
+    public function updatePaymentMethod($token, $attribs)
+    {
+        return PaymentMethod::update($token, $attribs);
+    }
+
+    /**
+     * @param $id
+     * @return Customer
+     * @throws NotFound
+     */
+    public function getCustomerById($id)
+    {
+        return Customer::find($id);
     }
 }

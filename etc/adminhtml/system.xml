@@ -10,7 +10,7 @@
         <section id="payment">
             <group id="braintree_section" sortOrder="6" showInDefault="0" showInWebsite="1" showInStore="1">
                 <group id="braintree" translate="label comment" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label><![CDATA[Braintree Payments (by <a href="https://www.gene.co.uk/braintree-payments/" target="_blank">GENE Commerce</a>)]]></label>
+                    <label><![CDATA[Braintree Payments (by <a href="https://www.gene.co.uk/braintree-payments/" target="_blank" rel="noopener noreferrer">GENE Commerce</a>)]]></label>
                     <comment><![CDATA[Accept credit/debit cards and PayPal in your Magento store.<br />No setup or monthly fees and your customers never leave your store to complete the purchase.]]></comment>
                     <fieldset_css>complex braintree-section</fieldset_css>
                     <frontend_model>Magento\Braintree\Block\System\Config\Form\Fieldset</frontend_model>
@@ -52,8 +52,46 @@
                             <group id="braintree_required"/>
                         </requires>
                     </field>
+                    <field id="braintree_cc_vault_cvv" translate="label" type="select" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Enable Vault CVV Re-verification</label>
+                        <comment>
+                            <![CDATA[
+                            In order for CVV re-verification to work, you must enable CVV rules in your Braintree account.
+                            Please see the guide
+                            <a href="https://articles.braintreepayments.com/guides/fraud-tools/basic/avs-cvv-rules#enabling-avs-and-cvv-rules" target="_blank" rel="noopener noreferrer">here</a>
+                            on how to do so.
+                            <br/>
+                            <br/>
+                            <strong>Please enable "CVV does not match" and "CVV is not verified" and "Issuer does not participate" only</strong>
+                            ]]>
+                        </comment>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/braintree_cc_vault/cvv</config_path>
+                        <depends>
+                            <field id="braintree_cc_vault_active">1</field>
+                        </depends>
+                    </field>
                     <group id="braintree_required" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="5">
-                        <comment><![CDATA[<a href="https://www.braintreegateway.com/login" target="_blank">Click here to login to your existing Braintree account</a>. Or to setup a new account and accept payments on your website, <a href="https://apply.braintreegateway.com/signup/us" target="_blank">click here to signup for a Braintree account</a>.<br><br>Powered by <a href="https://www.braintreepayments.com/features/hosted-fields" target="_blank">Braintree v.zero with Hosted Fields</a> latest technology. Hosted Fields are small, transparent iframes that replace the sensitive credit card inputs in your checkout flow - helping you meet the latest data security requirements while ensuring your customization doesn't suffer. <a href="https://www.braintreepayments.com/features/hosted-fields" target="_blank">Find out more</a>.]]></comment>
+                        <comment>
+                            <![CDATA[
+                            <a href="https://www.braintreegateway.com/login" target="_blank" rel="noopener noreferrer">Click here to login to your
+                            existing Braintree account</a>. Or to setup a new account and accept payments on your website,
+                            <a href="https://apply.braintreegateway.com/signup/us" target="_blank" rel="noopener noreferrer">click here to signup
+                            for a Braintree account</a>.
+                            <br/><br/>
+                            Powered by <a href="https://www.braintreepayments.com/features/hosted-fields" target="_blank" rel="noopener noreferrer">Braintree v.zero with Hosted Fields</a>
+                            latest technology. Hosted Fields are small, transparent iframes that replace the sensitive
+                            credit card inputs in your checkout flow - helping you meet the latest data security
+                            requirements while ensuring your customization doesn't suffer.
+                            <br/><br/>
+                            If you would like to add <a href="https://articles.braintreepayments.com/control-panel/custom-fields" target="_blank" rel="noopener noreferrer">Custom Fields</a>
+                            to your Braintree transactions, we provide an example module
+                            <a href="https://github.com/genecommerce/module-braintree-customfields-example" target="_blank" rel="noopener noreferrer">here</a>
+                            that can be used to create a custom module for your store to add these fields.
+                            <br/><br/>
+                            <a href="https://www.braintreepayments.com/features/hosted-fields" target="_blank" rel="noopener noreferrer">Find out more</a>.
+                            ]]>
+                        </comment>
                         <label>Basic Braintree Settings</label>
                         <attribute type="expanded">1</attribute>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
@@ -97,25 +135,62 @@
                             <label>Vault Title</label>
                             <config_path>payment/braintree_cc_vault/title</config_path>
                         </field>
-                        <field id="merchant_account_id" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <field id="merchant_account_id" translate="label" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Merchant Account ID</label>
                             <comment>If you don't specify the merchant account to use to process a transaction, Braintree will process it using your default merchant account.</comment>
                             <config_path>payment/braintree/merchant_account_id</config_path>
                         </field>
-                        <field id="fraudprotection" translate="label" type="select" sortOrder="34" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <field id="fraudprotection" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Advanced Fraud Protection</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <comment>Be sure to Enable Advanced Fraud Protection in Your Braintree Account in Settings/Processing Section</comment>
                             <config_path>payment/braintree/fraudprotection</config_path>
                         </field>
-                        <field id="kount_id" translate="label" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Kount Merchant ID</label>
-                            <comment><![CDATA[Used for direct fraud tool integration. Make sure you also contact <a href="mailto:accounts@braintreepayments.com">accounts@braintreepayments.com</a> to setup your Kount account.]]></comment>
+
+                        <group id="kount" translate="label" sortOrder="32" showInDefault="1" showInWebsite="1">
+                            <label>Kount Settings</label>
+                            <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                             <depends>
                                 <field id="fraudprotection">1</field>
                             </depends>
-                            <config_path>payment/braintree/kount_id</config_path>
-                        </field>
+                            <field id="kount_ens_url" translate="label" sortOrder="0" showInDefault="1" showInWebsite="1">
+                                <label>ENS URL</label>
+                                <comment>
+                                    This is the ENS URL you will need to add into your website in the Kount AWC control panel.
+                                    This URL must be publicly accessible for the ENS to function correctly.
+                                    You'll need to add this ENS URL to the 'OPT-IN' website.
+                                </comment>
+                                <frontend_model>Magento\Braintree\Model\Config\Source\KountEnsUrl</frontend_model>
+                            </field>
+                            <field id="kount_id" translate="label" sortOrder="5" showInDefault="1" showInWebsite="1">
+                                <label>Merchant ID</label>
+                                <comment>
+                                    <![CDATA[
+                                    Used for direct fraud tool integration. Make sure you also contact
+                                    <a href="mailto:accounts@braintreepayments.com">accounts@braintreepayments.com</a> to setup your Kount account.
+                                    ]]>
+                                </comment>
+                                <config_path>payment/braintree/kount_id</config_path>
+                            </field>
+                            <field id="kount_skip_admin" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1">
+                                <label>Skip Fraud Checks on Admin Orders</label>
+                                <comment>
+                                    Prevents the transaction from being sent to Kount for evaluation as part of Advanced
+                                    Fraud Tools checks, on orders placed through the admin only.
+                                </comment>
+                                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                                <config_path>payment/braintree/kount_skip_admin</config_path>
+                            </field>
+                            <field id="kount_allowed_ips" translate="label" sortOrder="25" showInDefault="1" showInWebsite="1">
+                                <label>ENS Allowed IPs</label>
+                                <comment>
+                                    The IPs that have access to the ENS endpoint above. These can be individual IP's or
+                                    ranges separated with commas. To allow from all IPs leave this field empty (not recommended).
+                                </comment>
+                                <config_path>payment/braintree/kount_allowed_ips</config_path>
+                            </field>
+                        </group>
+
                         <field id="fraudprotection_threshold" translate="label" type="text" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Bypass Fraud Protection Threshold</label>
                             <comment>Advanced fraud protection checks will be bypassed if this threshold is met or exceeded. Leaving this field blank will disable this option.</comment>
@@ -180,7 +255,7 @@
                         <comment>
                             <![CDATA[
                             ACH is currently only available in the United States and you must qualify as an eligible merchant.
-                            Please see <a href="https://articles.braintreepayments.com/guides/payment-methods/ach#availability" target="_blank">here</a> for more information.
+                            Please see <a href="https://articles.braintreepayments.com/guides/payment-methods/ach#availability" target="_blank" rel="noopener noreferrer">here</a> for more information.
                             ]]>
                         </comment>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
@@ -191,14 +266,29 @@
                         </field>
                     </group>
                     <group id="braintree_applepay" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="40">
-                        <label>ApplePay through Braintree</label>
+                        <label>Apple Pay through Braintree</label>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
+                        <comment>
+                            <![CDATA[
+                            To use Apple Pay, you will need to register your domain. Please read the following guides for information;
+                            <a href="https://developers.braintreepayments.com/guides/apple-pay/configuration/javascript/v3#sandbox-environment" target="_blank">Sandbox</a>
+                            and
+                            <a href="https://developers.braintreepayments.com/guides/apple-pay/configuration/javascript/v3#production-environment" target="_blank">Production</a>
+                            <br/>
+                            <br/>
+                            Additional actions may also be required. Please see
+                            <a href="https://articles.braintreepayments.com/guides/payment-methods/apple-pay?_ga=1.128470923.640680026.1552987378" target="_blank">here</a>
+                            for general information about Apple Pay and
+                            <a href="https://developers.braintreepayments.com/guides/apple-pay/testing-go-live/php" target="_blank">here</a>
+                            for testing information.
+                            ]]>
+                        </comment>
                         <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Enable ApplePay through Braintree</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/braintree_applepay/active</config_path>
                             <comment>
-                                <![CDATA[You need to <a href="https://developers.braintreepayments.com/guides/apple-pay/configuration/javascript/v3" target="_blank">verify your domain name</a> in your Braintree account first.]]>
+                                <![CDATA[You need to <a href="https://developers.braintreepayments.com/guides/apple-pay/configuration/javascript/v3" target="_blank" rel="noopener noreferrer">verify your domain name</a> in your Braintree account first.]]>
                             </comment>
                         </field>
                         <field id="payment_action" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -283,7 +373,7 @@
                             <![CDATA[
                                 Merchants need to be approved to be able to use Venmo for payments.
                                 Please click on this
-                                <a href="https://articles.braintreepayments.com/guides/payment-methods/venmo?_ga=1.158025594.1943497021.1564012603#availability" target="_blank">link</a>
+                                <a href="https://articles.braintreepayments.com/guides/payment-methods/venmo?_ga=1.158025594.1943497021.1564012603#availability" target="_blank" rel="noopener noreferrer">link</a>
                                 and go to the "Go Live" section to get details around approval process.
                                 You can apply for it immediately. Please note currently Venmo is available in US only.
                             ]]>
@@ -360,11 +450,6 @@
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/braintree_paypal/display_on_shopping_cart</config_path>
                             <comment>Also affects mini-shopping cart.</comment>
-                        </field>
-                        <field id="payee_email" translate="label" type="text" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Payee Email</label>
-                            <config_path>payment/braintree_paypal/payee_email</config_path>
-                            <comment>Consult Braintree Support before enabling this option.</comment>
                         </field>
 
                         <group id="button_cart" translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="0">

@@ -116,12 +116,8 @@ class ConfigProvider implements ConfigProviderInterface
                 ],
                 Config::CODE_3DSECURE => [
                     'enabled' => $this->config->isVerify3DSecure(),
-                    'useCvvVault' => $this->config->isCvvEnabledVault(),
                     'thresholdAmount' => $this->config->getThresholdAmount(),
                     'specificCountries' => $this->config->get3DSecureSpecificCountries()
-                ],
-                self::CC_VAULT_CODE => [
-                    'useCvvVault' => $this->config->isCvvEnabledVault()
                 ]
             ]
         ];

@@ -6,6 +6,7 @@ use finfo;
 /**
  * Braintree HTTP Client
  * processes Http requests using curl
+ * @codingStandardsIgnoreFile
  */
 class Http
 {

@@ -36,6 +36,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const VALUE_3DSECURE_ALL = 0;
     const CODE_3DSECURE = 'three_d_secure';
     const KEY_KOUNT_MERCHANT_ID = 'kount_id';
+    const KEY_KOUNT_SKIP_ADMIN = 'kount_skip_admin';
     const FRAUD_PROTECTION = 'fraudprotection';
     const FRAUD_PROTECTION_THRESHOLD = 'fraudprotection_threshold';
 
@@ -258,6 +259,16 @@ class Config extends \Magento\Payment\Gateway\Config\Config
             self::KEY_KOUNT_MERCHANT_ID,
             $this->storeConfigResolver->getStoreId()
         );
+    }
+
+    /**
+     * @return bool
+     * @throws InputException
+     * @throws NoSuchEntityException
+     */
+    public function canSkipAdminFraudProtection(): bool
+    {
+        return (bool) $this->getValue(self::KEY_KOUNT_SKIP_ADMIN, $this->storeConfigResolver->getStoreId());
     }
 
     /**

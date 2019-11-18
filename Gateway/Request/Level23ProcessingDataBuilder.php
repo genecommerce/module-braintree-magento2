@@ -77,7 +77,6 @@ class Level23ProcessingDataBuilder implements BuilderInterface
      */
     public function build(array $buildSubject): array
     {
-        $tax = 0;
         $lineItems = [];
 
         $paymentDO = $this->subjectReader->readPayment($buildSubject);
@@ -92,20 +91,12 @@ class Level23ProcessingDataBuilder implements BuilderInterface
          */
         $order = $paymentDO->getOrder();
 
-        $billingAddress = $order->getBillingAddress();
-
-        // use Magento's Alpha2 code to get the Alpha3 code.
-        $addressData = $this->iso3166->alpha2($billingAddress->getCountryId());
-
         foreach ($order->getItems() as $item) {
 
-            // Skip configurable parent items and items with a base price of 0
+            // Skip configurable parent items and items with a base price of 0.
             if ($item->getParentItem() || 0.0 === $item->getPrice()) {
                 continue;
             }
-
-            /** @var OrderItemInterface $item */
-            $tax += $item->getTaxAmount();
 
             // Regex to replace all unsupported characters.
             $filteredFields = preg_replace(
@@ -123,33 +114,53 @@ class Level23ProcessingDataBuilder implements BuilderInterface
                 [
                     $filteredFields['name'],
                     TransactionLineItem::DEBIT,
-                    $item->getQtyOrdered(),
-                    $item->getPrice(),
+                    $this->numberToString($item->getQtyOrdered(), 2),
+                    $this->numberToString($item->getPrice(), 2),
                     $filteredFields['unit_of_measure'],
-                    $item->getQtyOrdered() * $item->getPrice(),
-                    $item->getTaxAmount(),
-                    $item->getDiscountAmount(),
+                    $this->numberToString($item->getQtyOrdered() * $item->getPrice(), 2),
+                    $item->getTaxAmount() === null ? '0.00' : $this->numberToString($item->getTaxAmount(), 2),
+                    $item->getTaxAmount() === null ? '0.00' : $this->numberToString($item->getDiscountAmount(), 2),
                     $filteredFields['sku'],
                     $filteredFields['sku']
                 ]
             );
         }
 
-        $storePostalCode = $this->scopeConfig->getValue(
-            'general/store_information/postcode',
-            ScopeInterface::SCOPE_STORE
-        );
-
-        return [
+        $processingData = [
             self::KEY_PURCHASE_ORDER_NUMBER => $order->getOrderIncrementId(), // Level 2.
-            self::KEY_TAX_AMT => $tax, // Level 2.
-            self::KEY_SHIPPING_AMT => $payment->getShippingAmount(), // Level 3.
-            self::KEY_DISCOUNT_AMT => abs($order->getBaseDiscountAmount()), // Level 3.
-            self::KEY_SHIPS_FROM_POSTAL_CODE => $storePostalCode, // Level 3.
+            self::KEY_TAX_AMT => $this->numberToString($order->getBaseTaxAmount(), 2), // Level 2.
+            self::KEY_DISCOUNT_AMT => $this->numberToString(abs($order->getBaseDiscountAmount()), 2), // Level 3.
             self::KEY_LINE_ITEMS => $lineItems, // Level 3.
-            self::KEY_SHIPPING => [ // Level 3.
-                self::KEY_COUNTRY_CODE_ALPHA_3 => $addressData['alpha3']
-            ]
         ];
+
+        // Only add these shipping related details if a shipping address is present.
+        if ($order->getShippingAddress()) {
+            $storePostalCode = $this->scopeConfig->getValue(
+                'general/store_information/postcode',
+                ScopeInterface::SCOPE_STORE
+            );
+
+            $address = $order->getShippingAddress();
+            // use Magento's Alpha2 code to get the Alpha3 code.
+            $addressData = $this->iso3166->alpha2($address->getCountryId());
+
+            $processingData[self::KEY_SHIPPING_AMT] = $this->numberToString($payment->getShippingAmount(), 2); // Level 3.
+            $processingData[self::KEY_SHIPS_FROM_POSTAL_CODE] = $storePostalCode; // Level 3.
+            $processingData[self::KEY_SHIPPING] = [ // Level 3.
+                self::KEY_COUNTRY_CODE_ALPHA_3 => $addressData['alpha3']
+            ];
+        }
+
+        return $processingData;
+    }
+
+    /**
+     * @param float $num
+     * @param int $precision
+     * @return string
+     */
+    private function numberToString(float $num, int $precision): string
+    {
+        return (string) round($num, $precision);
     }
 }

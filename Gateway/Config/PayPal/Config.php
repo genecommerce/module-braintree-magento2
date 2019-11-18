@@ -22,7 +22,6 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const KEY_ALLOW_TO_EDIT_SHIPPING_ADDRESS = 'allow_shipping_address_override';
     const KEY_MERCHANT_NAME_OVERRIDE = 'merchant_name_override';
     const KEY_REQUIRE_BILLING_ADDRESS = 'require_billing_address';
-    const KEY_PAYEE_EMAIL = 'payee_email';
     const KEY_PAYPAL_DISABLED_FUNDING_CHECKOUT = 'disabled_funding_checkout';
     const KEY_PAYPAL_DISABLED_FUNDING_CART = 'disabled_funding_cart';
     const KEY_PAYPAL_DISABLED_FUNDING_PDP = 'disabled_funding_productpage';
@@ -140,16 +139,6 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     public function getTitle()
     {
         return $this->getValue(self::KEY_TITLE);
-    }
-
-    /**
-     * Get payee email
-     *
-     * @return string|null
-     */
-    public function getPayeeEmail()
-    {
-        return $this->getValue(self::KEY_PAYEE_EMAIL);
     }
 
     /**

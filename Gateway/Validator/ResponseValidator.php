@@ -34,7 +34,8 @@ class ResponseValidator extends GeneralResponseValidator
                                 Transaction::SUBMITTED_FOR_SETTLEMENT,
                                 Transaction::SETTLING,
                                 Transaction::SETTLEMENT_PENDING
-                            ]
+                            ],
+                            true
                         ),
                         [__('Wrong transaction status')]
                     ];

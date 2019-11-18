@@ -92,6 +92,11 @@
             <argument name="methodCode" xsi:type="const">Magento\Braintree\Model\Ui\ConfigProvider::CODE</argument>
         </arguments>
     </type>
+    <type name="Magento\Braintree\Gateway\Config\Vault\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">Magento\Braintree\Model\Ui\Vault\ConfigProvider::CODE</argument>
+        </arguments>
+    </type>
     <type name="Magento\Braintree\Gateway\Config\PayPalCredit\Config">
         <arguments>
             <argument name="methodCode" xsi:type="const">Magento\Braintree\Model\Ui\PayPal\ConfigProvider::PAYPAL_CREDIT_CODE</argument>
@@ -336,11 +341,9 @@
                 <item name="source" xsi:type="string">Magento\Braintree\Gateway\Request\TransactionSourceDataBuilder</item>
                 <item name="customFields" xsi:type="string">Magento\Braintree\Gateway\Request\CustomFieldsDataBuilder</item>
                 <item name="vault" xsi:type="string">Magento\Braintree\Gateway\Request\PayPal\VaultDataBuilder</item>
-                <item name="payee" xsi:type="string">Magento\Braintree\Gateway\Request\PayPal\PayeeDataBuilder</item>
                 <item name="device_data" xsi:type="string">Magento\Braintree\Gateway\Request\PayPal\DeviceDataBuilder</item>
                 <item name="dynamic_descriptor" xsi:type="string">Magento\Braintree\Gateway\Request\DescriptorDataBuilder</item>
                 <item name="address" xsi:type="string">Magento\Braintree\Gateway\Request\AddressDataBuilder</item>
-                <item name="level_2_3_processing" xsi:type="string">Magento\Braintree\Gateway\Request\Level23ProcessingDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
@@ -376,8 +379,6 @@
                 <item name="customFields" xsi:type="string">Magento\Braintree\Gateway\Request\CustomFieldsDataBuilder</item>
                 <item name="address" xsi:type="string">Magento\Braintree\Gateway\Request\AddressDataBuilder</item>
                 <item name="dynamic_descriptor" xsi:type="string">Magento\Braintree\Gateway\Request\DescriptorDataBuilder</item>
-                <item name="payee" xsi:type="string">Magento\Braintree\Gateway\Request\PayPal\PayeeDataBuilder</item>
-                <item name="level_2_3_processing" xsi:type="string">Magento\Braintree\Gateway\Request\Level23ProcessingDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
@@ -679,7 +680,6 @@
                 <item name="channel" xsi:type="string">Magento\Braintree\Gateway\Request\ChannelDataBuilder</item>
                 <item name="address" xsi:type="string">Magento\Braintree\Gateway\Request\AddressDataBuilder</item>
                 <item name="dynamic_descriptor" xsi:type="string">Magento\Braintree\Gateway\Request\DescriptorDataBuilder</item>
-                <item name="level_2_3_processing" xsi:type="string">Magento\Braintree\Gateway\Request\Level23ProcessingDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
@@ -787,7 +787,6 @@
                 <item name="channel" xsi:type="string">Magento\Braintree\Gateway\Request\ChannelDataBuilder</item>
                 <item name="address" xsi:type="string">Magento\Braintree\Gateway\Request\AddressDataBuilder</item>
                 <item name="dynamic_descriptor" xsi:type="string">Magento\Braintree\Gateway\Request\DescriptorDataBuilder</item>
-                <item name="level_2_3_processing" xsi:type="string">Magento\Braintree\Gateway\Request\Level23ProcessingDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
@@ -893,7 +892,6 @@
                 <item name="address" xsi:type="string">Magento\Braintree\Gateway\Request\AddressDataBuilder</item>
                 <item name="dynamic_descriptor" xsi:type="string">Magento\Braintree\Gateway\Request\DescriptorDataBuilder</item>
                 <item name="device_data" xsi:type="string">Magento\Braintree\Gateway\Request\DeviceDataBuilder</item>
-                <item name="level_2_3_processing" xsi:type="string">Magento\Braintree\Gateway\Request\Level23ProcessingDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
@@ -1001,7 +999,6 @@
                 <item name="channel" xsi:type="string">Magento\Braintree\Gateway\Request\ChannelDataBuilder</item>
                 <item name="address" xsi:type="string">Magento\Braintree\Gateway\Request\AddressDataBuilder</item>
                 <item name="dynamic_descriptor" xsi:type="string">Magento\Braintree\Gateway\Request\DescriptorDataBuilder</item>
-                <item name="level_2_3_processing" xsi:type="string">Magento\Braintree\Gateway\Request\Level23ProcessingDataBuilder</item>
                 <item name="ach" xsi:type="string">Magento\Braintree\Gateway\Request\AchDataBuilder</item>
             </argument>
         </arguments>
@@ -1143,5 +1140,19 @@
 
     <type name="Magento\Framework\View\Asset\Minification">
         <plugin name="braintreeExcludeFromMinification" type="Magento\Braintree\Plugin\ExcludeFromMinification"/>
+    </type>
+
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="braintreeMigrate" xsi:type="object">Magento\Braintree\Console\VaultMigrate</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Braintree\Console\VaultMigrate">
+        <arguments>
+            <argument name="braintreeAdapter" xsi:type="object">Magento\Braintree\Model\Adapter\BraintreeAdapter\Proxy</argument>
+        </arguments>
     </type>
 </config>
