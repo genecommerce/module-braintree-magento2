@@ -55,11 +55,6 @@ define(
                 /**
                  * {String}
                  */
-                payeeEmail: null,
-
-                /**
-                 * {String}
-                 */
                 color: null,
 
                 /**
@@ -135,9 +130,6 @@ define(
                         currency: $this.data('currency'),
                         flow: 'checkout',
                         enableShippingAddress: true,
-                        payee: {
-                            email: this.payeeEmail
-                        },
                         displayName: this.displayName,
                         offerCredit: this.offerCredit
                     };

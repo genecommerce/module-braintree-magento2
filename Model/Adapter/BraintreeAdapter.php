@@ -8,6 +8,9 @@ namespace Magento\Braintree\Model\Adapter;
 use Braintree\ClientToken;
 use Braintree\Configuration;
 use Braintree\CreditCard;
+use Braintree\Customer;
+use Braintree\CustomerSearch;
+use Braintree\Exception\NotFound;
 use Braintree\PaymentMethod;
 use Braintree\PaymentMethodNonce;
 use Braintree\ResourceCollection;
@@ -168,6 +171,15 @@ class BraintreeAdapter
     }
 
     /**
+     * @param string $id
+     * @return Transaction|null
+     */
+    public function findById(string $id)
+    {
+        return Transaction::find($id);
+    }
+
+    /**
      * @param string $token
      * @return Successful|Error
      */
@@ -242,5 +254,15 @@ class BraintreeAdapter
     public function updatePaymentMethod($token, $attribs)
     {
         return PaymentMethod::update($token, $attribs);
+    }
+
+    /**
+     * @param $id
+     * @return Customer
+     * @throws NotFound
+     */
+    public function getCustomerById($id)
+    {
+        return Customer::find($id);
     }
 }
