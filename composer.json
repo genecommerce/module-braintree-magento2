@@ -18,19 +18,26 @@
         "magento/module-paypal": "100.2.*||100.3.*",
         "magento/module-theme": "100.2.*||101.0.*",
         "magento/module-ui": "101.0.*||101.1.*",
-        "braintree/braintree_php": "4.5.0 as 3.35.0",
         "ext-json": "*",
         "ext-simplexml": "*",
         "php": ">=7.2.0",
         "league/iso3166": "^2.1"
     },
     "replace": {
-        "magento/module-braintree": "100.*.*"
+        "magento/module-braintree": "100.*.*",
+        "braintree/braintree_php": "3.*"
     },
     "autoload": {
         "files": [
             "registration.php"
-        ]
+        ],
+        "psr-0": {
+            "Braintree": "braintree_php/lib/"
+        },
+        "psr-4": {
+            "Magento\\Braintree\\": "",
+            "Braintree\\": "braintree_php/lib/Braintree"
+        }
     },
     "authors": [
         {
