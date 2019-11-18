@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.4.0] - 2019-11-15
 ### Added
 - M1 to M2 Stored Card migration tool
-  - New `bin/magento` console command to connect to your remote M1 database and potentially copy across customers
+  - New `bin/magento braintree:migrate` console command to connect to your remote M1 database and potentially copy across customers
     stored cards. This should be run whilst Braintree is in Production mode.
 - Kount ENS webhook
   - Allow "suspected fraud" orders in Magento to be accepted or decline by changing status in your Kount portal

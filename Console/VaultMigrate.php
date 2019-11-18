@@ -7,6 +7,7 @@ use Braintree\Exception\NotFound;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\ResourceConnection\ConnectionFactory;
+use Magento\Framework\Console\Cli;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -142,14 +143,24 @@ class VaultMigrate extends Command
         /** @var QuestionHelper $questionHelper */
         $questionHelper = $this->getHelper('question');
 
+        if (!$input->getOption(self::HOST)) {
+            $question = new Question('<question>Database host/IP address:</question>', null);
+            $input->setOption(self::HOST, $questionHelper->ask($input, $output, $question));
+        }
+
+        if (!$input->getOption(self::DBNAME)) {
+            $question = new Question('<question>Database name:</question>', null);
+            $input->setOption(self::DBNAME, $questionHelper->ask($input, $output, $question));
+        }
+
         if (!$input->getOption(self::USERNAME)) {
-            $question = new Question('<question>Please enter the database username:</question>', null);
+            $question = new Question('<question>Database username:</question>', null);
             $question->setHidden(true);
             $input->setOption(self::USERNAME, $questionHelper->ask($input, $output, $question));
         }
 
         if (!$input->getOption(self::PASSWORD)) {
-            $question = new Question('<question>Please enter the database user password:</question>', null);
+            $question = new Question('<question>Database user password:</question>', null);
             $question->setHidden(true);
             $input->setOption(self::PASSWORD, $questionHelper->ask($input, $output, $question));
         }
@@ -204,6 +215,8 @@ class VaultMigrate extends Command
 
         // For each customer, locate them in the M2 database and save their stored cards
         $this->migrateStoredCards($output, $this->customers);
+
+        return Cli::RETURN_SUCCESS;
     }
 
     /**
