@@ -18,7 +18,7 @@
         "magento/module-paypal": "100.2.*||100.3.*",
         "magento/module-theme": "100.2.*||101.0.*",
         "magento/module-ui": "101.0.*||101.1.*",
-        "braintree/braintree_php": "4.5.0 as 3.*",
+        "braintree/braintree_php": "4.5.0 as 3.35.0",
         "ext-json": "*",
         "ext-simplexml": "*",
         "php": ">=7.2.0",
