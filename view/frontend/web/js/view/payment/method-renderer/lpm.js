@@ -202,20 +202,18 @@ define(
             },
 
             isActive: function() {
-                if (quote.isVirtual()) {
-                    return true; // Always show initially for virtual orders.
-                }
+                var address;
 
-                var billingAddress = this.getBillingAddress();
-
-                if (!billingAddress) {
-                    return false;
+                if (!quote.billingAddress()) {
+                    address = quote.shippingAddress();
+                } else {
+                    address = quote.billingAddress();
                 }
 
                 var methods = this.getPaymentMethods();
 
                 for (var i = 0; i < methods.length; i++) {
-                    if (methods[i].countries.includes(billingAddress.countryId)) {
+                    if (methods[i].countries.includes(address.countryId)) {
                         return true;
                     }
                 }
