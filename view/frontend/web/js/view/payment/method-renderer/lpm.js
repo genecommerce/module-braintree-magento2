@@ -34,10 +34,7 @@ define(
         return Component.extend({
             defaults: {
                 code: 'braintree_local_payment',
-                deleteUrl: url.build('braintree/lpm/delete'),
-                fallbackUrl: url.build('braintree/lpm/fallback'),
                 paymentMethodNonce: null,
-                saveUrl: url.build('braintree/lpm/save'),
                 template: 'Magento_Braintree/payment/lpm'
             },
 
@@ -74,7 +71,16 @@ define(
                                 surname: self.getCustomerDetails().lastName,
                                 shippingAddressRequired: !quote.isVirtual(),
                                 address: self.getAddress(),
-                                paymentType: method
+                                paymentType: method,
+                                onPaymentStart: function (data, start) {
+                                    start();
+                                },
+                                // This is a required option, however it will apparently never be used in the current payment flow.
+                                // Therefore, both values are set to allow the payment flow to continute, rather than erroring out.
+                                fallback: {
+                                    url: 'N/A',
+                                    buttonText: 'N/A'
+                                }
                             }, function (startPaymentError, payload) {
                                 fullScreenLoader.stopLoader();
                                 if (startPaymentError) {
