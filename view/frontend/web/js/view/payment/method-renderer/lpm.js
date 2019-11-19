@@ -85,14 +85,19 @@ define(
                             }, function (startPaymentError, payload) {
                                 fullScreenLoader.stopLoader();
                                 if (startPaymentError) {
-                                    if (startPaymentError.code === 'LOCAL_PAYMENT_POPUP_CLOSED') {
-                                        self.setErrorMsg($t('Local Payment popup was closed unexpectedly.'));
-                                    } else if(startPaymentError.code === 'LOCAL_PAYMENT_WINDOW_OPEN_FAILED') {
-                                        self.setErrorMsg($t('Local Payment popup failed to open.'));
-                                    } else if(startPaymentError.code === 'LOCAL_PAYMENT_WINDOW_CLOSED') {
-                                        self.setErrorMsg($t('Local Payment popup was closed. Payment cancelled.'));
-                                    } else {
-                                        self.setErrorMsg('Error! ' + startPaymentError);
+                                    switch (startPaymentError.code) {
+                                        case 'LOCAL_PAYMENT_POPUP_CLOSED':
+                                            self.setErrorMsg($t('Local Payment popup was closed unexpectedly.'));
+                                            break;
+                                        case 'LOCAL_PAYMENT_WINDOW_OPEN_FAILED':
+                                            self.setErrorMsg($t('Local Payment popup failed to open.'));
+                                            break;
+                                        case 'LOCAL_PAYMENT_WINDOW_CLOSED':
+                                            self.setErrorMsg($t('Local Payment popup was closed. Payment cancelled.'));
+                                            break;
+                                        default:
+                                            self.setErrorMsg('Error! ' + startPaymentError);
+                                            break;
                                     }
                                 } else {
                                     // Send the nonce to your server to create a transaction
@@ -195,21 +200,11 @@ define(
 
             initialize: function () {
                 this._super();
-
-                var self = this;
-
                 return this;
             },
 
             isActive: function() {
-                var address;
-
-                if (!quote.billingAddress()) {
-                    address = quote.shippingAddress();
-                } else {
-                    address = quote.billingAddress();
-                }
-
+                var address = quote.billingAddress() || quote.shippingAddress();
                 var methods = this.getPaymentMethods();
 
                 for (var i = 0; i < methods.length; i++) {
