@@ -34,6 +34,7 @@ define(
         return Component.extend({
             defaults: {
                 code: 'braintree_local_payment',
+                paymentMethodsAvailable: ko.observable(false),
                 paymentMethodNonce: null,
                 template: 'Magento_Braintree/payment/lpm'
             },
@@ -201,6 +202,10 @@ define(
             },
 
             isActive: function() {
+                if (quote.isVirtual()) {
+                    return true; // Always show initially for virtual orders.
+                }
+
                 var billingAddress = this.getBillingAddress();
 
                 if (!billingAddress) {
@@ -219,15 +224,23 @@ define(
             },
 
             isValidCountryAndCurrency: function (method) {
+                var address = quote.billingAddress();
+
+                if (!address) {
+                    this.paymentMethodsAvailable(false);
+                    return false;
+                }
+
+                var countryId = address.countryId;
                 var quoteCurrency = quote.totals()['base_currency_code'];
-                var billingAddress = quote.billingAddress();
-                var countryId = billingAddress.countryId;
                 var paymentMethodDetails = this.getPaymentMethod(method);
 
                 if (paymentMethodDetails.countries.includes(countryId) && quoteCurrency === 'EUR') {
+                    this.paymentMethodsAvailable(true);
                     return true;
                 }
 
+                this.paymentMethodsAvailable(false);
                 return false;
             },
 

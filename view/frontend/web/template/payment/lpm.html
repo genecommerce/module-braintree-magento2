@@ -27,6 +27,10 @@
             <!--/ko-->
         </div>
 
+        <!-- ko ifnot: paymentMethodsAvailable() -->
+        <p translate="'There are currently no available payment methods. Please update your Billing Address.'"></p>
+        <!-- /ko -->
+
         <div class="actions-toolbar" each="getPaymentMethods()">
             <if args="$parent.isValidCountryAndCurrency(method)">
                 <div class="primary">
