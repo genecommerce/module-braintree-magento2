@@ -92,7 +92,7 @@ define(
                                     } else if(startPaymentError.code === 'LOCAL_PAYMENT_WINDOW_CLOSED') {
                                         self.setErrorMsg($t('Local Payment popup was closed. Payment cancelled.'));
                                     } else {
-                                        console.error('Error!', startPaymentError);
+                                        self.setErrorMsg('Error! ' + startPaymentError);
                                     }
                                 } else {
                                     // Send the nonce to your server to create a transaction
