@@ -64,6 +64,13 @@ define(
             );
         }
 
+        rendererList.push(
+            {
+                type: 'braintree_local_payment',
+                component: 'Magento_Braintree/js/view/payment/method-renderer/lpm'
+            }
+        );
+
         /** Add view logic here if needed */
         return Component.extend({});
     }

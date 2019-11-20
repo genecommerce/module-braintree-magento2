@@ -53,7 +53,7 @@ class ThreeDSecureDataBuilder implements BuilderInterface
         $amount = $this->formatPrice($this->subjectReader->readAmount($buildSubject));
 
         if ($this->is3DSecureEnabled($paymentDO->getOrder(), $amount)) {
-            $result['options'][Config::CODE_3DSECURE] = ['required' => true];
+            $result['options']['threeDSecure'] = ['required' => true]; // 'three_d_secure' was removed in version 4.x.x
         }
         return $result;
     }

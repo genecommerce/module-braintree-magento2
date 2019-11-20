@@ -20,7 +20,7 @@
         "magento/module-ui": "101.0.*||101.1.*",
         "ext-json": "*",
         "ext-simplexml": "*",
-        "php": "^7.0",
+        "php": ">=7.2.0",
         "league/iso3166": "^2.1"
     },
     "replace": {

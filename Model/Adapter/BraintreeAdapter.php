@@ -9,7 +9,6 @@ use Braintree\ClientToken;
 use Braintree\Configuration;
 use Braintree\CreditCard;
 use Braintree\Customer;
-use Braintree\CustomerSearch;
 use Braintree\Exception\NotFound;
 use Braintree\PaymentMethod;
 use Braintree\PaymentMethodNonce;
@@ -27,7 +26,6 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class BraintreeAdapter
- * @codeCoverageIgnore
  */
 class BraintreeAdapter
 {

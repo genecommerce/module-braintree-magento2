@@ -28,6 +28,9 @@
     <event name="payment_method_assign_data_braintree_ach_direct_debit">
         <observer name="braintree_ach_direct_debit_gateway_data_assign" instance="Magento\Braintree\Observer\DataAssignObserver" />
     </event>
+    <event name="payment_method_assign_data_braintree_local_payment">
+        <observer name="braintree_local_payment_gateway_data_assign" instance="Magento\Braintree\Observer\DataAssignObserver" />
+    </event>
     <event name="sales_order_save_after">
         <observer name="braintree_sales_order_save_after" instance="Magento\Braintree\Observer\SalesOrderSaveObserver" />
     </event>
