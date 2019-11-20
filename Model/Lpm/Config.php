@@ -14,62 +14,41 @@ use Magento\Framework\View\Asset\Repository;
 
 /**
  * Class Config
+ *
+ * Provide configuration for LPMs
  */
 class Config extends \Magento\Payment\Gateway\Config\Config
 {
     const KEY_ACTIVE = 'active';
     const KEY_ALLOWED_METHODS = 'allowed_methods';
     const KEY_TITLE = 'title';
-    const PAYMENT_METHODS = [
-        'bancontact' => [
-            'method' => 'bancontact',
-            'countries' => 'BE',
-            'label' => 'Bancontact',
-            'image' => 'bancontact.svg'
-        ],
-        'eps' => [
-            'method' => 'eps',
-            'countries' => 'AT',
-            'label' => 'EPS',
-            'image' => 'eps.svg'
-        ],
-        'giropay' => [
-            'method' => 'giropay',
-            'countries' => 'DE',
-            'label' => 'giropay',
-            'image' => 'giropay.svg'
-        ],
-        'ideal' => [
-            'method' => 'ideal',
-            'countries' => 'NL',
-            'label' => 'iDEAL',
-            'image' => 'ideal.svg'
-        ],
-        'sofort' => [
-            'method' => 'sofort',
-            'countries' => ['AT', 'BE', 'DE', 'ES', 'IT', 'NL'],
-            'label' => 'Klarna Pay Now / SOFORT',
-            'image' => 'sofort.svg'
-        ],
-        'mybank' => [
-            'method' => 'mybank',
-            'countries' => 'IT',
-            'label' => 'MyBank',
-            'image' => 'mybank.svg'
-        ],
-        'p24' => [
-            'method' => 'p24',
-            'countries' => 'PL',
-            'label' => 'P24',
-            'image' => 'p24.svg'
-        ],
-        'sepa' => [
-            'method' => 'sepa',
-            'countries' => ['AT', 'DE'],
-            'label' => 'SEPA/ELV Direct Debit',
-            'image' => 'sepa.svg'
-        ]
-    ];
+
+    const VALUE_BANCONTACT = 'bancontact';
+    const VALUE_EPS = 'eps';
+    const VALUE_GIROPAY = 'giropay';
+    const VALUE_IDEAL = 'ideal';
+    const VALUE_SOFORT = 'sofort';
+    const VALUE_MYBANK = 'mybank';
+    const VALUE_P24 = 'p24';
+    const VALUE_SEPA = 'sepa';
+
+    const LABEL_BANCONTACT = 'Bancontact';
+    const LABEL_EPS = 'EPS';
+    const LABEL_GIROPAY = 'giropay';
+    const LABEL_IDEAL = 'iDEAL';
+    const LABEL_SOFORT = 'Klarna Pay Now / SOFORT';
+    const LABEL_MYBANK = 'MyBank';
+    const LABEL_P24 = 'P24';
+    const LABEL_SEPA = 'SEPA/ELV Direct Debit';
+
+    const COUNTRIES_BANCONTACT = 'BE';
+    const COUNTRIES_EPS = 'AT';
+    const COUNTRIES_GIROPAY = 'DE';
+    const COUNTRIES_IDEAL = 'NL';
+    const COUNTRIES_SOFORT = ['AT', 'BE', 'DE', 'ES', 'IT', 'NL'];
+    const COUNTRIES_MYBANK = 'IT';
+    const COUNTRIES_P24 = 'PL';
+    const COUNTRIES_SEPA = ['AT', 'DE'];
 
     /**
      * @var StoreConfigResolver
@@ -150,7 +129,11 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         );
 
         foreach ($allowedMethods as $allowedMethod) {
-            $this->allowedMethods[] = self::PAYMENT_METHODS[$allowedMethod];
+            $this->allowedMethods[] = [
+                'method' => $allowedMethod,
+                'label' => constant('self::LABEL_'.strtoupper($allowedMethod)),
+                'countries' => constant('self::COUNTRIES_'.strtoupper($allowedMethod))
+            ];
         }
 
         return $this->allowedMethods;
@@ -196,14 +179,14 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     public function getPaymentIcons(): array
     {
         $icons = [
-            'bancontact' => $this->assetRepo->getUrl('Magento_Braintree::images/bancontact.svg'),
-            'eps' => $this->assetRepo->getUrl('Magento_Braintree::images/eps.svg'),
-            'giropay' => $this->assetRepo->getUrl('Magento_Braintree::images/giropay.svg'),
-            'ideal' => $this->assetRepo->getUrl('Magento_Braintree::images/ideal.svg'),
-            'sofort' => $this->assetRepo->getUrl('Magento_Braintree::images/sofort.svg'),
-            'mybank' => $this->assetRepo->getUrl('Magento_Braintree::images/mybank.svg'),
-            'p24' => $this->assetRepo->getUrl('Magento_Braintree::images/p24.svg'),
-            'sepa' => $this->assetRepo->getUrl('Magento_Braintree::images/sepa.svg')
+            self::VALUE_BANCONTACT => $this->assetRepo->getUrl('Magento_Braintree::images/'.self::VALUE_BANCONTACT.'.svg'),
+            self::VALUE_EPS => $this->assetRepo->getUrl('Magento_Braintree::images/'.self::VALUE_EPS.'.svg'),
+            self::VALUE_GIROPAY => $this->assetRepo->getUrl('Magento_Braintree::images/'.self::VALUE_GIROPAY.'.svg'),
+            self::VALUE_IDEAL => $this->assetRepo->getUrl('Magento_Braintree::images/'.self::VALUE_IDEAL.'.svg'),
+            self::VALUE_SOFORT => $this->assetRepo->getUrl('Magento_Braintree::images/'.self::VALUE_SOFORT.'.svg'),
+            self::VALUE_MYBANK => $this->assetRepo->getUrl('Magento_Braintree::images/'.self::VALUE_MYBANK.'.svg'),
+            self::VALUE_P24 => $this->assetRepo->getUrl('Magento_Braintree::images/'.self::VALUE_P24.'.svg'),
+            self::VALUE_SEPA => $this->assetRepo->getUrl('Magento_Braintree::images/'.self::VALUE_SEPA.'.svg')
         ];
 
         return $icons;

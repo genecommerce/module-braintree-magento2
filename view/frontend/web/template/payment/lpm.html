@@ -37,7 +37,7 @@
                     <button class="action checkout"
                             click="function () { $parent.clickPaymentBtn(method) }"
                             css="$data.method, { disabled: !$parent.isPlaceOrderActionAllowed() }"
-                            enabled="($parent.getCode() == $parent.isChecked())">
+                            enabled="($parent.getCode() === $parent.isChecked())">
                         <img attr="{ src: $parent.getPaymentMarkSrc()[method], alt: 'Pay with' + label }" />
                     </button>
                 </div>
