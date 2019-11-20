@@ -209,8 +209,14 @@ define([
         placeOrder: function () {
             var self = this;
 
-            if (!self.validateCvv('#' + self.getId() + '_cid', self.isValidCvv) || !additionalValidators.validate()) {
-                return;
+            if (self.showCvvVerify()) {
+                if (!self.validateCvv('#' + self.getId() + '_cid', self.isValidCvv) || !additionalValidators.validate()) {
+                    return;
+                }
+            } else {
+                if (!additionalValidators.validate()) {
+                    return;
+                }
             }
 
             fullScreenLoader.startLoader();
@@ -238,7 +244,6 @@ define([
                             });
                             return;
                         }
-
                         self.getPaymentMethodNonce();
                     })
                 });
