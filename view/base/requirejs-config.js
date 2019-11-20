@@ -18,6 +18,7 @@ var config = {
         "braintreeGooglePay": 'https://js.braintreegateway.com/web/3.51.0/js/google-payment.min',
         "braintreeVenmo": 'https://js.braintreegateway.com/web/3.51.0/js/venmo.min',
         "braintreeAch": "https://js.braintreegateway.com/web/3.51.0/js/us-bank-account.min",
+        "braintreeLpm": "https://js.braintreegateway.com/web/3.51.0/js/local-payment.min",
         "googlePayLibrary": "https://pay.google.com/gp/p/js/pay"
     }
 };

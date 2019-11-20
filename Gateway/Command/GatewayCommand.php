@@ -101,6 +101,7 @@ class GatewayCommand implements CommandInterface
                 array_merge($commandSubject, ['response' => $response])
             );
             if (!$result->isValid()) {
+                // TODO attempt to cancel Braintree Transaction
                 $this->logExceptions($result->getFailsDescription());
                 throw new CommandException($this->getExceptionMessage($response));
             }
