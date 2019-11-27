@@ -319,6 +319,7 @@
                         <field id="title" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1">
                             <label>Title</label>
                             <config_path>payment/braintree_local_payment/title</config_path>
+                            <validate>required-entry</validate>
                             <depends>
                                 <field id="active">1</field>
                             </depends>
