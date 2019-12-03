@@ -4,7 +4,7 @@ define([
 ], function (wrapper, $) {
     'use strict';
 
-    let mixin = {
+    var mixin = {
         handleHash: function (originalFn) {
             var hashString = window.location.hash.replace('#', '');
             return (hashString.includes('venmo')) ? false : originalFn();

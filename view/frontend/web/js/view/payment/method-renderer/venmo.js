@@ -75,7 +75,7 @@ define(
             },
 
             getData: function () {
-                let data = {
+                var data = {
                     'method': this.getCode(),
                     'additional_data': {
                         'payment_method_nonce': this.paymentMethodNonce,
