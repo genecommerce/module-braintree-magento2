@@ -296,7 +296,7 @@ define(
              */
             getData: function () {
                 var data = {
-                    'method': this.getCode(),
+                    'method': 'braintree', // hardcode this value in an attempt to stop it being changed randomly.
                     'additional_data': {
                         'payment_method_nonce': this.paymentMethodNonce
                     }
