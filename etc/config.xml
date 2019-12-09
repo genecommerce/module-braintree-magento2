@@ -30,7 +30,7 @@
                 <can_deny_payment>1</can_deny_payment>
                 <cctypes>AE,VI,MC,DI,JCB,CUP,DN,MI</cctypes>
                 <useccv>1</useccv>
-                <cctypes_braintree_mapper><![CDATA[{"american-express":"AE","discover":"DI","jcb":"JCB","mastercard":"MC","master-card":"MC","visa":"VI","maestro":"MI","diners-club":"DN","unionpay":"CUP"}]]></cctypes_braintree_mapper>
+                <cctypes_braintree_mapper><![CDATA[{"american-express":"AE","discover":"DI","jcb":"JCB","mastercard":"MC","master-card":"MC","visa":"VI","maestro":"MI","uk-maestro":"MI","diners-club":"DN","unionpay":"CUP"}]]></cctypes_braintree_mapper>
                 <order_status>processing</order_status>
                 <environment>sandbox</environment>
                 <allowspecific>0</allowspecific>
