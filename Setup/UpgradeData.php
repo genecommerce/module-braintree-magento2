@@ -57,6 +57,11 @@ class UpgradeData implements UpgradeDataInterface
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
             $this->convertSerializedDataToJson($setup);
         }
+
+        // Hotfix to remove incorrectly stored LPM config key/values
+        if (version_compare($context->getVersion(), '4.0.1', '<')) {
+            $this->removeNullLpmAllowedMethods($setup);
+        }
     }
 
     /**
@@ -88,6 +93,23 @@ class UpgradeData implements UpgradeDataInterface
             'config_id',
             'value',
             $queryModifier
+        );
+    }
+
+    /**
+     * Hotfix to remove incorrectly stored config value for `payment/braintree_local_paymnet/allowed_methods`
+     *
+     * @param ModuleDataSetupInterface $setup
+     */
+    private function removeNullLpmAllowedMethods(ModuleDataSetupInterface $setup)
+    {
+        $connection = $setup->getConnection();
+        $connection->delete(
+            $setup->getTable('core_config_data'),
+            [
+                '`path`=?' => 'payment/braintree_local_payment/allowed_methods',
+                '`value` IS NULL'
+            ]
         );
     }
 }

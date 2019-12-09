@@ -319,6 +319,7 @@
                         <field id="title" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1">
                             <label>Title</label>
                             <config_path>payment/braintree_local_payment/title</config_path>
+                            <validate>required-entry</validate>
                             <depends>
                                 <field id="active">1</field>
                             </depends>
@@ -330,8 +331,8 @@
                                 valid for that method, regardless of the method being enabled here.
                             </comment>
                             <source_model>Magento\Braintree\Model\Adminhtml\Source\LpmMethods</source_model>
-                            <can_be_empty>1</can_be_empty>
                             <config_path>payment/braintree_local_payment/allowed_methods</config_path>
+                            <validate>required-entry</validate>
                             <depends>
                                 <field id="active">1</field>
                             </depends>
