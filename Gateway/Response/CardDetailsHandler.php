@@ -53,7 +53,10 @@ class CardDetailsHandler implements HandlerInterface
     }
 
     /**
-     * @inheritdoc
+     * @param array $handlingSubject
+     * @param array $response
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
     public function handle(array $handlingSubject, array $response)
     {
@@ -67,7 +70,6 @@ class CardDetailsHandler implements HandlerInterface
         $payment->setCcLast4($creditCard[self::CARD_LAST4]);
         $payment->setCcExpMonth($creditCard[self::CARD_EXP_MONTH]);
         $payment->setCcExpYear($creditCard[self::CARD_EXP_YEAR]);
-
         $payment->setCcType($this->getCreditCardType($creditCard[self::CARD_TYPE]));
 
         // set card details to additional info
@@ -83,7 +85,7 @@ class CardDetailsHandler implements HandlerInterface
      * @throws InputException
      * @throws NoSuchEntityException
      */
-    private function getCreditCardType($type): string
+    private function getCreditCardType(string $type): string
     {
         $replaced = str_replace(' ', '-', strtolower($type));
         $mapper = $this->config->getCcTypesMapper();
