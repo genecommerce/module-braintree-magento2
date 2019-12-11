@@ -13,8 +13,9 @@ define([
     'Magento_Checkout/js/model/full-screen-loader',
     'Magento_Ui/js/model/messageList',
     'mage/translate',
+    'Magento_Checkout/js/model/quote',
     'https://www.paypalobjects.com/api/checkout.js'
-], function ($, client, dataCollector, hostedFields, paypalCheckout, fullScreenLoader, globalMessageList, $t) {
+], function ($, client, dataCollector, hostedFields, paypalCheckout, fullScreenLoader, globalMessageList, $t, quote) {
     'use strict';
 
     return {
@@ -355,6 +356,7 @@ define([
                     locale: this.config.paypal.locale,
 
                     payment: function () {
+                        paypalPayment.amount = quote.totals()['base_grand_total'];
                         return paypalCheckoutInstance.createPayment(paypalPayment);
                     },
 
