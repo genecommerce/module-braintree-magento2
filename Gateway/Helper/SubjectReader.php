@@ -7,6 +7,7 @@ namespace Magento\Braintree\Gateway\Helper;
 
 use Braintree\Transaction;
 use InvalidArgumentException;
+use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Quote\Model\Quote;
 use Magento\Payment\Gateway\Helper;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
@@ -17,6 +18,21 @@ use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
  */
 class SubjectReader
 {
+    /**
+     * @var BraintreeAdapter
+     */
+    private $braintreeAdapter;
+
+    /**
+     * SubjectReader constructor.
+     *
+     * @param BraintreeAdapter $braintreeAdapter
+     */
+    public function __construct(BraintreeAdapter $braintreeAdapter)
+    {
+        $this->braintreeAdapter = $braintreeAdapter;
+    }
+
     /**
      * Reads response object from subject
      *
@@ -115,7 +131,8 @@ class SubjectReader
     public function readPayPal(Transaction $transaction): array
     {
         if (!isset($transaction->paypal)) {
-            throw new InvalidArgumentException('Transaction has\'t paypal attribute');
+            $this->braintreeAdapter->void($transaction->id);
+            throw new InvalidArgumentException('Transaction does not contain a PayPal attribute');
         }
 
         return $transaction->paypal;
