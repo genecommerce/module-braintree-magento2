@@ -73,6 +73,7 @@ class PaymentDetailsHandler implements HandlerInterface
 
     /**
      * @inheritdoc
+     * @throws LocalizedException
      */
     public function handle(array $handlingSubject, array $response)
     {

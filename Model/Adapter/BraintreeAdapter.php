@@ -9,7 +9,6 @@ use Braintree\ClientToken;
 use Braintree\Configuration;
 use Braintree\CreditCard;
 use Braintree\Customer;
-use Braintree\CustomerSearch;
 use Braintree\Exception\NotFound;
 use Braintree\PaymentMethod;
 use Braintree\PaymentMethodNonce;
@@ -18,6 +17,7 @@ use Braintree\Result\Error;
 use Braintree\Result\Successful;
 use Braintree\Transaction;
 use Exception;
+use InvalidArgumentException;
 use Magento\Braintree\Gateway\Config\Config;
 use Magento\Braintree\Model\Adminhtml\Source\Environment;
 use Magento\Braintree\Model\StoreConfigResolver;
@@ -50,7 +50,6 @@ class BraintreeAdapter
      *
      * @param Config $config Braintree configurator
      * @param StoreConfigResolver $storeConfigResolver StoreId resolver model
-     *
      * @param LoggerInterface $logger
      * @throws InputException
      * @throws NoSuchEntityException
@@ -63,7 +62,6 @@ class BraintreeAdapter
         $this->config = $config;
         $this->storeConfigResolver = $storeConfigResolver;
         $this->logger = $logger;
-
         $this->initCredentials();
     }
 
@@ -264,5 +262,38 @@ class BraintreeAdapter
     public function getCustomerById($id)
     {
         return Customer::find($id);
+    }
+
+    /**
+     * @param Transaction $transaction
+     * @param string $expected
+     * @param string $actual
+     * @return Error|Successful
+     */
+    public function voidOrRefund(Transaction $transaction, string $expected, string $actual)
+    {
+        $this->logger->error(__('Wrong payment method used. Expected %1, got %2.', $expected, $actual));
+
+        if (in_array(
+            $transaction->status,
+            [
+                Transaction::AUTHORIZED,
+                Transaction::SUBMITTED_FOR_SETTLEMENT
+            ],
+            true
+        )) {
+            return $this->void($transaction->id);
+        }
+
+        if (in_array(
+            $transaction->status,
+            [
+                Transaction::SETTLED,
+                Transaction::SETTLING
+            ],
+            true
+        )) {
+            return $this->refund($transaction->id);
+        }
     }
 }

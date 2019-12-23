@@ -131,7 +131,6 @@ class SubjectReader
     public function readPayPal(Transaction $transaction): array
     {
         if (!isset($transaction->paypal)) {
-            $this->braintreeAdapter->void($transaction->id);
             throw new InvalidArgumentException('Transaction does not contain a PayPal attribute');
         }
 

@@ -6,32 +6,42 @@
 namespace Magento\Braintree\Gateway\Response;
 
 use Braintree\Transaction;
+use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 
 /**
  * Class PayPalDetailsHandler
+ *
+ * Handles PayPal data and assigns it to the orders payment.
  */
 class PayPalDetailsHandler implements HandlerInterface
 {
     const PAYMENT_ID = 'paymentId';
-
     const PAYER_EMAIL = 'payerEmail';
 
     /**
      * @var SubjectReader
      */
     private $subjectReader;
+    /**
+     * @var BraintreeAdapter
+     */
+    private $braintreeAdapter;
 
     /**
      * Constructor
      *
      * @param SubjectReader $subjectReader
+     * @param BraintreeAdapter $braintreeAdapter
      */
-    public function __construct(SubjectReader $subjectReader)
-    {
+    public function __construct(
+        SubjectReader $subjectReader,
+        BraintreeAdapter $braintreeAdapter
+    ) {
         $this->subjectReader = $subjectReader;
+        $this->braintreeAdapter = $braintreeAdapter;
     }
 
     /**
@@ -43,6 +53,10 @@ class PayPalDetailsHandler implements HandlerInterface
 
         /** @var Transaction $transaction */
         $transaction = $this->subjectReader->readTransaction($response);
+
+        if ($transaction->paymentInstrumentType === 'credit_card') {
+            $this->braintreeAdapter->voidOrRefund($transaction, 'PayPal', 'Credit Card');
+        }
 
         /** @var OrderPaymentInterface $payment */
         $payment = $paymentDO->getPayment();

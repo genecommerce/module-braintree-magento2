@@ -7,6 +7,7 @@ namespace Magento\Braintree\Gateway\Response;
 
 use Magento\Braintree\Gateway\Config\Config;
 use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Payment\Gateway\Helper\ContextHelper;
@@ -15,41 +16,45 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
 
 /**
  * Class CardDetailsHandler
+ *
+ * Handles credit card data and assigns it to the orders payment.
  */
 class CardDetailsHandler implements HandlerInterface
 {
     const CARD_TYPE = 'cardType';
-
     const CARD_EXP_MONTH = 'expirationMonth';
-
     const CARD_EXP_YEAR = 'expirationYear';
-
     const CARD_LAST4 = 'last4';
-
     const CARD_NUMBER = 'cc_number';
 
     /**
      * @var Config
      */
     private $config;
-
     /**
      * @var SubjectReader
      */
     private $subjectReader;
+    /**
+     * @var BraintreeAdapter
+     */
+    private $braintreeAdapter;
 
     /**
      * Constructor
      *
      * @param Config $config
      * @param SubjectReader $subjectReader
+     * @param BraintreeAdapter $braintreeAdapter
      */
     public function __construct(
         Config $config,
-        SubjectReader $subjectReader
+        SubjectReader $subjectReader,
+        BraintreeAdapter $braintreeAdapter
     ) {
         $this->config = $config;
         $this->subjectReader = $subjectReader;
+        $this->braintreeAdapter = $braintreeAdapter;
     }
 
     /**
@@ -63,7 +68,12 @@ class CardDetailsHandler implements HandlerInterface
         $paymentDO = $this->subjectReader->readPayment($handlingSubject);
         $transaction = $this->subjectReader->readTransaction($response);
 
+        if ($transaction->paymentInstrumentType === 'paypal_account') {
+            $this->braintreeAdapter->voidOrRefund($transaction, 'Credit Card', 'PayPal');
+        }
+
         $payment = $paymentDO->getPayment();
+
         ContextHelper::assertOrderPayment($payment);
 
         $creditCard = $transaction->creditCard;
