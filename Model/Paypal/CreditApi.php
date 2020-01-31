@@ -116,6 +116,9 @@ class CreditApi
         ];
 
         $body = json_encode($body);
+        
+        // Sleep 2 seconds to stagger API calls and avoid the "RATE_LIMIT_REACHED" response
+        sleep(2);
 
         $response = $this->request(
             $this->getCalcUrl(),
