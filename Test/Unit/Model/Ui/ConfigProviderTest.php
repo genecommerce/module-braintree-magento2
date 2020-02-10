@@ -136,7 +136,6 @@ class ConfigProviderTest extends TestCase
                 'config' => [
                     'isActive' => true,
                     'getCcTypesMapper' => ['visa' => 'VI', 'american-express'=> 'AE'],
-                    'getSdkUrl' => self::SDK_URL,
                     'getCountrySpecificCardTypeConfig' => [
                         'GB' => ['VI', 'AE'],
                         'US' => ['DI', 'JCB']
