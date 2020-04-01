@@ -14,7 +14,7 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * Class Level23ProcessingDataBuilder
+ * Build up Level 2/3 Processing payload
  */
 class Level23ProcessingDataBuilder implements BuilderInterface
 {
@@ -26,18 +26,6 @@ class Level23ProcessingDataBuilder implements BuilderInterface
     const KEY_SHIPPING = 'shipping';
     const KEY_COUNTRY_CODE_ALPHA_3 = 'countryCodeAlpha3';
     const KEY_LINE_ITEMS = 'lineItems';
-    const LINE_ITEMS_ARRAY = [
-        'name',
-        'kind',
-        'quantity',
-        'unitAmount',
-        'unitOfMeasure',
-        'totalAmount',
-        'taxAmount',
-        'discountAmount',
-        'productCode',
-        'commodityCode'
-    ];
 
     /**
      * @var SubjectReader
@@ -48,6 +36,7 @@ class Level23ProcessingDataBuilder implements BuilderInterface
      * @var ScopeConfigInterface
      */
     private $scopeConfig;
+
     /**
      * @var ISO3166
      */
