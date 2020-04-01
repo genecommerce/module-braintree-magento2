@@ -43,6 +43,7 @@ class Level23ProcessingDataBuilder implements BuilderInterface
      * @var SubjectReader
      */
     private $subjectReader;
+
     /**
      * @var ScopeConfigInterface
      */
@@ -109,25 +110,26 @@ class Level23ProcessingDataBuilder implements BuilderInterface
                 ]
             );
 
-            $lineItems[] = array_combine(
-                self::LINE_ITEMS_ARRAY,
-                [
-                    $filteredFields['name'],
-                    TransactionLineItem::DEBIT,
-                    $this->numberToString($item->getQtyOrdered(), 2),
-                    $this->numberToString($item->getBasePrice(), 2),
-                    $filteredFields['unit_of_measure'],
-                    $this->numberToString($item->getQtyOrdered() * $item->getBasePrice(), 2),
-                    $item->getTaxAmount() === null ? '0.00' : $this->numberToString($item->getTaxAmount(), 2),
-                    $item->getDiscountAmount() === null ? '0.00' : $this->numberToString($item->getDiscountAmount(), 2),
-                    $filteredFields['sku'],
-                    $filteredFields['sku']
-                ]
-            );
+            $lineItems[] = [
+                'name' => $filteredFields['name'],
+                'kind' => TransactionLineItem::DEBIT,
+                'quantity' => $this->numberToString($item->getQtyOrdered(), 2),
+                'unitAmount' => $this->numberToString($item->getBasePrice(), 2),
+                'unitOfMeasure' => $filteredFields['unit_of_measure'],
+                'totalAmount' => $this->numberToString($item->getQtyOrdered() * $item->getBasePrice(), 2),
+                'taxAmount' => $item->getTaxAmount() === null ?
+                    '0.00' :
+                    $this->numberToString($item->getTaxAmount(), 2),
+                'discountAmount' => $item->getDiscountAmount() === null ?
+                    '0.00' :
+                    $this->numberToString($item->getDiscountAmount(), 2),
+                'productCode' => $filteredFields['sku'],
+                'commodityCode' => $filteredFields['sku']
+            ];
         }
 
         $processingData = [
-            self::KEY_PURCHASE_ORDER_NUMBER => $order->getOrderIncrementId(), // Level 2.
+            self::KEY_PURCHASE_ORDER_NUMBER => substr($order->getOrderIncrementId(), -12, 12), // Level 2.
             self::KEY_TAX_AMT => $this->numberToString($order->getBaseTaxAmount(), 2), // Level 2.
             self::KEY_DISCOUNT_AMT => $this->numberToString(abs($order->getBaseDiscountAmount()), 2), // Level 3.
             self::KEY_LINE_ITEMS => $lineItems, // Level 3.
@@ -144,7 +146,10 @@ class Level23ProcessingDataBuilder implements BuilderInterface
             // use Magento's Alpha2 code to get the Alpha3 code.
             $addressData = $this->iso3166->alpha2($address->getCountryId());
 
-            $processingData[self::KEY_SHIPPING_AMT] = $this->numberToString($payment->getShippingAmount(), 2); // Level 3.
+            $processingData[self::KEY_SHIPPING_AMT] = $this->numberToString(
+                $payment->getShippingAmount(),
+                2
+            ); // Level 3.
             $processingData[self::KEY_SHIPS_FROM_POSTAL_CODE] = $storePostalCode; // Level 3.
             $processingData[self::KEY_SHIPPING] = [ // Level 3.
                 self::KEY_COUNTRY_CODE_ALPHA_3 => $addressData['alpha3']
@@ -155,12 +160,17 @@ class Level23ProcessingDataBuilder implements BuilderInterface
     }
 
     /**
-     * @param float $num
+     * @param float|string $num
      * @param int $precision
      * @return string
      */
-    private function numberToString(float $num, int $precision): string
+    private function numberToString($num, int $precision): string
     {
+        // To counter the fact that Magento often wrongly returns a sting for price values, we can cast it to a float.
+        if (is_string($num)) {
+            $num = (float) $num;
+        }
+
         return (string) round($num, $precision);
     }
 }
