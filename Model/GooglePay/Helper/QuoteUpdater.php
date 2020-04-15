@@ -172,7 +172,8 @@ class QuoteUpdater extends AbstractHelper
 
         $address->setEmail($addressData['email']);
         $address->setFirstname($name[0]);
-        $address->setLastname($name[1]);
+        // Google Pay does not validate Cardholder Name input, so a single name can be passed.
+        $address->setLastname($name[1] ?? 'N/A');
 
         $address->setStreet([$addressData['streetAddress'], $extendedAddress]);
         $address->setCity($addressData['locality']);
