@@ -173,6 +173,7 @@ class QuoteUpdater extends AbstractHelper
         $shippingAddress->setLastname($details['lastName']);
         $shippingAddress->setFirstname($details['firstName']);
         $shippingAddress->setEmail($details['email']);
+        $shippingAddress->setTelephone($details['phone']);
 
         $shippingAddress->setCollectShippingRates(true);
 
@@ -197,6 +198,7 @@ class QuoteUpdater extends AbstractHelper
         $billingAddress->setFirstname($details['firstName']);
         $billingAddress->setLastname($details['lastName']);
         $billingAddress->setEmail($details['email']);
+        $billingAddress->setTelephone($details['phone']);
 
         if ($this->config->isRequiredBillingAddress()) {
             $this->updateAddressData($billingAddress, $details['billingAddress']);
