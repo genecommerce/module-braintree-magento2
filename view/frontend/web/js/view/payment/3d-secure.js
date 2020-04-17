@@ -43,7 +43,7 @@ define([
         validate: function (context) {
             var clientInstance = braintree.getApiClient(),
                 state = $.Deferred(),
-                totalAmount = quote.totals()['base_grand_total'],
+                totalAmount = parseFloat(quote.totals()['base_grand_total']).toFixed(2),
                 billingAddress = quote.billingAddress();
 
             // No 3d secure if using CVV verification on vaulted cards
@@ -54,7 +54,7 @@ define([
                 }
             }
 
-            if (!this.isAmountAvailable(totalAmount) || !this.isCountryAvailable(billingAddress.countryId)) {
+            if (!this.isAmountAvailable(quote.totals()['base_grand_total']) || !this.isCountryAvailable(billingAddress.countryId)) {
                 state.resolve();
                 return state.promise();
             }
@@ -165,8 +165,6 @@ define([
          * @returns {Boolean}
          */
         isAmountAvailable: function (amount) {
-            amount = parseFloat(amount);
-
             return amount >= this.config.thresholdAmount;
         },
 
