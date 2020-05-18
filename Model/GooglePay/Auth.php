@@ -98,4 +98,12 @@ class Auth
     {
         return $this->configProvider->getAvailableCardTypes();
     }
+
+    /**
+     * @return int
+     */
+    public function getBtnColor(): int
+    {
+        return $this->configProvider->getBtnColor();
+    }
 }

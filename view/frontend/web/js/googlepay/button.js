@@ -51,7 +51,7 @@ define(
                 // Create a button within the KO element, as google pay can only be instantiated through
                 // a valid on click event (ko onclick bind interferes with this).
                 var button = document.createElement('button');
-                button.className = "braintree-googlepay-button braintree-googlepay-button-no-shadow";
+                button.className = "braintree-googlepay-button " + (context.getBtnColor() == 1 ? 'black' : 'white');
                 button.title = $t("Buy with Google Pay");
 
                 // init braintree api
