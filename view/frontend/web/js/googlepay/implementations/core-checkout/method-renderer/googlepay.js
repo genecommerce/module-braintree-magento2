@@ -120,6 +120,13 @@ define([
         },
 
         /**
+         * BTN Color
+         */
+        getBtnColor: function () {
+            return window.checkoutConfig.payment[this.getCode()].btnColor;
+        },
+
+        /**
          * Get data
          * @returns {Object}
          */

@@ -146,6 +146,7 @@
                 <paymentInfoKeys>processorAuthorizationCode,processorResponseCode,processorResponseText</paymentInfoKeys>
                 <cctypes>VISA,MASTERCARD,AMEX</cctypes>
                 <merchant_id>testmode</merchant_id>
+                <btn_color>0</btn_color>
             </braintree_googlepay>
             <braintree_venmo>
                 <active>0</active>

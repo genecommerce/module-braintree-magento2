@@ -334,6 +334,11 @@
                             <source_model>Magento\Braintree\Model\Adminhtml\Source\GooglePayCcType</source_model>
                             <config_path>payment/braintree_googlepay/cctypes</config_path>
                         </field>
+                        <field id="btn_color" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Button Color</label>
+                            <source_model>Magento\Braintree\Model\Adminhtml\Source\GooglePayBtnColor</source_model>
+                            <config_path>payment/braintree_googlepay/btn_color</config_path>
+                        </field>
                     </group>
                     <group id="braintree_venmo" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="50">
                         <label>Venmo through Braintree</label>
