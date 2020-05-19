@@ -18,7 +18,8 @@ define([
             currencyCode: null,
             actionSuccess: null,
             amount: null,
-            cardTypes: []
+            cardTypes: [],
+            btnColor: 0
         },
 
         /**
@@ -90,6 +91,16 @@ define([
         },
         getCardTypes: function () {
             return this.cardTypes;
+        },
+
+        /**
+         * BTN Color
+         */
+        setBtnColor: function (value) {
+            this.btnColor = value;
+        },
+        getBtnColor: function () {
+            return this.btnColor;
         },
 
         /**

@@ -74,6 +74,7 @@ class ConfigProvider implements ConfigProviderInterface
                     'clientToken' => $this->getClientToken(),
                     'merchantId' => $this->getMerchantId(),
                     'cardTypes' => $this->getAvailableCardTypes(),
+                    'btnColor' => $this->getBtnColor(),
                     'paymentMarkSrc' => $this->getPaymentMarkSrc()
                 ]
             ]
@@ -122,6 +123,14 @@ class ConfigProvider implements ConfigProviderInterface
     public function getMerchantId(): string
     {
         return $this->config->getMerchantId();
+    }
+
+    /**
+     * @return array
+     */
+    public function getBtnColor(): int
+    {
+        return $this->config->getBtnColor();
     }
 
     /**
