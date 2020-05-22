@@ -150,4 +150,14 @@ abstract class AbstractButton extends Template
     {
         return $this->auth->getAvailableCardTypes();
     }
+
+    /**
+     * BTN Color
+     *
+     * @return mixed
+     */
+    public function getBtnColor()
+    {
+        return $this->auth->getBtnColor();
+    }
 }

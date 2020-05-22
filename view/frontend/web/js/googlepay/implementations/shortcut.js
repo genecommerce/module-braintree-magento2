@@ -28,7 +28,8 @@ define(
                 actionSuccess: null,
                 amount: null,
                 environment: "TEST",
-                cardType: []
+                cardType: [],
+                btnColor: 0
             },
 
             /**
@@ -44,7 +45,8 @@ define(
                 api.setMerchantId(this.merchantId);
                 api.setActionSuccess(this.actionSuccess);
                 api.setAmount(this.amount);
-                api.setCardTypes(this.cardTypes);
+                api.setCardTypes(this.cardTypes)
+                api.setBtnColor(this.btnColor);
 
                 // Attach the button
                 button.init(
