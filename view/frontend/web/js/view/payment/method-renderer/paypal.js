@@ -98,7 +98,19 @@ define([
                 .observe(['active', 'isReviewRequired', 'customerEmail']);
 
             window.addEventListener('hashchange', function (e) {
-                if (e.newURL.indexOf('payment') > 0 && self.grandTotalAmount !== null) {
+                var methodCode = quote.paymentMethod();
+
+                if (methodCode === 'braintree_paypal' || methodCode === 'braintree_paypal_vault') {
+                    if (e.newURL.indexOf('payment') > 0 && self.grandTotalAmount !== null) {
+                        self.reInitPayPal();
+                    }
+                }
+            });
+
+            quote.paymentMethod.subscribe(function (value) {
+                var methodCode = value;
+
+                if (methodCode === 'braintree_paypal' || methodCode === 'braintree_paypal_vault') {
                     self.reInitPayPal();
                 }
             });
