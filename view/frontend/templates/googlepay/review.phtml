@@ -87,7 +87,7 @@
                 <div class="box-content">
                     <?= $block->escapeHtml('Google Pay') ?><br>
                     <?= $block->escapeHtml($block->getEmail()) ?> <br>
-                    <img src="<?php echo $this->getViewFileUrl('Magento_Braintree::images/GooglePay_AcceptanceMark_WhiteShape_WithStroke_RGB_62x38pt@4x.png')?>"
+                    <img src="<?= $this->getViewFileUrl('Magento_Braintree::images/google-pay-mark.png')?>"
                          alt="<?= $block->escapeHtml(__('Buy now with Google Pay')) ?>"
                          width="40" />
                 </div>
