@@ -148,7 +148,7 @@ class ConfigProvider implements ConfigProviderInterface
      */
     public function getPaymentMarkSrc()
     {
-        $fileId = 'Magento_Braintree::images/GooglePay_AcceptanceMark_WhiteShape_WithStroke_RGB_62x38pt@4x.png';
+        $fileId = 'Magento_Braintree::images/google-pay-mark.png';
         return $this->assetRepo->getUrl($fileId);
     }
 }

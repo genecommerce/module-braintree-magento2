@@ -6,11 +6,10 @@
                class="radio"
                data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()"/>
         <label data-bind="attr: {'for': getCode()}" class="label">
-            <!-- PayPal Logo -->
-            <img data-bind="attr: {src: getPaymentMarkSrc(), alt: $t('Google Pay Mark')}"
+            <!-- Google Pay Logo -->
+            <img data-bind="attr: {src: getPaymentMarkSrc(), alt: $t('Google Pay Acceptance Mark')}"
                  width="60"
                  class="payment-icon"/>
-            <!-- PayPal Logo -->
             <span text="getTitle()"></span>
         </label>
     </div>
