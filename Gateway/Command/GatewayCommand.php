@@ -131,7 +131,7 @@ class GatewayCommand implements CommandInterface
             return __('Your payment could not be taken. Please try again or use a different payment method.');
         }
 
-        return __('Your payment could not be taken. Please try again or use a different payment method. ' . $response['object']->message);
+        return __('Your payment could not be taken. Please try again or use a different payment method. %1', $response['object']->message);
     }
 
     /**
