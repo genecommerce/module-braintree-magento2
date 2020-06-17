@@ -100,6 +100,7 @@ define([
                             countryCodeAlpha2: billingAddress.countryId
                         },
                         onLookupComplete: function (data, next) {
+                            fullScreenLoader.stopLoader();
                             next();
                         },
                         addFrame: function (err, iframe) {
