@@ -232,9 +232,6 @@ define(
                     this.paymentMethodsAvailable(true);
                     return true;
                 }
-
-                this.paymentMethodsAvailable(false);
-                return false;
             },
 
             setErrorMsg: function (message) {
