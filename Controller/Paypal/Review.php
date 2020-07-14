@@ -6,12 +6,12 @@
 namespace Magento\Braintree\Controller\Paypal;
 
 use Exception;
+use Magento\Braintree\Gateway\Config\PayPal\Config;
+use Magento\Braintree\Model\Paypal\Helper\QuoteUpdater;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Braintree\Gateway\Config\PayPal\Config;
-use Magento\Braintree\Model\Paypal\Helper\QuoteUpdater;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Result\Page;
 
@@ -60,9 +60,6 @@ class Review extends AbstractAction
         $quote = $this->checkoutSession->getQuote();
 
         try {
-            if (empty($requestData) || $requestData == null) {
-                throw new LocalizedException(__('Malformed request data. This may be caused by special characters. Please try again'));
-            }
             $this->validateQuote($quote);
 
             if ($this->validateRequestData($requestData)) {
