@@ -263,14 +263,14 @@ define(
                                         var address = payload.details.shippingAddress;
                                         payload.details.shippingAddress = {
                                             streetAddress: typeof address.line2 !== 'undefined' ? address.line1 + " " + address.line2 : address.line1,
-                                            locality: address.city,
+                                            locality: address.city.replace(/'/g, "&apos;"),
                                             postalCode: address.postalCode,
                                             countryCodeAlpha2: address.countryCode,
-                                            email: payload.details.email,
-                                            firstname: payload.details.firstName,
-                                            lastname: payload.details.lastName,
+                                            email: payload.details.email.replace(/'/g, "&apos;"),
+                                            firstname: payload.details.firstName.replace(/'/g, "&apos;"),
+                                            lastname: payload.details.lastName.replace(/'/g, "&apos;"),
                                             telephone: typeof payload.details.phone !== 'undefined' ? payload.details.phone : '',
-                                            region: typeof address.state !== 'undefined' ? address.state : ''
+                                            region: typeof address.state !== 'undefined' ? address.state.replace(/'/g, "&apos;") : ''
                                         };
 
                                         formBuilder.build(
