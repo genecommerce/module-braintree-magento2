@@ -1152,6 +1152,7 @@
     <type name="Magento\Braintree\Console\VaultMigrate">
         <arguments>
             <argument name="braintreeAdapter" xsi:type="object">Magento\Braintree\Model\Adapter\BraintreeAdapter\Proxy</argument>
+            <argument name="customerRepository" xsi:type="object">Magento\Customer\Model\ResourceModel\CustomerRepository\Proxy</argument>
         </arguments>
     </type>
 </config>
