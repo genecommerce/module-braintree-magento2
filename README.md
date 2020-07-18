@@ -2,6 +2,8 @@
 
 Module Magento\Braintree implements integration with the Braintree payment system.
 
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/genecommerce/module-braintree-magento2.svg?logo=lgtm&style=plastic)](https://lgtm.com/projects/g/genecommerce/module-braintree-magento2/alerts/)
+
 ## Overview
 
 This module overwrites the original Magento Braintree module, to provide additional features and bug fixes.
