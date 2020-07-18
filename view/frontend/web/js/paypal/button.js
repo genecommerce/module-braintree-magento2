@@ -190,7 +190,7 @@ define(
                         };
                         if (this.offerCredit === true) {
                             //funding.allowed.push(paypal.FUNDING.CREDIT);
-                            style.label = 'credit'
+                            style.label = 'credit';
                         } else {
                             //funding.disallowed.push(paypal.FUNDING.CREDIT);
                         }
@@ -298,4 +298,3 @@ define(
         });
     }
 );
-

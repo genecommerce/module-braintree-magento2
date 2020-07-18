@@ -21,8 +21,6 @@ define(
     ) {
         'use strict';
 
-        var that;
-
         return {
             init: function (element, context) {
                 // No element or context
