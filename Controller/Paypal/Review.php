@@ -60,6 +60,9 @@ class Review extends AbstractAction
         $quote = $this->checkoutSession->getQuote();
 
         try {
+            if (empty($requestData) || $requestData === null) {
+                throw new LocalizedException(__('Malformed request data. This may be caused by special characters. Please try again'));
+            }
             $this->validateQuote($quote);
 
             if ($this->validateRequestData($requestData)) {
