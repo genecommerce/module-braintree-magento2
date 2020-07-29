@@ -112,16 +112,64 @@
                         <field id="merchant_id" translate="label" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Merchant ID</label>
                             <config_path>payment/braintree/merchant_id</config_path>
+                            <depends>
+                                <field id="environment">production</field>
+                            </depends>
+                        </field>
+                        <field id="merchant_account_id" translate="label" sortOrder="95" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Merchant Account ID</label>
+                            <comment>If you don't specify the merchant account to use to process a transaction, Braintree will process it using your default merchant account.</comment>
+                            <config_path>payment/braintree/merchant_account_id</config_path>
+                            <depends>
+                                <field id="environment">production</field>
+                            </depends>
                         </field>
                         <field id="public_key" translate="label" type="obscure" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Public Key</label>
                             <config_path>payment/braintree/public_key</config_path>
                             <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                            <depends>
+                                <field id="environment">production</field>
+                            </depends>
                         </field>
                         <field id="private_key" translate="label" type="obscure" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Private Key</label>
                             <config_path>payment/braintree/private_key</config_path>
                             <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                            <depends>
+                                <field id="environment">production</field>
+                            </depends>
+                        </field>
+                        <field id="sandbox_merchant_id" translate="label" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Sandbox Merchant ID</label>
+                            <config_path>payment/braintree/sandbox_merchant_id</config_path>
+                            <depends>
+                                <field id="environment">sandbox</field>
+                            </depends>
+                        </field>
+                        <field id="sandbox_merchant_account_id" translate="label" sortOrder="95" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Sandbox Merchant Account ID</label>
+                            <comment>If you don't specify the merchant account to use to process a transaction, Braintree will process it using your default merchant account.</comment>
+                            <config_path>payment/braintree/sandbox_merchant_account_id</config_path>
+                            <depends>
+                                <field id="environment">sandbox</field>
+                            </depends>
+                        </field>
+                        <field id="sandbox_public_key" translate="label" type="obscure" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Sandbox Public Key</label>
+                            <config_path>payment/braintree/sandbox_public_key</config_path>
+                            <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                            <depends>
+                                <field id="environment">sandbox</field>
+                            </depends>
+                        </field>
+                        <field id="sandbox_private_key" translate="label" type="obscure" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Sandbox Private Key</label>
+                            <config_path>payment/braintree/sandbox_private_key</config_path>
+                            <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                            <depends>
+                                <field id="environment">sandbox</field>
+                            </depends>
                         </field>
                         <field id="key_validation" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label></label>
@@ -134,11 +182,6 @@
                         <field id="braintree_cc_vault_title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Vault Title</label>
                             <config_path>payment/braintree_cc_vault/title</config_path>
-                        </field>
-                        <field id="merchant_account_id" translate="label" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
-                            <label>Merchant Account ID</label>
-                            <comment>If you don't specify the merchant account to use to process a transaction, Braintree will process it using your default merchant account.</comment>
-                            <config_path>payment/braintree/merchant_account_id</config_path>
                         </field>
                         <field id="fraudprotection" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Advanced Fraud Protection</label>
