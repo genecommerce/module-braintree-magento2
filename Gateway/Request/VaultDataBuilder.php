@@ -6,7 +6,7 @@
 namespace Magento\Braintree\Gateway\Request;
 
 use Magento\Payment\Gateway\Request\BuilderInterface;
-use PayPal\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Vault\Model\Ui\VaultConfigProvider;
 
 /**
