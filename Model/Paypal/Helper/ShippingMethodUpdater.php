@@ -51,8 +51,14 @@ class ShippingMethodUpdater extends AbstractHelper
                 $shippingAddress->setShippingMethod($shippingMethod);
                 $shippingAddress->setCollectShippingRates(true);
 
-                $quote->collectTotals();
+                $cartExtension = $quote->getExtensionAttributes();
+                if ($cartExtension && $cartExtension->getShippingAssignments()) {
+                    $cartExtension->getShippingAssignments()[0]
+                        ->getShipping()
+                        ->setMethod($shippingMethod);
+                }
 
+                $quote->collectTotals();
                 $this->quoteRepository->save($quote);
             }
         }
