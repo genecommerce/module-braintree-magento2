@@ -45,7 +45,7 @@ class Fieldset extends Payment
     }
 
     /**
-     * Remove UK specific fields from the form when on a non-UK merchant country
+     * Remove US & UK specific fields from the form if merchant country is not UK or US.
      *
      * @inheritDoc
      */
@@ -68,7 +68,11 @@ class Fieldset extends Payment
             );
         }
 
+        // Only available to GB and US
         if ($locale !== 'gb' && $locale !== 'us') {
+            $element->removeField(
+                'payment_' . $locale . '_braintree_section_braintree_braintree_paypal_credit_active'
+            );
             $element->removeField(
                 'payment_other_braintree_section_braintree_braintree_paypal_credit_active'
             );

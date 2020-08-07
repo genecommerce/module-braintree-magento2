@@ -36,7 +36,7 @@
                         <label>Enable PayPal Credit through Braintree</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/braintree_paypal_credit/active</config_path>
-                        <comment>PayPal Credit is currently only available in the United States and United Kingdom. PayPal Credit will be disabled if the selected value for the Merchant Country field is not US or UK.</comment>
+                        <comment>PayPal Credit is currently only available in the United States and United Kingdom. PayPal Credit will be disabled if the selected value for the Merchant Country field is not US or UK. This field is only available if Merchant Country is US or UK.</comment>
                         <requires>
                             <group id="braintree_required"/>
                         </requires>
