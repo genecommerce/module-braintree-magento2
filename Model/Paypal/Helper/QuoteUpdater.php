@@ -242,6 +242,10 @@ class QuoteUpdater extends AbstractHelper
 
         $address->setCountryId($addressData['countryCodeAlpha2']);
         $address->setPostcode($addressData['postalCode']);
+        
+        if (isset($addressData['telephone'])) {
+            $address->setTelephone($addressData['telephone']);
+        }
 
         // PayPal's address supposes not saving against customer account
         $address->setSaveInAddressBook(false);
