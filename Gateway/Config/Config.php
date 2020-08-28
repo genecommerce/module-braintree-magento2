@@ -26,7 +26,6 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const KEY_PUBLIC_KEY = 'public_key';
     const KEY_PRIVATE_KEY = 'private_key';
     const KEY_SANDBOX_MERCHANT_ID = 'sandbox_merchant_id';
-    const KEY_SANDBOX_MERCHANT_ACCOUNT_ID = 'sandbox_merchant_account_id';
     const KEY_SANDBOX_PUBLIC_KEY = 'sandbox_public_key';
     const KEY_SANDBOX_PRIVATE_KEY = 'sandbox_private_key';
     const KEY_COUNTRY_CREDIT_CARD = 'countrycreditcard';
@@ -368,12 +367,6 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getMerchantAccountId()
     {
-        if ($this->getEnvironment() === Environment::ENVIRONMENT_SANDBOX) {
-            return $this->getValue(
-                self::KEY_SANDBOX_MERCHANT_ACCOUNT_ID,
-                $this->storeConfigResolver->getStoreId()
-            );
-        }
         return $this->getValue(
             self::KEY_MERCHANT_ACCOUNT_ID,
             $this->storeConfigResolver->getStoreId()
