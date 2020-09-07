@@ -207,6 +207,16 @@ class BraintreeAdapter
 
     /**
      * @param string $transactionId
+     * @param null|float $amount
+     * @return Successful|Error
+     */
+    public function submitForPartialSettlement($transactionId, $amount = null)
+    {
+        return Transaction::submitForPartialSettlement($transactionId, $amount);
+    }
+
+    /**
+     * @param string $transactionId
      * @return Successful|Error
      */
     public function void($transactionId)
