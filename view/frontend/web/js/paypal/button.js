@@ -15,7 +15,7 @@ define(
         'braintreeCheckoutPayPalAdapter',
         'Magento_Braintree/js/form-builder',
         'domReady!',
-        'https://www.paypalobjects.com/api/checkout.js'
+        'braintreePayPalInContextCheckout'
     ],
     function (
         resolver,
