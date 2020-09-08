@@ -73,7 +73,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * @var array
      */
-    private $allowedMethods;
+    private $allowedMethods = [];
 
     /**
      * @var Repository
@@ -122,7 +122,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     {
         $allowedMethods = explode(
             ',',
-            $this->getValue(
+            (string) $this->getValue(
                 self::KEY_ALLOWED_METHODS,
                 $this->storeConfigResolver->getStoreId()
             )
