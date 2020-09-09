@@ -129,6 +129,10 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         );
 
         foreach ($allowedMethods as $allowedMethod) {
+            if (! $allowedMethod) {
+                continue;
+            }
+            
             $this->allowedMethods[] = [
                 'method' => $allowedMethod,
                 'label' => constant('self::LABEL_'.strtoupper($allowedMethod)),
