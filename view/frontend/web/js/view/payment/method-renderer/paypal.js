@@ -230,10 +230,18 @@ define([
         beforePlaceOrder: function (data) {
             this.setPaymentMethodNonce(data.nonce);
 
-            if (quote.shippingAddress() === quote.billingAddress()) {
-                selectBillingAddress(quote.shippingAddress());
+            if (this.isRequiredBillingAddress() === true || quote.billingAddress() === null) {
+                if (typeof data.details.billingAddress !== 'undefined') {
+                    this.setBillingAddress(data.details, data.details.billingAddress);
+                } else {
+                    this.setBillingAddress(data.details, data.details.shippingAddress);
+                }
             } else {
-                selectBillingAddress(quote.billingAddress());
+                if (quote.shippingAddress() === quote.billingAddress()) {
+                    selectBillingAddress(quote.shippingAddress());
+                } else {
+                    selectBillingAddress(quote.billingAddress());
+                }
             }
 
             this.customerEmail(data.details.email);
@@ -264,6 +272,14 @@ define([
                 Braintree.setup();
                 this.enableButton();
             }
+        },
+
+        /**
+         * Is Billing Address required from PayPal side
+         * @returns {exports.isRequiredBillingAddress|(function())|boolean}
+         */
+        isRequiredBillingAddress: function () {
+            return window.checkoutConfig.payment[this.getCode()].isRequiredBillingAddress;
         },
 
         /**

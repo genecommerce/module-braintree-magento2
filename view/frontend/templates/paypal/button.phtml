@@ -31,7 +31,8 @@ $config = [
         'shape' => $block->getButtonShape(),
         'size' => $block->getButtonSize(),
         'color' => $block->getButtonColor(),
-        'disabledFunding' => $block->getDisabledFunding()
+        'disabledFunding' => $block->getDisabledFunding(),
+        'isRequiredBillingAddress' => $block->isRequiredBillingAddress()
     ]
 ];
 if ($block->isCreditActive()) {
@@ -45,7 +46,8 @@ if ($block->isCreditActive()) {
             'offerCredit' => true,
             'shape' => $block->getButtonShape(),
             'size' => $block->getButtonSize(),
-            'color' => 'darkblue'
+            'color' => 'darkblue',
+            'isRequiredBillingAddress' => $block->isRequiredBillingAddress()
         ]
     ];
 }
