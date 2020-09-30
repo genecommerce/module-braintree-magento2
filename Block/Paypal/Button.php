@@ -246,4 +246,12 @@ class Button extends Template implements ShortcutInterface
     {
         return $this->getIsCart() ? 'cart' : 'minicart';
     }
+
+    /**
+     * @return bool
+     */
+    public function isRequiredBillingAddress(): bool
+    {
+        return (bool) $this->config->isRequiredBillingAddress();
+    }
 }

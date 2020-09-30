@@ -101,6 +101,11 @@ define(
                 },
 
                 /**
+                 * {Bool}
+                 */
+                isRequiredBillingAddress: false,
+
+                /**
                  * {Object}
                  */
                 events: {
@@ -136,6 +141,13 @@ define(
 
                 this.initCallback(data);
                 return this;
+            },
+
+            /**
+             * @returns {boolean}
+             */
+            isBillingAddressRequired: function () {
+                return this.isRequiredBillingAddress;
             },
 
             initCallback: function (data) {
@@ -207,7 +219,8 @@ define(
                         // Render
                         var actionSuccess = this.actionSuccess,
                             beforeSubmit = this.beforeSubmit,
-                            events = this.events;
+                            events = this.events,
+                            isBillingAddressRequired = this.isBillingAddressRequired();
 
                         paypal.Button.render({
                             env: this.environment,
@@ -261,17 +274,36 @@ define(
 
                                         // Map the shipping address correctly
                                         var address = payload.details.shippingAddress;
+                                        var recipientName = address.recipientName.split(" ");
                                         payload.details.shippingAddress = {
-                                            streetAddress: typeof address.line2 !== 'undefined' ? address.line1 + " " + address.line2 : address.line1,
-                                            locality: address.city,
+                                            streetAddress: typeof address.line2 !== 'undefined' ? address.line1.replace(/'/g, "&apos;") + " " + address.line2.replace(/'/g, "&apos;") : address.line1.replace(/'/g, "&apos;"),
+                                            locality: address.city.replace(/'/g, "&apos;"),
                                             postalCode: address.postalCode,
                                             countryCodeAlpha2: address.countryCode,
-                                            email: payload.details.email,
-                                            firstname: payload.details.firstName,
-                                            lastname: payload.details.lastName,
+                                            recipientFirstName: recipientName[0].replace(/'/g, "&apos;"),
+                                            recipientLastName: recipientName[1].replace(/'/g, "&apos;"),
                                             telephone: typeof payload.details.phone !== 'undefined' ? payload.details.phone : '',
-                                            region: typeof address.state !== 'undefined' ? address.state : ''
+                                            region: typeof address.state !== 'undefined' ? address.state.replace(/'/g, "&apos;") : ''
                                         };
+                                        payload.details.email = payload.details.email.replace(/'/g, "&apos;");
+                                        payload.details.firstName = payload.details.firstName.replace(/'/g, "&apos;");
+                                        payload.details.lastName = payload.details.lastName.replace(/'/g, "&apos;");
+                                        if (typeof payload.details.businessName !== 'undefined') {
+                                            payload.details.businessName = payload.details.businessName.replace(/'/g, "&apos;");
+                                        }
+
+                                        // Map the billing address correctly
+                                        if (isBillingAddressRequired === true) {
+                                            var billingAddress = payload.details.billingAddress;
+                                            payload.details.billingAddress = {
+                                                streetAddress: typeof billingAddress.line2 !== 'undefined' ? billingAddress.line1.replace(/'/g, "&apos;") + " " + billingAddress.line2.replace(/'/g, "&apos;") : billingAddress.line1.replace(/'/g, "&apos;"),
+                                                locality: billingAddress.city.replace(/'/g, "&apos;"),
+                                                postalCode: billingAddress.postalCode,
+                                                countryCodeAlpha2: billingAddress.countryCode,
+                                                telephone: typeof payload.details.phone !== 'undefined' ? payload.details.phone : '',
+                                                region: typeof billingAddress.state !== 'undefined' ? billingAddress.state.replace(/'/g, "&apos;") : ''
+                                            };
+                                        }
 
                                         formBuilder.build(
                                             {
