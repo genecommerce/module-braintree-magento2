@@ -39,6 +39,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const KEY_KOUNT_SKIP_ADMIN = 'kount_skip_admin';
     const FRAUD_PROTECTION = 'fraudprotection';
     const FRAUD_PROTECTION_THRESHOLD = 'fraudprotection_threshold';
+    const ENABLE_RECAPTCHA = 'enable_recaptcha';
 
     /**
      * Get list of available dynamic descriptors keys
@@ -312,6 +313,21 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     {
         return $this->getValue(
             self::FRAUD_PROTECTION_THRESHOLD,
+            $this->storeConfigResolver->getStoreId()
+        );
+    }
+
+    /**
+     * Check for fraud protection
+     *
+     * @return bool
+     * @throws InputException
+     * @throws NoSuchEntityException
+     */
+    public function getCaptchaSettings(): bool
+    {
+        return (bool) $this->getValue(
+            self::ENABLE_RECAPTCHA,
             $this->storeConfigResolver->getStoreId()
         );
     }

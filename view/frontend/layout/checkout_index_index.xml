@@ -23,6 +23,23 @@
                                             <item name="children" xsi:type="array">
                                                 <item name="payment" xsi:type="array">
                                                     <item name="children" xsi:type="array">
+                                                        <item name="payments-list" xsi:type="array">
+                                                            <item name="children" xsi:type="array">
+                                                                <item name="braintree-recaptcha" xsi:type="array">
+                                                                    <item name="component" xsi:type="string">uiComponent</item>
+                                                                    <item name="displayArea" xsi:type="string">braintree-recaptcha</item>
+                                                                    <item name="children" xsi:type="array">
+                                                                        <item name="msp_recaptcha_braintree" xsi:type="array">
+                                                                            <item name="component" xsi:type="string">Magento_Braintree/js/reCaptcha/reCaptcha</item>
+                                                                            <item name="displayArea" xsi:type="string">braintree-recaptcha</item>
+                                                                            <item name="configSource" xsi:type="string">checkoutConfig</item>
+                                                                            <item name="reCaptchaId" xsi:type="string">msp-recaptcha-checkout-braintree</item>
+                                                                            <item name="zone" xsi:type="string">paypal</item>
+                                                                        </item>
+                                                                    </item>
+                                                                </item>
+                                                            </item>
+                                                        </item>
                                                         <item name="renders" xsi:type="array">
                                                             <!-- merge payment method renders here -->
                                                             <item name="children" xsi:type="array">
