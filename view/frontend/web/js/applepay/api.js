@@ -7,12 +7,14 @@ define(
     [
         'uiComponent',
         'mage/translate',
-        'mage/storage'
+        'mage/storage',
+        'Magento_Checkout/js/model/quote',
     ],
     function (
         Component,
         $t,
-        storage
+        storage,
+        quote
     ) {
         'use strict';
 
@@ -189,9 +191,25 @@ define(
                 ).done(function (result) {
                     // Stop if no shipping methods.
                     if (result.length === 0) {
-                        session.abort();
-                        alert($t("There are no shipping methods available for you right now. Please try again or use an alternative payment method."));
-                        return false;
+                        if(quote.isVirtual()) {
+                            session.completeShippingContactSelection(
+                                ApplePaySession.STATUS_SUCCESS,
+                                [],
+                                {
+                                    label: this.getDisplayName(),
+                                    amount: this.getGrandTotalAmount()
+                                },
+                                [{
+                                    type: 'final',
+                                    label: $t('Shipping'),
+                                    amount: 0
+                                }]
+                            );
+                        } else {
+                            session.abort();
+                            alert($t("There are no shipping methods available for you right now. Please try again or use an alternative payment method."));
+                            return false;
+                        }
                     }
 
                     let shippingMethods = [];
@@ -352,8 +370,8 @@ define(
                                 "customer_address_id": 0,
                                 "save_in_address_book": 0
                             },
-                            "shipping_method_code": this.shippingMethods[this.shippingMethod].method_code,
-                            "shipping_carrier_code": this.shippingMethods[this.shippingMethod].carrier_code
+                            "shipping_method_code": this.shippingMethod ? this.shippingMethods[this.shippingMethod].method_code : '' ,
+                            "shipping_carrier_code": this.shippingMethod ? this.shippingMethods[this.shippingMethod].carrier_code : ''
                         }
                     };
 
