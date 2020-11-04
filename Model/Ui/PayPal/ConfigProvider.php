@@ -7,6 +7,7 @@ namespace Magento\Braintree\Model\Ui\PayPal;
 
 use Magento\Braintree\Gateway\Config\PayPal\Config;
 use Magento\Braintree\Gateway\Config\PayPalCredit\Config as CreditConfig;
+use Magento\Braintree\Gateway\Config\PayPalPayLater\Config as PayLaterConfig;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\Locale\ResolverInterface;
 
@@ -37,18 +38,26 @@ class ConfigProvider implements ConfigProviderInterface
     private $creditConfig;
 
     /**
+     * @var PayLaterConfig
+     */
+    private $payLaterConfig;
+
+    /**
      * ConfigProvider constructor.
      * @param Config $config
      * @param CreditConfig $creditConfig
+     * @param PayLaterConfig $payLaterConfig
      * @param ResolverInterface $resolver
      */
     public function __construct(
         Config $config,
         CreditConfig $creditConfig,
+        PayLaterConfig $payLaterConfig,
         ResolverInterface $resolver
     ) {
         $this->config = $config;
         $this->creditConfig = $creditConfig;
+        $this->payLaterConfig = $payLaterConfig;
         $this->resolver = $resolver;
     }
 
