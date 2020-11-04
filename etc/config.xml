@@ -67,6 +67,7 @@
                 <disabled_funding_checkout></disabled_funding_checkout>
                 <disabled_funding_cart></disabled_funding_cart>
                 <button_productpage_enabled>0</button_productpage_enabled>
+                <message_productpage_enabled>0</message_productpage_enabled>
 
                 <!-- These are also defined in Gateway/Config/PayPal/Config.php::getButtonStyle() -->
                 <button_customise_cart>0</button_customise_cart>
@@ -91,6 +92,16 @@
                 <secret backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <sandbox>0</sandbox>
             </braintree_paypal_credit>
+            <braintree_paypal_paylater>
+                <model>BraintreePayPalPayLaterFacade</model>
+                <title>PayPal Pay Later</title>
+                <active>1</active>
+                <sort_order>1</sort_order>
+                <client_id backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <secret backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <sandbox>0</sandbox>
+                <group>braintree_group</group>
+            </braintree_paypal_paylater>
             <braintree_cc_vault>
                 <model>BraintreeCreditCardVaultFacade</model>
                 <title>Stored Cards</title>

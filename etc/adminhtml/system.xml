@@ -44,6 +44,18 @@
                             <field id="active_braintree_paypal">1</field>
                         </depends>
                     </field>
+                    <field id="braintree_paypal_paylater_active" translate="label" type="select" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Enable PayPal Pay Later through Braintree</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/braintree_paypal_paylater/active</config_path>
+                        <comment>PayPal Paylater is currently only available in the United States. PayPal Pay Later will be disabled if the selected value for the Merchant Country field is not US. This field only available if Merchant Country is US.</comment>
+                        <requires>
+                            <group id="braintree_required"/>
+                        </requires>
+                        <depends>
+                            <field id="active_braintree_paypal">1</field>
+                        </depends>
+                    </field>
                     <field id="braintree_cc_vault_active" translate="label" type="select" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Enable Vault for Card Payments</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -512,6 +524,15 @@
                                 <label>Enable PayPal Buy Now button on the product page</label>
                                 <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                                 <config_path>payment/braintree_paypal/button_productpage_enabled</config_path>
+                            </field>
+                            <field id="message_productpage_enabled" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Enable PayPal Pay Later message on the product page</label>
+                                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                                <config_path>payment/braintree_paypal/message_productpage_enabled</config_path>
+                                <comment><![CDATA[PayPal Message is only available when PayPal Pay Later button is enabled]]></comment>
+                                <depends>
+                                    <field id="braintree_paypal_paylater_active">1</field>
+                                </depends>
                             </field>
                             <field id="disabled_funding" translate="label" type="multiselect" sortOrder="131" showInDefault="1" showInWebsite="1" showInStore="0">
                                 <label>Disable Funding Options</label>
