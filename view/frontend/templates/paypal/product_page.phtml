@@ -1,5 +1,5 @@
 <?php
-
+// @codingStandardsIgnoreFile
 use Magento\Braintree\Block\Paypal\ProductPage;
 
 /** @var ProductPage $block */
@@ -13,6 +13,7 @@ try {
      */
     $paypalId = sprintf('paypal-%s', $block->getContainerId());
     $paypalCreditId = sprintf('paypalcredit-%s', $block->getContainerId());
+    $paypalPaylaterId = sprintf('paypalpaylater-%s', $block->getContainerId());
 }
 
 $config = [
@@ -22,7 +23,7 @@ $config = [
         'clientToken' => $block->getClientToken(),
         'displayName' => $block->getMerchantName(),
         'actionSuccess' => $block->getActionSuccess(),
-        'offerCredit' => false,
+        'funding' => 'paypal',
         'fundingicons' => true,
         'shape' => $block->getButtonShape(),
         'size' => $block->getButtonSize(),
@@ -39,10 +40,25 @@ if ($block->isCreditActive()) {
             'clientToken' => $block->getClientToken(),
             'displayName' => $block->getMerchantName(),
             'actionSuccess' => $block->getActionSuccess(),
-            'offerCredit' => true,
+            'funding' => 'credit',
             'shape' => $block->getButtonShape(),
             'size' => $block->getButtonSize(),
             'color' => 'darkblue',
+        ]
+    ];
+}
+if ($block->isPayLaterActive()) {
+    $paypalPayLaterConfig = [
+        'Magento_Braintree/js/paypal/product-page' => [
+            'id' => $paypalPaylaterId,
+            'environment' => $block->getEnvironment(),
+            'clientToken' => $block->getClientToken(),
+            'displayName' => $block->getMerchantName(),
+            'actionSuccess' => $block->getActionSuccess(),
+            'funding' => 'paylater',
+            'shape' => $block->getButtonShape(),
+            'size' => $block->getButtonSize(),
+            'color' => 'white'
         ]
     ];
 }

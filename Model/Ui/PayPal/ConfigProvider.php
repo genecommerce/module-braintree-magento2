@@ -18,6 +18,7 @@ class ConfigProvider implements ConfigProviderInterface
 {
     const PAYPAL_CODE = 'braintree_paypal';
     const PAYPAL_CREDIT_CODE = 'braintree_paypal_credit';
+    const PAYPAL_PAYLATER_CODE = 'braintree_paypal_paylater';
     const PAYPAL_VAULT_CODE = 'braintree_paypal_vault';
 
     /**
@@ -80,6 +81,22 @@ class ConfigProvider implements ConfigProviderInterface
                 self::PAYPAL_CREDIT_CODE => [
                     'isActive' => $this->creditConfig->isActive(),
                     'title' => __('PayPal Credit'),
+                    'isAllowShippingAddressOverride' => $this->config->isAllowToEditShippingAddress(),
+                    'merchantName' => $this->config->getMerchantName(),
+                    'locale' => $this->resolver->getLocale(),
+                    'paymentAcceptanceMarkSrc' =>
+                        'https://www.paypalobjects.com/webstatic/en_US/i/buttons/ppc-acceptance-medium.png',
+                    'paymentIcon' => $this->config->getPayPalIcon(),
+                    'style' => [
+                        'shape' => $this->config->getButtonShape(Config::BUTTON_AREA_CHECKOUT),
+                        'size' => $this->config->getButtonSize(Config::BUTTON_AREA_CHECKOUT),
+                        'color' => $this->config->getButtonColor(Config::BUTTON_AREA_CHECKOUT)
+                    ]
+                ],
+
+                self::PAYPAL_PAYLATER_CODE => [
+                    'isActive' => $this->payLaterConfig->isActive(),
+                    'title' => __('PayPal PayLater'),
                     'isAllowShippingAddressOverride' => $this->config->isAllowToEditShippingAddress(),
                     'merchantName' => $this->config->getMerchantName(),
                     'locale' => $this->resolver->getLocale(),

@@ -32,6 +32,11 @@
             <argument name="code" xsi:type="const">Magento\Braintree\Model\Ui\PayPal\ConfigProvider::PAYPAL_CREDIT_CODE</argument>
         </arguments>
     </virtualType>
+    <virtualType name="BraintreePayPalPayLaterFacade" type="BraintreePayPalFacade">
+        <arguments>
+            <argument name="code" xsi:type="const">Magento\Braintree\Model\Ui\PayPal\ConfigProvider::PAYPAL_PAYLATER_CODE</argument>
+        </arguments>
+    </virtualType>
 
     <!-- Configuration for Vault payments -->
     <virtualType name="BraintreeVaultPaymentConfig" type="Magento\Payment\Gateway\Config\Config">
@@ -100,6 +105,11 @@
     <type name="Magento\Braintree\Gateway\Config\PayPalCredit\Config">
         <arguments>
             <argument name="methodCode" xsi:type="const">Magento\Braintree\Model\Ui\PayPal\ConfigProvider::PAYPAL_CREDIT_CODE</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Braintree\Gateway\Config\PayPalPayLater\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">Magento\Braintree\Model\Ui\PayPal\ConfigProvider::PAYPAL_PAYLATER_CODE</argument>
         </arguments>
     </type>
     <type name="Magento\Braintree\Gateway\Config\PayPal\Config">

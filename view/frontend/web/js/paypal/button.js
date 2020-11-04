@@ -9,13 +9,14 @@ define(
         'uiComponent',
         'underscore',
         'jquery',
+        'Magento_Customer/js/customer-data',
+        'mage/translate',
         'braintree',
         'braintreeDataCollector',
         'braintreePayPalCheckout',
         'braintreeCheckoutPayPalAdapter',
         'Magento_Braintree/js/form-builder',
-        'domReady!',
-        'https://www.paypalobjects.com/api/checkout.js'
+        'domReady!'
     ],
     function (
         resolver,
@@ -23,6 +24,8 @@ define(
         Component,
         _,
         $,
+        customerData,
+        $t,
         braintree,
         dataCollector,
         paypalCheckout,
@@ -130,10 +133,8 @@ define(
                         currency: $this.data('currency'),
                         flow: 'checkout',
                         enableShippingAddress: true,
-                        displayName: this.displayName,
-                        offerCredit: this.offerCredit
+                        displayName: this.displayName
                     };
-
                 this.initCallback(data);
                 return this;
             },
@@ -298,4 +299,3 @@ define(
         });
     }
 );
-

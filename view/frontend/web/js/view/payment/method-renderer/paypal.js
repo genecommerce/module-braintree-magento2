@@ -9,6 +9,7 @@ define([
     'underscore',
     'Magento_Checkout/js/view/payment/default',
     'braintreeCheckoutPayPalAdapter',
+    'braintreePayPalCheckout',
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/model/full-screen-loader',
     'Magento_Checkout/js/model/payment/additional-validators',
@@ -16,18 +17,22 @@ define([
     'Magento_Vault/js/view/payment/vault-enabler',
     'Magento_Checkout/js/action/create-billing-address',
     'Magento_Checkout/js/action/select-billing-address',
+    'mage/translate',
+    'braintreePayPalInContextCheckout'
 ], function (
     $,
     _,
     Component,
     Braintree,
+    paypalCheckout,
     quote,
     fullScreenLoader,
     additionalValidators,
     stepNavigator,
     VaultEnabler,
     createBillingAddress,
-    selectBillingAddress
+    selectBillingAddress,
+    $t
 ) {
     'use strict';
 
@@ -71,7 +76,7 @@ define([
                  * @param {Object} context
                  */
                 onReady: function (context) {
-                    context.setupPaypal();
+                    this.setupPayPal();
                 },
 
                 /**
@@ -126,6 +131,11 @@ define([
             quote.totals.subscribe(function () {
                 if (self.grandTotalAmount !== quote.totals()['base_grand_total']) {
                     self.grandTotalAmount = quote.totals()['base_grand_total'];
+                    var methodCode = quote.paymentMethod();
+
+                    if (methodCode === 'braintree_paypal' || methodCode === 'braintree_paypal_vault') {
+                        self.reInitPayPal();
+                    }
                 }
             });
 
@@ -229,12 +239,15 @@ define([
          */
         beforePlaceOrder: function (data) {
             this.setPaymentMethodNonce(data.nonce);
-
-            if (quote.shippingAddress() === quote.billingAddress()) {
-                selectBillingAddress(quote.shippingAddress());
+            this.customerEmail(data.details.email);
+            if (quote.isVirtual()) {
+                this.isReviewRequired(true);
             } else {
-                selectBillingAddress(quote.billingAddress());
-            }
+                if (quote.shippingAddress() === quote.billingAddress()) {
+                    selectBillingAddress(quote.shippingAddress());
+                } else {
+                    selectBillingAddress(quote.billingAddress());
+                }
 
             this.customerEmail(data.details.email);
             this.placeOrder();
@@ -438,4 +451,5 @@ define([
         }
     });
 });
+
 

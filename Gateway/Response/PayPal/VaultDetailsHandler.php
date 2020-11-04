@@ -90,7 +90,11 @@ class VaultDetailsHandler implements HandlerInterface
     private function getVaultPaymentToken(Transaction $transaction)
     {
         // Check token existing in gateway response
-        $token = $transaction->paypalDetails->token;
+        if(!empty($transaction->paypalDetails->implicitlyVaultedPaymentMethodToken)) {
+            $token = $transaction->paypalDetails->implicitlyVaultedPaymentMethodToken;
+        } else {
+            $token = $transaction->paypalDetails->token;
+        }
         if (empty($token)) {
             return null;
         }
