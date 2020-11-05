@@ -6,6 +6,7 @@ use Magento\Braintree\Block\Paypal\Button;
 try {
     $paypalId = sprintf('paypal-%s-%d', $block->getContainerId(), random_int(PHP_INT_MIN, PHP_INT_MAX));
     $paypalCreditId = sprintf('paypalcredit-%s-%d', $block->getContainerId(), random_int(PHP_INT_MIN, PHP_INT_MAX));
+    $paypalPaylaterId = sprintf('paypalpaylater-%s-%d', $block->getContainerId(), random_int(PHP_INT_MIN, PHP_INT_MAX));
 } catch (Exception $e) {
     /**
      * Exception only thrown if an appropriate source of randomness cannot be found.

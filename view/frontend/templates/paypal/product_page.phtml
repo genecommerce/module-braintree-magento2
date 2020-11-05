@@ -6,6 +6,8 @@ use Magento\Braintree\Block\Paypal\ProductPage;
 try {
     $paypalId = sprintf('paypal-%s-%d', $block->getContainerId(), random_int(PHP_INT_MIN, PHP_INT_MAX));
     $paypalCreditId = sprintf('paypalcredit-%s-%d', $block->getContainerId(), random_int(PHP_INT_MIN, PHP_INT_MAX));
+    $paypalPaylaterId = sprintf('paypalpaylater-%s-%d', $block->getContainerId(), random_int(PHP_INT_MIN, PHP_INT_MAX));
+
 } catch (Exception $e) {
     /**
      * Exception only thrown if an appropriate source of randomness cannot be found.
@@ -64,22 +66,35 @@ if ($block->isPayLaterActive()) {
 }
 ?>
 
-<div data-mage-init='<?= /** @noEscape */ json_encode($config) ?>'
-     class="paypal checkout paypal-logo braintree-paypal-logo <?= $block->escapeHtmlAttr($block->getContainerId()) ?>-container">
-    <div data-currency="<?= $block->escapeHtmlAttr($block->getCurrency()) ?>"
-         data-locale="<?= $block->escapeHtmlAttr($block->getLocale()) ?>"
-         data-amount="<?= $block->escapeHtmlAttr($block->getAmount()) ?>"
-         id="<?= $block->escapeHtmlAttr($paypalId) ?>"
-         class="action-braintree-paypal-logo"></div>
-</div>
+    <div data-mage-init='<?= /** @noEscape */ json_encode($config) ?>'
+         class="paypal checkout paypal-logo braintree-paypal-logo <?= $block->escapeHtmlAttr($block->getContainerId()) ?>-container">
+        <div data-currency="<?= $block->escapeHtmlAttr($block->getCurrency()) ?>"
+             data-locale="<?= $block->escapeHtmlAttr($block->getLocale()) ?>"
+             data-amount="<?= $block->escapeHtmlAttr($block->getAmount()) ?>"
+             id="<?= $block->escapeHtmlAttr($paypalId) ?>"
+             class="action-braintree-paypal-logo"></div>
+    </div>
 
-<?php if ($block->isCreditActive()) : ?>
-<div data-mage-init='<?= /** @noEscape */ json_encode($paypalCreditConfig) ?>'
-     class="paypal checkout paypal-logo braintree-paypal-logo <?= $block->escapeHtmlAttr($block->getContainerId()) ?>-container">
-    <div data-currency="<?= $block->escapeHtmlAttr($block->getCurrency()) ?>"
-         data-locale="<?= $block->escapeHtmlAttr($block->getLocale()) ?>"
-         data-amount="<?= $block->escapeHtmlAttr($block->getAmount()) ?>"
-         id="<?= $block->escapeHtmlAttr($paypalCreditId) ?>"
-         class="action-braintree-paypal-logo"></div>
-</div>
+<?php if ($block->isCreditActive()): ?>
+    <div data-mage-init='<?= /** @noEscape */ json_encode($paypalCreditConfig) ?>'
+         class="paypal checkout paypal-logo braintree-paypal-logo <?= $block->escapeHtmlAttr($block->getContainerId()) ?>-container">
+        <div data-currency="<?= $block->escapeHtmlAttr($block->getCurrency()) ?>"
+             data-locale="<?= $block->escapeHtmlAttr($block->getLocale()) ?>"
+             data-amount="<?= $block->escapeHtmlAttr($block->getAmount()) ?>"
+             id="<?= $block->escapeHtmlAttr($paypalCreditId) ?>"
+             class="action-braintree-paypal-logo"></div>
+    </div>
+<?php endif; ?>
+<?php if ($block->isPayLaterActive()): ?>
+    <div data-mage-init='<?= /** @noEscape */ json_encode($paypalPayLaterConfig) ?>'
+         class="paypal checkout paypal-logo braintree-paypal-logo <?= $block->escapeHtmlAttr($block->getContainerId()) ?>-container">
+        <div data-currency="<?= $block->escapeHtmlAttr($block->getCurrency()) ?>"
+             data-locale="<?= $block->escapeHtmlAttr($block->getLocale()) ?>"
+             data-amount="<?= $block->escapeHtmlAttr($block->getAmount()) ?>"
+             id="<?= $block->escapeHtmlAttr($paypalPaylaterId) ?>"
+             class="action-braintree-paypal-logo"></div>
+    </div>
+    <?php if ($block->isPayLaterMessageActive() && !$block->isPayPalVaultActive()): ?>
+        <div data-pp-message data-pp-placement="product" data-pp-amount="<?= $block->escapeHtmlAttr($block->getAmount()) ?>"></div>
+    <?php endif; ?>
 <?php endif; ?>
