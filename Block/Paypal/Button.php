@@ -173,6 +173,30 @@ class Button extends Template implements ShortcutInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isPayLaterActive(): bool
+    {
+        return $this->payPalPayLaterConfig->isActive();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPayLaterMessageActive(): bool
+    {
+        return $this->payPalPayLaterConfig->isMessageActive();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPayPalVaultActive(): bool
+    {
+        return $this->payPalPayLaterConfig->IsPayPalVaultActive();
+    }
+
+    /**
      * @return string|null
      */
     public function getMerchantName()
