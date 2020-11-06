@@ -14,7 +14,6 @@ define(
         'braintree',
         'braintreeDataCollector',
         'braintreePayPalCheckout',
-        'braintreeCheckoutPayPalAdapter',
         'Magento_Braintree/js/form-builder',
         'domReady!'
     ],
@@ -29,148 +28,103 @@ define(
         braintree,
         dataCollector,
         paypalCheckout,
-        paypalAdapter,
         formBuilder
     ) {
         'use strict';
-
-        return Component.extend({
-
-            defaults: {
-
-                integrationName: 'braintreePaypal.currentIntegration',
-
-                /**
-                 * {String}
-                 */
-                displayName: null,
-
-                /**
-                 * {String}
-                 */
-                environment: 'sandbox',
-
-                /**
-                 * {String}
-                 */
-                clientToken: null,
-
-                /**
-                 * {String}
-                 */
-                color: null,
-
-                /**
-                 * {String}
-                 */
-                shape: null,
-
-                /**
-                 * {String}
-                 */
-                size: null,
-
-                /**
-                 * {String}
-                 */
-                funding: null,
-
-                /**
-                 * {Bool}
-                 */
-                fundingicons: null,
-
-                /**
-                 * {Bool}
-                 */
-                branding: null,
-
-                /**
-                 * {Bool}
-                 */
-                tagline: null,
-
-                /**
-                 * {String}
-                 */
-                label: null,
+        let buttonIds = [];
 
 
+        return {
+            events: {
+                onClick: null,
+                onCancel: null,
+                onError: null
+            },
 
-                /**
-                 * {Object}
-                 */
-                disabledFunding: {
-                    card: false,
-                    elv: false
-                },
+            init: function (token) {
+                buttonIds = [];
+                $('.action-braintree-paypal-logo').each(function () {
+                    if(!$(this).hasClass( "button-loaded" )) {
+                        $(this).addClass('button-loaded');
+                        buttonIds.push($(this).attr('id'));
+                    }
+                });
 
-                /**
-                 * {Object}
-                 */
-                events: {
-                    onClick: null,
-                    onCancel: null,
-                    onError: null
+                if(buttonIds.length > 0){
+                    this.loadSDK(token);
                 }
             },
 
-            /**
-             * @returns {Object}
-             */
-            initialize: function () {
-                this._super()
-                    .initComponent();
-                return this;
+            loadSDK: function (token) {
+                braintree.create({
+                    authorization: token
+                }, function (clientErr, clientInstance) {
+                    if (clientErr) {
+                        console.error('paypalCheckout error', clientErr);
+                        return this.showError("PayPal Checkout could not be initialized. Please contact the store owner.");
+                    }
+                    dataCollector.create({
+                        client: clientInstance,
+                        paypal: true
+                    }, function (err, dataCollectorInstance) {
+                        if (err) {
+                            return console.log(err);
+                        }
+                    });
+                    paypalCheckout.create({
+                        client: clientInstance
+                    }, function (err, paypalCheckoutInstance) {
+
+                        if (typeof paypal !== 'undefined' ) {
+                            this.renderpayPalButtons(buttonIds, paypalCheckoutInstance)
+                        } else {
+                            paypalCheckoutInstance.loadPayPalSDK({
+                                components: 'buttons,messages,funding-eligibility',
+                                "buyer-country": 'US',
+                            }, function () {
+                                this.renderpayPalButtons(buttonIds, paypalCheckoutInstance)
+                            }.bind(this));
+                        }
+
+
+                    }.bind(this));
+                }.bind(this));
+            },
+            renderpayPalButtons: function(ids, paypalCheckoutInstance) {
+                _.each(ids,function(id) {
+                    this.payPalButton(id, paypalCheckoutInstance);
+
+                }.bind(this));
             },
 
-            /**
-             * @returns {Object}
-             */
-            initComponent: function () {
-                var $this = $('#' + this.id),
-                    data = {
-                        amount: $this.data('amount'),
-                        locale: $this.data('locale'),
-                        currency: $this.data('currency'),
-                        flow: 'checkout',
-                        enableShippingAddress: true,
-                        displayName: this.displayName
-                    };
-                this.initCallback(data);
-                return this;
-            },
+            payPalButton: function(id, paypalCheckoutInstance) {
 
-            payPalButtons: function(data, paypalCheckoutInstance) {
+                let data = $('#' + id);
                 let style = {
-                    color: this.color,
-                    shape: this.shape,
-                    size: this.size
+                    color: data.data('color'),
+                    shape: data.data('shape'),
+                    size: data.data('size'),
                 };
 
-                if (typeof this.fundingicons === 'boolean') {
-                    style.fundingicons = this.fundingicons;
-                }
-                if (typeof this.branding === 'boolean') {
-                    style.branding = this.branding;
-                }
-                if (typeof this.label === 'string') {
-                    style.label = this.label;
-                }
-                if (typeof this.tagline === 'boolean') {
-                    style.tagline = this.tagline;
+                if (data.data('fundingicons')) {
+                    style.fundingicons = data.data('fundingicons');
                 }
 
                 // Render
-                var actionSuccess = this.actionSuccess,
-                    beforeSubmit = this.beforeSubmit,
-                    events = this.events,
-                    paypalActions;
+                var paypalActions;
                 var button = paypal.Buttons({
-                    fundingSource: this.funding,
+                    fundingSource: data.data('funding'),
                     style: style,
                     createOrder: function () {
-                        return paypalCheckoutInstance.createPayment(data);
+                        return paypalCheckoutInstance.createPayment(
+                            {
+                                amount: data.data('amount'),
+                                locale: data.data('locale'),
+                                currency: data.data('currency'),
+                                flow: 'checkout',
+                                enableShippingAddress: true,
+                                displayName: data.data('displayname')
+                            });
                     },
                     validate: function(actions) {
                         var cart = customerData.get('cart'),
@@ -185,13 +139,12 @@ define(
                         paypalActions = actions;
                     },
 
-
                     onCancel: function (data) {
                         jQuery("#maincontent").trigger('processStop');
 
-                        if (typeof events.onCancel === 'function') {
+                        /*if (typeof events.onCancel === 'function') {
                             events.onCancel();
-                        }
+                        }*/
                     },
 
                     onError: function (err) {
@@ -199,9 +152,9 @@ define(
                         jQuery("#maincontent").trigger('processStop');
 
 
-                        if (typeof events.onError === 'function') {
+                        /*if (typeof events.onError === 'function') {
                             events.onError(err);
-                        }
+                        }*/
                     },
 
                     onClick: function(data) {
@@ -216,19 +169,13 @@ define(
                             alert($t('To check out, please sign in with your email address.'));
                         }
 
-                        if (typeof events.onClick === 'function') {
+                        /*if (typeof events.onClick === 'function') {
                             events.onClick(data);
-                        }
+                        }*/
                     },
 
-                    onApprove: function (data)  {
-                        return paypalCheckoutInstance.tokenizePayment(data, function (err, payload) {
-                            if (typeof beforeSubmit === 'function') {
-                                if (!beforeSubmit(payload)) {
-                                    return false;
-                                }
-                            }
-
+                    onApprove: function (data1)  {
+                        return paypalCheckoutInstance.tokenizePayment(data1, function (err, payload) {
                             jQuery("#maincontent").trigger('processStart');
 
                             // Map the shipping address correctly
@@ -245,7 +192,15 @@ define(
                                 telephone: typeof payload.details.phone !== 'undefined' ? payload.details.phone : '',
                                 region: typeof address.state !== 'undefined' ? address.state.replace(/'/g, "&apos;") : ''
                             };
+                            if(data.data('location') == 'productpage') {
+                                var form = $("#product_addtocart_form");
+                                if (!(form.validation() && form.validation('isValid'))) {
+                                    return false;
+                                }
+                                payload.additionalData = form.serialize();
+                            }
 
+                            var actionSuccess = data.data('actionsuccess');
                             formBuilder.build(
                                 {
                                     action: actionSuccess,
@@ -258,48 +213,11 @@ define(
                     }
                 });
                 if (!button.isEligible()) {
-                    jQuery('#' + this.id).parent().remove();
+                    data.parent().remove();
                     return;
                 }
-                button.render('#' + this.id);
+                button.render('#' + data.attr('id'));
             },
-            initCallback: function (data) {
-                if (typeof paypal !== 'undefined' ) {
-                    this.payPalButtons(data);
-                } else {
-                    braintree.create({
-                        authorization: this.clientToken
-                    }, function (clientErr, clientInstance) {
-                        if (clientErr) {
-                            console.error('paypalCheckout error', clientErr);
-                            return this.showError("PayPal Checkout could not be initialized. Please contact the store owner.");
-                        }
-                        dataCollector.create({
-                            client: clientInstance,
-                            paypal: true
-                        }, function (err, dataCollectorInstance) {
-                            if (err) {
-                                return console.log(err);
-                            }
-                        });
-                        paypalCheckout.create({
-                            client: clientInstance
-                        }, function (err, paypalCheckoutInstance) {
-
-                            paypalCheckoutInstance.loadPayPalSDK({
-                                components: 'buttons,messages',
-                                "buyer-country": 'US',
-                            }, function () {
-                                this.payPalButtons(data, paypalCheckoutInstance);
-                            }.bind(this));
-                        }.bind(this));
-                    }.bind(this));
-                }
-            },
-
-            beforeSubmit: function () {
-                return true;
-            }
-        });
+        }
     }
 );

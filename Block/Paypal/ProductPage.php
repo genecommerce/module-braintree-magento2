@@ -126,6 +126,14 @@ class ProductPage extends Button
     /**
      * @return string
      */
+    public function getLocation(): string
+    {
+        return 'productpage';
+    }
+
+    /**
+     * @return string
+     */
     public function getActionSuccess(): string
     {
         return $this->getUrl('braintree/paypal/oneclick', ['_secure' => true]);
