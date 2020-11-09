@@ -158,7 +158,7 @@ class Http
         }
 
         if (!empty($file)) {
-            $boundary = "---------------------" . md5(mt_rand() . microtime());
+            $boundary = "---------------------" . hash('sha256',random_int(0,PHP_INT_MAX) . microtime());
             $headers[] = "Content-Type: multipart/form-data; boundary={$boundary}";
             $this->prepareMultipart($curl, $requestBody, $file, $boundary);
         } else if (!empty($requestBody)) {

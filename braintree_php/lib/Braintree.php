@@ -1,4 +1,5 @@
 <?php
+namespace Braintree;
 /**
  * Braintree PHP Library
  * Creates class_aliases for old class names replaced by PSR-4 Namespaces
