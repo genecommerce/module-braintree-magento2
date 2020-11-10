@@ -18,6 +18,7 @@ use Magento\Framework\View\Element\Template\Context;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Braintree\Gateway\Config\Config as BraintreeConfig;
 use Magento\Braintree\Gateway\Config\PayPalCredit\Config as PayPalCreditConfig;
+use Magento\Braintree\Gateway\Config\PayPalPayLater\Config as PayPalPayLaterConfig;
 
 /**
  * Class Button
@@ -72,6 +73,7 @@ class Button extends Template implements ShortcutInterface
      * @param Session $checkoutSession
      * @param Config $config
      * @param PayPalCreditConfig $payPalCreditConfig
+     * @param PayPalPayLaterConfig $payPalPayLaterConfig
      * @param BraintreeConfig $braintreeConfig
      * @param ConfigProvider $configProvider
      * @param MethodInterface $payment
@@ -83,6 +85,7 @@ class Button extends Template implements ShortcutInterface
         Session $checkoutSession,
         Config $config,
         PayPalCreditConfig $payPalCreditConfig,
+        PayPalPayLaterConfig $payPalPayLaterConfig,
         BraintreeConfig $braintreeConfig,
         ConfigProvider $configProvider,
         MethodInterface $payment,
@@ -97,6 +100,7 @@ class Button extends Template implements ShortcutInterface
         $this->configProvider = $configProvider;
         $this->payment = $payment;
         $this->payPalCreditConfig = $payPalCreditConfig;
+        $this->payPalPayLaterConfig = $payPalPayLaterConfig;
     }
 
     /**
@@ -166,6 +170,30 @@ class Button extends Template implements ShortcutInterface
     public function isCreditActive(): bool
     {
         return $this->payPalCreditConfig->isActive();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPayLaterActive(): bool
+    {
+        return $this->payPalPayLaterConfig->isActive();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPayLaterMessageActive(): bool
+    {
+        return $this->payPalPayLaterConfig->isMessageActive();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPayPalVaultActive(): bool
+    {
+        return $this->payPalPayLaterConfig->IsPayPalVaultActive();
     }
 
     /**
