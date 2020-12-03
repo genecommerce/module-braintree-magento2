@@ -17,6 +17,7 @@ try {
     $paypalPaylaterId = sprintf('paypalpaylater-%s', $block->getContainerId());
 }
 ?>
+<?php if ($block->getAmount() > 0): ?>
     <script>
         require([
             'Magento_Braintree/js/paypal/button',
@@ -44,40 +45,41 @@ try {
              class="action-braintree-paypal-logo"></div>
     </div>
 
-<?php if ($block->isCreditActive()): ?>
-    <div class="paypal checkout paypal-logo braintree-paypal-logo <?= $block->escapeHtmlAttr($block->getContainerId()) ?>-container">
-        <div data-currency="<?= $block->escapeHtmlAttr($block->getCurrency()) ?>"
-             data-locale="<?= $block->escapeHtmlAttr($block->getLocale()) ?>"
-             data-amount="<?= $block->escapeHtmlAttr($block->getAmount()) ?>"
-             id="<?= $block->escapeHtmlAttr($paypalCreditId) ?>"
-             data-environment="<?= $block->getEnvironment() ?>"
-             data-displayname="<?= $block->getMerchantName() ?>"
-             data-actionsuccess="<?= $block->getActionSuccess() ?>"
-             data-funding="credit"
-             data-fundingicons="true"
-             data-shape="<?= $block->getButtonShape() ?>"
-             data-size="<?= $block->getButtonSize() ?>"
-             data-color="darkblue"
-             class="action-braintree-paypal-logo"></div>
-    </div>
-<?php endif; ?>
-<?php if ($block->isPayLaterActive()): ?>
-    <div class="paypal checkout paypal-logo braintree-paypal-logo <?= $block->escapeHtmlAttr($block->getContainerId()) ?>-container">
-        <div data-currency="<?= $block->escapeHtmlAttr($block->getCurrency()) ?>"
-             data-locale="<?= $block->escapeHtmlAttr($block->getLocale()) ?>"
-             data-amount="<?= $block->escapeHtmlAttr($block->getAmount()) ?>"
-             id="<?= $block->escapeHtmlAttr($paypalPaylaterId) ?>"
-             data-environment="<?= $block->getEnvironment() ?>"
-             data-displayname="<?= $block->getMerchantName() ?>"
-             data-actionsuccess="<?= $block->getActionSuccess() ?>"
-             data-funding="paylater"
-             data-fundingicons="true"
-             data-shape="<?= $block->getButtonShape() ?>"
-             data-size="<?= $block->getButtonSize() ?>"
-             data-color="white"
-             class="action-braintree-paypal-logo"></div>
-    </div>
-    <?php if ($block->isPayLaterMessageActive() && !$block->isPayPalVaultActive()): ?>
-        <div data-pp-message data-pp-placement="product" data-pp-amount="<?= $block->escapeHtmlAttr($block->getAmount()) ?>"></div>
+    <?php if ($block->isCreditActive()): ?>
+        <div class="paypal checkout paypal-logo braintree-paypal-logo <?= $block->escapeHtmlAttr($block->getContainerId()) ?>-container">
+            <div data-currency="<?= $block->escapeHtmlAttr($block->getCurrency()) ?>"
+                 data-locale="<?= $block->escapeHtmlAttr($block->getLocale()) ?>"
+                 data-amount="<?= $block->escapeHtmlAttr($block->getAmount()) ?>"
+                 id="<?= $block->escapeHtmlAttr($paypalCreditId) ?>"
+                 data-environment="<?= $block->getEnvironment() ?>"
+                 data-displayname="<?= $block->getMerchantName() ?>"
+                 data-actionsuccess="<?= $block->getActionSuccess() ?>"
+                 data-funding="credit"
+                 data-fundingicons="true"
+                 data-shape="<?= $block->getButtonShape() ?>"
+                 data-size="<?= $block->getButtonSize() ?>"
+                 data-color="darkblue"
+                 class="action-braintree-paypal-logo"></div>
+        </div>
+    <?php endif; ?>
+    <?php if ($block->isPayLaterActive()): ?>
+        <div class="paypal checkout paypal-logo braintree-paypal-logo <?= $block->escapeHtmlAttr($block->getContainerId()) ?>-container">
+            <div data-currency="<?= $block->escapeHtmlAttr($block->getCurrency()) ?>"
+                 data-locale="<?= $block->escapeHtmlAttr($block->getLocale()) ?>"
+                 data-amount="<?= $block->escapeHtmlAttr($block->getAmount()) ?>"
+                 id="<?= $block->escapeHtmlAttr($paypalPaylaterId) ?>"
+                 data-environment="<?= $block->getEnvironment() ?>"
+                 data-displayname="<?= $block->getMerchantName() ?>"
+                 data-actionsuccess="<?= $block->getActionSuccess() ?>"
+                 data-funding="paylater"
+                 data-fundingicons="true"
+                 data-shape="<?= $block->getButtonShape() ?>"
+                 data-size="<?= $block->getButtonSize() ?>"
+                 data-color="white"
+                 class="action-braintree-paypal-logo"></div>
+        </div>
+        <?php if ($block->isPayLaterMessageActive() && !$block->isPayPalVaultActive()): ?>
+            <div data-pp-message data-pp-placement="product" data-pp-amount="<?= $block->escapeHtmlAttr($block->getAmount()) ?>"></div>
+        <?php endif; ?>
     <?php endif; ?>
 <?php endif; ?>
