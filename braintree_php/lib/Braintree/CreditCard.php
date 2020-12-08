@@ -13,34 +13,20 @@ namespace Braintree;
  * @package    Braintree
  * @category   Resources
  *
- * @property-read \Braintree\Address $billingAddress
+ * @property-read string $billingAddress
  * @property-read string $bin
  * @property-read string $cardType
  * @property-read string $cardholderName
- * @property-read string $commercial
- * @property-read \DateTime $createdAt
+ * @property-read string $createdAt
  * @property-read string $customerId
- * @property-read string $customerLocation
- * @property-read string $debit
- * @property-read boolean $default
- * @property-read string $durbinRegulated
  * @property-read string $expirationDate
  * @property-read string $expirationMonth
  * @property-read string $expirationYear
- * @property-read boolean $expired
- * @property-read boolean $healthcare
  * @property-read string $imageUrl
- * @property-read string $issuingBank
  * @property-read string $last4
  * @property-read string $maskedNumber
- * @property-read string $payroll
- * @property-read string $prepaid
- * @property-read string $productId
- * @property-read \Braintree\Subscription[] $subscriptions
  * @property-read string $token
- * @property-read string $uniqueNumberIdentifier
- * @property-read \DateTime $updatedAt
- * @property-read \Braintree\CreditCardVerification|null $verification
+ * @property-read string $updatedAt
  */
 class CreditCard extends Base
 {
@@ -50,7 +36,6 @@ class CreditCard extends Base
     const CHINA_UNION_PAY = 'China UnionPay';
     const DINERS_CLUB_INTERNATIONAL = 'Diners Club';
     const DISCOVER = 'Discover';
-    const ELO = 'Elo';
     const JCB = 'JCB';
     const LASER = 'Laser';
     const MAESTRO = 'Maestro';
@@ -317,7 +302,6 @@ class CreditCard extends Base
             CreditCard::CHINA_UNION_PAY,
             CreditCard::DINERS_CLUB_INTERNATIONAL,
             CreditCard::DISCOVER,
-            CreditCard::ELO,
             CreditCard::JCB,
             CreditCard::LASER,
             CreditCard::MAESTRO,

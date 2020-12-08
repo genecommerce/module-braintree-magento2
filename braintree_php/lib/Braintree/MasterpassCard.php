@@ -12,22 +12,22 @@ namespace Braintree;
  * @package    Braintree
  * @category   Resources
  *
- * @property-read \Braintree\Address $billingAddress
+ * @property-read string $billingAddress
  * @property-read string $bin
  * @property-read string $cardType
  * @property-read string $cardholderName
  * @property-read string $commercial
  * @property-read string $countryOfIssuance
- * @property-read \DateTime $createdAt
+ * @property-read string $createdAt
  * @property-read string $customerId
  * @property-read string $customerLocation
  * @property-read string $debit
- * @property-read boolean $default
+ * @property-read string $default
  * @property-read string $durbinRegulated
  * @property-read string $expirationDate
  * @property-read string $expirationMonth
  * @property-read string $expirationYear
- * @property-read boolean $expired
+ * @property-read string $expired
  * @property-read string $healthcare
  * @property-read string $imageUrl
  * @property-read string $issuingBank
@@ -36,10 +36,10 @@ namespace Braintree;
  * @property-read string $payroll
  * @property-read string $prepaid
  * @property-read string $productId
- * @property-read \Braintree\Subscription[] $subscriptions
+ * @property-read string $subscriptions
  * @property-read string $token
  * @property-read string $uniqueNumberIdentifier
- * @property-read \DateTime $updatedAt
+ * @property-read string $updatedAt
  */
 class MasterpassCard extends Base
 {

@@ -33,8 +33,7 @@ class Configuration
      * Braintree API version to use
      * @access public
      */
-    const API_VERSION =  5;
-    const GRAPHQL_API_VERSION = '2018-09-10';
+     const API_VERSION =  4;
 
     public function __construct($attribs = [])
     {
@@ -458,18 +457,6 @@ class Configuration
     }
 
     /**
-     * returns the base URL for Braintree's GraphQL endpoint based on config values
-     *
-     * @access public
-     * @param none
-     * @return string Braintree GraphQL URL
-     */
-     public function graphQLBaseUrl()
-     {
-        return sprintf('%s://%s:%d/graphql', $this->protocol(), $this->graphQLServerName(), $this->graphQLPortNumber());
-     }
-
-    /**
      * sets the merchant path based on merchant ID
      *
      * @access protected
@@ -518,21 +505,6 @@ class Configuration
     }
 
     /**
-     * returns the graphql port number depending on environment
-     *
-     * @access public
-     * @param none
-     * @return int graphql portnumber
-     */
-    public function graphQLPortNumber()
-    {
-        if ($this->sslOn()) {
-            return 443;
-        }
-        return getenv("GRAPHQL_PORT") ?: 8080;
-    }
-
-    /**
      * returns http protocol depending on environment
      *
      * @access public
@@ -571,35 +543,6 @@ class Configuration
         }
 
         return $serverName;
-    }
-
-    /**
-     * returns Braintree GraphQL server name depending on environment
-     *
-     * @access public
-     * @param none
-     * @return string graphql domain name
-     */
-    public function graphQLServerName()
-    {
-        switch($this->_environment) {
-         case 'production':
-             $graphQLServerName = 'payments.braintree-api.com';
-             break;
-         case 'qa':
-             $graphQLServerName = 'payments-qa.dev.braintree-api.com';
-             break;
-         case 'sandbox':
-             $graphQLServerName = 'payments.sandbox.braintree-api.com';
-             break;
-         case 'development':
-         case 'integration':
-         default:
-             $graphQLServerName = 'graphql.bt.local';
-             break;
-        }
-
-        return $graphQLServerName;
     }
 
     public function authUrl()

@@ -6,7 +6,6 @@ use finfo;
 /**
  * Braintree HTTP Client
  * processes Http requests using curl
- * @codingStandardsIgnoreFile
  */
 class Http
 {
@@ -54,11 +53,7 @@ class Http
 
     public function postMultipart($path, $params, $file)
     {
-        $headers = [
-            'User-Agent: Braintree PHP Library ' . Version::get(),
-            'X-ApiVersion: ' . Configuration::API_VERSION
-        ];
-        $response = $this->_doRequest('POST', $path, $params, $file, $headers);
+        $response = $this->_doRequest('POST', $path, $params, $file);
         $responseCode = $response['status'];
         if ($responseCode === 200 || $responseCode === 201 || $responseCode === 422 || $responseCode == 400) {
             return Xml::buildArrayFromXml($response['body']);
@@ -114,12 +109,12 @@ class Http
         $this->_useClientCredentials = true;
     }
 
-    private function _doRequest($httpVerb, $path, $requestBody = null, $file = null, $headers = null)
+    private function _doRequest($httpVerb, $path, $requestBody = null, $file = null)
     {
-        return $this->_doUrlRequest($httpVerb, $this->_config->baseUrl() . $path, $requestBody, $file, $headers);
+        return $this->_doUrlRequest($httpVerb, $this->_config->baseUrl() . $path, $requestBody, $file);
     }
 
-    public function _doUrlRequest($httpVerb, $url, $requestBody = null, $file = null, $customHeaders = null)
+    public function _doUrlRequest($httpVerb, $url, $requestBody = null, $file = null)
     {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_TIMEOUT, $this->_config->timeout());
@@ -133,15 +128,9 @@ class Http
             curl_setopt($curl, CURLOPT_SSLVERSION, $this->_config->sslVersion());
         }
 
-        $headers = [];
-        if ($customHeaders) {
-            $headers = $customHeaders;
-        } else {
-            $headers = $this->_getHeaders($curl);
-            $headers[] = 'User-Agent: Braintree PHP Library ' . Version::get();
-            $headers[] = 'X-ApiVersion: ' . Configuration::API_VERSION;
-            $headers[] = 'Content-Type: application/xml';
-        }
+        $headers = $this->_getHeaders($curl);
+        $headers[] = 'User-Agent: Braintree PHP Library ' . Version::get();
+        $headers[] = 'X-ApiVersion: ' . Configuration::API_VERSION;
 
         $authorization = $this->_getAuthorization();
         if (isset($authorization['user'])) {
@@ -158,10 +147,11 @@ class Http
         }
 
         if (!empty($file)) {
-            $boundary = "---------------------" . hash('sha256',random_int(0,PHP_INT_MAX) . microtime());
+            $boundary = "---------------------" . md5(mt_rand() . microtime());
             $headers[] = "Content-Type: multipart/form-data; boundary={$boundary}";
             $this->prepareMultipart($curl, $requestBody, $file, $boundary);
         } else if (!empty($requestBody)) {
+            $headers[] = 'Content-Type: application/xml';
             curl_setopt($curl, CURLOPT_POSTFIELDS, $requestBody);
         }
 

@@ -80,7 +80,7 @@ class CustomerGateway
      *
      * @access public
      * @param array $attribs
-     * @return Result\Successful|Result\Error
+     * @return Braintree_Result_Successful|Braintree_Result_Error
      */
     public function create($attribs = [])
     {
@@ -202,12 +202,6 @@ class CustomerGateway
                 ['paypal' => [
                     'payee_email',
                     'payeeEmail',
-                    'order_id',
-                    'orderId',
-                    'custom_field',
-                    'customField',
-                    'description',
-                    'amount',
                     ['shipping' =>
                         [
                             'firstName', 'lastName', 'company', 'countryName',

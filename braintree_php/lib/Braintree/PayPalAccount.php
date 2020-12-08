@@ -17,16 +17,10 @@ namespace Braintree;
  * @package    Braintree
  * @category   Resources
  *
- * @property-read string $billingAgreementId
- * @property-read \DateTime $createdAt
  * @property-read string $customerId
- * @property-read boolean $default
  * @property-read string $email
- * @property-read string $imageUrl
- * @property-read string $payerId
- * @property-read \Braintree\Subscription[] $subscriptions
  * @property-read string $token
- * @property-read \DateTime $updatedAt
+ * @property-read string $imageUrl
  */
 class PayPalAccount extends Base
 {

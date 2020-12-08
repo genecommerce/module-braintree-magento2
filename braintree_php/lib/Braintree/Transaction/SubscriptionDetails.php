@@ -10,8 +10,8 @@ use Braintree\Instance;
  * @package    Braintree
  * @subpackage Transaction
  *
- * @property-read string $billingPeriodStartDate
- * @property-read string $billingPeriodEndDate
+ * @property-read string $billing_period_start_date
+ * @property-read string $billing_period_end_date
  */
 class SubscriptionDetails extends Instance
 {

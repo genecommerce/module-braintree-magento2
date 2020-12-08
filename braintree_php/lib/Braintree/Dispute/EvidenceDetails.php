@@ -10,12 +10,12 @@ use Braintree\Instance;
  *
  * @property-read string $category
  * @property-read string $comment
- * @property-read \DateTime $createdAt
+ * @property-read date   $created_at
  * @property-read string $id
- * @property-read \DateTime $sentToProcessorAt
- * @property-read string $sequenceNumber
- * @property-read string $tag
+ * @property-read string $sent_to_processor_at
  * @property-read string $url
+ * @property-read string $tag
+ * @property-read string $sequenceNumber
  */
 class EvidenceDetails extends Instance
 {
