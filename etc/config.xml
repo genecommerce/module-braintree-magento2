@@ -66,8 +66,13 @@
                 <sort_order>2</sort_order>
                 <disabled_funding_checkout></disabled_funding_checkout>
                 <disabled_funding_cart></disabled_funding_cart>
-                <button_productpage_enabled>0</button_productpage_enabled>
-                <message_productpage_enabled>0</message_productpage_enabled>
+                <button_productpage_enable>1</button_productpage_enable>
+                <button_paylater_productpage_enable>1</button_paylater_productpage_enable>
+                <button_paylater_checkout_enable>1</button_paylater_checkout_enable>
+                <message_productpage_enable>1</message_productpage_enable>
+                <message_checkout_enable>1</message_checkout_enable>
+                <button_cart_enabled>1</button_cart_enabled>
+                <message_cart_enabled>1</message_cart_enabled>
 
                 <!-- These are also defined in Gateway/Config/PayPal/Config.php::getButtonStyle() -->
                 <button_customise_cart>0</button_customise_cart>

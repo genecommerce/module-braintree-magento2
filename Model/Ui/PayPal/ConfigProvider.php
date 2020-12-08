@@ -104,7 +104,7 @@ class ConfigProvider implements ConfigProviderInterface
                 ],
 
                 self::PAYPAL_PAYLATER_CODE => [
-                    'isActive' => $this->payLaterConfig->isActive(),
+                    'isActive' => $this->payLaterConfig->isButtonActive('checkout'),
                     'title' => __('PayPal PayLater'),
                     'isAllowShippingAddressOverride' => $this->config->isAllowToEditShippingAddress(),
                     'merchantName' => $this->config->getMerchantName(),
@@ -112,6 +112,7 @@ class ConfigProvider implements ConfigProviderInterface
                     'paymentAcceptanceMarkSrc' =>
                         'https://www.paypalobjects.com/webstatic/en_US/i/buttons/ppc-acceptance-medium.png',
                     'paymentIcon' => $this->config->getPayPalIcon(),
+                    'isMessageActive' => $this->payLaterConfig->isMessageActive('checkout'),
                     'style' => [
                         'shape' => $this->config->getButtonShape(Config::BUTTON_AREA_CHECKOUT),
                         'size' => $this->config->getButtonSize(Config::BUTTON_AREA_CHECKOUT),

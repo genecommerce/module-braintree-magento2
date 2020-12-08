@@ -440,6 +440,20 @@
                         <group id="button_cart" translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Mini-Cart and Cart Page</label>
                             <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
+                            <field id="button_paylater_cart_enable" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Enable PayPal Pay Later button on the cart page and mini-cart</label>
+                                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                                <config_path>payment/braintree_paypal/button_paylater_cart_enable</config_path>
+                            </field>
+                            <field id="message_cart_enable" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Enable PayPal Pay Later message on the cart page and mini-cart</label>
+                                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                                <config_path>payment/braintree_paypal/message_cart_enable</config_path>
+                                <comment><![CDATA[PayPal Message is only available when PayPal Pay Later button is enabled]]></comment>
+                                <depends>
+                                    <field id="braintree_paypal_paylater_active">1</field>
+                                </depends>
+                            </field>
                             <field id="disabled_funding" translate="label" type="multiselect" sortOrder="131" showInDefault="1" showInWebsite="1" showInStore="0">
                                 <label>Disable Funding Options</label>
                                 <source_model>Magento\Braintree\Model\Adminhtml\Source\DisabledFundingOptions</source_model>
@@ -479,7 +493,20 @@
                         <group id="button_checkout" translate="label" type="select" sortOrder="141" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Checkout Page</label>
                             <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-
+                            <field id="button_paylater_checkout_enable" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Enable PayPal PayLater button on the product page</label>
+                                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                                <config_path>payment/braintree_paypal/button_paylater_checkout_enable</config_path>
+                            </field>
+                            <field id="message_checkout_enable" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Enable PayPal Pay Later message on the product page</label>
+                                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                                <config_path>payment/braintree_paypal/message_checkout_enable</config_path>
+                                <comment><![CDATA[PayPal Message is only available when PayPal Pay Later button is enabled]]></comment>
+                                <depends>
+                                    <field id="braintree_paypal_paylater_active">1</field>
+                                </depends>
+                            </field>
                             <field id="disabled_funding" translate="label" type="multiselect" sortOrder="131" showInDefault="1" showInWebsite="1" showInStore="0">
                                 <label>Disable Funding Options</label>
                                 <source_model>Magento\Braintree\Model\Adminhtml\Source\DisabledFundingOptions</source_model>
@@ -525,10 +552,15 @@
                                 <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                                 <config_path>payment/braintree_paypal/button_productpage_enabled</config_path>
                             </field>
-                            <field id="message_productpage_enabled" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <field id="button_paylater_productpage_enable" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Enable PayPal PayLater button on the product page</label>
+                                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                                <config_path>payment/braintree_paypal/button_paylater_productpage_enable</config_path>
+                            </field>
+                            <field id="message_productpage_enable" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
                                 <label>Enable PayPal Pay Later message on the product page</label>
                                 <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                                <config_path>payment/braintree_paypal/message_productpage_enabled</config_path>
+                                <config_path>payment/braintree_paypal/message_productpage_enable</config_path>
                                 <comment><![CDATA[PayPal Message is only available when PayPal Pay Later button is enabled]]></comment>
                                 <depends>
                                     <field id="braintree_paypal_paylater_active">1</field>

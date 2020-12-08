@@ -186,11 +186,21 @@ class Button extends Template implements ShortcutInterface
     }
 
     /**
+     * @param string $type
      * @return bool
      */
-    public function isPayLaterMessageActive(): bool
+    public function isPayLaterMessageActive($type): bool
     {
-        return $this->payPalPayLaterConfig->isMessageActive();
+        return $this->payPalPayLaterConfig->isMessageActive($type);
+    }
+
+    /**
+     * @param string $type
+     * @return bool
+     */
+    public function isPayLaterButtonActive($type): bool
+    {
+        return $this->payPalPayLaterConfig->isButtonActive($type);
     }
 
     /**
