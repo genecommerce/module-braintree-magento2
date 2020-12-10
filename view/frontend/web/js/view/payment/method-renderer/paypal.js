@@ -303,7 +303,6 @@ define([
                 }
                 paypalCheckoutInstance.loadPayPalSDK({
                     components: 'buttons,messages,funding-eligibility',
-                    "buyer-country": 'US',
                 }, function () {
                     this.loadPayPalButton(paypalCheckoutInstance, 'paypal');
                     if(this.isCreditEnabled()) {

@@ -81,7 +81,6 @@ define(
                         } else {
                             paypalCheckoutInstance.loadPayPalSDK({
                                 components: 'buttons,messages,funding-eligibility',
-                                "buyer-country": 'US',
                             }, function () {
                                 this.renderpayPalButtons(buttonIds, paypalCheckoutInstance);
                                 this.renderpayPalMessages();
