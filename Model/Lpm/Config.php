@@ -120,13 +120,14 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getAllowedMethods(): array
     {
-        $allowedMethods = explode(
-            ',',
-            $this->getValue(
-                self::KEY_ALLOWED_METHODS,
-                $this->storeConfigResolver->getStoreId()
-            )
-        );
+        $allowedMethodsValue = $this->getValue(self::KEY_ALLOWED_METHODS, $this->storeConfigResolver->getStoreId());
+
+        if (!$allowedMethodsValue) {
+            $this->allowedMethods = [];
+            return $this->allowedMethods;
+        }
+
+        $allowedMethods = explode(',', $allowedMethodsValue);
 
         foreach ($allowedMethods as $allowedMethod) {
             $this->allowedMethods[] = [
