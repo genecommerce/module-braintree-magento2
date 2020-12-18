@@ -111,10 +111,10 @@ class AddressDataBuilder implements BuilderInterface
             $extendedAddress = $streetAddress1;
             if (!empty($streetAddress1)) {
                 if (!empty($streetAddress2)) {
-                    $extendedAddress .= ", " . $streetAddress2;
+                    $extendedAddress = $streetAddress1 . ", " . $streetAddress2;
                 }
                 if (!empty($streetAddress3)) {
-                    $extendedAddress .= ", " . $streetAddress2 . ", " . $streetAddress3;
+                    $extendedAddress = $streetAddress1 . ", " . $streetAddress2 . ", " . $streetAddress3;
                 }
             }
 
@@ -142,10 +142,10 @@ class AddressDataBuilder implements BuilderInterface
             $extendedAddress = $streetAddress1;
             if (!empty($streetAddress1)) {
                 if (!empty($streetAddress2)) {
-                    $extendedAddress .= ", " . $streetAddress2;
+                    $extendedAddress = $streetAddress1 . ", " . $streetAddress2;
                 }
                 if (!empty($streetAddress3)) {
-                    $extendedAddress .= ", " . $streetAddress2 . ", " . $streetAddress3;
+                    $extendedAddress = $streetAddress1 . ", " . $streetAddress2 . ", " . $streetAddress3;
                 }
             }
 
