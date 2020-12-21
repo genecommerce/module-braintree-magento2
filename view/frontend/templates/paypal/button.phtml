@@ -23,7 +23,7 @@ try {
             'jquery'
         ], function (button, $) {
             $(function () {
-                button.init('<?= $block->getClientToken() ?>');
+                button.init('<?= $block->getClientToken() ?>', '<?= $block->escapeHtmlAttr($block->getCurrency()) ?>');
             })
         })
     </script>

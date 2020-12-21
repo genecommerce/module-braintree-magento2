@@ -41,7 +41,7 @@ define(
                 onError: null
             },
 
-            init: function (token) {
+            init: function (token, currency) {
                 buttonIds = [];
                 $('.action-braintree-paypal-logo').each(function () {
                     if(!$(this).hasClass( "button-loaded" )) {
@@ -51,11 +51,11 @@ define(
                 });
 
                 if(buttonIds.length > 0){
-                    this.loadSDK(token);
+                    this.loadSDK(token, currency);
                 }
             },
 
-            loadSDK: function (token) {
+            loadSDK: function (token, currency) {
                 braintree.create({
                     authorization: token
                 }, function (clientErr, clientInstance) {
@@ -80,6 +80,7 @@ define(
                         } else {
                             paypalCheckoutInstance.loadPayPalSDK({
                                 components: 'buttons,messages,funding-eligibility',
+                                currency: currency,
                             }, function () {
                                 this.renderpayPalButtons(buttonIds, paypalCheckoutInstance)
                             }.bind(this));
