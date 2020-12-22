@@ -76,13 +76,15 @@ define(
                     }, function (err, paypalCheckoutInstance) {
 
                         if (typeof paypal !== 'undefined' ) {
-                            this.renderpayPalButtons(buttonIds, paypalCheckoutInstance)
+                            this.renderpayPalButtons(buttonIds, paypalCheckoutInstance);
+                            this.renderpayPalMessages();
                         } else {
                             paypalCheckoutInstance.loadPayPalSDK({
                                 components: 'buttons,messages,funding-eligibility',
                                 currency: currency,
                             }, function () {
-                                this.renderpayPalButtons(buttonIds, paypalCheckoutInstance)
+                                this.renderpayPalButtons(buttonIds, paypalCheckoutInstance);
+                                this.renderpayPalMessages();
                             }.bind(this));
                         }
 
@@ -95,6 +97,20 @@ define(
                     this.payPalButton(id, paypalCheckoutInstance);
 
                 }.bind(this));
+            },
+
+            renderpayPalMessages: function() {
+                $('.action-braintree-paypal-message').each(function () {
+                    paypal.Messages({
+                        amount: $(this).data('pp-amount'),
+                        pageType: $(this).data('pp-type'),
+                        style: {
+                            layout: 'text',
+                        }
+                    }).render('#' + $(this).attr('id'));
+
+
+                });
             },
 
             payPalButton: function(id, paypalCheckoutInstance) {

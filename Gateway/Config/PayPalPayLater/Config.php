@@ -122,17 +122,18 @@ class Config implements ConfigInterface
 
     /**
      * Get Paypal pay later message configuration status
+     * @param string $type
      *
      * @return bool
      */
-    public function isMessageActive(): bool
+    public function isMessageActive($type): bool
     {
         $paypalActive = $this->getConfigValue("payment/braintree_paypal/active");
         $paypalPayLaterActive = $this->getConfigValue("payment/braintree_paypal_paylater/active");
-        $paypalPayLaterMessageActive = $this->getConfigValue("payment/braintree_paypal/message_productpage_enabled");
+        $paypalPayLaterMessageActive = $this->getConfigValue("payment/braintree_paypal/message_" . $type . "_enable");
 
         // If PayPal or PayPal Pay Later is disabled in the admin
-        if (!$paypalActive || !$paypalPayLaterActive || !$paypalPayLaterMessageActive) {
+        if (!$paypalActive || !$paypalPayLaterActive || !$paypalPayLaterMessageActive || $this->IsPayPalVaultActive()) {
             return false;
         }
 
@@ -144,9 +145,30 @@ class Config implements ConfigInterface
         return (bool) $paypalPayLaterMessageActive;
     }
 
+    /**
+     * Get Paypal pay later message configuration status
+     * @param string $type
+     *
+     * @return bool
+     */
+    public function isButtonActive($type): bool
+    {
+        $paypalActive = $this->getConfigValue("payment/braintree_paypal/active");
+        $paypalPayLaterActive = $this->getConfigValue("payment/braintree_paypal_paylater/active");
+        $paypalPayLaterButtonActive = $this->getConfigValue("payment/braintree_paypal/button_paylater_" . $type . "_enable");
 
+        // If PayPal or PayPal Pay Later is disabled in the admin
+        if (!$paypalActive || !$paypalPayLaterActive || !$paypalPayLaterButtonActive) {
+            return false;
+        }
 
+        // Only allowed on US
+        if (!$this->isUS()) {
+            return false;
+        }
 
+        return (bool) $paypalPayLaterButtonActive;
+    }
 
     /**
      * Merchant Country set to US
