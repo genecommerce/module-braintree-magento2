@@ -70,8 +70,18 @@
             </div>
         </div>
         <div class="actions-toolbar" data-bind="visible: !isReviewRequired()">
-            <div data-bind="attr: {id: getButtonId()}"></div>
+            <div data-bind="attr: {id: getPayPalButtonId()}"></div>
+            <!-- ko if: (isCreditEnabled())-->
+            <div data-bind="attr: {id: getCreditButtonId()}"></div>
+            <!-- /ko -->
+            <!-- ko if: (isPaylaterEnabled())-->
+            <div data-bind="attr: {id: getPaylaterButtonId()}"></div>
+            <!-- /ko -->
+            <!-- ko if: (isPaylaterMessageEnabled())-->
+            <div data-pp-message data-pp-placement="payment"
+                 data-bind='attr: {"data-pp-amount": getGrandTotalAmount()}'
+            ></div>
+            <!-- /ko -->
         </div>
     </div>
 </div>
-
