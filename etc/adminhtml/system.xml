@@ -124,23 +124,55 @@
                         <field id="merchant_id" translate="label" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Merchant ID</label>
                             <config_path>payment/braintree/merchant_id</config_path>
+                            <depends>
+                                <field id="environment">production</field>
+                            </depends>
                         </field>
                         <field id="public_key" translate="label" type="obscure" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Public Key</label>
                             <config_path>payment/braintree/public_key</config_path>
                             <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                            <depends>
+                                <field id="environment">production</field>
+                            </depends>
                         </field>
                         <field id="private_key" translate="label" type="obscure" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Private Key</label>
                             <config_path>payment/braintree/private_key</config_path>
                             <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                            <depends>
+                                <field id="environment">production</field>
+                            </depends>
+                        </field>
+                        <field id="sandbox_merchant_id" translate="label" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Sandbox Merchant ID</label>
+                            <config_path>payment/braintree/sandbox_merchant_id</config_path>
+                            <depends>
+                                <field id="environment">sandbox</field>
+                            </depends>
+                        </field>
+                        <field id="sandbox_public_key" translate="label" type="obscure" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Sandbox Public Key</label>
+                            <config_path>payment/braintree/sandbox_public_key</config_path>
+                            <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                            <depends>
+                                <field id="environment">sandbox</field>
+                            </depends>
+                        </field>
+                        <field id="sandbox_private_key" translate="label" type="obscure" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Sandbox Private Key</label>
+                            <config_path>payment/braintree/sandbox_private_key</config_path>
+                            <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                            <depends>
+                                <field id="environment">sandbox</field>
+                            </depends>
                         </field>
                         <field id="key_validation" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label></label>
                             <frontend_model>Magento\Braintree\Block\Adminhtml\Form\Field\Validation</frontend_model>
                         </field>
                     </group>
-                    <group id="braintree_advanced" translate="label" showInDefault="1" showInWebsite="1" sortOrder="20">
+                    <group id="braintree_advanced" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
                         <label>Advanced Braintree Settings</label>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                         <field id="braintree_cc_vault_title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
