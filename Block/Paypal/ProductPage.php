@@ -109,7 +109,7 @@ class ProductPage extends Button
                 return $groupedProducts[0]->getPrice();
             }
 
-            return $product->getPrice();
+            return $product->getFinalPrice();
         }
 
         return 100; // TODO There must be a better return value than this?
