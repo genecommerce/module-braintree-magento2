@@ -15,6 +15,7 @@ This module overwrites the original Magento Braintree module, to provide additio
     * JCB
     * Diners
     * Maestro
+    * UnionPay
     * Restrictions apply.
 * PayPal
 * PayPal Credit
