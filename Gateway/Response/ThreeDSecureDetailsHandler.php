@@ -14,12 +14,24 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
 
 /**
  * Class ThreeDSecureDetailsHandler
+ * @package Magento\Braintree\Gateway\Response
  */
 class ThreeDSecureDetailsHandler implements HandlerInterface
 {
     const LIABILITY_SHIFTED = 'liabilityShifted';
 
     const LIABILITY_SHIFT_POSSIBLE = 'liabilityShiftPossible';
+
+    const ECI_FLAG = 'eciFlag';
+
+    const ECI_ACCEPTED_VALUES = [
+        '00' => 'Failed',
+        '01' => 'Attempted',
+        '02' => 'Success',
+        '07' => 'Failed',
+        '06' => 'Attempted',
+        '05' => 'Success'
+    ];
 
     /**
      * @var SubjectReader
@@ -64,5 +76,22 @@ class ThreeDSecureDetailsHandler implements HandlerInterface
         $payment->setAdditionalInformation(self::LIABILITY_SHIFTED, $info->liabilityShifted ? 'Yes' : 'No');
         $shiftPossible = $info->liabilityShiftPossible ? 'Yes' : 'No';
         $payment->setAdditionalInformation(self::LIABILITY_SHIFT_POSSIBLE, $shiftPossible);
+
+        $eciFlag = $this->getEciFlagInformation($info->eciFlag);
+        if ($eciFlag !== '') {
+            $payment->setAdditionalInformation(self::ECI_FLAG, $eciFlag);
+        }
+    }
+
+    /**
+     * @param $eciFlagValue
+     * @return mixed|string
+     */
+    public function getEciFlagInformation($eciFlagValue)
+    {
+        if ($eciFlagValue !== NULL && array_key_exists($eciFlagValue, self::ECI_ACCEPTED_VALUES)) {
+            return self::ECI_ACCEPTED_VALUES[$eciFlagValue];
+        }
+        return '';
     }
 }
