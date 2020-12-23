@@ -12,8 +12,7 @@ define([
     'braintreePayPalCheckout',
     'Magento_Checkout/js/model/full-screen-loader',
     'Magento_Ui/js/model/messageList',
-    'mage/translate',
-    'https://www.paypalobjects.com/api/checkout.js'
+    'mage/translate'
 ], function ($, client, dataCollector, hostedFields, paypalCheckout, fullScreenLoader, globalMessageList, $t) {
     'use strict';
 
@@ -455,4 +454,3 @@ define([
         }
     };
 });
-
