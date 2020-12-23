@@ -124,14 +124,14 @@ class ThreeDSecureDataBuilderTest extends \PHPUnit\Framework\TestCase
         return [
             ['verify' => true, 'amount' => 20, 'countryId' => 'US', 'countries' => [], 'result' => [
                 'options' => [
-                    'three_d_secure' => [
+                    'threeDSecure' => [
                         'required' => true
                     ]
                 ]
             ]],
             ['verify' => true, 'amount' => 0, 'countryId' => 'US', 'countries' => ['US', 'GB'], 'result' => [
                 'options' => [
-                    'three_d_secure' => [
+                    'threeDSecure' => [
                         'required' => true
                     ]
                 ]
