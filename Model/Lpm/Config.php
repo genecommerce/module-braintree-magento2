@@ -120,13 +120,13 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getAllowedMethods(): array
     {
-        $allowedMethods = explode(
-            ',',
-            $this->getValue(
-                self::KEY_ALLOWED_METHODS,
-                $this->storeConfigResolver->getStoreId()
-            )
-        );
+        $configuredMethods = $this->getValue(self::KEY_ALLOWED_METHODS, $this->storeConfigResolver->getStoreId()) ?? [];
+        
+        if (empty($configuredMethods)) {
+            return []; //or throw informative exeption, otherwise we got blank page on checkout
+        }
+        
+        $allowedMethods = explode(',', $configuredMethods);
 
         foreach ($allowedMethods as $allowedMethod) {
             $this->allowedMethods[] = [
