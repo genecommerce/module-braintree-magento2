@@ -19,6 +19,7 @@ use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Sales\Api\Data\TransactionInterface;
+use Magento\Braintree\Model\Ui\PayPal\ConfigProvider as PaypalConfigProvider;
 
 /**
  * Class CaptureStrategyCommand
@@ -35,6 +36,11 @@ class CaptureStrategyCommand implements CommandInterface
      * Braintree capture command
      */
     const CAPTURE = 'settlement';
+
+    /**
+     * Braintree partial capture command
+     */
+    const PARTIAL_CAPTURE = 'partial_capture';
 
     /**
      * Braintree vault capture command
@@ -116,24 +122,32 @@ class CaptureStrategyCommand implements CommandInterface
 
         /** @var OrderPaymentInterface $paymentInfo */
         $paymentInfo = $paymentDO->getPayment();
+        $amount = $commandSubject['amount'];
         ContextHelper::assertOrderPayment($paymentInfo);
 
-        $command = $this->getCommand($paymentInfo);
+        $command = $this->getCommand($paymentInfo, $amount);
         $this->commandPool->get($command)->execute($commandSubject);
     }
 
     /**
      * Get execution command name
      * @param OrderPaymentInterface $payment
+     * @param float $amount
      * @return string
      */
-    private function getCommand(OrderPaymentInterface $payment): string
+    private function getCommand(OrderPaymentInterface $payment, $amount): string
     {
         // if auth transaction is not exists execute authorize&capture command
         $existsCapture = $this->isExistsCaptureTransaction($payment);
 
         if (!$existsCapture && !$payment->getAuthorizationTransaction()) {
             return self::SALE;
+        }
+
+        // do partial capture for authorization transaction only braintree PayPal
+        if ($amount < $payment->getAmountAuthorized() && !$this->isExpiredAuthorization($payment)
+            && ($payment->getMethod() == PaypalConfigProvider::PAYPAL_CODE)) {
+            return self::PARTIAL_CAPTURE;
         }
 
         // do capture for authorization transaction
