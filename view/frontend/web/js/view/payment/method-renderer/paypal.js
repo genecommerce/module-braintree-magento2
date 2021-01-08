@@ -246,10 +246,18 @@ define([
             if (quote.isVirtual()) {
                 this.isReviewRequired(true);
             } else {
-                if (quote.shippingAddress() === quote.billingAddress()) {
-                    selectBillingAddress(quote.shippingAddress());
+                if (this.isRequiredBillingAddress() === '1' || quote.billingAddress() === null) {
+                    if (typeof data.details.billingAddress !== 'undefined') {
+                        this.setBillingAddress(data.details, data.details.billingAddress);
+                    } else {
+                        this.setBillingAddress(data.details, data.details.shippingAddress);
+                    }
                 } else {
-                    selectBillingAddress(quote.billingAddress());
+                    if (quote.shippingAddress() === quote.billingAddress()) {
+                        selectBillingAddress(quote.shippingAddress());
+                    } else {
+                        selectBillingAddress(quote.billingAddress());
+                    }
                 }
 
                 this.placeOrder();
@@ -335,11 +343,11 @@ define([
                 style.fundingicons = Braintree.getFundingIcons();
             }
 
-            if (funding == 'credit') {
+            if (funding === 'credit') {
                 style.layout = "horizontal";
                 style.color = "darkblue";
                 Braintree.config.buttonId = this.clientConfig.buttonCreditId;
-            } else if (funding == 'paylater') {
+            } else if (funding === 'paylater') {
                 style.layout = "horizontal";
                 style.color = "white";
                 Braintree.config.buttonId = this.clientConfig.buttonPaylaterId;
@@ -414,6 +422,14 @@ define([
          */
         getLocale: function () {
             return window.checkoutConfig.payment[this.getCode()].locale;
+        },
+
+        /**
+         * Is Billing Address required from PayPal side
+         * @returns {exports.isRequiredBillingAddress|(function())|boolean}
+         */
+        isRequiredBillingAddress: function () {
+            return window.checkoutConfig.payment[this.getCode()].isRequiredBillingAddress;
         },
 
         /**
@@ -617,4 +633,3 @@ define([
 
     });
 });
-

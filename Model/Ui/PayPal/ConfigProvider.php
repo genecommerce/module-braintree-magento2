@@ -84,7 +84,8 @@ class ConfigProvider implements ConfigProviderInterface
                         'shape' => $this->config->getButtonShape(Config::BUTTON_AREA_CHECKOUT),
                         'size' => $this->config->getButtonSize(Config::BUTTON_AREA_CHECKOUT),
                         'color' => $this->config->getButtonColor(Config::BUTTON_AREA_CHECKOUT)
-                    ]
+                    ],
+                    'isRequiredBillingAddress' => $this->config->isRequiredBillingAddress()
                 ],
 
                 self::PAYPAL_CREDIT_CODE => [
@@ -100,7 +101,8 @@ class ConfigProvider implements ConfigProviderInterface
                         'shape' => $this->config->getButtonShape(Config::BUTTON_AREA_CHECKOUT),
                         'size' => $this->config->getButtonSize(Config::BUTTON_AREA_CHECKOUT),
                         'color' => $this->config->getButtonColor(Config::BUTTON_AREA_CHECKOUT)
-                    ]
+                    ],
+                    'isRequiredBillingAddress' => $this->config->isRequiredBillingAddress()
                 ],
 
                 self::PAYPAL_PAYLATER_CODE => [
@@ -117,7 +119,8 @@ class ConfigProvider implements ConfigProviderInterface
                         'shape' => $this->config->getButtonShape(Config::BUTTON_AREA_CHECKOUT),
                         'size' => $this->config->getButtonSize(Config::BUTTON_AREA_CHECKOUT),
                         'color' => $this->config->getButtonColor(Config::BUTTON_AREA_CHECKOUT)
-                    ]
+                    ],
+                    'isRequiredBillingAddress' => $this->config->isRequiredBillingAddress()
                 ]
             ]
         ];
