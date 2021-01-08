@@ -41,6 +41,7 @@ try {
              data-shape="<?= $block->getButtonShape() ?>"
              data-size="<?= $block->getButtonSize() ?>"
              data-color="<?= $block->getButtonColor() ?>"
+             data-requiredbillingaddress="<?= $block->isRequiredBillingAddress() ?>"
              class="action-braintree-paypal-logo"></div>
     </div>
 
@@ -58,6 +59,7 @@ try {
              data-shape="<?= $block->getButtonShape() ?>"
              data-size="<?= $block->getButtonSize() ?>"
              data-color="darkblue"
+             data-requiredbillingaddress="<?= $block->isRequiredBillingAddress() ?>"
              class="action-braintree-paypal-logo"></div>
     </div>
 <?php endif; ?>
@@ -76,6 +78,7 @@ try {
                  data-shape="<?= $block->getButtonShape() ?>"
                  data-size="<?= $block->getButtonSize() ?>"
                  data-color="white"
+                 data-requiredbillingaddress="<?= $block->isRequiredBillingAddress() ?>"
                  class="action-braintree-paypal-logo"></div>
         </div>
     <?php endif; ?>

@@ -27,7 +27,6 @@ use Magento\Braintree\Gateway\Config\PayPalPayLater\Config as PayPalPayLaterConf
 class Button extends Template implements ShortcutInterface
 {
     const ALIAS_ELEMENT_INDEX = 'alias';
-
     const BUTTON_ELEMENT_INDEX = 'button_id';
 
     /**
@@ -283,5 +282,13 @@ class Button extends Template implements ShortcutInterface
     public function getExtraClassname(): string
     {
         return $this->getIsCart() ? 'cart' : 'minicart';
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRequiredBillingAddress(): bool
+    {
+        return (bool) $this->config->isRequiredBillingAddress();
     }
 }

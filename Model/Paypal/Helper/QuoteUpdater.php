@@ -19,6 +19,7 @@ use Magento\Quote\Model\Quote\Address;
 
 /**
  * Class QuoteUpdater
+ * @package Magento\Braintree\Model\Paypal\Helper
  */
 class QuoteUpdater extends AbstractHelper
 {
@@ -41,13 +42,14 @@ class QuoteUpdater extends AbstractHelper
      * @var ResourceConnection
      */
     private $resource;
+
     /**
      * @var Region
      */
     private $region;
 
     /**
-     * Constructor
+     * QuoteUpdater constructor.
      *
      * @param Config $config
      * @param CartRepositoryInterface $quoteRepository
@@ -72,11 +74,9 @@ class QuoteUpdater extends AbstractHelper
     /**
      * Execute operation
      *
-     * @param string $nonce
+     * @param $nonce
      * @param array $details
      * @param Quote $quote
-     * @return void
-     * @throws InvalidArgumentException
      * @throws LocalizedException
      */
     public function execute($nonce, array $details, Quote $quote)
@@ -96,7 +96,6 @@ class QuoteUpdater extends AbstractHelper
      *
      * @param Quote $quote
      * @param array $details
-     * @return void
      */
     private function updateQuote(Quote $quote, array $details)
     {
@@ -148,7 +147,6 @@ class QuoteUpdater extends AbstractHelper
      *
      * @param Quote $quote
      * @param array $details
-     * @return void
      */
     private function updateQuoteAddress(Quote $quote, array $details)
     {
@@ -165,13 +163,12 @@ class QuoteUpdater extends AbstractHelper
      *
      * @param Quote $quote
      * @param array $details
-     * @return void
      */
     private function updateShippingAddress(Quote $quote, array $details)
     {
         $shippingAddress = $quote->getShippingAddress();
-        $shippingAddress->setLastname($details['lastName']);
-        $shippingAddress->setFirstname($details['firstName']);
+        $shippingAddress->setFirstname($details['shippingAddress']['recipientFirstName']);
+        $shippingAddress->setLastname($details['shippingAddress']['recipientLastName']);
         $shippingAddress->setEmail($details['email']);
 
         $shippingAddress->setCollectShippingRates(true);
@@ -181,7 +178,7 @@ class QuoteUpdater extends AbstractHelper
         // PayPal's address supposes not saving against customer account
         $shippingAddress->setSaveInAddressBook(false);
         $shippingAddress->setSameAsBilling(false);
-        $shippingAddress->unsCustomerAddressId();
+        $shippingAddress->setCustomerAddressId(null);
     }
 
     /**
@@ -194,22 +191,15 @@ class QuoteUpdater extends AbstractHelper
     private function updateBillingAddress(Quote $quote, array $details)
     {
         $billingAddress = $quote->getBillingAddress();
-        $billingAddress->setFirstname($details['firstName']);
-        $billingAddress->setLastname($details['lastName']);
+        $billingAddress->setFirstname($details['shippingAddress']['recipientFirstName']);
+        $billingAddress->setLastname($details['shippingAddress']['recipientLastName']);
         $billingAddress->setEmail($details['email']);
 
-        if ($this->config->isRequiredBillingAddress()) {
-            $this->updateAddressData($billingAddress, $details['billingAddress']);
+        if ($this->config->isRequiredBillingAddress() && !empty($details['billingAddress'])) {
+            $billingAddress->setFirstname($details['firstName']);
+            $billingAddress->setLastname($details['lastName']);
 
-            if (!empty($details['billingAddress']['firstName'])) {
-                $billingAddress->setFirstname($details['firstName']);
-            }
-            if (!empty($details['billingAddress']['lastName'])) {
-                $billingAddress->setLastname($details['lastName']);
-            }
-            if (!empty($details['billingAddress']['email'])) {
-                $billingAddress->setEmail($details['email']);
-            }
+            $this->updateAddressData($billingAddress, $details['billingAddress']);
         } else {
             $this->updateAddressData($billingAddress, $details['shippingAddress']);
         }
@@ -217,7 +207,7 @@ class QuoteUpdater extends AbstractHelper
         // PayPal's address supposes not saving against customer account
         $billingAddress->setSaveInAddressBook(false);
         $billingAddress->setSameAsBilling(false);
-        $billingAddress->unsCustomerAddressId();
+        $billingAddress->setCustomerAddressId(null);
     }
 
     /**
@@ -225,7 +215,6 @@ class QuoteUpdater extends AbstractHelper
      *
      * @param Address $address
      * @param array $addressData
-     * @return void
      */
     private function updateAddressData(Address $address, array $addressData)
     {
@@ -243,9 +232,12 @@ class QuoteUpdater extends AbstractHelper
         $address->setCountryId($addressData['countryCodeAlpha2']);
         $address->setPostcode($addressData['postalCode']);
 
+        if (!empty($addressData['telephone'])) {
+            $address->setTelephone($addressData['telephone']);
+        }
+
         // PayPal's address supposes not saving against customer account
         $address->setSaveInAddressBook(false);
         $address->setSameAsBilling(false);
-        $address->setCustomerAddressId(null);
     }
 }
