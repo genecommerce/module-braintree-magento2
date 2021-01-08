@@ -350,7 +350,10 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     {
         $values = [];
         foreach (self::$dynamicDescriptorKeys as $key) {
-            $value = $this->getValue('descriptor_' . $key);
+            $value = $this->getValue(
+                'descriptor_' . $key,
+                $this->storeConfigResolver->getStoreId()
+            );
             if (!empty($value)) {
                 $values[$key] = $value;
             }
