@@ -36,7 +36,19 @@
                         <label>Enable PayPal Credit through Braintree</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/braintree_paypal_credit/active</config_path>
-                        <comment>PayPal Credit is currently only available in the United States and United Kingdom. PayPal Credit will be disabled if the selected value for the Merchant Country field is not US or UK.</comment>
+                        <comment>PayPal Credit is currently only available in the United States and United Kingdom. PayPal Credit will be disabled if the selected value for the Merchant Country field is not US or UK. This field is only available if Merchant Country is US or UK.</comment>
+                        <requires>
+                            <group id="braintree_required"/>
+                        </requires>
+                        <depends>
+                            <field id="active_braintree_paypal">1</field>
+                        </depends>
+                    </field>
+                    <field id="braintree_paypal_paylater_active" translate="label" type="select" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Enable PayPal Pay Later through Braintree</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/braintree_paypal_paylater/active</config_path>
+                        <comment>PayPal Paylater is currently only available in the United States. PayPal Pay Later will be disabled if the selected value for the Merchant Country field is not US. This field only available if Merchant Country is US.</comment>
                         <requires>
                             <group id="braintree_required"/>
                         </requires>
@@ -112,30 +124,62 @@
                         <field id="merchant_id" translate="label" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Merchant ID</label>
                             <config_path>payment/braintree/merchant_id</config_path>
+                            <depends>
+                                <field id="environment">production</field>
+                            </depends>
                         </field>
                         <field id="public_key" translate="label" type="obscure" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Public Key</label>
                             <config_path>payment/braintree/public_key</config_path>
                             <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                            <depends>
+                                <field id="environment">production</field>
+                            </depends>
                         </field>
                         <field id="private_key" translate="label" type="obscure" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Private Key</label>
                             <config_path>payment/braintree/private_key</config_path>
                             <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                            <depends>
+                                <field id="environment">production</field>
+                            </depends>
+                        </field>
+                        <field id="sandbox_merchant_id" translate="label" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Sandbox Merchant ID</label>
+                            <config_path>payment/braintree/sandbox_merchant_id</config_path>
+                            <depends>
+                                <field id="environment">sandbox</field>
+                            </depends>
+                        </field>
+                        <field id="sandbox_public_key" translate="label" type="obscure" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Sandbox Public Key</label>
+                            <config_path>payment/braintree/sandbox_public_key</config_path>
+                            <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                            <depends>
+                                <field id="environment">sandbox</field>
+                            </depends>
+                        </field>
+                        <field id="sandbox_private_key" translate="label" type="obscure" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Sandbox Private Key</label>
+                            <config_path>payment/braintree/sandbox_private_key</config_path>
+                            <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                            <depends>
+                                <field id="environment">sandbox</field>
+                            </depends>
                         </field>
                         <field id="key_validation" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label></label>
                             <frontend_model>Magento\Braintree\Block\Adminhtml\Form\Field\Validation</frontend_model>
                         </field>
                     </group>
-                    <group id="braintree_advanced" translate="label" showInDefault="1" showInWebsite="1" sortOrder="20">
+                    <group id="braintree_advanced" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="20">
                         <label>Advanced Braintree Settings</label>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                         <field id="braintree_cc_vault_title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Vault Title</label>
                             <config_path>payment/braintree_cc_vault/title</config_path>
                         </field>
-                        <field id="merchant_account_id" translate="label" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <field id="merchant_account_id" translate="label" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Merchant Account ID</label>
                             <comment>If you don't specify the merchant account to use to process a transaction, Braintree will process it using your default merchant account.</comment>
                             <config_path>payment/braintree/merchant_account_id</config_path>
@@ -305,18 +349,18 @@
                             </comment>
                         </field>
                     </group>
-                    <group id="braintree_local_payment" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="42">
+                    <group id="braintree_local_payment" translate="label" showInDefault="1" showInWebsite="1" showInStore="0" sortOrder="42">
                         <label>Local Payment Methods</label>
                         <comment>
                             All payments made with a Local Payment Method will be treated as an "Intent Sale" payment action.
                         </comment>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-                        <field id="active" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1">
+                        <field id="active" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Enable Local Payment Methods</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/braintree_local_payment/active</config_path>
                         </field>
-                        <field id="title" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1">
+                        <field id="title" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Title</label>
                             <config_path>payment/braintree_local_payment/title</config_path>
                             <validate>required-entry</validate>
@@ -324,7 +368,7 @@
                                 <field id="active">1</field>
                             </depends>
                         </field>
-                        <field id="allowed_methods" translate="label" type="multiselect" sortOrder="10" showInDefault="1" showInWebsite="1">
+                        <field id="allowed_methods" translate="label" type="multiselect" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Allowed Payment Methods</label>
                             <comment>
                                 Any particular payment method will only be visible to customers who's billing address is
@@ -461,6 +505,20 @@
                         <group id="button_cart" translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Mini-Cart and Cart Page</label>
                             <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
+                            <field id="button_paylater_cart_enable" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Enable PayPal Pay Later button on the cart page and mini-cart</label>
+                                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                                <config_path>payment/braintree_paypal/button_paylater_cart_enable</config_path>
+                            </field>
+                            <field id="message_cart_enable" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Enable PayPal Pay Later message on the cart page and mini-cart</label>
+                                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                                <config_path>payment/braintree_paypal/message_cart_enable</config_path>
+                                <comment><![CDATA[PayPal Message is only available when PayPal Pay Later button is enabled]]></comment>
+                                <depends>
+                                    <field id="braintree_paypal_paylater_active">1</field>
+                                </depends>
+                            </field>
                             <field id="disabled_funding" translate="label" type="multiselect" sortOrder="131" showInDefault="1" showInWebsite="1" showInStore="0">
                                 <label>Disable Funding Options</label>
                                 <source_model>Magento\Braintree\Model\Adminhtml\Source\DisabledFundingOptions</source_model>
@@ -500,7 +558,20 @@
                         <group id="button_checkout" translate="label" type="select" sortOrder="141" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Checkout Page</label>
                             <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-
+                            <field id="button_paylater_checkout_enable" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Enable PayPal PayLater button on the product page</label>
+                                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                                <config_path>payment/braintree_paypal/button_paylater_checkout_enable</config_path>
+                            </field>
+                            <field id="message_checkout_enable" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Enable PayPal Pay Later message on the product page</label>
+                                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                                <config_path>payment/braintree_paypal/message_checkout_enable</config_path>
+                                <comment><![CDATA[PayPal Message is only available when PayPal Pay Later button is enabled]]></comment>
+                                <depends>
+                                    <field id="braintree_paypal_paylater_active">1</field>
+                                </depends>
+                            </field>
                             <field id="disabled_funding" translate="label" type="multiselect" sortOrder="131" showInDefault="1" showInWebsite="1" showInStore="0">
                                 <label>Disable Funding Options</label>
                                 <source_model>Magento\Braintree\Model\Adminhtml\Source\DisabledFundingOptions</source_model>
@@ -545,6 +616,20 @@
                                 <label>Enable PayPal Buy Now button on the product page</label>
                                 <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                                 <config_path>payment/braintree_paypal/button_productpage_enabled</config_path>
+                            </field>
+                            <field id="button_paylater_productpage_enable" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Enable PayPal PayLater button on the product page</label>
+                                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                                <config_path>payment/braintree_paypal/button_paylater_productpage_enable</config_path>
+                            </field>
+                            <field id="message_productpage_enable" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label>Enable PayPal Pay Later message on the product page</label>
+                                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                                <config_path>payment/braintree_paypal/message_productpage_enable</config_path>
+                                <comment><![CDATA[PayPal Message is only available when PayPal Pay Later button is enabled]]></comment>
+                                <depends>
+                                    <field id="braintree_paypal_paylater_active">1</field>
+                                </depends>
                             </field>
                             <field id="disabled_funding" translate="label" type="multiselect" sortOrder="131" showInDefault="1" showInWebsite="1" showInStore="0">
                                 <label>Disable Funding Options</label>

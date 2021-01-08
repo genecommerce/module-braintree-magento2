@@ -1,9 +1,18 @@
 require(['jquery', 'Magento_Ui/js/modal/alert', 'mage/translate'], function ($, alert, $t) {
-    window.braintreeValidator = function (endpoint, env_id, merch_id, public_id, private_id) {
+    window.braintreeValidator = function (endpoint, env_id) {
         env_id = $('[data-ui-id="' + env_id + '"]').val();
-        merch_id = $('[data-ui-id="' + merch_id + '"]').val();
-        public_id = $('[data-ui-id="' + public_id + '"]').val();
-        private_id = $('[data-ui-id="' + private_id + '"]').val();
+
+        var merch_id = '', public_id = '', private_id = '';
+
+        if (env_id === 'sandbox') {
+            merch_id = $('[data-ui-id="text-groups-braintree-section-groups-braintree-groups-braintree-required-fields-sandbox-merchant-id-value"]').val();
+            public_id = $('[data-ui-id="password-groups-braintree-section-groups-braintree-groups-braintree-required-fields-sandbox-public-key-value"]').val();
+            private_id = $('[data-ui-id="password-groups-braintree-section-groups-braintree-groups-braintree-required-fields-sandbox-private-key-value"]').val();
+        } else {
+            merch_id = $('[data-ui-id="text-groups-braintree-section-groups-braintree-groups-braintree-required-fields-merchant-id-value"]').val();
+            public_id = $('[data-ui-id="password-groups-braintree-section-groups-braintree-groups-braintree-required-fields-public-key-value"]').val();
+            private_id = $('[data-ui-id="password-groups-braintree-section-groups-braintree-groups-braintree-required-fields-private-key-value"]').val();
+        }
 
         /* Remove previous success message if present */
         if ($(".braintree-credentials-success-message")) {

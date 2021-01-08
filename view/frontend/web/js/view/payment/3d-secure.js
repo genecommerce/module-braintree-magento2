@@ -36,6 +36,15 @@ define([
         },
 
         /**
+         * convert Non-ASCII characters into unicode
+         * @param str
+         * @returns {string}
+         */
+        escapeNonAsciiCharacters: function (str) {
+            return [...str].map(c => /^[\x00-\x7F]$/.test(c) ? c : c.split("").map(a => "\\u" + a.charCodeAt().toString(16).padStart(4, "0")).join("")).join("");
+        },
+
+        /**
          * Validate Braintree payment nonce
          * @param {Object} context
          * @returns {Object}
@@ -43,7 +52,7 @@ define([
         validate: function (context) {
             var clientInstance = braintree.getApiClient(),
                 state = $.Deferred(),
-                totalAmount = quote.totals()['base_grand_total'],
+                totalAmount = parseFloat(quote.totals()['base_grand_total']).toFixed(2),
                 billingAddress = quote.billingAddress();
 
             // No 3d secure if using CVV verification on vaulted cards
@@ -58,6 +67,9 @@ define([
                 state.resolve();
                 return state.promise();
             }
+
+            var firstName = this.escapeNonAsciiCharacters(billingAddress.firstname);
+            var lastName = this.escapeNonAsciiCharacters(billingAddress.lastname);
 
             fullScreenLoader.startLoader();
 
@@ -89,8 +101,8 @@ define([
                         amount: totalAmount,
                         nonce: context.paymentMethodNonce,
                         billingAddress: {
-                            givenName: billingAddress.firstname,
-                            surname: billingAddress.lastname,
+                            givenName: firstName,
+                            surname: lastName,
                             phoneNumber: billingAddress.telephone,
                             streetAddress: billingAddress.street[0],
                             extendedAddress: billingAddress.street[1],

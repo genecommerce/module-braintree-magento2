@@ -28,18 +28,21 @@
                 <can_edit>1</can_edit>
                 <can_review_payment>1</can_review_payment>
                 <can_deny_payment>1</can_deny_payment>
-                <cctypes>AE,VI,MC,DI,JCB,CUP,DN,MI</cctypes>
+                <cctypes>AE,VI,MC,DI,JCB,DN,MI</cctypes>
                 <useccv>1</useccv>
-                <cctypes_braintree_mapper><![CDATA[{"american-express":"AE","discover":"DI","jcb":"JCB","mastercard":"MC","master-card":"MC","visa":"VI","maestro":"MI","uk-maestro":"MI","diners-club":"DN","unionpay":"CUP"}]]></cctypes_braintree_mapper>
+                <cctypes_braintree_mapper><![CDATA[{"american-express":"AE","discover":"DI","jcb":"JCB","mastercard":"MC","master-card":"MC","visa":"VI","maestro":"MI","uk-maestro":"MI","diners-club":"DN"}]]></cctypes_braintree_mapper>
                 <order_status>processing</order_status>
                 <environment>sandbox</environment>
                 <allowspecific>0</allowspecific>
                 <public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <private_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <sandbox_public_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <sandbox_private_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <masked_fields>cvv,number</masked_fields>
-                <privateInfoKeys>avsPostalCodeResponseCode,avsStreetAddressResponseCode,cvvResponseCode,processorAuthorizationCode,processorResponseCode,processorResponseText,liabilityShifted,liabilityShiftPossible,riskDataId,riskDataDecision,transactionSource</privateInfoKeys>
-                <paymentInfoKeys>cc_type,cc_number,avsPostalCodeResponseCode,avsStreetAddressResponseCode,cvvResponseCode,processorAuthorizationCode,processorResponseCode,processorResponseText,liabilityShifted,liabilityShiftPossible,riskDataId,riskDataDecision,transactionSource</paymentInfoKeys>
+                <privateInfoKeys>avsPostalCodeResponseCode,avsStreetAddressResponseCode,cvvResponseCode,processorAuthorizationCode,processorResponseCode,processorResponseText,liabilityShifted,liabilityShiftPossible,eciFlag,riskDataId,riskDataDecision,transactionSource</privateInfoKeys>
+                <paymentInfoKeys>cc_type,cc_number,avsPostalCodeResponseCode,avsStreetAddressResponseCode,cvvResponseCode,processorAuthorizationCode,processorResponseCode,processorResponseText,liabilityShifted,liabilityShiftPossible,eciFlag,riskDataId,riskDataDecision,transactionSource</paymentInfoKeys>
                 <kount_allowed_ips>208.75.112.0/22,209.81.12.0/24</kount_allowed_ips>
+                <group>braintree_group</group>
             </braintree>
             <braintree_paypal>
                 <model>BraintreePayPalFacade</model>
@@ -66,7 +69,13 @@
                 <sort_order>2</sort_order>
                 <disabled_funding_checkout></disabled_funding_checkout>
                 <disabled_funding_cart></disabled_funding_cart>
-                <button_productpage_enabled>0</button_productpage_enabled>
+                <button_productpage_enable>1</button_productpage_enable>
+                <button_paylater_productpage_enable>1</button_paylater_productpage_enable>
+                <button_paylater_checkout_enable>1</button_paylater_checkout_enable>
+                <message_productpage_enable>1</message_productpage_enable>
+                <message_checkout_enable>1</message_checkout_enable>
+                <button_cart_enabled>1</button_cart_enabled>
+                <message_cart_enabled>1</message_cart_enabled>
 
                 <!-- These are also defined in Gateway/Config/PayPal/Config.php::getButtonStyle() -->
                 <button_customise_cart>0</button_customise_cart>
@@ -81,6 +90,7 @@
                 <button_color_productpage>2</button_color_productpage>
                 <button_size_productpage>2</button_size_productpage>
                 <button_shape_productpage>1</button_shape_productpage>
+                <group>braintree_group</group>
             </braintree_paypal>
             <braintree_paypal_credit>
                 <model>BraintreePayPalCreditFacade</model>
@@ -90,15 +100,37 @@
                 <client_id backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <secret backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <sandbox>0</sandbox>
+                <group>braintree_group</group>
             </braintree_paypal_credit>
+            <braintree_paypal_paylater>
+                <model>BraintreePayPalPayLaterFacade</model>
+                <title>PayPal Pay Later</title>
+                <active>1</active>
+                <sort_order>1</sort_order>
+                <client_id backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <secret backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <sandbox>0</sandbox>
+                <group>braintree_group</group>
+            </braintree_paypal_paylater>
             <braintree_cc_vault>
                 <model>BraintreeCreditCardVaultFacade</model>
                 <title>Stored Cards</title>
+                <instant_purchase>
+                    <available>Magento\Braintree\Model\InstantPurchase\CreditCard\AvailabilityChecker</available>
+                    <tokenFormat>Magento\Braintree\Model\InstantPurchase\CreditCard\TokenFormatter</tokenFormat>
+                    <additionalInformation>Magento\Braintree\Model\InstantPurchase\PaymentAdditionalInformationProvider</additionalInformation>
+                </instant_purchase>
+                <group>braintree_group</group>
             </braintree_cc_vault>
             <braintree_paypal_vault>
                 <model>BraintreePayPalVaultFacade</model>
                 <title>Stored Accounts (PayPal)</title>
                 <can_use_internal>1</can_use_internal>
+                <instant_purchase>
+                    <tokenFormat>Magento\Braintree\Model\InstantPurchase\PayPal\TokenFormatter</tokenFormat>
+                    <additionalInformation>Magento\Braintree\Model\InstantPurchase\PaymentAdditionalInformationProvider</additionalInformation>
+                </instant_purchase>
+                <group>braintree_group</group>
             </braintree_paypal_vault>
             <braintree_applepay>
                 <model>BraintreeApplePay</model>
@@ -122,6 +154,7 @@
                 <privateInfoKeys>processorAuthorizationCode,processorResponseCode,processorResponseText</privateInfoKeys>
                 <paymentInfoKeys>processorAuthorizationCode,processorResponseCode,processorResponseText</paymentInfoKeys>
                 <merchant_name>Store</merchant_name>
+                <group>braintree_group</group>
             </braintree_applepay>
             <braintree_googlepay>
                 <model>BraintreeGooglePay</model>
@@ -147,6 +180,7 @@
                 <cctypes>VISA,MASTERCARD,AMEX</cctypes>
                 <merchant_id>testmode</merchant_id>
                 <btn_color>0</btn_color>
+                <group>braintree_group</group>
             </braintree_googlepay>
             <braintree_venmo>
                 <active>0</active>
@@ -165,6 +199,7 @@
                 <title>Venmo</title>
                 <privateInfoKeys>processorAuthorizationCode,processorResponseCode,processorResponseText</privateInfoKeys>
                 <paymentInfoKeys>processorAuthorizationCode,processorResponseCode,processorResponseText</paymentInfoKeys>
+                <group>braintree_group</group>
             </braintree_venmo>
             <braintree_ach_direct_debit>
                 <active>0</active>
@@ -183,6 +218,7 @@
                 <title>ACH Direct Debit</title>
                 <privateInfoKeys>processorAuthorizationCode,processorResponseCode,processorResponseText</privateInfoKeys>
                 <paymentInfoKeys>processorAuthorizationCode,processorResponseCode,processorResponseText</paymentInfoKeys>
+                <group>braintree_group</group>
             </braintree_ach_direct_debit>
             <braintree_local_payment>
                 <active>0</active>
@@ -202,6 +238,7 @@
                 <privateInfoKeys>processorAuthorizationCode,processorResponseCode,processorResponseText</privateInfoKeys>
                 <title>Local Payments</title>
                 <allowed_methods>bancontact,eps,giropay,ideal,sofort,mybank,p24,sepa</allowed_methods>
+                <group>braintree_group</group>
             </braintree_local_payment>
         </payment>
     </default>

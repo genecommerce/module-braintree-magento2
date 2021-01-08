@@ -10,6 +10,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Braintree\Model\Adminhtml\Source\Environment;
 use Magento\Braintree\Model\StoreConfigResolver;
 
 /**
@@ -24,6 +25,9 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const KEY_MERCHANT_ACCOUNT_ID = 'merchant_account_id';
     const KEY_PUBLIC_KEY = 'public_key';
     const KEY_PRIVATE_KEY = 'private_key';
+    const KEY_SANDBOX_MERCHANT_ID = 'sandbox_merchant_id';
+    const KEY_SANDBOX_PUBLIC_KEY = 'sandbox_public_key';
+    const KEY_SANDBOX_PRIVATE_KEY = 'sandbox_private_key';
     const KEY_COUNTRY_CREDIT_CARD = 'countrycreditcard';
     const KEY_CC_TYPES = 'cctypes';
     const KEY_CC_TYPES_BRAINTREE_MAPPER = 'cctypes_braintree_mapper';
@@ -280,6 +284,12 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getMerchantId()
     {
+        if ($this->getEnvironment() === Environment::ENVIRONMENT_SANDBOX) {
+            return $this->getValue(
+                self::KEY_SANDBOX_MERCHANT_ID,
+                $this->storeConfigResolver->getStoreId()
+            );
+        }
         return $this->getValue(
             self::KEY_MERCHANT_ID,
             $this->storeConfigResolver->getStoreId()

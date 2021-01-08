@@ -140,6 +140,7 @@ Debug,Debug
 "braintree", "Braintree"
 "liabilityShifted", "Liability Shifted"
 "liabilityShiftPossible", "Liability Shift Possible"
+"eciFlag", "ECI Flag"
 "riskDataId", "Risk ID"
 "riskDataDecision", "Risk Decision"
 "paymentId", "Payment Id"

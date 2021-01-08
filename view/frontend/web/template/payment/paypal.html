@@ -50,6 +50,11 @@
         </div>
         <!-- /ko -->
         <div class="actions-toolbar braintree-paypal-actions" data-bind="visible: isReviewRequired()">
+            <div class="payment-method-billing-address">
+                <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+                <!--/ko-->
+            </div>
             <div class="payment-method-item braintree-paypal-account">
                 <span class="payment-method-type">PayPal</span>
                 <span class="payment-method-description" text="customerEmail()"></span>
@@ -65,8 +70,18 @@
             </div>
         </div>
         <div class="actions-toolbar" data-bind="visible: !isReviewRequired()">
-            <div data-bind="attr: {id: getButtonId()}"></div>
+            <div data-bind="attr: {id: getPayPalButtonId()}"></div>
+            <!-- ko if: (isCreditEnabled())-->
+            <div data-bind="attr: {id: getCreditButtonId()}"></div>
+            <!-- /ko -->
+            <!-- ko if: (isPaylaterEnabled())-->
+            <div data-bind="attr: {id: getPaylaterButtonId()}"></div>
+            <!-- /ko -->
+            <!-- ko if: (isPaylaterMessageEnabled())-->
+            <div data-pp-message data-pp-placement="payment"
+                 data-bind='attr: {"data-pp-amount": getGrandTotalAmount()}'
+            ></div>
+            <!-- /ko -->
         </div>
     </div>
 </div>
-
