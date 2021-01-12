@@ -35,7 +35,7 @@ define(
                 if (!this.countryDirectory) {
                     storage.get("rest/V1/directory/countries").done(function (result) {
                         this.countryDirectory = {};
-                        let i, data, x, region;
+                        var i, data, x, region;
                         for (i = 0; i < result.length; ++i) {
                             data = result[i];
                             this.countryDirectory[data.two_letter_abbreviation] = {};
@@ -167,10 +167,10 @@ define(
              */
             onShippingContactSelect: function (event, session) {
                 // Get the address.
-                let address = event.shippingContact;
+                var address = event.shippingContact;
 
                 // Create a payload.
-                let payload = {
+                var payload = {
                     address: {
                         city: address.locality,
                         region: address.administrativeArea,
@@ -194,16 +194,16 @@ define(
                         return false;
                     }
 
-                    let shippingMethods = [];
+                    var shippingMethods = [];
                     this.shippingMethods = {};
 
                     // Format shipping methods array.
-                    for (let i = 0; i < result.length; i++) {
+                    for (var i = 0; i < result.length; i++) {
                         if (typeof result[i].method_code !== 'string') {
                             continue;
                         }
 
-                        let method = {
+                        var method = {
                             identifier: result[i].method_code,
                             label: result[i].method_title,
                             detail: result[i].carrier_title ? result[i].carrier_title : "",
@@ -221,7 +221,7 @@ define(
                     }
 
                     // Create payload to get totals
-                    let totalsPayload = {
+                    var totalsPayload = {
                         "addressInformation": {
                             "address": {
                                 "countryId": this.shippingAddress.country_id,
@@ -275,10 +275,10 @@ define(
              * Record which shipping method has been selected & Updated totals
              */
             onShippingMethodSelect: function (event, session) {
-                let shippingMethod = event.shippingMethod;
+                var shippingMethod = event.shippingMethod;
                 this.shippingMethod = shippingMethod.identifier;
 
-                let payload = {
+                var payload = {
                     "addressInformation": {
                         "address": {
                             "countryId": this.shippingAddress.country_id,
@@ -316,7 +316,7 @@ define(
              * Place the order
              */
             startPlaceOrder: function (nonce, event, session) {
-                let shippingContact = event.payment.shippingContact,
+                var shippingContact = event.payment.shippingContact,
                     billingContact = event.payment.billingContact,
                     payload = {
                         "addressInformation": {

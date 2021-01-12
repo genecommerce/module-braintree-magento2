@@ -58,9 +58,9 @@ define(
 
                 var billingAddress = quote.billingAddress();
 
-                let regionCode;
+                var regionCode;
 
-                let bankDetails = {
+                var bankDetails = {
                     routingNumber: self.routingNumber(),
                     accountNumber: self.accountNumber(),
                     accountType: self.accountType(),
@@ -132,7 +132,7 @@ define(
             },
 
             getData: function () {
-                let data = {
+                var data = {
                     'method': this.getCode(),
                     'additional_data': {
                         'payment_method_nonce': this.paymentMethodNonce,

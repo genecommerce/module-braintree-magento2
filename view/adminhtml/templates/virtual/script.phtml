@@ -18,7 +18,7 @@ $code = $block->escapeHtml($block->getCode());
             'jquery',
             'domReady!'
         ], function(Braintree, $) {
-            let config = <?= /* @noEscape */ $block->getPaymentConfig() ?>,
+            var config = <?= /* @noEscape */ $block->getPaymentConfig() ?>,
                 payment;
             payment = new Braintree(config);
         });

@@ -15,7 +15,7 @@ define(
     ) {
         'use strict';
 
-        let config = window.checkoutConfig.payment,
+        var config = window.checkoutConfig.payment,
             braintreeType = 'braintree',
             payPalType = 'braintree_paypal',
             payPalCreditType = 'braintree_paypal_credit',
