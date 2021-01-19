@@ -107,7 +107,7 @@ define([
                             streetAddress: billingAddress.street[0],
                             extendedAddress: billingAddress.street[1],
                             locality: billingAddress.city,
-                            region: billingAddress.region,
+                            region: billingAddress.regionCode,
                             postalCode: billingAddress.postcode,
                             countryCodeAlpha2: billingAddress.countryId
                         },
