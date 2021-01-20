@@ -108,7 +108,7 @@ define([
             window.addEventListener('hashchange', function (e) {
                 var methodCode = quote.paymentMethod();
 
-                if (methodCode === 'braintree_paypal' || methodCode === 'braintree_paypal_vault') {
+                if (methodCode['method'] === 'braintree_paypal' || methodCode['method'] === 'braintree_paypal_vault') {
                     if (e.newURL.indexOf('payment') > 0 && self.grandTotalAmount !== null) {
                         self.reInitPayPal();
                     }
@@ -118,7 +118,7 @@ define([
             quote.paymentMethod.subscribe(function (value) {
                 var methodCode = value;
 
-                if (methodCode === 'braintree_paypal' || methodCode === 'braintree_paypal_vault') {
+                if (methodCode['method'] === 'braintree_paypal' || methodCode['method'] === 'braintree_paypal_vault') {
                     self.reInitPayPal();
                 }
             });
@@ -136,7 +136,7 @@ define([
                     self.grandTotalAmount = quote.totals()['base_grand_total'];
                     var methodCode = quote.paymentMethod();
 
-                    if (methodCode === 'braintree_paypal' || methodCode === 'braintree_paypal_vault') {
+                    if (methodCode['method'] === 'braintree_paypal' || methodCode['method'] === 'braintree_paypal_vault') {
                         self.reInitPayPal();
                     }
                 }
