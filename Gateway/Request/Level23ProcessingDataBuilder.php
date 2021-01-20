@@ -118,10 +118,10 @@ class Level23ProcessingDataBuilder implements BuilderInterface
                 [
                     $filteredFields['name'],
                     TransactionLineItem::DEBIT,
-                    $this->numberToString($item->getQtyOrdered(), 2),
+                    $this->numberToString((float)$item->getQtyOrdered(), 2),
                     $this->numberToString($itemPrice, 2),
                     $filteredFields['unit_of_measure'],
-                    $this->numberToString($item->getQtyOrdered() * $itemPrice, 2),
+                    $this->numberToString((float)$item->getQtyOrdered() * $itemPrice, 2),
                     $item->getTaxAmount() === null ? '0.00' : $this->numberToString($item->getTaxAmount(), 2),
                     $item->getDiscountAmount() === null ? '0.00' : $this->numberToString($item->getDiscountAmount(), 2),
                     $filteredFields['sku'],
