@@ -7,10 +7,12 @@ namespace Magento\Braintree\Gateway\Data\Order;
 
 use Magento\Payment\Gateway\Data\AddressAdapterInterface;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
+use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Sales\Model\Order;
 
 /**
  * Class OrderAdapter
+ * @package Magento\Braintree\Gateway\Data\Order
  */
 class OrderAdapter implements OrderAdapterInterface
 {
@@ -20,12 +22,21 @@ class OrderAdapter implements OrderAdapterInterface
     private $order;
 
     /**
+     * @var CartRepositoryInterface
+     */
+    private $quoteRepository;
+
+    /**
+     * OrderAdapter constructor.
      * @param Order $order
+     * @param CartRepositoryInterface $quoteRepository
      */
     public function __construct(
-        Order $order
+        Order $order,
+        CartRepositoryInterface $quoteRepository
     ) {
         $this->order = $order;
+        $this->quoteRepository = $quoteRepository;
     }
 
     /**
@@ -36,6 +47,23 @@ class OrderAdapter implements OrderAdapterInterface
     public function getCurrencyCode()
     {
         return $this->order->getBaseCurrencyCode();
+    }
+
+    /**
+     * Check whether order is multi shipping
+     *
+     * @return bool
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function isMultiShipping()
+    {
+        $quoteId = $this->order->getQuoteId();
+        if (!$quoteId) {
+            return false;
+        }
+        $quote = $this->quoteRepository->get($quoteId);
+
+        return (bool)$quote->getIsMultiShipping();
     }
 
     /**

@@ -10,7 +10,8 @@ use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Vault\Model\Ui\VaultConfigProvider;
 
 /**
- * Vault Data Builder
+ * Class VaultDataBuilder
+ * @package Magento\Braintree\Gateway\Request
  */
 class VaultDataBuilder implements BuilderInterface
 {
@@ -50,7 +51,7 @@ class VaultDataBuilder implements BuilderInterface
         $payment = $paymentDO->getPayment();
         $data = $payment->getAdditionalInformation();
 
-        if (!empty($data[VaultConfigProvider::IS_ACTIVE_CODE])) {
+        if ($paymentDO->getOrder()->isMultiShipping() || !empty($data[VaultConfigProvider::IS_ACTIVE_CODE])) {
             $result[self::OPTIONS] = [
                 self::STORE_IN_VAULT_ON_SUCCESS => true
             ];
