@@ -47,6 +47,7 @@ define([
             grandTotalAmount: null,
             isReviewRequired: false,
             customerEmail: null,
+            methodSelected: false,
 
             /**
              * Additional payment data
@@ -118,9 +119,10 @@ define([
             quote.paymentMethod.subscribe(function (value) {
                 var methodCode = value;
 
-                if (methodCode['method'] === 'braintree_paypal' || methodCode['method'] === 'braintree_paypal_vault') {
+                if ((methodCode['method'] === 'braintree_paypal' || methodCode['method'] === 'braintree_paypal_vault') && self.methodSelected === false) {
                     self.reInitPayPal();
                 }
+                self.methodSelected = false;
             });
 
             this.vaultEnabler = new VaultEnabler();
@@ -191,6 +193,7 @@ define([
 
             // need always re-init Braintree with PayPal configuration
             this.reInitPayPal();
+            this.methodSelected = true;
         },
 
         /**
