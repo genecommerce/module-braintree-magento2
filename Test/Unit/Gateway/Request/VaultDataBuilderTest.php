@@ -25,55 +25,18 @@ use Zend\Log\Filter\Mock;
 class VaultDataBuilderTest extends TestCase
 {
     /**
-     * @var SubjectReader | MockObject
-     */
-    private $subjectReader;
-
-    /**
      * @var PaymentDataObjectInterface | MockObject
      */
     private $paymentDO;
 
-    /**
-     * @var VaultDataBuilder | MockObject
-     */
-    private $builder;
-
-    /**
-     * @var Config | MockObject
-     */
-    private $configMock;
-
-    /**
-     * @var Payment | MockObject
-     */
-    private $paymentMock;
-
     public function setUp()
     {
         $this->paymentDO = $this->createMock(PaymentDataObjectInterface::class);
-
-        $this->configMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->paymentMock = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->subjectReader = $this->getMockBuilder(SubjectReader::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->builder = new VaultDataBuilder($this->subjectReader);
+        $this->builder = new VaultDataBuilder();
     }
 
     public function testBuild()
     {
-        $additionalData = [
-            VaultConfigProvider::IS_ACTIVE_CODE => true
-        ];
-
         $expectedResult = [
             VaultDataBuilder::OPTIONS => [
                 VaultDataBuilder::STORE_IN_VAULT_ON_SUCCESS => true
@@ -83,19 +46,6 @@ class VaultDataBuilderTest extends TestCase
         $buildSubject = [
             'payment' => $this->paymentDO
         ];
-
-        $this->paymentMock->expects(static::exactly(count($additionalData)))
-            ->method('getAdditionalInformation')
-            ->willReturn($additionalData);
-
-        $this->paymentDO->expects(static::once())
-            ->method('getPayment')
-            ->willReturn($this->paymentMock);
-
-        $this->subjectReader->expects(self::once())
-            ->method('readPayment')
-            ->with($buildSubject)
-            ->willReturn($this->paymentDO);
 
         static::assertEquals(
             $expectedResult,

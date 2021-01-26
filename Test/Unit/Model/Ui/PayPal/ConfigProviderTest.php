@@ -102,7 +102,6 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
                             'title' => 'Payment Title',
                             'isAllowShippingAddressOverride' => true,
                             'merchantName' => 'Test',
-                            'payeeEmail' => null,
                             'locale' => 'en_US',
                             'paymentAcceptanceMarkSrc' =>
                                 'https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-medium.png',
@@ -118,11 +117,10 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
                         ],
 
                         ConfigProvider::PAYPAL_CREDIT_CODE => [
-                            'isActive' => null,
+                            'isActive' => false,
                             'title' => __('PayPal Credit'),
                             'isAllowShippingAddressOverride' => true,
                             'merchantName' => 'Test',
-                            'payeeEmail' => null,
                             'locale' => 'en_US',
                             'paymentAcceptanceMarkSrc' =>
                                 'https://www.paypalobjects.com/webstatic/en_US/i/buttons/ppc-acceptance-medium.png',

@@ -8,6 +8,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\ResourceConnection\ConnectionFactory;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Api\PaymentTokenRepositoryInterface;
 use Magento\Vault\Model\PaymentTokenFactory;
 use Magento\Vault\Test\Block\Onepage\Payment\Method\Vault;
@@ -50,6 +51,10 @@ class VaultMigrateTest extends TestCase
      */
     private $jsonMock;
     /**
+     * @var MockObject|StoreManagerInterface
+     */
+    private $storeManagerMock;
+    /**
      * @var MockObject|VaultMigrate
      */
     private $command;
@@ -63,6 +68,7 @@ class VaultMigrateTest extends TestCase
         $this->paymentTokenRepositoryMock = $this->createMock(PaymentTokenRepositoryInterface::class);
         $this->encryptorMock = $this->createMock(EncryptorInterface::class);
         $this->jsonMock = $this->createMock(SerializerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $this->command = new VaultMigrate(
             $this->connectionFactoryMock,
@@ -71,7 +77,8 @@ class VaultMigrateTest extends TestCase
             $this->paymentTokenFactoryMock,
             $this->paymentTokenRepositoryMock,
             $this->encryptorMock,
-            $this->jsonMock
+            $this->jsonMock,
+            $this->storeManagerMock
         );
     }
 

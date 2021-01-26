@@ -136,7 +136,6 @@ class ConfigProviderTest extends TestCase
                 'config' => [
                     'isActive' => true,
                     'getCcTypesMapper' => ['visa' => 'VI', 'american-express'=> 'AE'],
-                    'getSdkUrl' => self::SDK_URL,
                     'getCountrySpecificCardTypeConfig' => [
                         'GB' => ['VI', 'AE'],
                         'US' => ['DI', 'JCB']
@@ -157,7 +156,6 @@ class ConfigProviderTest extends TestCase
                             'isActive' => true,
                             'clientToken' => self::CLIENT_TOKEN,
                             'ccTypesMapper' => ['visa' => 'VI', 'american-express' => 'AE'],
-                            'sdkUrl' => self::SDK_URL,
                             'countrySpecificCardTypes' =>[
                                 'GB' => ['VI', 'AE'],
                                 'US' => ['DI', 'JCB']
@@ -182,12 +180,8 @@ class ConfigProviderTest extends TestCase
                         ],
                         Config::CODE_3DSECURE => [
                             'enabled' => true,
-                            'thresholdAmount' => 20,
-                            'specificCountries' => ['GB', 'US', 'CA'],
-                            'useCvvVault' => null
-                        ],
-                        ConfigProvider::CC_VAULT_CODE => [
-                            'useCvvVault' => null
+                            'thresholdAmount' => 20.0,
+                            'specificCountries' => ['GB', 'US', 'CA']
                         ]
                     ]
                 ]
