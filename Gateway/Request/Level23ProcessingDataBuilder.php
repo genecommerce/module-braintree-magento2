@@ -15,6 +15,7 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Class Level23ProcessingDataBuilder
+ * @package Magento\Braintree\Gateway\Request
  */
 class Level23ProcessingDataBuilder implements BuilderInterface
 {
@@ -43,10 +44,12 @@ class Level23ProcessingDataBuilder implements BuilderInterface
      * @var SubjectReader
      */
     private $subjectReader;
+
     /**
      * @var ScopeConfigInterface
      */
     private $scopeConfig;
+
     /**
      * @var ISO3166
      */
@@ -94,30 +97,31 @@ class Level23ProcessingDataBuilder implements BuilderInterface
         foreach ($order->getItems() as $item) {
 
             // Skip configurable parent items and items with a base price of 0.
-            if ($item->getParentItem() || 0.0 === $item->getPrice()) {
+            if ($item->getParentItem() || 0.0 === (float) $item->getPrice()) {
                 continue;
             }
 
             // Regex to replace all unsupported characters.
             $filteredFields = preg_replace(
-                '/[^a-zA-Z0-9\s\-.\']/',
+                '/[^\p{M}\w\s\-.\']/u',
                 '',
                 [
-                    'name' => substr($item->getName(), 0, 35),
+                    'name' => mb_substr($item->getName(), 0, 35),
                     'unit_of_measure' => substr($item->getProductType(), 0, 12),
                     'sku' => substr($item->getSku(), 0, 12)
                 ]
             );
 
+            $itemPrice = (float) $item->getPrice();
             $lineItems[] = array_combine(
                 self::LINE_ITEMS_ARRAY,
                 [
                     $filteredFields['name'],
                     TransactionLineItem::DEBIT,
-                    $this->numberToString($item->getQtyOrdered(), 2),
-                    $this->numberToString($item->getBasePrice(), 2),
+                    $this->numberToString((float)$item->getQtyOrdered(), 2),
+                    $this->numberToString($itemPrice, 2),
                     $filteredFields['unit_of_measure'],
-                    $this->numberToString($item->getQtyOrdered() * $item->getBasePrice(), 2),
+                    $this->numberToString((float)$item->getQtyOrdered() * $itemPrice, 2),
                     $item->getTaxAmount() === null ? '0.00' : $this->numberToString($item->getTaxAmount(), 2),
                     $item->getDiscountAmount() === null ? '0.00' : $this->numberToString($item->getDiscountAmount(), 2),
                     $filteredFields['sku'],
@@ -155,12 +159,17 @@ class Level23ProcessingDataBuilder implements BuilderInterface
     }
 
     /**
-     * @param float $num
+     * @param $num
      * @param int $precision
      * @return string
      */
-    private function numberToString(float $num, int $precision): string
+    private function numberToString($num, int $precision): string
     {
+        // To counter the fact that Magento often wrongly returns a string for price values, we can cast it to a float.
+        if (is_string($num)) {
+            $num = (float) $num;
+        }
+
         return (string) round($num, $precision);
     }
 }

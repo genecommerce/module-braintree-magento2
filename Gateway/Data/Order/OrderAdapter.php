@@ -6,13 +6,13 @@
 namespace Magento\Braintree\Gateway\Data\Order;
 
 use Magento\Payment\Gateway\Data\AddressAdapterInterface;
-use Magento\Payment\Gateway\Data\Order\AddressAdapter;
-use Magento\Payment\Gateway\Data\Order\AddressAdapterFactory;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
+use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Sales\Model\Order;
 
 /**
  * Class OrderAdapter
+ * @package Magento\Braintree\Gateway\Data\Order
  */
 class OrderAdapter implements OrderAdapterInterface
 {
@@ -22,20 +22,21 @@ class OrderAdapter implements OrderAdapterInterface
     private $order;
 
     /**
-     * @var AddressAdapter
+     * @var CartRepositoryInterface
      */
-    private $addressAdapterFactory;
+    private $quoteRepository;
 
     /**
+     * OrderAdapter constructor.
      * @param Order $order
-     * @param AddressAdapterFactory $addressAdapterFactory
+     * @param CartRepositoryInterface $quoteRepository
      */
     public function __construct(
         Order $order,
-        AddressAdapterFactory $addressAdapterFactory
+        CartRepositoryInterface $quoteRepository
     ) {
         $this->order = $order;
-        $this->addressAdapterFactory = $addressAdapterFactory;
+        $this->quoteRepository = $quoteRepository;
     }
 
     /**
@@ -46,6 +47,23 @@ class OrderAdapter implements OrderAdapterInterface
     public function getCurrencyCode()
     {
         return $this->order->getBaseCurrencyCode();
+    }
+
+    /**
+     * Check whether order is multi shipping
+     *
+     * @return bool
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function isMultiShipping()
+    {
+        $quoteId = $this->order->getQuoteId();
+        if (!$quoteId) {
+            return false;
+        }
+        $quote = $this->quoteRepository->get($quoteId);
+
+        return (bool)$quote->getIsMultiShipping();
     }
 
     /**
@@ -71,14 +89,12 @@ class OrderAdapter implements OrderAdapterInterface
     /**
      * Returns billing address
      *
-     * @return AddressAdapterInterface|null
+     * @return AddressAdapterInterface|\Magento\Sales\Api\Data\OrderAddressInterface|null
      */
     public function getBillingAddress()
     {
         if ($this->order->getBillingAddress()) {
-            return $this->addressAdapterFactory->create(
-                ['address' => $this->order->getBillingAddress()]
-            );
+            return $this->order->getBillingAddress();
         }
 
         return null;
@@ -87,14 +103,12 @@ class OrderAdapter implements OrderAdapterInterface
     /**
      * Returns shipping address
      *
-     * @return AddressAdapterInterface|null
+     * @return AddressAdapterInterface|Order\Address|null
      */
     public function getShippingAddress()
     {
         if ($this->order->getShippingAddress()) {
-            return $this->addressAdapterFactory->create(
-                ['address' => $this->order->getShippingAddress()]
-            );
+            return $this->order->getShippingAddress();
         }
 
         return null;

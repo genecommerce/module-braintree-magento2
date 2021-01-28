@@ -8,6 +8,7 @@ use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Braintree\Gateway\Config\Config;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Braintree\Model\Adminhtml\Source\Environment;
 
 /**
  * Class Validate
@@ -44,19 +45,28 @@ class Validate extends Action
         $publicKey = $this->getRequest()->getParam('public_key');
         $privateKey = $this->getRequest()->getParam('private_key');
         $storeId = $this->getRequest()->getParam('storeId', 0);
+        $environment = $this->getRequest()->getParam('environment');
 
         if (false !== strpos($publicKey, '*')) {
-            $publicKey = $this->config->getValue(Config::KEY_PUBLIC_KEY, $storeId);
+            if ($environment === Environment::ENVIRONMENT_SANDBOX) {
+                $publicKey = $this->config->getValue(Config::KEY_SANDBOX_PUBLIC_KEY, $storeId);
+            } else {
+                $publicKey = $this->config->getValue(Config::KEY_PUBLIC_KEY, $storeId);
+            }
         }
 
         if (false !== strpos($privateKey, '*')) {
-            $privateKey = $this->config->getValue(Config::KEY_PRIVATE_KEY, $storeId);
+            if ($environment === Environment::ENVIRONMENT_SANDBOX) {
+                $privateKey = $this->config->getValue(Config::KEY_SANDBOX_PRIVATE_KEY, $storeId);
+            } else {
+                $privateKey = $this->config->getValue(Config::KEY_PRIVATE_KEY, $storeId);
+            }
         }
 
         $response = $this->resultFactory->create(ResultFactory::TYPE_JSON);
 
         try {
-            Configuration::environment($this->getRequest()->getParam('environment'));
+            Configuration::environment($environment);
             Configuration::merchantId($this->getRequest()->getParam('merchant_id'));
             Configuration::publicKey($publicKey);
             Configuration::privateKey($privateKey);

@@ -33,12 +33,6 @@ class Validation extends Field
         $title = __('Validate Credentials');
         $envId = 'select-groups-braintree-section-groups-braintree-groups-braintree-'
             . 'required-fields-environment-value';
-        $merchantId = 'text-groups-braintree-section-groups-braintree-groups-braintree-'
-            . 'required-fields-merchant-id-value';
-        $publicKeyId = 'password-groups-braintree-section-groups-braintree-groups-braintree-'
-            . 'required-fields-public-key-value';
-        $privateKeyId = 'password-groups-braintree-section-groups-braintree-groups-braintree-'
-            . 'required-fields-private-key-value';
         $storeId = 0;
 
         if ($this->getRequest()->getParam('website')) {
@@ -58,7 +52,7 @@ class Validation extends Field
                 type="button"
                 title="{$title}"
                 class="button"
-                onclick="braintreeValidator.call(this, '{$endpoint}', '{$envId}', '{$merchantId}', '{$publicKeyId}', '{$privateKeyId}')">
+                onclick="braintreeValidator.call(this, '{$endpoint}', '{$envId}')">
                 <span>{$title}</span>
             </button>
 TEXT;

@@ -80,18 +80,26 @@ class BraintreeAdapter
 
         $this->environment(Environment::ENVIRONMENT_SANDBOX);
 
+        $merchantId = $this->config->getValue(Config::KEY_SANDBOX_MERCHANT_ID, $storeId);
+        $publicKey = $this->config->getValue(Config::KEY_SANDBOX_PUBLIC_KEY, $storeId);
+        $privateKey = $this->config->getValue(Config::KEY_SANDBOX_PRIVATE_KEY, $storeId);
+
         if ($environmentIdentifier === Environment::ENVIRONMENT_PRODUCTION) {
             $this->environment(Environment::ENVIRONMENT_PRODUCTION);
+
+            $merchantId = $this->config->getValue(Config::KEY_MERCHANT_ID, $storeId);
+            $publicKey = $this->config->getValue(Config::KEY_PUBLIC_KEY, $storeId);
+            $privateKey = $this->config->getValue(Config::KEY_PRIVATE_KEY, $storeId);
         }
 
         $this->merchantId(
-            $this->config->getValue(Config::KEY_MERCHANT_ID, $storeId)
+            $merchantId
         );
         $this->publicKey(
-            $this->config->getValue(Config::KEY_PUBLIC_KEY, $storeId)
+            $publicKey
         );
         $this->privateKey(
-            $this->config->getValue(Config::KEY_PRIVATE_KEY, $storeId)
+            $privateKey
         );
     }
 
@@ -203,6 +211,16 @@ class BraintreeAdapter
     public function submitForSettlement($transactionId, $amount = null)
     {
         return Transaction::submitForSettlement($transactionId, $amount);
+    }
+
+    /**
+     * @param string $transactionId
+     * @param null|float $amount
+     * @return Successful|Error
+     */
+    public function submitForPartialSettlement($transactionId, $amount = null)
+    {
+        return Transaction::submitForPartialSettlement($transactionId, $amount);
     }
 
     /**

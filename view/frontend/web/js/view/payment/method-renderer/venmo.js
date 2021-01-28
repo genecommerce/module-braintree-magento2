@@ -121,13 +121,12 @@ define(
                             client: clientInstance,
                             allowNewBrowserTab: false
                         }, function (venmoErr, venmoInstance) {
-                            if (venmoErr) {
-                                self.setErrorMsg($t('Error initializing Venmo: %1').replace('%1', venmoErr));
+                            if (!venmoInstance.isBrowserSupported()) {
                                 return;
                             }
 
-                            if (!venmoInstance.isBrowserSupported()) {
-                                self.setErrorMsg($t('Browser does not support Venmo.'));
+                            if (venmoErr) {
+                                self.setErrorMsg($t('Error initializing Venmo: %1').replace('%1', venmoErr));
                                 return;
                             }
 

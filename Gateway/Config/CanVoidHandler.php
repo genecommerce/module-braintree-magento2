@@ -42,8 +42,14 @@ class CanVoidHandler implements ValueHandlerInterface
     public function handle(array $subject, $storeId = null)
     {
         $paymentDO = $this->subjectReader->readPayment($subject);
-
+        $canCaptureFlag = true;
         $payment = $paymentDO->getPayment();
-        return $payment instanceof Payment && !(bool)$payment->getAmountPaid();
+        if ((bool)$payment->getAmountPaid()) {
+            $canCaptureFlag = false;
+        }
+        if ($payment->getAmountPaid() < $payment->getAmountAuthorized() && (bool)$payment->getAmountPaid()) {
+            $canCaptureFlag = true;
+        }
+        return $payment instanceof Payment && $canCaptureFlag;
     }
 }

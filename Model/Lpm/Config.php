@@ -13,9 +13,10 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Asset\Repository;
 
 /**
- * Class Config
- *
  * Provide configuration for LPMs
+ *
+ * Class Config
+ * @package Magento\Braintree\Model\Lpm
  */
 class Config extends \Magento\Payment\Gateway\Config\Config
 {
@@ -81,8 +82,14 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     private $assetRepo;
 
     /**
+     * Config constructor.
+     * @param BraintreeAdapter $adapter
+     * @param BraintreeConfig $braintreeConfig
      * @param StoreConfigResolver $storeConfigResolver
-     * {@inheritDoc}
+     * @param Repository $assetRepo
+     * @param ScopeConfigInterface $scopeConfig
+     * @param null $methodCode
+     * @param $pathPattern
      */
     public function __construct(
         BraintreeAdapter $adapter,
@@ -120,13 +127,16 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getAllowedMethods(): array
     {
-        $allowedMethods = explode(
-            ',',
-            $this->getValue(
-                self::KEY_ALLOWED_METHODS,
-                $this->storeConfigResolver->getStoreId()
-            )
+        $allowedMethodsValue = $this->getValue(
+            self::KEY_ALLOWED_METHODS,
+            $this->storeConfigResolver->getStoreId()
         );
+
+        if (is_null($allowedMethodsValue)) {
+            return [];
+        }
+
+        $allowedMethods = explode(',', $allowedMethodsValue);
 
         foreach ($allowedMethods as $allowedMethod) {
             $this->allowedMethods[] = [
