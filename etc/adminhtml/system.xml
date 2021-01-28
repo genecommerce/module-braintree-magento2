@@ -42,6 +42,7 @@
                         </requires>
                         <depends>
                             <field id="active_braintree_paypal">1</field>
+                            <field id="braintree_paypal_paylater_active">0</field>
                         </depends>
                     </field>
                     <field id="braintree_paypal_paylater_active" translate="label" type="select" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -54,6 +55,8 @@
                         </requires>
                         <depends>
                             <field id="active_braintree_paypal">1</field>
+                            <field id="braintree_paypal_credit_active">0</field>
+                            <field id="payment_gb/account/merchant_country">US</field>
                         </depends>
                     </field>
                     <field id="braintree_cc_vault_active" translate="label" type="select" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -509,6 +512,9 @@
                                 <label>Enable PayPal Pay Later button on the cart page and mini-cart</label>
                                 <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                                 <config_path>payment/braintree_paypal/button_paylater_cart_enable</config_path>
+                                <depends>
+                                    <field id="payment_gb/account/merchant_country">US</field>
+                                </depends>
                             </field>
                             <field id="message_cart_enable" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
                                 <label>Enable PayPal Pay Later message on the cart page and mini-cart</label>
@@ -562,6 +568,9 @@
                                 <label>Enable PayPal PayLater button on the product page</label>
                                 <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                                 <config_path>payment/braintree_paypal/button_paylater_checkout_enable</config_path>
+                                <depends>
+                                    <field id="payment_gb/account/merchant_country">US</field>
+                                </depends>
                             </field>
                             <field id="message_checkout_enable" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
                                 <label>Enable PayPal Pay Later message on the product page</label>
@@ -621,6 +630,9 @@
                                 <label>Enable PayPal PayLater button on the product page</label>
                                 <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                                 <config_path>payment/braintree_paypal/button_paylater_productpage_enable</config_path>
+                                <depends>
+                                    <field id="payment_gb/account/merchant_country">US</field>
+                                </depends>
                             </field>
                             <field id="message_productpage_enable" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
                                 <label>Enable PayPal Pay Later message on the product page</label>
