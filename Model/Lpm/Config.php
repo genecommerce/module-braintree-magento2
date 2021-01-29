@@ -82,14 +82,8 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     private $assetRepo;
 
     /**
-     * Config constructor.
-     * @param BraintreeAdapter $adapter
-     * @param BraintreeConfig $braintreeConfig
      * @param StoreConfigResolver $storeConfigResolver
-     * @param Repository $assetRepo
-     * @param ScopeConfigInterface $scopeConfig
-     * @param null $methodCode
-     * @param $pathPattern
+     * {@inheritDoc}
      */
     public function __construct(
         BraintreeAdapter $adapter,
