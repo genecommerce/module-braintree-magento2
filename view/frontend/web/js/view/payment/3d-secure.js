@@ -55,6 +55,10 @@ define([
                 totalAmount = parseFloat(quote.totals()['base_grand_total']).toFixed(2),
                 billingAddress = quote.billingAddress();
 
+            if(billingAddress.regionCode != undefined && billingAddress.regionCode.length > 2) {
+                billingAddress.regionCode = undefined;
+            }
+
             // No 3d secure if using CVV verification on vaulted cards
             if (quote.paymentMethod().method.indexOf('braintree_cc_vault_') !== -1) {
                 if (this.config.useCvvVault === true) {
