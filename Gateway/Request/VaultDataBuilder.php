@@ -46,17 +46,10 @@ class VaultDataBuilder implements BuilderInterface
      */
     public function build(array $buildSubject): array
     {
-        $result = [];
-        $paymentDO = $this->subjectReader->readPayment($buildSubject);
-        $payment = $paymentDO->getPayment();
-        $data = $payment->getAdditionalInformation();
-
-        if ($paymentDO->getOrder()->isMultiShipping() || !empty($data[VaultConfigProvider::IS_ACTIVE_CODE])) {
-            $result[self::OPTIONS] = [
+        return [
+            self::OPTIONS => [
                 self::STORE_IN_VAULT_ON_SUCCESS => true
-            ];
-        }
-
-        return $result;
+            ]
+        ];
     }
 }
