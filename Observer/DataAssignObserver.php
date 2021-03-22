@@ -16,13 +16,15 @@ class DataAssignObserver extends AbstractDataAssignObserver
 {
     const PAYMENT_METHOD_NONCE = 'payment_method_nonce';
     const DEVICE_DATA = 'device_data';
+    const CAPTCHA_RESPONSE = 'g-recaptcha-response';
 
     /**
      * @var array
      */
     protected $additionalInformationList = [
         self::PAYMENT_METHOD_NONCE,
-        self::DEVICE_DATA
+        self::DEVICE_DATA,
+        self::CAPTCHA_RESPONSE
     ];
 
     /**
