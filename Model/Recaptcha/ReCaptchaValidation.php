@@ -3,10 +3,13 @@ declare(strict_types=1);
 
 namespace Magento\Braintree\Model\Recaptcha;
 
+use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Payment\Gateway\Command\CommandException;
 use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Braintree\Observer\DataAssignObserver;
 use Magento\Framework\Exception\InputException;
+use MSP\ReCaptcha\Api\ValidateInterface;
+use MSP\ReCaptcha\Model\Config;
 
 class ReCaptchaValidation
 {
@@ -16,22 +19,37 @@ class ReCaptchaValidation
     private $subjectReader;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface $objectManager
+     * @var ValidateInterface
      */
-    private $objectManager;
+    private $validate;
 
+    /**
+     * @var RemoteAddress
+     */
+    private $remoteAddress;
+
+    /**
+     * @var Config
+     */
+    private $config;
 
     /**
      * @param SubjectReader $subjectReader
-     * @param \Magento\Framework\ObjectManagerInterface $objectmanager
+     * @param ValidateInterface $validate
+     * @param RemoteAddress $remoteAddress
+     * @param Config $config
      * @throws InputException
      */
     public function __construct(
         SubjectReader $subjectReader,
-        \Magento\Framework\ObjectManagerInterface $objectmanager
+        ValidateInterface $validate,
+        RemoteAddress $remoteAddress,
+        Config $config
     ) {
         $this->subjectReader = $subjectReader;
-        $this->objectManager = $objectmanager;
+        $this->validate = $validate;
+        $this->remoteAddress = $remoteAddress;
+        $this->config = $config;
     }
 
     /**
@@ -48,7 +66,10 @@ class ReCaptchaValidation
             throw new CommandException(__('Can not resolve reCAPTCHA response.'));
         }
 
+        $remoteIp = $this->remoteAddress->getRemoteAddress();
+        if (!$this->validate->validate($token, $remoteIp)) {
+            throw new CommandException($this->config->getErrorDescription());
+        }
+
     }
-
-
 }
