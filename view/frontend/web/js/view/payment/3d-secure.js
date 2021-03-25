@@ -47,7 +47,7 @@ define([
                 }
 
                 return c.split('').map(function (a) {
-                    return '\\u' + a.charCodeAt().toString(16).padStart(4, '0')
+                    return '\\u' + a.charCodeAt().toString(16).padStart(4, '0');
                 }).join('');
             }).join('');
         },
