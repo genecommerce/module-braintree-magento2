@@ -133,12 +133,8 @@ class Config implements ConfigInterface
         $paypalPayLaterMessageActive = $this->getConfigValue("payment/braintree_paypal/message_" . $type . "_enable");
 
         // If PayPal or PayPal Pay Later is disabled in the admin
-        if (!$paypalActive || !$paypalPayLaterActive || !$paypalPayLaterMessageActive || $this->IsPayPalVaultActive()) {
-            return false;
-        }
+        if (!$paypalActive || !$paypalPayLaterMessageActive || $this->IsPayPalVaultActive()) {
 
-        // Only allowed on US
-        if (!$this->isUS()) {
             return false;
         }
 

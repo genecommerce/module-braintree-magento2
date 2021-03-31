@@ -45,6 +45,15 @@ define(
              * @param currency
              */
             init: function (token, currency) {
+                if($('.action-braintree-paypal-message').length) {
+                    $('.product-add-form form').on('keyup change paste', 'input, select, textarea', function(){
+                        var currentPrice, currencySymbol;
+                        currentPrice = $(".product-info-main span").find("[data-price-type='finalPrice']").text();
+                        currencySymbol = $('.action-braintree-paypal-message').data('currency-symbol');
+                        $('.action-braintree-paypal-message').attr('data-pp-amount', currentPrice.replace(currencySymbol,''));
+                    });
+                }
+
                 buttonIds = [];
                 $('.action-braintree-paypal-logo').each(function () {
                     if(!$(this).hasClass( "button-loaded" )) {

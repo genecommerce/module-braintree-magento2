@@ -16,6 +16,7 @@ use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\GroupedProduct\Model\Product\Type\Grouped;
 use Magento\Payment\Model\MethodInterface;
+use Magento\Directory\Model\Currency;
 
 /**
  * Class ProductPage
@@ -29,6 +30,11 @@ class ProductPage extends Button
     protected $registry;
 
     /**
+     * @var Currency
+     */
+    protected $currency;
+
+    /**
      * ProductPage constructor.
      * @param Context $context
      * @param ResolverInterface $localeResolver
@@ -40,6 +46,7 @@ class ProductPage extends Button
      * @param ConfigProvider $configProvider
      * @param MethodInterface $payment
      * @param Registry $registry
+     * @param Currency $currency
      * @param array $data
      */
     public function __construct(
@@ -53,6 +60,7 @@ class ProductPage extends Button
         ConfigProvider $configProvider,
         MethodInterface $payment,
         Registry $registry,
+        Currency $currency,
         array $data = []
     ) {
         parent::__construct(
@@ -69,6 +77,7 @@ class ProductPage extends Button
         );
 
         $this->registry = $registry;
+        $this->currency = $currency;
     }
 
     /**
@@ -90,6 +99,15 @@ class ProductPage extends Button
     public function getCurrency(): string
     {
         return $this->_storeManager->getStore()->getCurrentCurrency()->getCode();
+    }
+
+    /**
+     * @return string
+     * @throws NoSuchEntityException
+     */
+    public function getCurrencySymbol(): string
+    {
+        return $this->currency->load($this->getCurrency())->getCurrencySymbol();
     }
 
     /**
