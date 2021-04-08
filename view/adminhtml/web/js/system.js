@@ -14,7 +14,7 @@ require(['jquery', 'Magento_Ui/js/modal/alert', 'mage/translate', 'domReady!'], 
         }
 
         if(merchant_country !== 'US') {
-            $('[data-ui-id="select-groups-braintree-section-groups-braintree-fields-braintree-paypal-paylater-active-value"]').val(0).attr('disabled','disabled');
+            $('[data-ui-id="select-groups-braintree-section-groups-braintree-fields-braintree-paypal-paylater-active-value"]').val(0).attr('readonly',true).click();
             $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-button-cart-fields-button-paylater-cart-enable-value"]').val(0).attr('readonly',true).click();
             $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-button-checkout-fields-button-paylater-checkout-enable-value"]').val(0).attr('readonly',true).click();
             $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-button-productpage-fields-button-paylater-productpage-enable-value"]').val(0).attr('readonly',true).click();
