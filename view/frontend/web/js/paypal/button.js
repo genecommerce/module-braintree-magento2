@@ -269,6 +269,7 @@ define(
                     }
                 });
                 if (!button.isEligible()) {
+                    console.log('PayPal button is not elligible')
                     data.parent().remove();
                     return;
                 }

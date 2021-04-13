@@ -92,6 +92,7 @@ try {
         <div class="action-braintree-paypal-message"
              id="<?= $block->escapeHtmlAttr($paypalPaylaterId) ?>-message"
              data-pp-amount="<?= $block->escapeHtmlAttr($block->getAmount()) ?>"
+             data-currency-symbol="<?= $block->getCurrencySymbol(); ?>"
              data-pp-type="product"
         ></div>
     <?php endif; ?>
