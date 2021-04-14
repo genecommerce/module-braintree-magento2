@@ -236,7 +236,7 @@ define(
 
                             // Map the billing address correctly
                             let isRequiredBillingAddress = data.data('requiredbillingaddress');
-                            if (isRequiredBillingAddress === 1) {
+                            if ((isRequiredBillingAddress === 1) && (typeof payload.details.billingAddress !== 'undefined')) {
                                 var billingAddress = payload.details.billingAddress;
                                 payload.details.billingAddress = {
                                     streetAddress: typeof billingAddress.line2 !== 'undefined' ? billingAddress.line1.replace(/'/g, "&apos;") + " " + billingAddress.line2.replace(/'/g, "&apos;") : billingAddress.line1.replace(/'/g, "&apos;"),
