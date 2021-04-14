@@ -138,6 +138,10 @@ class Config implements ConfigInterface
             return false;
         }
 
+        if (!in_array($this->getMerchantCountry(), ['GB','FR','US','DE', 'AU'])) {
+            return false;
+        }
+
         return (bool) $paypalPayLaterMessageActive;
     }
 

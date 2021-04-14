@@ -49,8 +49,8 @@ define(
                     $('.product-add-form form').on('keyup change paste', 'input, select, textarea', function(){
                         var currentPrice, currencySymbol;
                         currentPrice = $(".product-info-main span").find("[data-price-type='finalPrice']").text();
-                        currencySymbol = $('.action-braintree-paypal-message').data('currency-symbol');
-                        $('.action-braintree-paypal-message').attr('data-pp-amount', currentPrice.replace(currencySymbol,''));
+                        currencySymbol = $('.action-braintree-paypal-message[data-pp-type="product"]').data('currency-symbol');
+                        $('.action-braintree-paypal-message[data-pp-type="product"]').attr('data-pp-amount', currentPrice.replace(currencySymbol,''));
                     });
                 }
 
@@ -99,6 +99,7 @@ define(
                         } else {
                             paypalCheckoutInstance.loadPayPalSDK({
                                 components: 'buttons,messages,funding-eligibility',
+                                "buyer-country": 'US',
                                 currency: currency,
                             }, function () {
                                 this.renderPayPalButtons(buttonIds, paypalCheckoutInstance);
