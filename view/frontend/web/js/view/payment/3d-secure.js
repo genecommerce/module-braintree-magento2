@@ -41,7 +41,7 @@ define([
          * @returns {string}
          */
         escapeNonAsciiCharacters: function (str) {
-            return [...str].map(c => /^[\x00-\x7F]$/.test(c) ? c : c.split("").map(a => "\\u" + a.charCodeAt().toString(16).padStart(4, "0")).join("")).join("");
+            return str.split("").map(function (c) { return /^[\x00-\x7F]$/.test(c) ? c : c.split("").map(function (a) { return "\\u00" + a.charCodeAt().toString(16)}).join("")}).join("");
         },
 
         /**
