@@ -82,6 +82,7 @@ try {
                      class="action-braintree-paypal-logo"></div>
             </div>
         <?php endif; ?>
+    <?php endif; ?>
         <?php if ($block->isPayLaterMessageActive('cart') && !$block->isPayPalVaultActive()): ?>
             <div class="action-braintree-paypal-message"
                  id="<?= $block->escapeHtmlAttr($paypalPaylaterId) ?>-message"
@@ -89,5 +90,4 @@ try {
                  data-pp-type="cart"
             ></div>
         <?php endif; ?>
-    <?php endif; ?>
 <?php endif; ?>
