@@ -1,6 +1,6 @@
 /**
  * Config to pull in all the relevant Braintree JS SDKs
- * @type {{paths: {braintreePayPalCheckout: string, braintreeHostedFields: string, braintreeDataCollector: string, braintreeThreeDSecure: string, braintreeGooglePay: string, braintreeApplePay: string, googlePayLibrary: string}, map: {"*": {braintree: string}}}}
+ * @type {{paths: {braintreePayPalInContextCheckout: string, braintreePayPalCheckout: string, braintreeVenmo: string, braintreeHostedFields: string, braintreeDataCollector: string, braintreeThreeDSecure: string, braintreeGooglePay: string, braintreeApplePay: string, braintreeAch: string, braintreeLpm: string, googlePayLibrary: string}, map: {"*": {braintree: string}}}}
  */
 var config = {
     map: {
@@ -18,6 +18,7 @@ var config = {
         "braintreeGooglePay": 'https://js.braintreegateway.com/web/3.67.0/js/google-payment.min',
         "braintreeVenmo": 'https://js.braintreegateway.com/web/3.67.0/js/venmo.min',
         "braintreeAch": "https://js.braintreegateway.com/web/3.67.0/js/us-bank-account.min",
+        "braintreeLpm": "https://js.braintreegateway.com/web/3.67.0/js/local-payment.min",
         "googlePayLibrary": "https://pay.google.com/gp/p/js/pay",
         "braintreePayPalInContextCheckout": "https://www.paypalobjects.com/api/checkout"
     }
