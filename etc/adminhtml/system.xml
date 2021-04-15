@@ -192,6 +192,11 @@
                             <comment>Be sure to Enable Advanced Fraud Protection in Your Braintree Account in Settings/Processing Section</comment>
                             <config_path>payment/braintree/fraudprotection</config_path>
                         </field>
+                        <field id="enable_recaptcha" translate="label" type="select" sortOrder="31" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Enable ReCaptcha</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/braintree/enable_recaptcha</config_path>
+                        </field>
 
                         <group id="kount" translate="label" sortOrder="32" showInDefault="1" showInWebsite="1">
                             <label>Kount Settings</label>

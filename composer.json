@@ -22,7 +22,8 @@
         "ext-json": "*",
         "ext-simplexml": "*",
         "php": ">=7.2.0",
-        "league/iso3166": "^2.1"
+        "league/iso3166": "^2.1",
+        "msp/recaptcha": "^2.2.3"
     },
     "replace": {
         "magento/module-braintree": "100.*.*",

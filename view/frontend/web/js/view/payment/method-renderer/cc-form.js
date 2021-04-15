@@ -298,7 +298,8 @@ define(
                 var data = {
                     'method': this.getCode(),
                     'additional_data': {
-                        'payment_method_nonce': this.paymentMethodNonce
+                        'payment_method_nonce': this.paymentMethodNonce,
+                        'g-recaptcha-response' : $("#token-grecaptcha-braintree").val()
                     }
                 };
 

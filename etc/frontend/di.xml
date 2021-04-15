@@ -105,6 +105,22 @@
         <plugin name="braintreeDeleteStoredPaymentPlugin" type="\Magento\Braintree\Plugin\DeleteStoredPaymentPlugin" />
     </type>
 
+    <type name="Magento\Checkout\Block\Onepage">
+        <arguments>
+            <argument name="layoutProcessors" xsi:type="array">
+                <item name="msp_braintree_recaptcha" xsi:type="object">Magento\Braintree\Block\LayoutProcessor\Checkout\Onepage</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Checkout\Model\CompositeConfigProvider">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="msp_braintree_recaptcha_config_provider" xsi:type="object">Magento\Braintree\Model\CheckoutConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
+
     <type name="Magento\Multishipping\Model\Checkout\Type\Multishipping\PlaceOrderPool">
         <arguments>
             <argument name="services" xsi:type="array">
