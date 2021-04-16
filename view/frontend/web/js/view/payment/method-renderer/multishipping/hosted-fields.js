@@ -73,8 +73,6 @@ define([
          * @override
          */
         placeOrder: function () {
-            var self = this;
-
             if (this.isProcessing) {
                 return false;
             } else {

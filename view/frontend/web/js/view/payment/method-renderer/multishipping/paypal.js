@@ -101,8 +101,7 @@ define([
          */
         getPayPalConfig: function () {
             var totals = quote.totals(),
-                config = {},
-                isActiveVaultEnabler = this.isActiveVault();
+                config = {};
 
             config.paypal = {
                 flow: 'checkout',
