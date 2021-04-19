@@ -95,7 +95,14 @@ define(
                 registry.ids.push(this.getReCaptchaId());
                 registry.captchaList.push(widgetId);
                 registry.tokenFields.push(this.tokenField);
-            }
+            },
+            /**
+             * Return true if reCaptcha is visible
+             * @returns {Boolean}
+             */
+            getIsVisible: function () {
+                return window.checkoutConfig.msp_recaptcha_braintree;
+            },
         });
     }
 );
