@@ -13,5 +13,5 @@ var config = {
         '*': {
             braintreeCheckoutPayPalAdapter: 'Magento_Braintree/js/view/payment/adapter'
         }
-    },
+    }
 };
