@@ -328,7 +328,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     }
 
     /**
-     * Check for fraud protection
+     * Check is reCaptchs is enabled
      *
      * @return bool
      * @throws InputException

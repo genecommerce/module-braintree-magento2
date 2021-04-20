@@ -10,6 +10,7 @@ use Magento\Braintree\Observer\DataAssignObserver;
 use Magento\Framework\Exception\InputException;
 use MSP\ReCaptcha\Api\ValidateInterface;
 use MSP\ReCaptcha\Model\Config;
+use Magento\Braintree\Gateway\Config\Config as GatewayConfig;
 
 class ReCaptchaValidation
 {
@@ -34,22 +35,30 @@ class ReCaptchaValidation
     private $config;
 
     /**
+     * @var GatewayConfig
+     */
+    private $gatewayConfig;
+
+    /**
      * @param SubjectReader $subjectReader
      * @param ValidateInterface $validate
      * @param RemoteAddress $remoteAddress
      * @param Config $config
+     * @param GatewayConfig $gatewayConfig
      * @throws InputException
      */
     public function __construct(
         SubjectReader $subjectReader,
         ValidateInterface $validate,
         RemoteAddress $remoteAddress,
-        Config $config
+        Config $config,
+        GatewayConfig $gatewayConfig
     ) {
         $this->subjectReader = $subjectReader;
         $this->validate = $validate;
         $this->remoteAddress = $remoteAddress;
         $this->config = $config;
+        $this->gatewayConfig = $gatewayConfig;
     }
 
     /**
@@ -59,6 +68,10 @@ class ReCaptchaValidation
     {
         $paymentDO = $this->subjectReader->readPayment($payment);
         $payment = $paymentDO->getPayment();
+        if ($payment->getMethod() != 'braintree' || !$this->gatewayConfig->getCaptchaSettings()) {
+
+            return;
+        }
         $token = $payment->getAdditionalInformation(
             DataAssignObserver::CAPTCHA_RESPONSE
         );
