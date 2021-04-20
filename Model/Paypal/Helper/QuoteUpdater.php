@@ -167,8 +167,8 @@ class QuoteUpdater extends AbstractHelper
     private function updateShippingAddress(Quote $quote, array $details)
     {
         $shippingAddress = $quote->getShippingAddress();
-        $shippingAddress->setFirstname($details['shippingAddress']['recipientFirstName']);
-        $shippingAddress->setLastname($details['shippingAddress']['recipientLastName']);
+        $shippingAddress->setFirstname($details['shippingAddress']['firstname']);
+        $shippingAddress->setLastname($details['shippingAddress']['lastname']);
         $shippingAddress->setEmail($details['email']);
 
         $shippingAddress->setCollectShippingRates(true);
@@ -191,8 +191,8 @@ class QuoteUpdater extends AbstractHelper
     private function updateBillingAddress(Quote $quote, array $details)
     {
         $billingAddress = $quote->getBillingAddress();
-        $billingAddress->setFirstname($details['shippingAddress']['recipientFirstName']);
-        $billingAddress->setLastname($details['shippingAddress']['recipientLastName']);
+        $billingAddress->setFirstname($details['shippingAddress']['firstname']);
+        $billingAddress->setLastname($details['shippingAddress']['lastname']);
         $billingAddress->setEmail($details['email']);
 
         if ($this->config->isRequiredBillingAddress() && !empty($details['billingAddress'])) {
