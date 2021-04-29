@@ -45,6 +45,15 @@ define(
              * @param currency
              */
             init: function (token, currency) {
+                if($('.action-braintree-paypal-message').length) {
+                    $('.product-add-form form').on('keyup change paste', 'input, select, textarea', function(){
+                        var currentPrice, currencySymbol;
+                        currentPrice = $(".product-info-main span").find("[data-price-type='finalPrice']").text();
+                        currencySymbol = $('.action-braintree-paypal-message[data-pp-type="product"]').data('currency-symbol');
+                        $('.action-braintree-paypal-message[data-pp-type="product"]').attr('data-pp-amount', currentPrice.replace(currencySymbol,''));
+                    });
+                }
+
                 buttonIds = [];
                 $('.action-braintree-paypal-logo').each(function () {
                     if(!$(this).hasClass( "button-loaded" )) {
@@ -90,6 +99,7 @@ define(
                         } else {
                             paypalCheckoutInstance.loadPayPalSDK({
                                 components: 'buttons,messages,funding-eligibility',
+                                "buyer-country": 'US',
                                 currency: currency,
                             }, function () {
                                 this.renderPayPalButtons(buttonIds, paypalCheckoutInstance);
@@ -227,7 +237,7 @@ define(
 
                             // Map the billing address correctly
                             let isRequiredBillingAddress = data.data('requiredbillingaddress');
-                            if (isRequiredBillingAddress === 1) {
+                            if ((isRequiredBillingAddress === 1) && (typeof payload.details.billingAddress !== 'undefined')) {
                                 var billingAddress = payload.details.billingAddress;
                                 payload.details.billingAddress = {
                                     streetAddress: typeof billingAddress.line2 !== 'undefined' ? billingAddress.line1.replace(/'/g, "&apos;") + " " + billingAddress.line2.replace(/'/g, "&apos;") : billingAddress.line1.replace(/'/g, "&apos;"),
@@ -260,6 +270,7 @@ define(
                     }
                 });
                 if (!button.isEligible()) {
+                    console.log('PayPal button is not elligible')
                     data.parent().remove();
                     return;
                 }

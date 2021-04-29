@@ -27,6 +27,8 @@ class ConfigProvider implements ConfigProviderInterface
 
     const ALLOWED_MERCHANT_COUNTRIES = ['US'];
 
+    const METHOD_KEY_ACTIVE = 'payment/braintree_ach_direct_debit/active';
+
     /**
      * @var BraintreeAdapter $adapter
      */
@@ -70,6 +72,10 @@ class ConfigProvider implements ConfigProviderInterface
      */
     public function getConfig(): array
     {
+        if (!$this->isEnabled()) {
+            return [];
+        }
+
         return [
             'payment' => [
                 self::METHOD_CODE => [
@@ -79,6 +85,19 @@ class ConfigProvider implements ConfigProviderInterface
                 ]
             ]
         ];
+    }
+
+    /**
+     * Get Payment configuration status
+     *
+     * @return bool
+     */
+    public function isEnabled(): bool
+    {
+        return (bool) $this->scopeConfig->getValue(
+            self::METHOD_KEY_ACTIVE,
+            ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
