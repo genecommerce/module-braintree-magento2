@@ -5,6 +5,7 @@
  */
 namespace Magento\Braintree\Gateway\Request;
 
+use Magento\Braintree\Gateway\Config\Config;
 use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Payment\Helper\Formatter;
@@ -15,6 +16,12 @@ use Magento\Payment\Helper\Formatter;
 class VaultCaptureDataBuilder implements BuilderInterface
 {
     use Formatter;
+    /**
+     * The merchant account ID used to create a transaction.
+     * Currency is also determined by merchant account ID.
+     * If no merchant account ID is specified, Braintree will use your default merchant account.
+     */
+    const MERCHANT_ACCOUNT_ID = 'merchantAccountId';
 
     /**
      * @var SubjectReader
@@ -22,12 +29,19 @@ class VaultCaptureDataBuilder implements BuilderInterface
     private $subjectReader;
 
     /**
+     * @var Config $config
+     */
+    private $config;
+
+    /**
      * Constructor
      *
+     * @param Config $config
      * @param SubjectReader $subjectReader
      */
-    public function __construct(SubjectReader $subjectReader)
+    public function __construct(Config $config, SubjectReader $subjectReader)
     {
+        $this->config = $config;
         $this->subjectReader = $subjectReader;
     }
 
@@ -41,9 +55,17 @@ class VaultCaptureDataBuilder implements BuilderInterface
         $extensionAttributes = $payment->getExtensionAttributes();
         $paymentToken = $extensionAttributes->getVaultPaymentToken();
 
-        return [
+        $result = [
             'amount' => $this->formatPrice($this->subjectReader->readAmount($buildSubject)),
             'paymentMethodToken' => $paymentToken->getGatewayToken()
         ];
+
+        $merchantAccountId = $this->config->getMerchantAccountId();
+        if (!empty($merchantAccountId)) {
+            $result[self::MERCHANT_ACCOUNT_ID] = $merchantAccountId;
+        }
+
+        return $result;
     }
 }
+
