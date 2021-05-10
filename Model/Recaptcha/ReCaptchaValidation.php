@@ -11,7 +11,13 @@ use Magento\Framework\Exception\InputException;
 use MSP\ReCaptcha\Api\ValidateInterface;
 use MSP\ReCaptcha\Model\Config;
 use Magento\Braintree\Gateway\Config\Config as GatewayConfig;
+use Magento\Framework\App\Area;
+use Magento\Framework\App\State;
 
+/**
+ * Class ReCaptchaValidation
+ * @package Magento\Braintree\Model\Recaptcha
+ */
 class ReCaptchaValidation
 {
     /**
@@ -40,11 +46,17 @@ class ReCaptchaValidation
     private $gatewayConfig;
 
     /**
+     * @var State
+     */
+    private $state;
+
+    /**
      * @param SubjectReader $subjectReader
      * @param ValidateInterface $validate
      * @param RemoteAddress $remoteAddress
      * @param Config $config
      * @param GatewayConfig $gatewayConfig
+     * @param State $state
      * @throws InputException
      */
     public function __construct(
@@ -52,13 +64,15 @@ class ReCaptchaValidation
         ValidateInterface $validate,
         RemoteAddress $remoteAddress,
         Config $config,
-        GatewayConfig $gatewayConfig
+        GatewayConfig $gatewayConfig,
+        State $state
     ) {
         $this->subjectReader = $subjectReader;
         $this->validate = $validate;
         $this->remoteAddress = $remoteAddress;
         $this->config = $config;
         $this->gatewayConfig = $gatewayConfig;
+        $this->state = $state;
     }
 
     /**
@@ -68,13 +82,12 @@ class ReCaptchaValidation
     {
         $paymentDO = $this->subjectReader->readPayment($payment);
         $payment = $paymentDO->getPayment();
-        if ($payment->getMethod() != 'braintree' || !$this->gatewayConfig->getCaptchaSettings()) {
 
+        if ($payment->getMethod() !== 'braintree' || !$this->gatewayConfig->getCaptchaSettings() || $this->state->getAreaCode() === Area::AREA_ADMINHTML) {
             return;
         }
-        $token = $payment->getAdditionalInformation(
-            DataAssignObserver::CAPTCHA_RESPONSE
-        );
+
+        $token = $payment->getAdditionalInformation(DataAssignObserver::CAPTCHA_RESPONSE);
         if (empty($token)) {
             throw new CommandException(__('Can not resolve reCAPTCHA response.'));
         }
@@ -83,6 +96,5 @@ class ReCaptchaValidation
         if (!$this->validate->validate($token, $remoteIp)) {
             throw new CommandException($this->config->getErrorDescription());
         }
-
     }
 }
