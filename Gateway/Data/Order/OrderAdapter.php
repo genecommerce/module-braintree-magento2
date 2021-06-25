@@ -27,7 +27,7 @@ class OrderAdapter implements OrderAdapterInterface
     private $quoteRepository;
 
     /**
-     * @var AddressAdapter
+     * @var AddressAdapterFactory
      */
     private $addressAdapterFactory;
 
@@ -35,6 +35,7 @@ class OrderAdapter implements OrderAdapterInterface
      * OrderAdapter constructor.
      * @param Order $order
      * @param CartRepositoryInterface $quoteRepository
+     * @param AddressAdapterFactory $addressAdapterFactory
      */
     public function __construct(
         Order $order,
@@ -105,6 +106,8 @@ class OrderAdapter implements OrderAdapterInterface
                 ['address' => $this->order->getBillingAddress()]
             );
         }
+
+        return null;
     }
 
     /**
@@ -119,6 +122,8 @@ class OrderAdapter implements OrderAdapterInterface
                 ['address' => $this->order->getShippingAddress()]
             );
         }
+
+        return null;
     }
 
     /**

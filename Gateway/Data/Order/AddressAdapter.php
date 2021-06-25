@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Braintree\Gateway\Data\Order;
 
 use Magento\Braintree\Gateway\Data\AddressAdapterInterface as BraintreeAddressAdapterInterface;
@@ -8,6 +11,7 @@ use Magento\Sales\Api\Data\OrderAddressInterface;
 
 /**
  * Class AddressAdapter
+ * Extends Magento's payment AddressAdapter to provide possibility get all street addresses.
  */
 class AddressAdapter extends MagentoAddressAdapter implements BraintreeAddressAdapterInterface
 {
@@ -34,5 +38,4 @@ class AddressAdapter extends MagentoAddressAdapter implements BraintreeAddressAd
 
         return empty($street) ? [] : $street;
     }
-
 }

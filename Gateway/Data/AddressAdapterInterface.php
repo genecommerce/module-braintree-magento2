@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Braintree\Gateway\Data;
 
 use Magento\Payment\Gateway\Data\AddressAdapterInterface as MagentoAddressAdapterInterface;
@@ -16,5 +19,5 @@ interface AddressAdapterInterface extends MagentoAddressAdapterInterface
      * @return string[]|null
      */
     public function getStreet();
-
 }
+
