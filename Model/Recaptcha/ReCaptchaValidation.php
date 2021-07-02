@@ -83,7 +83,7 @@ class ReCaptchaValidation
         $paymentDO = $this->subjectReader->readPayment($payment);
         $payment = $paymentDO->getPayment();
 
-        if ($payment->getMethod() !== 'braintree' || !$this->gatewayConfig->getCaptchaSettings() || $this->state->getAreaCode() === Area::AREA_ADMINHTML) {
+        if ($payment->getMethod() !== 'braintree' || !$this->gatewayConfig->getCaptchaSettings() || $this->state->getAreaCode() != Area::AREA_FRONTEND) {
             return;
         }
 
