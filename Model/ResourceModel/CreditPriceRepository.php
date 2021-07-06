@@ -34,7 +34,8 @@ class CreditPriceRepository implements CreditPriceRepositoryInterface
      */
     public function save(CreditPriceDataInterface $entity): CreditPriceDataInterface
     {
-        return $entity->getResource()->save($entity);
+        $entity->getResource()->save($entity);
+        return $entity;
     }
 
     /**
