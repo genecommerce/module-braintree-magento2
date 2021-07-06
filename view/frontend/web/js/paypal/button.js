@@ -92,22 +92,19 @@ define(
                     paypalCheckout.create({
                         client: clientInstance
                     }, function (err, paypalCheckoutInstance) {
-
                         if (typeof paypal !== 'undefined' ) {
                             this.renderPayPalButtons(buttonIds, paypalCheckoutInstance);
                             this.renderPayPalMessages();
                         } else {
                             paypalCheckoutInstance.loadPayPalSDK({
                                 components: 'buttons,messages,funding-eligibility',
-                                "buyer-country": 'US',
+                                "enable-funding":"paylater",
                                 currency: currency,
                             }, function () {
                                 this.renderPayPalButtons(buttonIds, paypalCheckoutInstance);
                                 this.renderPayPalMessages();
                             }.bind(this));
                         }
-
-
                     }.bind(this));
                 }.bind(this));
             },
