@@ -1,8 +1,5 @@
 <?php
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
+
 namespace Magento\Braintree\Model\GooglePay\Helper;
 
 use InvalidArgumentException;
@@ -57,7 +54,7 @@ class QuoteUpdater extends AbstractHelper
     public function execute($nonce, array $details, Quote $quote)
     {
         if (empty($nonce) || empty($details)) {
-            throw new InvalidArgumentException('The "nonce" and "details" fields does not exists');
+            throw new InvalidArgumentException('The "nonce" and "details" fields do not exist');
         }
 
         $payment = $quote->getPayment();
@@ -122,7 +119,6 @@ class QuoteUpdater extends AbstractHelper
 
     /**
      * Update shipping address
-     * (PayPal doesn't provide detailed shipping info: prefix, suffix)
      *
      * @param Quote $quote
      * @param array $details
@@ -134,7 +130,6 @@ class QuoteUpdater extends AbstractHelper
         $shippingAddress->setCollectShippingRates(true);
         $this->updateAddressData($shippingAddress, $details['shippingAddress']);
 
-        // PayPal's address supposes not saving against customer account
         $shippingAddress->setSaveInAddressBook(false);
         $shippingAddress->setSameAsBilling(false);
         $shippingAddress->unsCustomerAddressId();
@@ -180,7 +175,8 @@ class QuoteUpdater extends AbstractHelper
         $address->setCountryId($addressData['countryCodeAlpha2']);
         $address->setPostcode($addressData['postalCode']);
 
-        // PayPal's address supposes not saving against customer account
+        $address->setTelephone($addressData['telephone']);
+
         $address->setSaveInAddressBook(false);
         $address->setSameAsBilling(false);
         $address->setCustomerAddressId(null);
