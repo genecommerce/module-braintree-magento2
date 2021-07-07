@@ -5,7 +5,7 @@
  */
 namespace Magento\Braintree\Gateway\Data\Order;
 
-use Magento\Payment\Gateway\Data\AddressAdapterInterface;
+use Magento\Braintree\Gateway\Data\AddressAdapterInterface;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Sales\Model\Order;
@@ -27,16 +27,24 @@ class OrderAdapter implements OrderAdapterInterface
     private $quoteRepository;
 
     /**
+     * @var AddressAdapterFactory
+     */
+    private $addressAdapterFactory;
+
+    /**
      * OrderAdapter constructor.
      * @param Order $order
      * @param CartRepositoryInterface $quoteRepository
+     * @param AddressAdapterFactory $addressAdapterFactory
      */
     public function __construct(
         Order $order,
-        CartRepositoryInterface $quoteRepository
+        CartRepositoryInterface $quoteRepository,
+        AddressAdapterFactory $addressAdapterFactory
     ) {
         $this->order = $order;
         $this->quoteRepository = $quoteRepository;
+        $this->addressAdapterFactory = $addressAdapterFactory;
     }
 
     /**
@@ -89,12 +97,14 @@ class OrderAdapter implements OrderAdapterInterface
     /**
      * Returns billing address
      *
-     * @return AddressAdapterInterface|\Magento\Sales\Api\Data\OrderAddressInterface|null
+     * @return AddressAdapterInterface|null
      */
     public function getBillingAddress()
     {
         if ($this->order->getBillingAddress()) {
-            return $this->order->getBillingAddress();
+            return $this->addressAdapterFactory->create(
+                ['address' => $this->order->getBillingAddress()]
+            );
         }
 
         return null;
@@ -103,12 +113,14 @@ class OrderAdapter implements OrderAdapterInterface
     /**
      * Returns shipping address
      *
-     * @return AddressAdapterInterface|Order\Address|null
+     * @return AddressAdapterInterface|null
      */
     public function getShippingAddress()
     {
         if ($this->order->getShippingAddress()) {
-            return $this->order->getShippingAddress();
+            return $this->addressAdapterFactory->create(
+                ['address' => $this->order->getShippingAddress()]
+            );
         }
 
         return null;
