@@ -55,7 +55,8 @@ define(
                         }
 
                         lpm.create({
-                            client: clientInstance
+                            client: clientInstance,
+                            merchantAccountId: self.getMerchantAccountId()
                         }, function (lpmError, lpmInstance) {
                             if (lpmError) {
                                 self.setErrorMsg(lpmError);
@@ -149,7 +150,7 @@ define(
                 return quote.totals()['base_currency_code'];
             },
 
-            getCustomerDetails: function() {
+            getCustomerDetails: function () {
                 var billingAddress = quote.billingAddress();
                 return {
                     firstName: billingAddress.firstname,
@@ -172,11 +173,11 @@ define(
                 return data;
             },
 
-            getMerchantId: function () {
-                return window.checkoutConfig.payment[this.getCode()].merchantId;
+            getMerchantAccountId: function () {
+                return window.checkoutConfig.payment[this.getCode()].merchantAccountId;
             },
 
-            getPaymentMethod: function(method) {
+            getPaymentMethod: function (method) {
                 var methods = this.getPaymentMethods();
 
                 for (var i = 0; i < methods.length; i++) {
@@ -186,7 +187,7 @@ define(
                 }
             },
 
-            getPaymentMethods: function() {
+            getPaymentMethods: function () {
                 return window.checkoutConfig.payment[this.getCode()].allowedMethods;
             },
 
@@ -194,7 +195,7 @@ define(
                 return window.checkoutConfig.payment[this.getCode()].paymentIcons;
             },
 
-            getTitle: function() {
+            getTitle: function () {
                 return window.checkoutConfig.payment[this.getCode()].title;
             },
 
@@ -203,7 +204,7 @@ define(
                 return this;
             },
 
-            isActive: function() {
+            isActive: function () {
                 var address = quote.billingAddress() || quote.shippingAddress();
                 var methods = this.getPaymentMethods();
 
@@ -228,10 +229,12 @@ define(
                 var quoteCurrency = quote.totals()['base_currency_code'];
                 var paymentMethodDetails = this.getPaymentMethod(method);
 
-                if (paymentMethodDetails.countries.includes(countryId) && quoteCurrency === 'EUR') {
+                if ((countryId !== 'GB' && paymentMethodDetails.countries.includes(countryId) && (quoteCurrency === 'EUR' || quoteCurrency === 'PLN')) || (countryId === 'GB' && paymentMethodDetails.countries.includes(countryId) && quoteCurrency === 'GBP')) {
                     this.paymentMethodsAvailable(true);
                     return true;
                 }
+
+                return false;
             },
 
             setErrorMsg: function (message) {
