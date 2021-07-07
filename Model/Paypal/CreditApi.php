@@ -141,7 +141,7 @@ class CreditApi
 
             foreach ($qualifyingOptions as $qualifyingOption) {
                 if ($qualifyingOption->credit_financing->credit_type === 'INST' &&
-                    $qualifyingOption->credit_financing->enabled === 1
+                    $qualifyingOption->credit_financing->enabled === true
                 ) {
                     $options[] = [
                         'term' => $qualifyingOption->credit_financing->term,
