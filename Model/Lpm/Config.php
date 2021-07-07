@@ -46,7 +46,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const COUNTRIES_EPS = 'AT';
     const COUNTRIES_GIROPAY = 'DE';
     const COUNTRIES_IDEAL = 'NL';
-    const COUNTRIES_SOFORT = ['AT', 'BE', 'DE', 'ES', 'IT', 'NL'];
+    const COUNTRIES_SOFORT = ['AT', 'BE', 'DE', 'ES', 'IT', 'NL', 'GB'];
     const COUNTRIES_MYBANK = 'IT';
     const COUNTRIES_P24 = 'PL';
     const COUNTRIES_SEPA = ['AT', 'DE'];
@@ -135,8 +135,8 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         foreach ($allowedMethods as $allowedMethod) {
             $this->allowedMethods[] = [
                 'method' => $allowedMethod,
-                'label' => constant('self::LABEL_'.strtoupper($allowedMethod)),
-                'countries' => constant('self::COUNTRIES_'.strtoupper($allowedMethod))
+                'label' => constant('self::LABEL_' . strtoupper($allowedMethod)),
+                'countries' => constant('self::COUNTRIES_' . strtoupper($allowedMethod))
             ];
         }
 
@@ -165,16 +165,13 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     }
 
     /**
-     * @return string
+     * @return string|null
      * @throws InputException
      * @throws NoSuchEntityException
      */
-    public function getMerchantAccountId(): string
+    public function getMerchantAccountId()
     {
-        return $this->getValue(
-            self::KEY_TITLE,
-            $this->storeConfigResolver->getStoreId()
-        );
+        return $this->braintreeConfig->getMerchantAccountId();
     }
 
     /**
@@ -183,14 +180,14 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     public function getPaymentIcons(): array
     {
         $icons = [
-            self::VALUE_BANCONTACT => $this->assetRepo->getUrl('Magento_Braintree::images/'.self::VALUE_BANCONTACT.'.svg'),
-            self::VALUE_EPS => $this->assetRepo->getUrl('Magento_Braintree::images/'.self::VALUE_EPS.'.svg'),
-            self::VALUE_GIROPAY => $this->assetRepo->getUrl('Magento_Braintree::images/'.self::VALUE_GIROPAY.'.svg'),
-            self::VALUE_IDEAL => $this->assetRepo->getUrl('Magento_Braintree::images/'.self::VALUE_IDEAL.'.svg'),
-            self::VALUE_SOFORT => $this->assetRepo->getUrl('Magento_Braintree::images/'.self::VALUE_SOFORT.'.svg'),
-            self::VALUE_MYBANK => $this->assetRepo->getUrl('Magento_Braintree::images/'.self::VALUE_MYBANK.'.svg'),
-            self::VALUE_P24 => $this->assetRepo->getUrl('Magento_Braintree::images/'.self::VALUE_P24.'.svg'),
-            self::VALUE_SEPA => $this->assetRepo->getUrl('Magento_Braintree::images/'.self::VALUE_SEPA.'.svg')
+            self::VALUE_BANCONTACT => $this->assetRepo->getUrl('Magento_Braintree::images/' . self::VALUE_BANCONTACT . '.svg'),
+            self::VALUE_EPS => $this->assetRepo->getUrl('Magento_Braintree::images/' . self::VALUE_EPS . '.svg'),
+            self::VALUE_GIROPAY => $this->assetRepo->getUrl('Magento_Braintree::images/' . self::VALUE_GIROPAY . '.svg'),
+            self::VALUE_IDEAL => $this->assetRepo->getUrl('Magento_Braintree::images/' . self::VALUE_IDEAL . '.svg'),
+            self::VALUE_SOFORT => $this->assetRepo->getUrl('Magento_Braintree::images/' . self::VALUE_SOFORT . '.svg'),
+            self::VALUE_MYBANK => $this->assetRepo->getUrl('Magento_Braintree::images/' . self::VALUE_MYBANK . '.svg'),
+            self::VALUE_P24 => $this->assetRepo->getUrl('Magento_Braintree::images/' . self::VALUE_P24 . '.svg'),
+            self::VALUE_SEPA => $this->assetRepo->getUrl('Magento_Braintree::images/' . self::VALUE_SEPA . '.svg')
         ];
 
         return $icons;
