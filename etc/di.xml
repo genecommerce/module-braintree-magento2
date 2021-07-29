@@ -668,7 +668,7 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="BraintreeApplePaySaleCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+    <virtualType name="BraintreeApplePaySaleCommand" type="Magento\Braintree\Gateway\Command\GatewayCommand">
         <arguments>
             <argument name="transferFactory" xsi:type="object">Magento\Braintree\Gateway\Http\TransferFactory</argument>
             <argument name="client" xsi:type="object">Magento\Braintree\Gateway\Http\Client\TransactionSale</argument>
@@ -775,7 +775,7 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="BraintreeGooglePaySaleCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+    <virtualType name="BraintreeGooglePaySaleCommand" type="Magento\Braintree\Gateway\Command\GatewayCommand">
         <arguments>
             <argument name="transferFactory" xsi:type="object">Magento\Braintree\Gateway\Http\TransferFactory</argument>
             <argument name="client" xsi:type="object">Magento\Braintree\Gateway\Http\Client\TransactionSale</argument>
