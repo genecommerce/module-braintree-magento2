@@ -869,6 +869,11 @@
         </arguments>
     </virtualType>
     <!-- commandPool -->
+    <type name="Magento\Braintree\Gateway\Response\Venmo\VaultDetailsHandler">
+        <arguments>
+            <argument name="paymentTokenFactory" xsi:type="object">Magento\Vault\Model\AccountPaymentTokenFactory</argument>
+        </arguments>
+    </type>
     <virtualType name="BraintreeVenmoCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
         <arguments>
             <argument name="commands" xsi:type="array">

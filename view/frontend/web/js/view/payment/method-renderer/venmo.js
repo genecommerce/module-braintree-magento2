@@ -119,14 +119,16 @@ define(
                         // callback from collectDeviceData
                         venmo.create({
                             client: clientInstance,
+                            allowDesktop: true,
                             allowNewBrowserTab: false
                         }, function (venmoErr, venmoInstance) {
-                            if (!venmoInstance.isBrowserSupported()) {
+                            if (venmoErr) {
+                                self.setErrorMsg($t('Error initializing Venmo: %1').replace('%1', venmoErr));
                                 return;
                             }
 
-                            if (venmoErr) {
-                                self.setErrorMsg($t('Error initializing Venmo: %1').replace('%1', venmoErr));
+                            if (!venmoInstance.isBrowserSupported()) {
+                                console.log('Browser does not support Venmo');
                                 return;
                             }
 
@@ -140,10 +142,6 @@ define(
 
             isAllowed: function () {
                 return window.checkoutConfig.payment[this.getCode()].isAllowed;
-            },
-
-            isBrowserSupported: function () {
-                return venmo.isBrowserSupported();
             },
 
             setErrorMsg: function (message) {
