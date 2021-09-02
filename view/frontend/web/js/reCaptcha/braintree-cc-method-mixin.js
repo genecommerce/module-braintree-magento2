@@ -4,7 +4,7 @@
  */
 define([
     'jquery',
-    'Magento_Checkout/js/model/payment/additional-validators'
+    'Magento_Checkout/js/model/payment/additional-validators',
     'mage/translate'
 ], function ($, additionalValidators, $t) {
     'use strict';
