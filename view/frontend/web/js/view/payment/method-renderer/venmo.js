@@ -25,7 +25,7 @@ define(
             defaults: {
                 deviceData: null,
                 paymentMethodNonce: null,
-                template: 'PayPal_Braintree/payment/venmo',
+                template: 'Magento_Braintree/payment/venmo',
                 venmoInstance: null
             },
 
