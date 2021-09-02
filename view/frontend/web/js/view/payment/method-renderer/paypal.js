@@ -450,7 +450,7 @@ define([
                     if (typeof events.onClick === 'function') {
                         events.onClick(data);
                     }
-                },
+                }.bind(this),
 
                 onApprove: function (data, actions) {
                     return paypalCheckoutInstance.tokenizePayment(data)
