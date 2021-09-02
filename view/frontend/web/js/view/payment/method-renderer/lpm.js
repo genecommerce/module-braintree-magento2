@@ -156,7 +156,7 @@ define(
                     firstName: billingAddress.firstname,
                     lastName: billingAddress.lastname,
                     phone: billingAddress.telephone,
-                    email: typeof quote.guestEmail === 'string' ? quote.guestEmail : billingAddress.email
+                    email: typeof quote.guestEmail === 'string' ? quote.guestEmail : window.checkoutConfig.customerData.email
                 }
             },
 

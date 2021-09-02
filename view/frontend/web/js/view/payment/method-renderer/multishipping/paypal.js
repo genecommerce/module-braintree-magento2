@@ -95,6 +95,102 @@ define([
             }
         },
 
+        loadPayPalButton: function (paypalCheckoutInstance, funding) {
+            var paypalPayment = Braintree.config.paypal,
+                onPaymentMethodReceived = Braintree.config.onPaymentMethodReceived;
+            var style = {
+                color: Braintree.getColor(),
+                shape: Braintree.getShape(),
+                layout: Braintree.getLayout(),
+                size: Braintree.getSize()
+            };
+
+            if (Braintree.getBranding()) {
+                style.branding = Braintree.getBranding();
+            }
+            if (Braintree.getFundingIcons()) {
+                style.fundingicons = Braintree.getFundingIcons();
+            }
+
+            if (funding === 'credit') {
+                style.layout = "horizontal";
+                style.color = "darkblue";
+                Braintree.config.buttonId = this.clientConfig.buttonCreditId;
+            } else if (funding === 'paylater') {
+                style.layout = "horizontal";
+                style.color = "white";
+                Braintree.config.buttonId = this.clientConfig.buttonPaylaterId;
+            } else {
+                Braintree.config.buttonId = this.clientConfig.buttonPayPalId;
+            }
+            // Render
+            Braintree.config.paypalInstance = paypalCheckoutInstance;
+            var events = Braintree.events;
+            $('#' + Braintree.config.buttonId).html('');
+
+            var button = paypal.Buttons({
+                fundingSource: funding,
+                env: Braintree.getEnvironment(),
+                style: style,
+                commit: true,
+                locale: Braintree.config.paypal.locale,
+
+                createOrder: function () {
+                    return paypalCheckoutInstance.createPayment(paypalPayment);
+                },
+
+                onCancel: function (data) {
+                    console.log('checkout.js payment cancelled', JSON.stringify(data, 0, 2));
+
+                    if (typeof events.onCancel === 'function') {
+                        events.onCancel();
+                    }
+                },
+
+                onError: function (err) {
+                    Braintree.showError($t("PayPal Checkout could not be initialized. Please contact the store owner."));
+                    Braintree.config.paypalInstance = null;
+                    console.error('Paypal checkout.js error', err);
+
+                    if (typeof events.onError === 'function') {
+                        events.onError(err);
+                    }
+                }.bind(this),
+
+                onClick: function (data) {
+                    // To check term & conditions input checked - validate additional validators.
+                    if (!additionalValidators.validate()) {
+                        return false;
+                    }
+
+                    if (typeof events.onClick === 'function') {
+                        events.onClick(data);
+                    }
+                }.bind(this),
+
+                onApprove: function (data, actions) {
+                    return paypalCheckoutInstance.tokenizePayment(data)
+                        .then(function (payload) {
+                            onPaymentMethodReceived(payload);
+                        });
+                }
+
+            });
+            if (button.isEligible() && $('#' + Braintree.config.buttonId).length) {
+
+                button.render('#' + Braintree.config.buttonId).then(function () {
+                    Braintree.enableButton();
+                    if (typeof Braintree.config.onPaymentMethodError === 'function') {
+                        Braintree.config.onPaymentMethodError();
+                    }
+                }.bind(this)).then(function (data) {
+                    if (typeof events.onRender === 'function') {
+                        events.onRender(data);
+                    }
+                });
+            }
+        },
+
         /**
          * Get configuration for PayPal
          * @returns {Object}
@@ -135,6 +231,11 @@ define([
             }
 
             return config;
+        },
+
+        getShippingAddress: function () {
+
+            return {};
         },
 
         /**

@@ -24,7 +24,12 @@ try {
             'jquery'
         ], function (button, $) {
             $(function () {
-                button.init('<?= $block->getClientToken() ?>', '<?= $block->escapeHtmlAttr($block->getCurrency()) ?>');
+                button.init(
+                    '<?= $block->getClientToken() ?>',
+                    '<?= $block->escapeHtmlAttr($block->getCurrency()) ?>',
+                    '<?= $block->escapeHtmlAttr($block->getEnvironment()) ?>',
+                    '<?= $block->escapeHtmlAttr($block->getMerchantCountry()) ?>'
+                );
             })
         })
     </script>

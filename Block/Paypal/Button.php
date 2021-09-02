@@ -291,4 +291,12 @@ class Button extends Template implements ShortcutInterface
     {
         return (bool) $this->config->isRequiredBillingAddress();
     }
+
+    /**
+     * @return string|null
+     */
+    public function getMerchantCountry()
+    {
+        return $this->payPalPayLaterConfig->getMerchantCountry();
+    }
 }

@@ -44,7 +44,7 @@ define(
              * @param token
              * @param currency
              */
-            init: function (token, currency) {
+            init: function (token, currency, env, local) {
                 if($('.action-braintree-paypal-message').length) {
                     $('.product-add-form form').on('keyup change paste', 'input, select, textarea', function(){
                         var currentPrice, currencySymbol;
@@ -63,7 +63,7 @@ define(
                 });
 
                 if(buttonIds.length > 0){
-                    this.loadSDK(token, currency);
+                    this.loadSDK(token, currency, env, local);
                 }
             },
 
@@ -73,7 +73,7 @@ define(
              * @param token
              * @param currency
              */
-            loadSDK: function (token, currency) {
+            loadSDK: function (token, currency, env, local) {
                 braintree.create({
                     authorization: token
                 }, function (clientErr, clientInstance) {
@@ -96,11 +96,15 @@ define(
                             this.renderPayPalButtons(buttonIds, paypalCheckoutInstance);
                             this.renderPayPalMessages();
                         } else {
-                            paypalCheckoutInstance.loadPayPalSDK({
+                            var configSDK = {
                                 components: 'buttons,messages,funding-eligibility',
-                                "enable-funding":"paylater",
-                                currency: currency,
-                            }, function () {
+                                "enable-funding": "paylater",
+                                currency: currency
+                            };
+                            if (env == 'sandbox' && local != '') {
+                                configSDK["buyer-country"] = local;
+                            }
+                            paypalCheckoutInstance.loadPayPalSDK(configSDK, function () {
                                 this.renderPayPalButtons(buttonIds, paypalCheckoutInstance);
                                 this.renderPayPalMessages();
                             }.bind(this));
@@ -271,7 +275,9 @@ define(
                     data.parent().remove();
                     return;
                 }
-                button.render('#' + data.attr('id'));
+                if ($('#' + data.attr('id')).length) {
+                    button.render('#' + data.attr('id'));
+                }
             },
         }
     }
