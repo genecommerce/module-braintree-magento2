@@ -7,6 +7,7 @@ define(
         'Magento_Braintree/js/form-builder',
         'Magento_Ui/js/model/messageList',
         'Magento_Checkout/js/model/full-screen-loader',
+        'Magento_Checkout/js/model/payment/additional-validators',
         'mage/translate'
     ],
     function (
@@ -17,6 +18,7 @@ define(
         formBuilder,
         messageList,
         fullScreenLoader,
+        additionalValidators,
         $t
     ) {
         'use strict';
@@ -31,6 +33,10 @@ define(
 
             clickVenmoBtn: function () {
                 var self = this;
+
+                if (!additionalValidators.validate()) {
+                    return false;
+                }
 
                 if (!this.venmoInstance) {
                     this.setErrorMsg($t('Venmo not initialized, please try reloading.'));
