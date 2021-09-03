@@ -414,7 +414,9 @@ define([
                 },
 
                 createOrder: function () {
-                    return paypalCheckoutInstance.createPayment(paypalPayment);
+                    return paypalCheckoutInstance.createPayment(paypalPayment).catch(function (err) {
+                        throw err.details.originalError.details.originalError.paymentResource;
+                    });
                 },
 
                 onCancel: function (data) {
@@ -426,7 +428,11 @@ define([
                 },
 
                 onError: function (err) {
-                    Braintree.showError($t("PayPal Checkout could not be initialized. Please contact the store owner."));
+                    if (err.errorName === 'VALIDATION_ERROR' && err.errorMessage.indexOf('Value is invalid') !== -1) {
+                        Braintree.showError($t('Address failed validation. Please check and confirm your City, State, and Postal Code'));
+                    } else {
+                        Braintree.showError($t("PayPal Checkout could not be initialized. Please contact the store owner."));
+                    }
                     Braintree.config.paypalInstance = null;
                     console.error('Paypal checkout.js error', err);
 
