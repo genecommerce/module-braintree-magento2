@@ -92,26 +92,6 @@
                 <button_shape_productpage>1</button_shape_productpage>
                 <group>braintree_group</group>
             </braintree_paypal>
-            <braintree_paypal_credit>
-                <model>BraintreePayPalCreditFacade</model>
-                <title>PayPal Credit</title>
-                <active>1</active>
-                <sort_order>1</sort_order>
-                <client_id backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
-                <secret backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
-                <sandbox>0</sandbox>
-                <group>braintree_group</group>
-            </braintree_paypal_credit>
-            <braintree_paypal_paylater>
-                <model>BraintreePayPalPayLaterFacade</model>
-                <title>PayPal Pay Later</title>
-                <active>1</active>
-                <sort_order>1</sort_order>
-                <client_id backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
-                <secret backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
-                <sandbox>0</sandbox>
-                <group>braintree_group</group>
-            </braintree_paypal_paylater>
             <braintree_cc_vault>
                 <model>BraintreeCreditCardVaultFacade</model>
                 <title>Stored Cards</title>
