@@ -11,6 +11,8 @@ use Magento\Framework\Exception\InputException;
 use MSP\ReCaptcha\Api\ValidateInterface;
 use MSP\ReCaptcha\Model\Config;
 use Magento\Braintree\Gateway\Config\Config as GatewayConfig;
+use Magento\Framework\App\Area;
+use Magento\Framework\App\State;
 
 /**
  * Class ReCaptchaValidation
@@ -43,7 +45,10 @@ class ReCaptchaValidation
      */
     private $gatewayConfig;
 
-
+    /**
+     * @var State
+     */
+    protected $state;
 
     /**
      * @param SubjectReader $subjectReader
@@ -51,6 +56,7 @@ class ReCaptchaValidation
      * @param RemoteAddress $remoteAddress
      * @param Config $config
      * @param GatewayConfig $gatewayConfig
+     * @param State $state
      * @throws InputException
      */
     public function __construct(
@@ -58,13 +64,15 @@ class ReCaptchaValidation
         ValidateInterface $validate,
         RemoteAddress $remoteAddress,
         Config $config,
-        GatewayConfig $gatewayConfig
+        GatewayConfig $gatewayConfig,
+        State $state
     ) {
         $this->subjectReader = $subjectReader;
         $this->validate = $validate;
         $this->remoteAddress = $remoteAddress;
         $this->config = $config;
         $this->gatewayConfig = $gatewayConfig;
+        $this->state = $state;
     }
 
     /**
@@ -77,7 +85,12 @@ class ReCaptchaValidation
 
         $token = $payment->getAdditionalInformation(DataAssignObserver::CAPTCHA_RESPONSE);
 
-        if ($payment->getMethod() !== 'braintree' || !$this->gatewayConfig->getCaptchaSettings() || empty($token)) {
+        if (
+            in_array($this->state->getAreaCode(), [Area::AREA_ADMINHTML, Area::AREA_CRONTAB])
+            || $payment->getMethod() !== 'braintree'
+            || !$this->gatewayConfig->getCaptchaSettings()
+            || empty($token)
+        ) {
             return;
         }
 
