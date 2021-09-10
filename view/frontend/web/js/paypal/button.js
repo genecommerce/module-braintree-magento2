@@ -99,7 +99,6 @@ define(
                         } else {
                             paypalCheckoutInstance.loadPayPalSDK({
                                 components: 'buttons,messages,funding-eligibility',
-                                "buyer-country": 'US',
                                 currency: currency,
                             }, function () {
                                 this.renderPayPalButtons(buttonIds, paypalCheckoutInstance);
