@@ -89,7 +89,7 @@ class ReCaptchaValidation
             in_array($this->state->getAreaCode(), [Area::AREA_ADMINHTML, Area::AREA_CRONTAB])
             || $payment->getMethod() !== 'braintree'
             || !$this->gatewayConfig->getCaptchaSettings()
-            || empty($token)
+            || $payment->getOrder()->getCustomerId()
         ) {
             return;
         }
