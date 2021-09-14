@@ -92,26 +92,6 @@
                 <button_shape_productpage>1</button_shape_productpage>
                 <group>braintree_group</group>
             </braintree_paypal>
-            <braintree_paypal_credit>
-                <model>BraintreePayPalCreditFacade</model>
-                <title>PayPal Credit</title>
-                <active>1</active>
-                <sort_order>1</sort_order>
-                <client_id backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
-                <secret backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
-                <sandbox>0</sandbox>
-                <group>braintree_group</group>
-            </braintree_paypal_credit>
-            <braintree_paypal_paylater>
-                <model>BraintreePayPalPayLaterFacade</model>
-                <title>PayPal Pay Later</title>
-                <active>1</active>
-                <sort_order>1</sort_order>
-                <client_id backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
-                <secret backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
-                <sandbox>0</sandbox>
-                <group>braintree_group</group>
-            </braintree_paypal_paylater>
             <braintree_cc_vault>
                 <model>BraintreeCreditCardVaultFacade</model>
                 <title>Stored Cards</title>
@@ -146,9 +126,9 @@
                 <can_use_checkout>1</can_use_checkout>
                 <can_authorize>1</can_authorize>
                 <can_capture>1</can_capture>
-                <can_capture_partial>1</can_capture_partial>
+                <can_capture_partial>0</can_capture_partial>
                 <can_refund>1</can_refund>
-                <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
+                <can_refund_partial_per_invoice>0</can_refund_partial_per_invoice>
                 <can_void>1</can_void>
                 <can_cancel>1</can_cancel>
                 <privateInfoKeys>processorAuthorizationCode,processorResponseCode,processorResponseText</privateInfoKeys>
@@ -170,9 +150,9 @@
                 <can_use_checkout>1</can_use_checkout>
                 <can_authorize>1</can_authorize>
                 <can_capture>1</can_capture>
-                <can_capture_partial>1</can_capture_partial>
+                <can_capture_partial>0</can_capture_partial>
                 <can_refund>1</can_refund>
-                <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
+                <can_refund_partial_per_invoice>0</can_refund_partial_per_invoice>
                 <can_void>1</can_void>
                 <can_cancel>1</can_cancel>
                 <privateInfoKeys>processorAuthorizationCode,processorResponseCode,processorResponseText</privateInfoKeys>
@@ -187,9 +167,9 @@
                 <can_authorize>1</can_authorize>
                 <can_cancel>1</can_cancel>
                 <can_capture>1</can_capture>
-                <can_capture_partial>1</can_capture_partial>
+                <can_capture_partial>0</can_capture_partial>
                 <can_refund>1</can_refund>
-                <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
+                <can_refund_partial_per_invoice>0</can_refund_partial_per_invoice>
                 <can_use_checkout>1</can_use_checkout>
                 <can_void>1</can_void>
                 <is_gateway>1</is_gateway>
@@ -206,9 +186,9 @@
                 <can_authorize>1</can_authorize>
                 <can_cancel>1</can_cancel>
                 <can_capture>1</can_capture>
-                <can_capture_partial>1</can_capture_partial>
+                <can_capture_partial>0</can_capture_partial>
                 <can_refund>1</can_refund>
-                <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
+                <can_refund_partial_per_invoice>0</can_refund_partial_per_invoice>
                 <can_use_checkout>1</can_use_checkout>
                 <can_void>1</can_void>
                 <is_gateway>1</is_gateway>
@@ -225,9 +205,9 @@
                 <can_authorize>1</can_authorize>
                 <can_cancel>1</can_cancel>
                 <can_capture>1</can_capture>
-                <can_capture_partial>1</can_capture_partial>
+                <can_capture_partial>0</can_capture_partial>
                 <can_refund>1</can_refund>
-                <can_refund_partial_per_invoice>1</can_refund_partial_per_invoice>
+                <can_refund_partial_per_invoice>0</can_refund_partial_per_invoice>
                 <can_use_checkout>1</can_use_checkout>
                 <can_void>1</can_void>
                 <is_gateway>1</is_gateway>

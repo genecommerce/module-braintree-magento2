@@ -668,7 +668,7 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="BraintreeApplePaySaleCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+    <virtualType name="BraintreeApplePaySaleCommand" type="Magento\Braintree\Gateway\Command\GatewayCommand">
         <arguments>
             <argument name="transferFactory" xsi:type="object">Magento\Braintree\Gateway\Http\TransferFactory</argument>
             <argument name="client" xsi:type="object">Magento\Braintree\Gateway\Http\Client\TransactionSale</argument>
@@ -775,7 +775,7 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="BraintreeGooglePaySaleCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+    <virtualType name="BraintreeGooglePaySaleCommand" type="Magento\Braintree\Gateway\Command\GatewayCommand">
         <arguments>
             <argument name="transferFactory" xsi:type="object">Magento\Braintree\Gateway\Http\TransferFactory</argument>
             <argument name="client" xsi:type="object">Magento\Braintree\Gateway\Http\Client\TransactionSale</argument>
@@ -869,6 +869,11 @@
         </arguments>
     </virtualType>
     <!-- commandPool -->
+    <type name="Magento\Braintree\Gateway\Response\Venmo\VaultDetailsHandler">
+        <arguments>
+            <argument name="paymentTokenFactory" xsi:type="object">Magento\Vault\Model\AccountPaymentTokenFactory</argument>
+        </arguments>
+    </type>
     <virtualType name="BraintreeVenmoCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
         <arguments>
             <argument name="commands" xsi:type="array">
@@ -1158,6 +1163,7 @@
     <preference for="Magento\Braintree\Api\CreditPriceRepositoryInterface" type="Magento\Braintree\Model\ResourceModel\CreditPriceRepository" />
 
     <preference for="Magento\Payment\Gateway\Data\Order\OrderAdapter" type="Magento\Braintree\Gateway\Data\Order\OrderAdapter"/>
+    <preference for="Magento\Braintree\Gateway\Data\AddressAdapterInterface" type="Magento\Braintree\Gateway\Data\Order\AddressAdapter"/>
 
     <type name="Magento\Framework\View\Asset\Minification">
         <plugin name="braintreeExcludeFromMinification" type="Magento\Braintree\Plugin\ExcludeFromMinification"/>

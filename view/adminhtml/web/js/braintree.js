@@ -82,6 +82,10 @@ define([
         onActiveChange: function (isActive) {
             if (!isActive) {
                 this.$selector.off('submitOrder.braintree');
+                this.$selector.on('submitOrder', function () {
+                    $('#payment_form_braintree').find('[type="submit"]').trigger('click');
+                    $('#edit_form').trigger('realOrder');
+                });
 
                 return;
             }

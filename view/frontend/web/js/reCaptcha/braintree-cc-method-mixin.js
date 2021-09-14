@@ -4,8 +4,9 @@
  */
 define([
     'jquery',
-    'Magento_Checkout/js/model/payment/additional-validators'
-], function ($, additionalValidators) {
+    'Magento_Checkout/js/model/payment/additional-validators',
+    'mage/translate'
+], function ($, additionalValidators, $t) {
     'use strict';
 
     return function (originalComponent) {
@@ -22,13 +23,19 @@ define([
                     startEvent = 'captcha:startExecute',
                     endEvent = 'captcha:endExecute';
 
-                if (!additionalValidators.validate() || !isEnabled) {
+                if (!additionalValidators.validate() || !isEnabled || this.getCode() !== 'braintree') {
                     return original();
                 }
 
                 paymentFormSelector.off(endEvent).on(endEvent, function () {
-                        original();
-                        paymentFormSelector.off(endEvent);
+                        var recaptchaCheckBox = jQuery("#recaptcha-checkout-braintree-wrapper input[name='recaptcha-validate-']");
+
+                        if (recaptchaCheckBox.length &&  recaptchaCheckBox.prop('checked') === false) {
+                            alert($t('Please indicate google recaptcha'));
+                        } else {
+                            original();
+                            paymentFormSelector.off(endEvent);
+                        }
                     }
                 );
 

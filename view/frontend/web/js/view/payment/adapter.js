@@ -233,6 +233,29 @@ define([
                 }
             }.bind(this));
         },
+        
+        /**
+         * Providing a plugin point for overriding hosted field styles
+         *
+         * @returns {Object}
+         */
+        getHostedFieldStyles: function () {
+            return {
+                    "input": {
+                        "font-size": "14pt",
+                        "color": "#3A3A3A"
+                    },
+                    ":focus": {
+                        "color": "black"
+                    },
+                    ".valid": {
+                        "color": "green"
+                    },
+                    ".invalid": {
+                        "color": "red"
+                    }
+                };
+        },
 
         /**
          * Setup hosted fields instance
@@ -251,21 +274,7 @@ define([
             hostedFields.create({
                 client: this.clientInstance,
                 fields: this.config.hostedFields,
-                styles: {
-                    "input": {
-                        "font-size": "14pt",
-                        "color": "#3A3A3A"
-                    },
-                    ":focus": {
-                        "color": "black"
-                    },
-                    ".valid": {
-                        "color": "green"
-                    },
-                    ".invalid": {
-                        "color": "red"
-                    }
-                }
+                styles: this.getHostedFieldStyles()
             }, function (createErr, hostedFieldsInstance) {
                 if (createErr) {
                     self.showError($t("Braintree hosted fields could not be initialized. Please contact the store owner."));

@@ -45,7 +45,7 @@ class ConfigProvider implements ConfigProviderInterface
                 self::METHOD_CODE => [
                     'allowedMethods' => $this->config->getAllowedMethods(),
                     'clientToken' => $this->config->getClientToken(),
-                    'merchantId' => $this->config->getMerchantAccountId(),
+                    'merchantAccountId' => $this->config->getMerchantAccountId(),
                     'paymentIcons' => $this->config->getPaymentIcons(),
                     'title' => $this->config->getTitle()
                 ]

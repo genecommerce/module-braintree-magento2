@@ -8,21 +8,18 @@ namespace Magento\Braintree\Test\Unit\Gateway\Request;
 use Magento\Braintree\Gateway\Request\AddressDataBuilder;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
-use Magento\Payment\Gateway\Data\AddressAdapterInterface;
+use Magento\Braintree\Gateway\Data\AddressAdapterInterface;
 use Magento\Braintree\Gateway\Helper\SubjectReader;
 
-/**
- * Class AddressDataBuilderTest
- */
 class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var PaymentDataObjectInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PaymentDataObjectInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paymentDOMock;
 
     /**
-     * @var OrderAdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderAdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderMock;
 
@@ -32,11 +29,11 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
     private $builder;
 
     /**
-     * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var SubjectReader|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subjectReaderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
         $this->orderMock = $this->createMock(OrderAdapterInterface::class);
@@ -48,10 +45,11 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testBuildReadPaymentException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $buildSubject = [
             'payment' => null,
         ];
@@ -133,8 +131,7 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
                     'first_name' => 'John',
                     'last_name' => 'Smith',
                     'company' => 'Magento',
-                    'street_1' => 'street1',
-                    'street_2' => 'street2',
+                    'street' => ['street1', 'street2', 'street3', 'street4'],
                     'city' => 'Chicago',
                     'region_code' => 'IL',
                     'country_id' => 'US',
@@ -146,7 +143,7 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
                         AddressDataBuilder::LAST_NAME => 'Smith',
                         AddressDataBuilder::COMPANY => 'Magento',
                         AddressDataBuilder::STREET_ADDRESS => 'street1',
-                        AddressDataBuilder::EXTENDED_ADDRESS => 'street2',
+                        AddressDataBuilder::EXTENDED_ADDRESS => 'street2, street3, street4',
                         AddressDataBuilder::LOCALITY => 'Chicago',
                         AddressDataBuilder::REGION => 'IL',
                         AddressDataBuilder::POSTAL_CODE => '00000',
@@ -158,7 +155,7 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
                         AddressDataBuilder::LAST_NAME => 'Smith',
                         AddressDataBuilder::COMPANY => 'Magento',
                         AddressDataBuilder::STREET_ADDRESS => 'street1',
-                        AddressDataBuilder::EXTENDED_ADDRESS => 'street2',
+                        AddressDataBuilder::EXTENDED_ADDRESS => 'street2, street3, street4',
                         AddressDataBuilder::LOCALITY => 'Chicago',
                         AddressDataBuilder::REGION => 'IL',
                         AddressDataBuilder::POSTAL_CODE => '00000',
@@ -171,7 +168,7 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $addressData
-     * @return AddressAdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return AddressAdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getAddressMock($addressData)
     {
@@ -187,11 +184,8 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
             ->method('getCompany')
             ->willReturn($addressData['company']);
         $addressMock->expects(static::exactly(2))
-            ->method('getStreetLine1')
-            ->willReturn($addressData['street_1']);
-        $addressMock->expects(static::exactly(2))
-            ->method('getStreetLine2')
-            ->willReturn($addressData['street_2']);
+            ->method('getStreet')
+            ->willReturn($addressData['street']);
         $addressMock->expects(static::exactly(2))
             ->method('getCity')
             ->willReturn($addressData['city']);
