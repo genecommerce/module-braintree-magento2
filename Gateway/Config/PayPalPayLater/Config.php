@@ -11,7 +11,7 @@ class Config implements ConfigInterface
 {
     const KEY_ACTIVE = 'active';
     const DEFAULT_PATH_PATTERN = 'payment/%s/%s';
-
+    CONST ALLOWED_COUNTRIES_FOR_PAYLATER_BUTTON = ['US', 'AU'];
     /**
      * @var ScopeConfigInterface
      */
@@ -112,8 +112,8 @@ class Config implements ConfigInterface
             return false;
         }
 
-        // Only allowed on US
-        if (!$this->isUS()) {
+        // Only allowed on US and AU
+        if (!in_array($this->getMerchantCountry(), self::ALLOWED_COUNTRIES_FOR_PAYLATER_BUTTON)) {
             return false;
         }
 
@@ -162,8 +162,8 @@ class Config implements ConfigInterface
             return false;
         }
 
-        // Only allowed on US
-        if (!$this->isUS()) {
+        // Only allowed on US and AU
+        if (!in_array($this->getMerchantCountry(), self::ALLOWED_COUNTRIES_FOR_PAYLATER_BUTTON)) {
             return false;
         }
 

@@ -1,7 +1,7 @@
 require(['jquery', 'Magento_Ui/js/modal/alert', 'mage/translate', 'domReady!'], function ($, alert, $t) {
     function disablePayLaterMessages()
     {
-        var merchant_country = '', allowed_countries = '', paypal_credit = '';
+        var merchant_country = '', allowed_countries = '', allowed_countries_for_button = '', paypal_credit = '';
         merchant_country = $('[data-ui-id="adminhtml-system-config-field-country-0-select-groups-account-fields-merchant-country-value"]').val();
         paypal_credit = $('[data-ui-id="select-groups-braintree-section-groups-braintree-fields-braintree-paypal-credit-active-value"]').val();
 
@@ -13,7 +13,8 @@ require(['jquery', 'Magento_Ui/js/modal/alert', 'mage/translate', 'domReady!'], 
             $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-button-productpage-fields-message-productpage-enable-value"]').val(0).attr('readonly',true).click();
         }
 
-        if(merchant_country !== 'US') {
+        allowed_countries_for_button = ['US', 'AU'];
+        if($.inArray(merchant_country, allowed_countries_for_button) == -1 ){
             $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-button-cart-fields-button-paylater-cart-enable-value"]').val(0).attr('readonly',true).click();
             $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-button-checkout-fields-button-paylater-checkout-enable-value"]').val(0).attr('readonly',true).click();
             $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-button-productpage-fields-button-paylater-productpage-enable-value"]').val(0).attr('readonly',true).click();
