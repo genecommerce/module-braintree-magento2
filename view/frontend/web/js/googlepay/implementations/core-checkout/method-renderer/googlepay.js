@@ -17,6 +17,7 @@ define([
         defaults: {
             template: 'Magento_Braintree/googlepay/core-checkout',
             paymentMethodNonce: null,
+            deviceData: null,
             deviceSupported: button.deviceSupported(),
             grandTotalAmount: 0
         },
@@ -51,8 +52,9 @@ define([
         /**
          * Google pay place order method
          */
-        startPlaceOrder: function (nonce, paymentData) {
+        startPlaceOrder: function (nonce, paymentData, device_data) {
             this.setPaymentMethodNonce(nonce);
+            this.setDeviceData(device_data);
             this.placeOrder();
         },
 
@@ -61,6 +63,13 @@ define([
          */
         setPaymentMethodNonce: function (nonce) {
             this.paymentMethodNonce = nonce;
+        },
+
+        /**
+         * Save device_data
+         */
+        setDeviceData: function (device_data) {
+            this.deviceData = device_data;
         },
 
         /**
@@ -134,7 +143,8 @@ define([
             return {
                 'method': this.getCode(),
                 'additional_data': {
-                    'payment_method_nonce': this.paymentMethodNonce
+                    'payment_method_nonce': this.paymentMethodNonce,
+                    'device_data': this.deviceData
                 }
             };
         },
