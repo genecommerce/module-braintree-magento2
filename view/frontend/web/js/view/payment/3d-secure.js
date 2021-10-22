@@ -55,7 +55,7 @@ define([
                 totalAmount = parseFloat(quote.totals()['base_grand_total']).toFixed(2),
                 billingAddress = quote.billingAddress();
 
-            if(billingAddress.regionCode != undefined && billingAddress.regionCode.length > 2) {
+            if(billingAddress.regionCode !== null && billingAddress.regionCode.length > 2) {
                 billingAddress.regionCode = undefined;
             }
 
