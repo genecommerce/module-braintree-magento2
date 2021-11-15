@@ -6,11 +6,15 @@
 define(
     [
         'uiComponent',
+        'jquery',
+        'Magento_CheckoutAgreements/js/view/checkout-agreements',
         'mage/translate',
         'mage/storage'
     ],
     function (
         Component,
+        $,
+        checkoutAgreements,
         $t,
         storage
     ) {
@@ -363,6 +367,11 @@ define(
                     JSON.stringify(payload)
                 ).done(function () {
                     // Submit payment information
+                    var agreements = checkoutAgreements().agreements,
+                        agreementsIds = [];
+                    $.each(agreements, function (item, index) {
+                        agreementsIds.push(index.agreementId);
+                    });
                     storage.post(
                         this.getApiUrl("payment-information"),
                         JSON.stringify(
@@ -372,6 +381,9 @@ define(
                                     "method": "braintree_applepay",
                                     "additional_data": {
                                         "payment_method_nonce": nonce
+                                    },
+                                    "extension_attributes": {
+                                        "agreement_ids": agreementsIds
                                     }
                                 }
                             }
