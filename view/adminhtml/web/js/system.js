@@ -13,12 +13,6 @@ require(['jquery', 'Magento_Ui/js/modal/alert', 'mage/translate', 'domReady!'], 
             $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-button-productpage-fields-message-productpage-enable-value"]').val(0).attr('readonly',true).click();
         }
 
-        if(merchant_country !== 'US') {
-            $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-button-cart-fields-button-paylater-cart-enable-value"]').val(0).attr('readonly',true).click();
-            $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-button-checkout-fields-button-paylater-checkout-enable-value"]').val(0).attr('readonly',true).click();
-            $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-button-productpage-fields-button-paylater-productpage-enable-value"]').val(0).attr('readonly',true).click();
-        }
-
     }
     window.braintreeValidator = function (endpoint, env_id) {
         env_id = $('[data-ui-id="' + env_id + '"]').val();
