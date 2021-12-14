@@ -162,11 +162,6 @@ class Config implements ConfigInterface
             return false;
         }
 
-        // Only allowed on US
-        if (!$this->isUS()) {
-            return false;
-        }
-
         return (bool) $paypalPayLaterButtonActive;
     }
 
