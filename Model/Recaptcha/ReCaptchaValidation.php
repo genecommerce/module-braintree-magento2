@@ -86,7 +86,7 @@ class ReCaptchaValidation
         $token = $payment->getAdditionalInformation(DataAssignObserver::CAPTCHA_RESPONSE);
 
         if (
-            in_array($this->state->getAreaCode(), [Area::AREA_ADMINHTML, Area::AREA_CRONTAB])
+            in_array($this->state->getAreaCode(), [Area::AREA_ADMINHTML, Area::AREA_CRONTAB, Area::AREA_WEBAPI_REST, Area::AREA_WEBAPI_SOAP])
             || $payment->getMethod() !== 'braintree'
             || !$this->gatewayConfig->getCaptchaSettings()
             || $payment->getOrder()->getCustomerId()
