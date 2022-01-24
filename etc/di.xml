@@ -1183,4 +1183,8 @@
             <argument name="customerRepository" xsi:type="object">Magento\Customer\Model\ResourceModel\CustomerRepository\Proxy</argument>
         </arguments>
     </type>
+
+    <type name="Magento\Checkout\Block\Cart\Sidebar">
+        <plugin name="addAgreementsToMinicartConfig" type="Magento\Braintree\Plugin\AddAgreementsToMinicartConfig"/>
+    </type>
 </config>
