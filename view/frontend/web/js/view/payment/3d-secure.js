@@ -55,11 +55,7 @@ define([
                 totalAmount = parseFloat(quote.totals()['base_grand_total']).toFixed(2),
                 billingAddress = quote.billingAddress();
 
-            if (billingAddress.regionCode == null) {
-                billingAddress.regionCode = undefined;
-            }
-
-            if (billingAddress.regionCode !== undefined && billingAddress.regionCode.length > 2) {
+            if(billingAddress.regionCode != undefined && billingAddress.regionCode.length > 2) {
                 billingAddress.regionCode = undefined;
             }
 
@@ -81,7 +77,7 @@ define([
 
             fullScreenLoader.startLoader();
 
-            var setup3d = function(clientInstance, challengeRequested) {
+            var setup3d = function(clientInstance) {
                 threeDSecure.create({
                     version: 2,
                     client: clientInstance
@@ -108,7 +104,6 @@ define([
                     threeDSecureInstance.verifyCard({
                         amount: totalAmount,
                         nonce: context.paymentMethodNonce,
-                        challengeRequested: challengeRequested,
                         billingAddress: {
                             givenName: firstName,
                             surname: lastName,
@@ -161,8 +156,6 @@ define([
                 });
             };
 
-            let challengeRequested = this.getChallengeRequested();
-
             if (!clientInstance) {
                 require(['Magento_Braintree/js/view/payment/method-renderer/cc-form'], function(c) {
                     var config = c.extend({
@@ -173,10 +166,10 @@ define([
                         }
                     });
                     braintree.setConfig(config.defaults.clientConfig);
-                    braintree.setup(setup3d, challengeRequested);
+                    braintree.setup(setup3d);
                 });
             } else {
-                setup3d(clientInstance, challengeRequested);
+                setup3d(clientInstance);
             }
 
             return state.promise();
@@ -214,13 +207,6 @@ define([
             }
 
             return false;
-        },
-
-        /**
-         * @returns {Boolean}
-         */
-        getChallengeRequested: function () {
-            return this.config.challengeRequested;
         }
     };
 });

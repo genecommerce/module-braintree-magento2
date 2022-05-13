@@ -144,7 +144,6 @@ class ConfigProviderTest extends TestCase
                     'getAvailableCardTypes' => ['AE', 'VI', 'MC', 'DI', 'JCB'],
                     'isCvvEnabled' => true,
                     'isVerify3DSecure' => true,
-                    'is3DSAlwaysRequested' => true,
                     'getThresholdAmount' => 20,
                     'get3DSecureSpecificCountries' => ['GB', 'US', 'CA'],
                     'getEnvironment' => 'test-environment',
@@ -183,7 +182,6 @@ class ConfigProviderTest extends TestCase
                         ],
                         Config::CODE_3DSECURE => [
                             'enabled' => true,
-                            'challengeRequested' => true,
                             'thresholdAmount' => 20,
                             'specificCountries' => ['GB', 'US', 'CA'],
                             'useCvvVault' => null
