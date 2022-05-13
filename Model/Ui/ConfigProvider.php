@@ -116,7 +116,6 @@ class ConfigProvider implements ConfigProviderInterface
                 ],
                 Config::CODE_3DSECURE => [
                     'enabled' => $this->config->isVerify3DSecure(),
-                    'challengeRequested' => $this->config->is3DSAlwaysRequested(),
                     'thresholdAmount' => $this->config->getThresholdAmount(),
                     'specificCountries' => $this->config->get3DSecureSpecificCountries()
                 ]
