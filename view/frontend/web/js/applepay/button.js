@@ -73,6 +73,11 @@ define(
                         el.addEventListener('click', function (e) {
                             e.preventDefault();
 
+                            //default.js payment expects validation to be called before calling the place order chain, applepay is not the only component in the site
+                            if(!context.validate() || !context.getAdditionalValidators().validate()) {
+                                return false; 
+                            }
+                            
                             // Payment request object
                             var paymentRequest = applePayInstance.createPaymentRequest(context.getPaymentRequest());
                             if (!paymentRequest) {
