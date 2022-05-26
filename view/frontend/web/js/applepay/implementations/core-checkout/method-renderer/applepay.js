@@ -6,10 +6,12 @@ define([
     'Magento_Checkout/js/view/payment/default',
     'Magento_Checkout/js/model/quote',
     'Magento_Braintree/js/applepay/button'
+    'Magento_Checkout/js/model/payment/additional-validators'
 ], function (
     Component,
     quote,
-    button
+    button,
+    additionalValidators
 ) {
     'use strict';
 
@@ -21,6 +23,13 @@ define([
             deviceSupported: button.deviceSupported()
         },
 
+        /**
+         * Reveal additionalValidators to button.js component
+         */
+        getAdditionalValidators: function() {
+            return additionalValidators;
+        },
+        
         /**
          * Inject the apple pay button into the target element
          */
