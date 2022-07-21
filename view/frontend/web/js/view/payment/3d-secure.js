@@ -41,7 +41,7 @@ define([
          * @returns {string}
          */
         escapeNonAsciiCharacters: function (str) {
-            return [...str].map(c => /^[\x00-\x7F]$/.test(c) ? c : c.split("").map(a => "\\u" + a.charCodeAt().toString(16).padStart(4, "0")).join("")).join("");
+            return str.split("").map(function (c) { return /^[\x00-\x7F]$/.test(c) ? c : c.split("").map(function (a) { return "\\u00" + a.charCodeAt().toString(16)}).join("")}).join("");
         },
 
         /**
@@ -54,6 +54,10 @@ define([
                 state = $.Deferred(),
                 totalAmount = parseFloat(quote.totals()['base_grand_total']).toFixed(2),
                 billingAddress = quote.billingAddress();
+
+            if(billingAddress.regionCode != undefined && billingAddress.regionCode.length > 2) {
+                billingAddress.regionCode = undefined;
+            }
 
             // No 3d secure if using CVV verification on vaulted cards
             if (quote.paymentMethod().method.indexOf('braintree_cc_vault_') !== -1) {

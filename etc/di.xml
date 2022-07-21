@@ -668,7 +668,7 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="BraintreeApplePaySaleCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+    <virtualType name="BraintreeApplePaySaleCommand" type="Magento\Braintree\Gateway\Command\GatewayCommand">
         <arguments>
             <argument name="transferFactory" xsi:type="object">Magento\Braintree\Gateway\Http\TransferFactory</argument>
             <argument name="client" xsi:type="object">Magento\Braintree\Gateway\Http\Client\TransactionSale</argument>
@@ -775,7 +775,7 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="BraintreeGooglePaySaleCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+    <virtualType name="BraintreeGooglePaySaleCommand" type="Magento\Braintree\Gateway\Command\GatewayCommand">
         <arguments>
             <argument name="transferFactory" xsi:type="object">Magento\Braintree\Gateway\Http\TransferFactory</argument>
             <argument name="client" xsi:type="object">Magento\Braintree\Gateway\Http\Client\TransactionSale</argument>
@@ -808,6 +808,7 @@
                 <item name="payment" xsi:type="string">Magento\Braintree\Gateway\Request\PaymentDataBuilder</item>
                 <item name="channel" xsi:type="string">Magento\Braintree\Gateway\Request\ChannelDataBuilder</item>
                 <item name="address" xsi:type="string">Magento\Braintree\Gateway\Request\AddressDataBuilder</item>
+                <item name="device_data" xsi:type="string">Magento\Braintree\Gateway\Request\DeviceDataBuilder</item>
                 <item name="dynamic_descriptor" xsi:type="string">Magento\Braintree\Gateway\Request\DescriptorDataBuilder</item>
             </argument>
         </arguments>
@@ -869,6 +870,11 @@
         </arguments>
     </virtualType>
     <!-- commandPool -->
+    <type name="Magento\Braintree\Gateway\Response\Venmo\VaultDetailsHandler">
+        <arguments>
+            <argument name="paymentTokenFactory" xsi:type="object">Magento\Vault\Model\AccountPaymentTokenFactory</argument>
+        </arguments>
+    </type>
     <virtualType name="BraintreeVenmoCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
         <arguments>
             <argument name="commands" xsi:type="array">
@@ -1158,6 +1164,7 @@
     <preference for="Magento\Braintree\Api\CreditPriceRepositoryInterface" type="Magento\Braintree\Model\ResourceModel\CreditPriceRepository" />
 
     <preference for="Magento\Payment\Gateway\Data\Order\OrderAdapter" type="Magento\Braintree\Gateway\Data\Order\OrderAdapter"/>
+    <preference for="Magento\Braintree\Gateway\Data\AddressAdapterInterface" type="Magento\Braintree\Gateway\Data\Order\AddressAdapter"/>
 
     <type name="Magento\Framework\View\Asset\Minification">
         <plugin name="braintreeExcludeFromMinification" type="Magento\Braintree\Plugin\ExcludeFromMinification"/>
@@ -1176,5 +1183,9 @@
             <argument name="braintreeAdapter" xsi:type="object">Magento\Braintree\Model\Adapter\BraintreeAdapter\Proxy</argument>
             <argument name="customerRepository" xsi:type="object">Magento\Customer\Model\ResourceModel\CustomerRepository\Proxy</argument>
         </arguments>
+    </type>
+
+    <type name="Magento\Checkout\Block\Cart\Sidebar">
+        <plugin name="addAgreementsToMinicartConfig" type="Magento\Braintree\Plugin\AddAgreementsToMinicartConfig"/>
     </type>
 </config>

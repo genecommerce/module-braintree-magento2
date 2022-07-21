@@ -103,20 +103,8 @@ class AddressDataBuilder implements BuilderInterface
         $billingAddress = $order->getBillingAddress();
         if ($billingAddress) {
             $street = $billingAddress->getStreet();
-            $streetAddress = isset($street[0]) ? $street[0] : '';
-            $streetAddress1 = isset($street[1]) ? $street[1] : '';
-            $streetAddress2 = isset($street[2]) ? $street[2] : '';
-            $streetAddress3 = isset($street[3]) ? $street[3] : '';
-
-            $extendedAddress = $streetAddress1;
-            if (!empty($streetAddress1)) {
-                if (!empty($streetAddress2)) {
-                    $extendedAddress = $streetAddress1 . ", " . $streetAddress2;
-                }
-                if (!empty($streetAddress3)) {
-                    $extendedAddress = $streetAddress1 . ", " . $streetAddress2 . ", " . $streetAddress3;
-                }
-            }
+            $streetAddress = array_shift($street);
+            $extendedAddress = implode(', ', $street);
 
             $result[self::BILLING_ADDRESS] = [
                 self::FIRST_NAME => $billingAddress->getFirstname(),
@@ -134,20 +122,8 @@ class AddressDataBuilder implements BuilderInterface
         $shippingAddress = $order->getShippingAddress();
         if ($shippingAddress) {
             $street = $shippingAddress->getStreet();
-            $streetAddress = isset($street[0]) ? $street[0] : '';
-            $streetAddress1 = isset($street[1]) ? $street[1] : '';
-            $streetAddress2 = isset($street[2]) ? $street[2] : '';
-            $streetAddress3 = isset($street[3]) ? $street[3] : '';
-
-            $extendedAddress = $streetAddress1;
-            if (!empty($streetAddress1)) {
-                if (!empty($streetAddress2)) {
-                    $extendedAddress = $streetAddress1 . ", " . $streetAddress2;
-                }
-                if (!empty($streetAddress3)) {
-                    $extendedAddress = $streetAddress1 . ", " . $streetAddress2 . ", " . $streetAddress3;
-                }
-            }
+            $streetAddress = array_shift($street);
+            $extendedAddress = implode(', ', $street);
 
             $result[self::SHIPPING_ADDRESS] = [
                 self::FIRST_NAME => $shippingAddress->getFirstname(),

@@ -5,6 +5,7 @@
  */
 namespace Magento\Braintree\Gateway\Config\PayPal;
 
+use Magento\Store\Model\ScopeInterface;
 use Magento\Braintree\Model\Config\Source\Color;
 use Magento\Braintree\Model\Config\Source\Shape;
 use Magento\Braintree\Model\Config\Source\Size;
@@ -58,6 +59,11 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     private $shapeConfigSource;
 
     /**
+     * @var \PayPal\Braintree\Model\Config\Source\Shape
+     */
+    private $scopeConfigResolver;
+
+    /**
      * Config constructor.
      * @param ScopeConfigInterface $scopeConfig
      * @param CcConfig $ccConfig
@@ -77,6 +83,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         $pathPattern = self::DEFAULT_PATH_PATTERN
     ) {
         parent::__construct($scopeConfig, $methodCode, $pathPattern);
+        $this->scopeConfigResolver = $scopeConfig;
         $this->ccConfig = $ccConfig;
         $this->sizeConfigSource = $sizeConfigSource;
         $this->colorConfigSource = $colorConfigSource;
@@ -129,6 +136,20 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     public function isRequiredBillingAddress(): string
     {
         return $this->getValue(self::KEY_REQUIRE_BILLING_ADDRESS);
+    }
+
+    /**
+     * Get Merchant country
+     *
+     * @param int $storeId
+     * @return mixed|null
+     */
+    public function getMerchantCountry()
+    {
+        return $this->scopeConfigResolver->getValue(
+            'paypal/general/merchant_country',
+            ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**

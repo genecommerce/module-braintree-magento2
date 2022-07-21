@@ -21,8 +21,6 @@ define(
     ) {
         'use strict';
 
-        var that;
-
         return {
             init: function (element, context) {
                 // No element or context
@@ -161,7 +159,7 @@ define(
              * @return boolean
              */
             deviceSupported: function () {
-                if (location.protocol != 'https:') {
+                if (location.protocol !== 'https:') {
                     console.warn("Braintree Apple Pay requires your checkout be served over HTTPS");
                     return false;
                 }

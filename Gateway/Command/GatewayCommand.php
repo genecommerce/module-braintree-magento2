@@ -16,6 +16,7 @@ use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Payment\Gateway\Validator\ValidatorInterface;
 use Psr\Log\LoggerInterface;
 use Magento\Payment\Gateway\Command\CommandException;
+use Magento\Braintree\Model\Recaptcha\ReCaptchaValidation;
 
 /**
  * Class GatewayCommand
@@ -56,12 +57,18 @@ class GatewayCommand implements CommandInterface
     private $logger;
 
     /**
+     * @var ReCaptchaValidation
+     */
+    private $reCaptchaValidation;
+
+    /**
      * @param BuilderInterface $requestBuilder
      * @param TransferFactoryInterface $transferFactory
      * @param ClientInterface $client
      * @param LoggerInterface $logger
      * @param HandlerInterface $handler
      * @param ValidatorInterface $validator
+     * @param ReCaptchaValidation $reCaptchaValidation
      */
     public function __construct(
         BuilderInterface $requestBuilder,
@@ -69,7 +76,8 @@ class GatewayCommand implements CommandInterface
         ClientInterface $client,
         LoggerInterface $logger,
         HandlerInterface $handler = null,
-        ValidatorInterface $validator = null
+        ValidatorInterface $validator = null,
+        ReCaptchaValidation $reCaptchaValidation
     ) {
         $this->requestBuilder = $requestBuilder;
         $this->transferFactory = $transferFactory;
@@ -77,6 +85,7 @@ class GatewayCommand implements CommandInterface
         $this->handler = $handler;
         $this->validator = $validator;
         $this->logger = $logger;
+        $this->reCaptchaValidation = $reCaptchaValidation;
     }
 
     /**
@@ -94,6 +103,8 @@ class GatewayCommand implements CommandInterface
         $transferO = $this->transferFactory->create(
             $this->requestBuilder->build($commandSubject)
         );
+
+        $this->reCaptchaValidation->validate($commandSubject);
 
         $response = $this->client->placeRequest($transferO);
         if (null !== $this->validator) {
@@ -131,7 +142,7 @@ class GatewayCommand implements CommandInterface
             return __('Your payment could not be taken. Please try again or use a different payment method.');
         }
 
-        return __('Your payment could not be taken. Please try again or use a different payment method. ' . $response['object']->message);
+        return __('Your payment could not be taken. Please try again or use a different payment method. %1', $response['object']->message);
     }
 
     /**

@@ -43,6 +43,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const KEY_KOUNT_SKIP_ADMIN = 'kount_skip_admin';
     const FRAUD_PROTECTION = 'fraudprotection';
     const FRAUD_PROTECTION_THRESHOLD = 'fraudprotection_threshold';
+    const ENABLE_RECAPTCHA = 'enable_recaptcha';
 
     /**
      * Get list of available dynamic descriptors keys
@@ -327,6 +328,21 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     }
 
     /**
+     * Check is reCaptchs is enabled
+     *
+     * @return bool
+     * @throws InputException
+     * @throws NoSuchEntityException
+     */
+    public function getCaptchaSettings(): bool
+    {
+        return (bool) $this->getValue(
+            self::ENABLE_RECAPTCHA,
+            $this->storeConfigResolver->getStoreId()
+        );
+    }
+
+    /**
      * Get Payment configuration status
      *
      * @return bool
@@ -364,15 +380,17 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * Get Merchant account ID
      *
+     * @param int|null $storeId
+     *
      * @return string|null
      * @throws InputException
      * @throws NoSuchEntityException
      */
-    public function getMerchantAccountId()
+    public function getMerchantAccountId($storeId = null)
     {
         return $this->getValue(
             self::KEY_MERCHANT_ACCOUNT_ID,
-            $this->storeConfigResolver->getStoreId()
+            !is_null($storeId) ? $storeId : $this->storeConfigResolver->getStoreId()
         );
     }
 }

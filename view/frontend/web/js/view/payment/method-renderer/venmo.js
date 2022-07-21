@@ -7,6 +7,7 @@ define(
         'Magento_Braintree/js/form-builder',
         'Magento_Ui/js/model/messageList',
         'Magento_Checkout/js/model/full-screen-loader',
+        'Magento_Checkout/js/model/payment/additional-validators',
         'mage/translate'
     ],
     function (
@@ -17,6 +18,7 @@ define(
         formBuilder,
         messageList,
         fullScreenLoader,
+        additionalValidators,
         $t
     ) {
         'use strict';
@@ -31,6 +33,10 @@ define(
 
             clickVenmoBtn: function () {
                 var self = this;
+
+                if (!additionalValidators.validate()) {
+                    return false;
+                }
 
                 if (!this.venmoInstance) {
                     this.setErrorMsg($t('Venmo not initialized, please try reloading.'));
@@ -119,14 +125,16 @@ define(
                         // callback from collectDeviceData
                         venmo.create({
                             client: clientInstance,
+                            allowDesktop: true,
                             allowNewBrowserTab: false
                         }, function (venmoErr, venmoInstance) {
-                            if (!venmoInstance.isBrowserSupported()) {
+                            if (venmoErr) {
+                                self.setErrorMsg($t('Error initializing Venmo: %1').replace('%1', venmoErr));
                                 return;
                             }
 
-                            if (venmoErr) {
-                                self.setErrorMsg($t('Error initializing Venmo: %1').replace('%1', venmoErr));
+                            if (!venmoInstance.isBrowserSupported()) {
+                                console.log('Browser does not support Venmo');
                                 return;
                             }
 
@@ -140,10 +148,6 @@ define(
 
             isAllowed: function () {
                 return window.checkoutConfig.payment[this.getCode()].isAllowed;
-            },
-
-            isBrowserSupported: function () {
-                return venmo.isBrowserSupported();
             },
 
             setErrorMsg: function (message) {

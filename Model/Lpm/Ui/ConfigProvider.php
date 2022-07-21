@@ -36,12 +36,16 @@ class ConfigProvider implements ConfigProviderInterface
      */
     public function getConfig(): array
     {
+        if (!$this->config->isActive()) {
+            return [];
+        }
+
         return [
             'payment' => [
                 self::METHOD_CODE => [
                     'allowedMethods' => $this->config->getAllowedMethods(),
                     'clientToken' => $this->config->getClientToken(),
-                    'merchantId' => $this->config->getMerchantAccountId(),
+                    'merchantAccountId' => $this->config->getMerchantAccountId(),
                     'paymentIcons' => $this->config->getPaymentIcons(),
                     'title' => $this->config->getTitle()
                 ]

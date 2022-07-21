@@ -126,7 +126,7 @@
                             </span>
                         <div class="field-tooltip-content"
                              data-target="dropdown"
-                             translate="'We store you payment information securely on Braintree servers via SSL.'"></div>
+                             translate="'We store your payment information securely on Braintree servers via SSL.'"></div>
                     </div>
                 </div>
                 <!-- /ko -->
@@ -138,6 +138,9 @@
             <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
         </div>
+        <!-- ko foreach: $parent.getRegion('braintree-recaptcha') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
         <div class="actions-toolbar">
             <div class="primary">
                 <button class="action primary checkout"

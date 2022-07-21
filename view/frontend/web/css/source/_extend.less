@@ -1,6 +1,7 @@
+
 /**
- * 3D Secure Container
- */
+* 3D Secure Container
+*/
 #braintree-three-d-modal {
     position: fixed;
     top: 0;
@@ -42,8 +43,8 @@
 }
 
 /**
- * Apple Pay button
- */
+* Apple Pay button
+*/
 .braintree-applepay-container-product {
     display: inline-block;
 
@@ -82,8 +83,8 @@
 }
 
 /**
- * PP Credit Calculator
- */
+* PP Credit Calculator
+*/
 .ppcredit-summary {
     background: linear-gradient(to right, #009CDE , #003087);
     color: #fff;
@@ -154,15 +155,15 @@
 }
 
 /**
- * CC FORM
- */
+* CC FORM
+*/
 #braintree_expirationDate {
     width: 90px;
 }
 
 /**
- * Google Pay
- */
+* Google Pay
+*/
 button.braintree-googlepay-button {
     background-origin: content-box;
     background-position: center center;
@@ -286,47 +287,60 @@ button.braintree-googlepay-button.black.long {
     }
 }
 
-& when (@media-common = true) {
-    #payment-method-braintree-cc-vault {
-        .field {
-            &.required {
-                .label {
-                    font-weight: @font-weight__semibold;
-                    &:after {
-                        content: '*';
-                        color: #e02b27;
-                        .lib-font-size(18px);
-                        margin: 0 0 0 5px;
-                    }
-                }
-            }
-            .hosted-control {
-                background: #ffffff;
-                background-clip: padding-box;
-                border: 1px solid #c2c2c2;
-                border-radius: 1px;
-                font-family: @font-family__base;
-                .lib-font-size(14px);
-                height: 32px;
-                padding: 0 9px;
-                vertical-align: baseline;
-                box-sizing: border-box;
-                position: relative;
-                width: 5rem;
+#payment-method-braintree-lpm {
+    .primary {
+        width: 100%;
 
-                &.braintree-hosted-fields-invalid:not(.braintree-hosted-fields-focused) ~ .hosted-error {
-                    height: auto;
-                    opacity: 1;
+        .action {
+            margin-bottom: 12px;
+            width: 100%;
+
+            img {
+                height: 40px;
+            }
+        }
+    }
+}
+
+#payment-method-braintree-cc-vault {
+    .field {
+        &.required {
+            .label {
+                font-weight: @font-weight__semibold;
+                &:after {
+                    content: '*';
+                    color: #e02b27;
+                    .lib-font-size(18px);
+                    margin: 0 0 0 5px;
                 }
             }
-            .hosted-error {
-                clear: both;
-                color: #e02b27;
-                .lib-font-size(12px);
-                height: 0;
-                margin-top: 7px;
-                opacity: 0;
+        }
+        .hosted-control {
+            background: #ffffff;
+            background-clip: padding-box;
+            border: 1px solid #c2c2c2;
+            border-radius: 1px;
+            font-family: @font-family__base;
+            .lib-font-size(14px);
+            height: 32px;
+            padding: 0 9px;
+            vertical-align: baseline;
+            box-sizing: border-box;
+            position: relative;
+            width: 5rem;
+
+            &.braintree-hosted-fields-invalid:not(.braintree-hosted-fields-focused) ~ .hosted-error {
+                height: auto;
+                opacity: 1;
             }
+        }
+        .hosted-error {
+            clear: both;
+            color: #e02b27;
+            .lib-font-size(12px);
+            height: 0;
+            margin-top: 7px;
+            opacity: 0;
         }
     }
 }

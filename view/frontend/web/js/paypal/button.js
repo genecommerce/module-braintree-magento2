@@ -44,7 +44,16 @@ define(
              * @param token
              * @param currency
              */
-            init: function (token, currency) {
+            init: function (token, currency, env, local) {
+                if($('.action-braintree-paypal-message').length) {
+                    $('.product-add-form form').on('keyup change paste', 'input, select, textarea', function(){
+                        var currentPrice, currencySymbol;
+                        currentPrice = $(".product-info-main span").find("[data-price-type='finalPrice']").text();
+                        currencySymbol = $('.action-braintree-paypal-message[data-pp-type="product"]').data('currency-symbol');
+                        $('.action-braintree-paypal-message[data-pp-type="product"]').attr('data-pp-amount', currentPrice.replace(currencySymbol,''));
+                    });
+                }
+
                 buttonIds = [];
                 $('.action-braintree-paypal-logo').each(function () {
                     if(!$(this).hasClass( "button-loaded" )) {
@@ -54,7 +63,7 @@ define(
                 });
 
                 if(buttonIds.length > 0){
-                    this.loadSDK(token, currency);
+                    this.loadSDK(token, currency, env, local);
                 }
             },
 
@@ -64,7 +73,7 @@ define(
              * @param token
              * @param currency
              */
-            loadSDK: function (token, currency) {
+            loadSDK: function (token, currency, env, local) {
                 braintree.create({
                     authorization: token
                 }, function (clientErr, clientInstance) {
@@ -83,21 +92,23 @@ define(
                     paypalCheckout.create({
                         client: clientInstance
                     }, function (err, paypalCheckoutInstance) {
-
                         if (typeof paypal !== 'undefined' ) {
                             this.renderPayPalButtons(buttonIds, paypalCheckoutInstance);
                             this.renderPayPalMessages();
                         } else {
-                            paypalCheckoutInstance.loadPayPalSDK({
+                            var configSDK = {
                                 components: 'buttons,messages,funding-eligibility',
-                                currency: currency,
-                            }, function () {
+                                "enable-funding": "paylater",
+                                currency: currency
+                            };
+                            if (env == 'sandbox' && local != '') {
+                                configSDK["buyer-country"] = local;
+                            }
+                            paypalCheckoutInstance.loadPayPalSDK(configSDK, function () {
                                 this.renderPayPalButtons(buttonIds, paypalCheckoutInstance);
                                 this.renderPayPalMessages();
                             }.bind(this));
                         }
-
-
                     }.bind(this));
                 }.bind(this));
             },
@@ -227,7 +238,7 @@ define(
 
                             // Map the billing address correctly
                             let isRequiredBillingAddress = data.data('requiredbillingaddress');
-                            if (isRequiredBillingAddress === 1) {
+                            if ((isRequiredBillingAddress === 1) && (typeof payload.details.billingAddress !== 'undefined')) {
                                 var billingAddress = payload.details.billingAddress;
                                 payload.details.billingAddress = {
                                     streetAddress: typeof billingAddress.line2 !== 'undefined' ? billingAddress.line1.replace(/'/g, "&apos;") + " " + billingAddress.line2.replace(/'/g, "&apos;") : billingAddress.line1.replace(/'/g, "&apos;"),
@@ -260,10 +271,13 @@ define(
                     }
                 });
                 if (!button.isEligible()) {
+                    console.log('PayPal button is not elligible')
                     data.parent().remove();
                     return;
                 }
-                button.render('#' + data.attr('id'));
+                if ($('#' + data.attr('id')).length) {
+                    button.render('#' + data.attr('id'));
+                }
             },
         }
     }

@@ -71,7 +71,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $this->initCcTypeMock();
         $this->initSessionQuoteMock();
         $this->initGatewayConfigMock();
-        
+
         $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->paymentDataHelper = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
@@ -140,7 +140,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $this->storeManager->expects(static::once())
             ->method('getStore')
             ->willReturn($store);
-        
+
         $store->expects(static::once())
             ->method('getId')
             ->willReturn($storeId);
@@ -166,11 +166,11 @@ class FormTest extends \PHPUnit\Framework\TestCase
     {
         $this->ccType = $this->getMockBuilder(CcType::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCcTypeLabelMap'])
+            ->setMethods(['getAllowedTypes'])
             ->getMock();
 
         $this->ccType->expects(static::any())
-            ->method('getCcTypeLabelMap')
+            ->method('getAllowedTypes')
             ->willReturn(self::$baseCardTypes);
     }
 

@@ -26,7 +26,12 @@ try {
             'jquery'
         ], function (button, $) {
             $(function () {
-                button.init('<?= $block->getClientToken() ?>', '<?= $block->escapeHtmlAttr($block->getCurrency()) ?>');
+                button.init(
+                    '<?= $block->getClientToken() ?>',
+                    '<?= $block->escapeHtmlAttr($block->getCurrency()) ?>',
+                    '<?= $block->escapeHtmlAttr($block->getEnvironment()) ?>',
+                    '<?= $block->escapeHtmlAttr($block->getMerchantCountry()) ?>'
+                );
             })
         })
     </script>
@@ -87,12 +92,13 @@ try {
                      class="action-braintree-paypal-logo"></div>
             </div>
         <?php endif; ?>
-        <?php if ($block->isPayLaterMessageActive('productpage') && !$block->isPayPalVaultActive()): ?>
-            <div class="action-braintree-paypal-message"
-                 id="<?= $block->escapeHtmlAttr($paypalPaylaterId) ?>-message"
-                 data-pp-amount="<?= $block->escapeHtmlAttr($block->getAmount()) ?>"
-                 data-pp-type="product"
-            ></div>
-        <?php endif; ?>
+    <?php endif; ?>
+    <?php if ($block->isPayLaterMessageActive('productpage') && !$block->isPayPalVaultActive()): ?>
+        <div class="action-braintree-paypal-message"
+             id="<?= $block->escapeHtmlAttr($paypalPaylaterId) ?>-message"
+             data-pp-amount="<?= $block->escapeHtmlAttr($block->getAmount()) ?>"
+             data-currency-symbol="<?= $block->getCurrencySymbol(); ?>"
+             data-pp-type="product"
+        ></div>
     <?php endif; ?>
 <?php endif; ?>
