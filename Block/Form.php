@@ -130,7 +130,7 @@ class Form extends Cc
      */
     private function getConfiguredCardTypes(): array
     {
-        $types = $this->ccType->getCcTypeLabelMap();
+        $types = $this->ccType->getAllowedTypes();
         $configCardTypes = array_fill_keys($this->gatewayConfig->getAvailableCardTypes(), '');
 
         return array_intersect_key($types, $configCardTypes);
