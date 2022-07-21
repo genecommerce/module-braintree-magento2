@@ -40,10 +40,13 @@ class VaultCaptureDataBuilder implements BuilderInterface
         $payment = $paymentDO->getPayment();
         $extensionAttributes = $payment->getExtensionAttributes();
         $paymentToken = $extensionAttributes->getVaultPaymentToken();
-
+        $gatewayToken = '';
+        if (!is_null($paymentToken)) {
+            $gatewayToken = $paymentToken->getGatewayToken();
+        }
         return [
             'amount' => $this->formatPrice($this->subjectReader->readAmount($buildSubject)),
-            'paymentMethodToken' => $paymentToken->getGatewayToken()
+            'paymentMethodToken' => $gatewayToken
         ];
     }
 }
