@@ -19,7 +19,7 @@ class CheckColumnOptionSourceTest extends \PHPUnit\Framework\TestCase
         $source = new PaymentType();
         $options = $source->toOptionArray();
 
-        static::assertEquals(6, count($options));
+        static::assertEquals(5, count($options));
     }
 
     public function testStatusSource()
