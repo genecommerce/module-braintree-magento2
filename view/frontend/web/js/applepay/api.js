@@ -338,7 +338,7 @@ define(
                             },
                             "billing_address": {
                                 "email": shippingContact.emailAddress,
-                                "telephone": '0000000000',
+                                "telephone": shippingContact.phoneNumber,
                                 "firstname": billingContact.givenName,
                                 "lastname": billingContact.familyName,
                                 "street": billingContact.addressLines,
@@ -363,19 +363,23 @@ define(
                     JSON.stringify(payload)
                 ).done(function () {
                     // Submit payment information
+                    let paymentInformation = {
+                        "email": shippingContact.emailAddress,
+                        "paymentMethod": {
+                            "method": "braintree_applepay",
+                            "additional_data": {
+                                "payment_method_nonce": nonce
+                            }
+                        }
+                    };
+                    if (window.checkout && window.checkout.agreementIds) {
+                        paymentInformation.paymentMethod.extension_attributes = {
+                            "agreement_ids": window.checkout.agreementIds
+                        };
+                    }
                     storage.post(
                         this.getApiUrl("payment-information"),
-                        JSON.stringify(
-                            {
-                                "email": shippingContact.emailAddress,
-                                "paymentMethod": {
-                                    "method": "braintree_applepay",
-                                    "additional_data": {
-                                        "payment_method_nonce": nonce
-                                    }
-                                }
-                            }
-                        )
+                        JSON.stringify(paymentInformation)
                     ).done(function (r) {
                         document.location = this.getActionSuccess();
                         session.completePayment(ApplePaySession.STATUS_SUCCESS);

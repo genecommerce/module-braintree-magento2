@@ -380,15 +380,17 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * Get Merchant account ID
      *
+     * @param int|null $storeId
+     *
      * @return string|null
      * @throws InputException
      * @throws NoSuchEntityException
      */
-    public function getMerchantAccountId()
+    public function getMerchantAccountId($storeId = null)
     {
         return $this->getValue(
             self::KEY_MERCHANT_ACCOUNT_ID,
-            $this->storeConfigResolver->getStoreId()
+            !is_null($storeId) ? $storeId : $this->storeConfigResolver->getStoreId()
         );
     }
 }
