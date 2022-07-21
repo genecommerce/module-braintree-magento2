@@ -548,12 +548,25 @@ define([
          * @returns {Object}
          */
         getShippingAddress: function () {
-            var address = quote.shippingAddress();
+
+            var line0, line1, address;
+
+            address = quote.shippingAddress();
+
+            if(!_.isUndefined(address.street) && _.isArray(address.street)) {
+                line0 = !_.isUndefined(address.street[0]) ? address.street[0] : "";
+                address.street.shift();
+                line1 = address.street.slice(0, 2).filter(Boolean).join(' ');
+            }
+
+            if(!_.isUndefined(address.street) && _.isString(address.street)) {
+                line0 = address.street;
+            }
 
             return {
-                recipientName: address.firstname + ' ' + address.lastname,
-                line1: address.street[0],
-                line2: typeof address.street[2] === 'undefined' ? address.street[1] : address.street[1] + ' ' + address.street[2],
+                recipientName: [address.firstname, address.lastname].filter(Boolean).join(' '),
+                line1: line0,
+                line2: line1,
                 city: address.city,
                 countryCode: address.countryId,
                 postalCode: address.postcode,
