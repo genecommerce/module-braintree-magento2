@@ -86,6 +86,12 @@ define(
                                 if (response.result) {
                                     button.addEventListener('click', function (event) {
                                         event.preventDefault();
+                                        
+                                        //default.js payment expects validation to be called before calling the place order chain, googlepay is not the only component in the site
+                                        if(!context.validate() || !context.getAdditionalValidators().validate()) {
+                                            return false;
+                                        }
+                                        
                                         jQuery("body").loader('show');
                                         var responseData;
 
