@@ -20,7 +20,6 @@ define([
             template: 'Magento_Braintree/googlepay/core-checkout',
             paymentMethodNonce: null,
             deviceData: null,
-            deviceSupported: button.deviceSupported(),
             grandTotalAmount: 0
         },
 
