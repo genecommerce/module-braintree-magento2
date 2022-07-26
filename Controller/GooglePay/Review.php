@@ -23,12 +23,12 @@ class Review extends AbstractAction
     /**
      * @var QuoteUpdater
      */
-    private $quoteUpdater;
+    private QuoteUpdater $quoteUpdater;
 
     /**
      * @var string
      */
-    private static $paymentMethodNonce = 'payment_method_nonce';
+    private static string $paymentMethodNonce = 'payment_method_nonce';
 
     /**
      * Constructor
@@ -66,6 +66,7 @@ class Review extends AbstractAction
             if ($this->validateRequestData($requestData)) {
                 $this->quoteUpdater->execute(
                     $requestData['nonce'],
+                    $requestData['deviceData'],
                     $requestData['details'],
                     $quote
                 );
