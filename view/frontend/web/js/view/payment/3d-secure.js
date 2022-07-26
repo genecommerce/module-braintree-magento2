@@ -138,7 +138,22 @@ define([
 
                         if (err) {
                             console.error("3dsecure validation failed", err);
-                            return state.reject($t('Please try again with another form of payment.'));
+                            if (err.code === 'THREEDS_LOOKUP_VALIDATION_ERROR') {
+                                let errorMessage = err.details.originalError.details.originalError.error.message;
+                                if (errorMessage === 'Billing line1 format is invalid.' && billingAddress.street[0].length > 50) {
+                                    return state.reject(
+                                        $t('Billing line1 must be string and less than 50 characters. Please update the address and try again.')
+                                    );
+
+                                } else if (errorMessage === 'Billing line2 format is invalid.' && billingAddress.street[1].length > 50) {
+                                    return state.reject(
+                                        $t('Billing line2 must be string and less than 50 characters. Please update the address and try again.')
+                                    );
+                                }
+                                return state.reject($t(errorMessage));
+                            } else {
+                                return state.reject($t('Please try again with another form of payment.'));
+                            }
                         }
 
                         var liability = {
