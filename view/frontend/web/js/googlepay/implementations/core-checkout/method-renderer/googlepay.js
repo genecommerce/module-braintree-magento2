@@ -23,16 +23,16 @@ define([
             deviceSupported: button.deviceSupported(),
             grandTotalAmount: 0
         },
-        
+
         /**
          * Reveal additionalValidators to button.js component
          */
         getAdditionalValidators: function() {
             return additionalValidators;
         },
-        
+
         /**
-         * Inject the google pay button into the target element
+         * Inject the Google Pay button into the target element
          */
         getGooglePayBtn: function (id) {
             button.init(
@@ -59,7 +59,11 @@ define([
         },
 
         /**
-         * Google pay place order method
+         * Google Pay place order method
+         *
+         * @param nonce
+         * @param paymentData
+         * @param device_data
          */
         startPlaceOrder: function (nonce, paymentData, device_data) {
             this.setPaymentMethodNonce(nonce);
@@ -69,6 +73,8 @@ define([
 
         /**
          * Save nonce
+         *
+         * @param nonce
          */
         setPaymentMethodNonce: function (nonce) {
             this.paymentMethodNonce = nonce;
@@ -76,6 +82,8 @@ define([
 
         /**
          * Save device_data
+         *
+         * @param device_data
          */
         setDeviceData: function (device_data) {
             this.deviceData = device_data;
@@ -83,6 +91,7 @@ define([
 
         /**
          * Retrieve the client token
+         *
          * @returns null|string
          */
         getClientToken: function () {
@@ -93,27 +102,30 @@ define([
          * Payment request info
          */
         getPaymentRequest: function () {
-           var result = {
+            var result = {
                 transactionInfo: {
                     totalPriceStatus: 'FINAL',
                     totalPrice: this.grandTotalAmount,
                     currencyCode: this.currencyCode
                 },
-                allowedPaymentMethods: ['CARD'],
-                phoneNumberRequired: false,
-                emailRequired: false,
+                allowedPaymentMethods: [{
+                    "type": "CARD",
+                    "parameters": {
+                        "allowedCardNetworks": this.getCardTypes(),
+                        "billingAddressRequired": false,
+                    },
+                }],
                 shippingAddressRequired: false,
-                cardRequirements: {
-                    billingAddressRequired: false,
-                    allowedCardNetworks: this.getCardTypes()
-                }
+                emailRequired: false,
             };
 
-           if (this.getEnvironment() !== "TEST") {
-               result['merchantId'] = this.getMerchantId();
-           }
+            if (this.getEnvironment() !== "TEST") {
+                result.merchantInfo = {
+                    merchantId: this.getMerchantId()
+                };
+            }
 
-           return result;
+            return result;
         },
 
         /**
@@ -146,6 +158,7 @@ define([
 
         /**
          * Get data
+         *
          * @returns {Object}
          */
         getData: function () {
@@ -159,7 +172,7 @@ define([
         },
 
         /**
-         * Return image url for the google pay mark
+         * Return image url for the Google Pay mark
          */
         getPaymentMarkSrc: function () {
             return window.checkoutConfig.payment[this.getCode()].paymentMarkSrc;
