@@ -1,4 +1,5 @@
 <?php
+
 namespace Braintree\Error;
 
 use Braintree\Util;
@@ -9,14 +10,8 @@ use Braintree\Util;
  *
  * <b>== More information ==</b>
  *
- * For more detailed information on Validation errors, see {@link https://developers.braintreepayments.com/reference/general/validation-errors/overview/php https://developers.braintreepayments.com/reference/general/validation-errors/overview/php}
- *
- * @package    Braintree
- * @subpackage Error
- *
- * @property-read string $attribute
- * @property-read string $code
- * @property-read string $message
+ * // phpcs:ignore Generic.Files.LineLength
+ * See our {@link https://developer.paypal.com/braintree/docs/reference/general/result-objects#error-results developer docs} for more information
  */
 class Validation
 {
@@ -24,37 +19,25 @@ class Validation
     private $_code;
     private $_message;
 
-    /**
-     * @ignore
-     * @param array $attributes
-     */
-    public function  __construct($attributes)
+    // phpcs:ignore PEAR.Commenting.FunctionComment.Missing
+    public function __construct($attributes)
     {
         $this->_initializeFromArray($attributes);
     }
-    /**
-     * initializes instance properties from the keys/values of an array
-     * @ignore
-     * @access protected
-     * @param array $attributes array of properties to set - single level
-     * @return void
-     */
+
+    // phpcs:ignore PEAR.Commenting.FunctionComment.Missing
     private function _initializeFromArray($attributes)
     {
-        foreach($attributes AS $name => $value) {
+        foreach ($attributes as $name => $value) {
             $varName = "_$name";
             $this->$varName = Util::delimiterToCamelCase($value, '_');
         }
     }
 
-    /**
-     *
-     * @ignore
-     */
-    public function  __get($name)
+    // phpcs:ignore PEAR.Commenting.FunctionComment.Missing
+    public function __get($name)
     {
         $varName = "_$name";
         return isset($this->$varName) ? $this->$varName : null;
     }
 }
-class_alias('Braintree\Error\Validation', 'Braintree_Error_Validation');

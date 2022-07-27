@@ -1,4 +1,5 @@
 <?php
+
 namespace Braintree;
 
 /**
@@ -7,15 +8,22 @@ namespace Braintree;
  */
 class GraphQLClient
 {
+    // phpcs:ignore PEAR.Commenting.FunctionComment.Missing
     public function __construct($config)
     {
         $this->_service = new GraphQL($config);
     }
 
-    public function query($definition, $variables = Null)
+    /*
+     * Make a GraphQL API request
+     *
+     * @param object $definition of the query
+     * @param object $variables optional
+     *
+     * @return object result
+     */
+    public function query($definition, $variables = null)
     {
         return $this->_service->request($definition, $variables);
     }
 }
-
-class_alias('Braintree\GraphQLClient', 'Braintree_GraphQLClient');

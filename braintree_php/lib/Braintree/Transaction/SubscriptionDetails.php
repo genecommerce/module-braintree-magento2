@@ -1,4 +1,5 @@
 <?php
+
 namespace Braintree\Transaction;
 
 use Braintree\Instance;
@@ -7,13 +8,8 @@ use Braintree\Instance;
  * Customer details from a transaction
  * Creates an instance of customer details as returned from a transaction
  *
- * @package    Braintree
- * @subpackage Transaction
- *
- * @property-read string $billingPeriodStartDate
- * @property-read string $billingPeriodEndDate
+ * See our {@link https://developer.paypal.com/braintree/docs/reference/response/transaction#subscription_details developer docs} for information on attributes
  */
 class SubscriptionDetails extends Instance
 {
 }
-class_alias('Braintree\Transaction\SubscriptionDetails', 'Braintree_Transaction_SubscriptionDetails');

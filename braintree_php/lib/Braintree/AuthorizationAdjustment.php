@@ -1,19 +1,22 @@
 <?php
+
 namespace Braintree;
 
 /**
  * Creates an instance of AuthorizationAdjustment as returned from a transaction
  *
- * @package Braintree
- *
- * @property-read string $amount
- * @property-read boolean $success
- * @property-read \DateTime $timestamp
- *
+ * See our {@link https://developer.paypal.com/braintree/docs/reference/response/transaction#authorization-adjustments developer docs} for information on attributes
  */
 
 class AuthorizationAdjustment extends Base
 {
+    /**
+     * Creates an instance of an AuthorizationAdjustment from given attributes
+     *
+     * @param array $attributes response object attributes
+     *
+     * @return AuthorizationAdjustment
+     */
     public static function factory($attributes)
     {
         $instance = new self();
@@ -27,9 +30,9 @@ class AuthorizationAdjustment extends Base
         $this->_attributes = $authorizationAdjustmentAttribs;
     }
 
-    public function  __toString()
+    // phpcs:ignore PEAR.Commenting.FunctionComment.Missing
+    public function __toString()
     {
         return __CLASS__ . '[' . Util::attributesToString($this->_attributes) . ']';
     }
 }
-class_alias('Braintree\AuthorizationAdjustment', 'Braintree_Authorization_Adjustment');

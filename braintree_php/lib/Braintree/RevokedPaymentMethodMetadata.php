@@ -1,33 +1,23 @@
 <?php
+
 namespace Braintree;
 
 /**
  * Braintree RevokedPaymentMethodMetadata module
- *
- * @package    Braintree
- * @category   Resources
  */
 
 /**
  * Manages Braintree RevokedPaymentMethodMetadata
  *
- * <b>== More information ==</b>
- *
- *
- * @package    Braintree
- * @category   Resources
- *
- * @property-read string $customerId
- * @property-read string $token
- * @property-read string $revokedPaymentMethod
+ * See our {@link https://developer.paypal.com/braintree/docs/guides/extend/grant-api/revocation developer docs} for more information
  */
 class RevokedPaymentMethodMetadata extends Base
 {
     /**
-     *  factory method: returns an instance of RevokedPaymentMethodMetadata
-     *  to the requesting method, with populated properties
+     * Creates an instance from given attributes
      *
-     * @ignore
+     * @param array $attributes response object attributes
+     *
      * @return RevokedPaymentMethodMetadata
      */
     public static function factory($attributes)
@@ -39,15 +29,10 @@ class RevokedPaymentMethodMetadata extends Base
         return $instance;
     }
 
-    /**
-     * create a printable representation of the object as:
-     * ClassName[property=value, property=value]
-     * @return string
-     */
-    public function  __toString()
+    // phpcs:ignore PEAR.Commenting.FunctionComment.Missing
+    public function __toString()
     {
         return __CLASS__ . '[' .
                 Util::attributesToString($this->_attributes) . ']';
     }
 }
-class_alias('Braintree\RevokedPaymentMethodMetadata', 'Braintree_RevokedPaymentMethodMetadata');

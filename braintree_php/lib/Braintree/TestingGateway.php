@@ -1,4 +1,6 @@
 <?php
+
+// phpcs:disable PEAR.Commenting
 namespace Braintree;
 
 class TestingGateway
@@ -49,4 +51,3 @@ class TestingGateway
         }
     }
 }
-class_alias('Braintree\TestingGateway', 'Braintree_TestingGateway');

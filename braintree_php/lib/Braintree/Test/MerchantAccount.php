@@ -1,11 +1,9 @@
 <?php
+
 namespace Braintree\Test;
 
 /**
  * Merchant Account constants used for testing purposes
- *
- * @package    Braintree
- * @subpackage Test
  */
 class MerchantAccount
 {
@@ -15,7 +13,4 @@ class MerchantAccount
     public static $accountNotAuthorizedContactUs = "account_not_authorized__contact";
     public static $bankRejectedUpdateFundingInformation = "bank_rejected__update";
     public static $bankRejectedNone = "bank_rejected__none";
-
-
 }
-class_alias('Braintree\Test\MerchantAccount', 'Braintree_Test_MerchantAccount');

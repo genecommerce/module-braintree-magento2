@@ -1,4 +1,5 @@
 <?php
+
 namespace Braintree;
 
 use InvalidArgumentException;
@@ -6,18 +7,7 @@ use InvalidArgumentException;
 /**
  * Braintree UsBankAccountGateway module
  *
- * @package    Braintree
- * @category   Resources
- */
-
-/**
  * Manages Braintree UsBankAccounts
- *
- * <b>== More information ==</b>
- *
- *
- * @package    Braintree
- * @category   Resources
  */
 class UsBankAccountGateway
 {
@@ -25,6 +15,7 @@ class UsBankAccountGateway
     private $_config;
     private $_http;
 
+    // phpcs:ignore PEAR.Commenting.FunctionComment.Missing
     public function __construct($gateway)
     {
         $this->_gateway = $gateway;
@@ -37,10 +28,11 @@ class UsBankAccountGateway
     /**
      * find a usBankAccount by token
      *
-     * @access public
      * @param string $token paypal accountunique id
-     * @return UsBankAccount
+     *
      * @throws Exception\NotFound
+     *
+     * @return UsBankAccount
      */
     public function find($token)
     {
@@ -53,16 +45,17 @@ class UsBankAccountGateway
                 'US bank account with token ' . $token . ' not found'
             );
         }
-
     }
 
     /**
      * create a new sale for the current UsBank account
      *
-     * @param string $token
-     * @param array $transactionAttribs
-     * @return Result\Successful|Result\Error
+     * @param string $token              payment method identifier
+     * @param array  $transactionAttribs request parameters
+     *
      * @see Transaction::sale()
+     *
+     * @return Result\Successful|Result\Error
      */
     public function sale($token, $transactionAttribs)
     {
@@ -82,25 +75,25 @@ class UsBankAccountGateway
      * encapsulates a Errors object inside a Result\Error
      * alternatively, throws an Unexpected exception if the response is invalid.
      *
-     * @ignore
      * @param array $response gateway response values
-     * @return Result\Successful|Result\Error
+     *
      * @throws Exception\Unexpected
+     *
+     * @return Result\Successful|Result\Error
      */
     private function _verifyGatewayResponse($response)
     {
         if (isset($response['usBankAccount'])) {
             // return a populated instance of UsBankAccount
             return new Result\Successful(
-                    UsBankAccount::factory($response['usBankAccount'])
+                UsBankAccount::factory($response['usBankAccount'])
             );
-        } else if (isset($response['apiErrorResponse'])) {
+        } elseif (isset($response['apiErrorResponse'])) {
             return new Result\Error($response['apiErrorResponse']);
         } else {
             throw new Exception\Unexpected(
-            'Expected US bank account or apiErrorResponse'
+                'Expected US bank account or apiErrorResponse'
             );
         }
     }
 }
-class_alias('Braintree\UsBankAccountGateway', 'Braintree_UsBankAccountGateway');

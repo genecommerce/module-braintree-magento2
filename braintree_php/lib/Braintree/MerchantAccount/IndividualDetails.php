@@ -1,8 +1,14 @@
 <?php
+
 namespace Braintree\MerchantAccount;
 
 use Braintree\Base;
 
+/**
+ * Braintree IndividualDetails class
+ *
+ * Object containing information on individual details of a merchant account
+ */
 class IndividualDetails extends Base
 {
     protected function _initialize($individualAttribs)
@@ -13,6 +19,13 @@ class IndividualDetails extends Base
         }
     }
 
+    /**
+     * Creates an instance from given attributes
+     *
+     * @param array $attributes response object attributes
+     *
+     * @return IndividualDetails
+     */
     public static function factory($attributes)
     {
         $instance = new self();
@@ -20,4 +33,3 @@ class IndividualDetails extends Base
         return $instance;
     }
 }
-class_alias('Braintree\MerchantAccount\IndividualDetails', 'Braintree_MerchantAccount_IndividualDetails');
