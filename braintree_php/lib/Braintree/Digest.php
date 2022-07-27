@@ -1,4 +1,7 @@
 <?php
+
+// phpcs:disable
+
 namespace Braintree;
 
 /**
@@ -57,4 +60,4 @@ class Digest
         return sha1($outerPad . pack($pack, sha1($innerPad . $message)));
     }
 }
-class_alias('Braintree\Digest', 'Braintree_Digest');
+// phpcs:enable

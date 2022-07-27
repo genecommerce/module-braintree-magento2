@@ -1,30 +1,18 @@
 <?php
+
 namespace Braintree;
 
+/**
+ * Braintree SettlementBatchSummaryGateway module
+ * Creates and manages SettlementBatchSummarys
+ */
 class SettlementBatchSummaryGateway
 {
-    /**
-     *
-     * @var Gateway
-     */
     private $_gateway;
-
-    /**
-     *
-     * @var Configuration
-     */
     private $_config;
-
-    /**
-     *
-     * @var Http
-     */
     private $_http;
 
-    /**
-     *
-     * @param Gateway $gateway
-     */
+    // phpcs:ignore PEAR.Commenting.FunctionComment.Missing
     public function __construct($gateway)
     {
         $this->_gateway = $gateway;
@@ -34,24 +22,24 @@ class SettlementBatchSummaryGateway
     }
 
     /**
+     * Create a Settlement Batch Summary report.
      *
-     * @param string $settlement_date
-     * @param string $groupByCustomField
+     * @param string $settlement_date    A string representing the date of the settlement batch
+     * @param string $groupByCustomField A string representing a transaction's custom field that you wish to group by
+     *
      * @return SettlementBatchSummary|Result\Error
      */
-    public function generate($settlement_date, $groupByCustomField = NULL)
+    public function generate($settlement_date, $groupByCustomField = null)
     {
         $criteria = ['settlement_date' => $settlement_date];
-        if (isset($groupByCustomField))
-        {
+        if (isset($groupByCustomField)) {
             $criteria['group_by_custom_field'] = $groupByCustomField;
         }
         $params = ['settlement_batch_summary' => $criteria];
         $path = $this->_config->merchantPath() . '/settlement_batch_summary';
         $response = $this->_http->post($path, $params);
 
-        if (isset($groupByCustomField))
-        {
+        if (isset($groupByCustomField)) {
             $response['settlementBatchSummary']['records'] = $this->_underscoreCustomField(
                 $groupByCustomField,
                 $response['settlementBatchSummary']['records']
@@ -61,18 +49,11 @@ class SettlementBatchSummaryGateway
         return $this->_verifyGatewayResponse($response);
     }
 
-    /**
-     *
-     * @param string $groupByCustomField
-     * @param array $records
-     * @return array
-    */
     private function _underscoreCustomField($groupByCustomField, $records)
     {
         $updatedRecords = [];
 
-        foreach ($records as $record)
-        {
+        foreach ($records as $record) {
             $camelized = Util::delimiterToCamelCase($groupByCustomField);
             $record[$groupByCustomField] = $record[$camelized];
             unset($record[$camelized]);
@@ -82,19 +63,13 @@ class SettlementBatchSummaryGateway
         return $updatedRecords;
     }
 
-    /**
-     *
-     * @param array $response
-     * @return Result\Successful|Result\Error
-     * @throws Exception\Unexpected
-     */
     private function _verifyGatewayResponse($response)
     {
         if (isset($response['settlementBatchSummary'])) {
             return new Result\Successful(
                 SettlementBatchSummary::factory($response['settlementBatchSummary'])
             );
-        } else if (isset($response['apiErrorResponse'])) {
+        } elseif (isset($response['apiErrorResponse'])) {
             return new Result\Error($response['apiErrorResponse']);
         } else {
             throw new Exception\Unexpected(
@@ -103,4 +78,3 @@ class SettlementBatchSummaryGateway
         }
     }
 }
-class_alias('Braintree\SettlementBatchSummaryGateway', 'Braintree_SettlementBatchSummaryGateway');

@@ -1,4 +1,5 @@
 <?php
+
 namespace Braintree\Test;
 
 /**
@@ -7,9 +8,6 @@ namespace Braintree\Test;
  * The constants contained in the Test\CreditCardNumbers class provide
  * credit card numbers that should be used when working in the sandbox environment.
  * The sandbox will not accept any credit card numbers other than the ones listed below.
- *
- * @package    Braintree
- * @subpackage Test
  */
 class CreditCardNumbers
 {
@@ -75,15 +73,19 @@ class CreditCardNumbers
         'Chargeback' => '4023898493988028',
     ];
 
+    /**
+     * Get all test credit cards in one array
+     *
+     * @return array
+     */
     public static function getAll()
     {
         return array_merge(
-                self::$amExes,
-                self::$discoverCards,
-                self::$eloCards,
-                self::$masterCards,
-                self::$visas
-                );
+            self::$amExes,
+            self::$discoverCards,
+            self::$eloCards,
+            self::$masterCards,
+            self::$visas
+        );
     }
 }
-class_alias('Braintree\Test\CreditCardNumbers', 'Braintree_Test_CreditCardNumbers');

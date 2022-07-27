@@ -1,4 +1,5 @@
 <?php
+
 namespace Braintree;
 
 use Braintree\Instance;
@@ -6,28 +7,7 @@ use Braintree\Instance;
 /**
  * Line item associated with a transaction
  *
- * @package    Braintree
- */
-
-/**
- * creates an instance of TransactionLineItem
- *
- *
- * @package    Braintree
- *
- * @property-read string $commodityCode
- * @property-read string $description
- * @property-read string $discountAmount
- * @property-read string $kind
- * @property-read string $name
- * @property-read string $productCode
- * @property-read string $quantity
- * @property-read string $taxAmount
- * @property-read string $totalAmount
- * @property-read string $unitAmount
- * @property-read string $unitOfMeasure
- * @property-read string $unitTaxAmount
- * @property-read string $url
+ * See our {@link https://developer.paypal.com/braintree/docs/reference/response/transaction-line-item developer docs} for information on attributes
  */
 class TransactionLineItem extends Instance
 {
@@ -37,17 +17,23 @@ class TransactionLineItem extends Instance
 
     protected $_attributes = [];
 
-    /**
-     * @ignore
-     */
+    // phpcs:ignore PEAR.Commenting.FunctionComment.Missing
     public function __construct($attributes)
     {
         parent::__construct($attributes);
     }
 
+    /**
+     * Static methods redirecting to gateway class
+     *
+     * @param string $transactionId of the Transaction to search for line items
+     *
+     * @see TransactionLineItemGateway::findAll()
+     *
+     * @return TransactionLineItem|Exception
+     */
     public static function findAll($transactionId)
     {
         return Configuration::gateway()->transactionLineItem()->findAll($transactionId);
     }
 }
-class_alias('Braintree\TransactionLineItem', 'Braintree_TransactionLineItem');

@@ -21,7 +21,7 @@
         "magento/module-multishipping": "100.2.*||100.3.*",
         "ext-json": "*",
         "ext-simplexml": "*",
-        "php": ">=7.2.0",
+        "php": ">=7.3.0",
         "league/iso3166": "^2.1",
         "msp/recaptcha": "^2.2.3"
     },
