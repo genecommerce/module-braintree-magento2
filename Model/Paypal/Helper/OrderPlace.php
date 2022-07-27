@@ -13,6 +13,7 @@ use Magento\Checkout\Model\Type\Onepage;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Checkout\Api\AgreementsValidatorInterface;
+use Magento\Braintree\Model\PayPal\OrderCancellationService;
 
 /**
  * Class OrderPlace
@@ -41,23 +42,31 @@ class OrderPlace extends AbstractHelper
     private $checkoutHelper;
 
     /**
-     * Constructor
+     * @var OrderCancellationService
+     */
+    private $orderCancellationService;
+
+    /**
+     * OrderPlace Constructor
      *
      * @param CartManagementInterface $cartManagement
      * @param AgreementsValidatorInterface $agreementsValidator
      * @param Session $customerSession
      * @param Data $checkoutHelper
+     * @param OrderCancellationService $orderCancellationService
      */
     public function __construct(
         CartManagementInterface $cartManagement,
         AgreementsValidatorInterface $agreementsValidator,
         Session $customerSession,
-        Data $checkoutHelper
+        Data $checkoutHelper,
+        OrderCancellationService $orderCancellationService
     ) {
         $this->cartManagement = $cartManagement;
         $this->agreementsValidator = $agreementsValidator;
         $this->customerSession = $customerSession;
         $this->checkoutHelper = $checkoutHelper;
+        $this->orderCancellationService = $orderCancellationService;
     }
 
     /**
@@ -81,7 +90,12 @@ class OrderPlace extends AbstractHelper
         $this->disabledQuoteAddressValidation($quote);
 
         $quote->collectTotals();
-        $this->cartManagement->placeOrder($quote->getId());
+        try {
+            $this->cartManagement->placeOrder($quote->getId());
+        } catch (\Exception $e) {
+            $this->orderCancellationService->execute($quote->getReservedOrderId());
+            throw $e;
+        }
     }
 
     /**

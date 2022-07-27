@@ -104,7 +104,9 @@ class GatewayCommand implements CommandInterface
             $this->requestBuilder->build($commandSubject)
         );
 
-        $this->reCaptchaValidation->validate($commandSubject);
+        if (isset($transferO->getBody()['paymentMethodNonce'])) {
+            $this->reCaptchaValidation->validate($commandSubject);
+        }
 
         $response = $this->client->placeRequest($transferO);
         if (null !== $this->validator) {
