@@ -99,6 +99,7 @@ class Form extends Cc
 
     /**
      * Check if cvv validation is available
+     *
      * @return boolean
      * @throws InputException
      * @throws NoSuchEntityException
@@ -110,13 +111,19 @@ class Form extends Cc
 
     /**
      * Check if vault enabled
+     *
      * @return bool
      * @throws NoSuchEntityException
      * @throws LocalizedException
      */
     public function isVaultEnabled(): bool
     {
-        $storeId = $this->_storeManager->getStore()->getId();
+        if ($this->sessionQuote->getStoreId()) {
+            $storeId = $this->sessionQuote->getStoreId();
+        } else {
+            $storeId = $this->_storeManager->getStore()->getId();
+        }
+
         $vaultPayment = $this->getVaultPayment();
 
         return $vaultPayment->isActive($storeId);
@@ -124,6 +131,7 @@ class Form extends Cc
 
     /**
      * Get card types available for Braintree
+     *
      * @return array
      * @throws InputException
      * @throws NoSuchEntityException
@@ -145,7 +153,7 @@ class Form extends Cc
      * @throws InputException
      * @throws NoSuchEntityException
      */
-    private function filterCardTypesForCountry(array $configCardTypes, $countryId): array
+    private function filterCardTypesForCountry(array $configCardTypes, string $countryId): array
     {
         $filtered = $configCardTypes;
         $countryCardTypes = $this->gatewayConfig->getCountryAvailableCardTypes($countryId);
@@ -166,21 +174,6 @@ class Form extends Cc
      */
     private function getVaultPayment(): MethodInterface
     {
-        return $this->getPaymentDataHelper()->getMethodInstance(ConfigProvider::CC_VAULT_CODE);
-    }
-
-    /**
-     * Get payment data helper instance
-     *
-     * @return Data
-     * @deprecated
-     */
-    private function getPaymentDataHelper(): Data
-    {
-        if (null === $this->paymentDataHelper) {
-            $this->paymentDataHelper = ObjectManager::getInstance()->get(Data::class);
-        }
-
-        return $this->paymentDataHelper;
+        return $this->paymentDataHelper->getMethodInstance(ConfigProvider::CC_VAULT_CODE);
     }
 }
