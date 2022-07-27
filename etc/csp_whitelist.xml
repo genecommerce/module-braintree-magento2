@@ -43,7 +43,6 @@
                 <value id="checkout_paypal" type="host">checkout.paypal.com</value>
                 <value id="data_image" type="host">data:</value>
                 <value id="paypal_image" type="host">*.paypal.com</value>
-                <value id="katpcha_image" type="host">*.kaptcha.com</value>
             </values>
         </policy>
         <policy id="child-src">
@@ -51,7 +50,6 @@
                 <value id="assets_braintree_gateway" type="host">assets.braintreegateway.com</value>
                 <value id="c_paypal" type="host">c.paypal.com</value>
                 <value id="paypal_child" type="host">*.paypal.com</value>
-                <value id="katpcha_child" type="host">*.kaptcha.com</value>
             </values>
         </policy>
         <policy id="frame-src">
@@ -84,6 +82,16 @@
             <values>
                 <value id="cardinal_commerce_form" type="host">*.cardinalcommerce.com</value>
                 <value id="paypal_form" type="host">*.paypal.com</value>
+                <value id="card_complete_form" type="host">3ds-secure.cardcomplete.com</value>
+                <value id="click_safe_form" type="host">www.clicksafe.lloydstsb.com</value>
+                <value id="activa_card_form" type="host">pay.activa-card.com</value>
+                <value id="wirecard_form" type="host">*.wirecard.com acs.sia.eu</value>
+                <value id="touch_tech_payments_form" type="host">*touchtechpayments.com</value>
+                <value id="secure_suite_form" type="host">www.securesuite.co.uk</value>
+                <value id="rsa3ds_auth_form" type="host">rsa3dsauth.com</value>
+                <value id="monzo_form" type="host">*.monzo.com</value>
+                <value id="arcot_form" type="host">*.arcot.com</value>
+                <value id="wlp_acs_form" type="host">*.wlp-acs.com</value>
             </values>
         </policy>
     </policies>
