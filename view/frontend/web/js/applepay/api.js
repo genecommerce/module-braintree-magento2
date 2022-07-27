@@ -188,10 +188,23 @@ define(
                     JSON.stringify(payload)
                 ).done(function (result) {
                     // Stop if no shipping methods.
+                    let virtualFlag = false;
                     if (result.length === 0) {
-                        session.abort();
-                        alert($t("There are no shipping methods available for you right now. Please try again or use an alternative payment method."));
-                        return false;
+                        let productItems = customerData.get('cart')().items;
+                        _.each(productItems,
+                            function (item) {
+                                if (item.is_virtual) {
+                                    virtualFlag = true;
+                                } else {
+                                    virtualFlag = false;
+                                }
+                            }
+                        );
+                        if (!virtualFlag) {
+                            session.abort();
+                            alert($t("There are no shipping methods available for you right now. Please try again or use an alternative payment method."));
+                            return false;
+                        }
                     }
 
                     let shippingMethods = [];
@@ -229,8 +242,8 @@ define(
                                 "regionId": this.getRegionId(this.shippingAddress.country_id, this.shippingAddress.region),
                                 "postcode": this.shippingAddress.postcode
                             },
-                            "shipping_method_code": this.shippingMethods[shippingMethods[0].identifier].method_code,
-                            "shipping_carrier_code": this.shippingMethods[shippingMethods[0].identifier].carrier_code
+                            "shipping_method_code": virtualFlag ? null : this.shippingMethods[shippingMethods[0].identifier].method_code,
+                            "shipping_carrier_code": virtualFlag ? null : this.shippingMethods[shippingMethods[0].identifier].carrier_code
                         }
                     };
 
@@ -253,7 +266,7 @@ define(
                             [{
                                 type: 'final',
                                 label: $t('Shipping'),
-                                amount: shippingMethods[0].amount
+                                amount: virtualFlag ? 0 : shippingMethods[0].amount
                             }]
                         );
                     }.bind(this)).fail(function (result) {

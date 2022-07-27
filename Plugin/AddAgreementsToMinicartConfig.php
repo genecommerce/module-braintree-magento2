@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 
 declare(strict_types=1);
 
@@ -20,6 +24,7 @@ class AddAgreementsToMinicartConfig
 
     /**
      * AddAgreementsToMinicartConfig constructor.
+     *
      * @param AgreementsConfigProvider $agreementsConfigProvider
      */
     public function __construct(
@@ -29,6 +34,8 @@ class AddAgreementsToMinicartConfig
     }
 
     /**
+     * Get config of checkout agreement
+     *
      * @param Sidebar $subject
      * @param array $result
      * @return array
