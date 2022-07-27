@@ -1192,4 +1192,8 @@
     <type name="Magento\Quote\Api\CartManagementInterface">
         <plugin name="order_cancellation" type="Magento\Braintree\Plugin\OrderCancellation"/>
     </type>
+
+    <type name="Magento\Checkout\CustomerData\AbstractItem">
+        <plugin name="braintreeAddFlagForVirtualProducts" type="Magento\Braintree\Plugin\AddFlagForVirtualProducts"/>
+    </type>
 </config>

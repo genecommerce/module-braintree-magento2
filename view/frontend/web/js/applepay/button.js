@@ -9,7 +9,8 @@ define(
         "jquery",
         'braintree',
         'braintreeApplePay',
-        'mage/translate'
+        'mage/translate',
+        'Magento_Checkout/js/model/payment/additional-validators'
         ],
     function (
         Component,
@@ -17,7 +18,8 @@ define(
         jQuery,
         braintree,
         applePay,
-        $t
+        $t,
+        additionalValidators
     ) {
         'use strict';
 
@@ -73,11 +75,10 @@ define(
                         el.addEventListener('click', function (e) {
                             e.preventDefault();
 
-                            //default.js payment expects validation to be called before calling the place order chain, applepay is not the only component in the site
-                            if(!context.validate() || !context.getAdditionalValidators().validate()) {
-                                return false; 
+                            if(!context.validate() || !additionalValidators.validate()) {
+                                return false;
                             }
-                            
+
                             // Payment request object
                             var paymentRequest = applePayInstance.createPaymentRequest(context.getPaymentRequest());
                             if (!paymentRequest) {
