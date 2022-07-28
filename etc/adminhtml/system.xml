@@ -1127,6 +1127,13 @@
                                     </field>
                                 </group>
                             </group>
+                            <field id="paypal_preview" translate="label" type="button" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <frontend_model>Magento\Braintree\Block\Adminhtml\System\Config\Preview</frontend_model>
+                            </field>
+                            <field id="styling_buttons" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
+                                <label></label>
+                                <frontend_model>Magento\Braintree\Block\Adminhtml\Form\Field\StylingButtons</frontend_model>
+                            </field>
                         </group>
                     </group>
                     <group id="braintree_3dsecure" translate="label" showInDefault="1" showInWebsite="1" sortOrder="65">

@@ -214,7 +214,7 @@ require(['jquery', 'Magento_Ui/js/modal/alert', 'mage/translate', 'domReady!'], 
             return false;
         }
         merchantCountryIndex = mainLocation.attr('id').split('_')[1];
-        mainType = $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-styling-groups-button-'+mainLocation.val()+'-fields-paypal-location-'+mainLocation.val()+'-button-type-value"]');
+        mainType = $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-styling-groups-button-' + mainLocation.val() + '-fields-paypal-location-' + mainLocation.val() + '-button-type-value"]');
         locations.each(function (loc) {
             $('#row_payment_' + merchantCountryIndex + '_braintree_section_braintree_braintree_paypal_styling_button_' + loc).hide();
             buttonTypes.each(function (type) {
