@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*browser:true*/
@@ -49,7 +49,6 @@ define([
             grandTotalAmount: null,
             isReviewRequired: false,
             customerEmail: null,
-            methodSelected: false,
 
             /**
              * Additional payment data
@@ -103,15 +102,15 @@ define([
          * @returns {exports.initObservable}
          */
         initObservable: function () {
-            var self = this;
+            let self = this;
 
             this._super()
                 .observe(['active', 'isReviewRequired', 'customerEmail']);
 
             window.addEventListener('hashchange', function (e) {
-                var methodCode = quote.paymentMethod();
+                let methodCode = quote.paymentMethod();
 
-                if (methodCode['method'] === 'braintree_paypal' || methodCode['method'] === 'braintree_paypal_vault') {
+                if (methodCode && (methodCode.method === 'braintree_paypal' || methodCode.method === 'braintree_paypal_vault')) {
                     if (e.newURL.indexOf('payment') > 0 && self.grandTotalAmount !== null) {
                         self.reInitPayPal();
                     }
@@ -119,12 +118,11 @@ define([
             });
 
             quote.paymentMethod.subscribe(function (value) {
-                var methodCode = value;
-
-                if ((methodCode['method'] === 'braintree_paypal' || methodCode['method'] === 'braintree_paypal_vault') && self.methodSelected === false) {
+                let methodCode = value;
+                
+                if (methodCode && (methodCode.method === 'braintree_paypal' || methodCode.method === 'braintree_paypal_vault')) {
                     self.reInitPayPal();
                 }
-                self.methodSelected = false;
             });
 
             this.vaultEnabler = new VaultEnabler();
@@ -138,13 +136,9 @@ define([
             quote.totals.subscribe(function () {
                 if (self.grandTotalAmount !== quote.totals()['base_grand_total']) {
                     self.grandTotalAmount = quote.totals()['base_grand_total'];
-                    var methodCode = quote.paymentMethod();
+                    let methodCode = quote.paymentMethod();
 
-                    if (!methodCode) {
-                        return;
-                    }
-                    
-                    if (methodCode['method'] === 'braintree_paypal' || methodCode['method'] === 'braintree_paypal_vault') {
+                    if (methodCode && (methodCode.method === 'braintree_paypal' || methodCode.method === 'braintree_paypal_vault')) {
                         self.reInitPayPal();
                     }
                 }
@@ -181,7 +175,7 @@ define([
          * @returns {Boolean}
          */
         isActive: function () {
-            var active = this.getCode() === this.isChecked();
+            let active = this.getCode() === this.isChecked();
 
             this.active(active);
 
@@ -199,7 +193,6 @@ define([
 
             // need always re-init Braintree with PayPal configuration
             this.reInitPayPal();
-            this.methodSelected = true;
         },
 
         /**
@@ -229,7 +222,7 @@ define([
          * @param {Object}address
          */
         setBillingAddress: function (customer, address) {
-            var billingAddress = {
+            let billingAddress = {
                 street: [address.line1],
                 city: address.city,
                 postcode: address.postalCode,
@@ -303,8 +296,6 @@ define([
          * Setup PayPal instance
          */
         setupPayPal: function () {
-            var self = this;
-
             if (Braintree.config.paypalInstance) {
                 fullScreenLoader.stopLoader(true);
                 return;
@@ -319,13 +310,13 @@ define([
                     return;
                 }
                 let quoteObj = quote.totals();
-                var configSDK = {
+                let configSDK = {
                     components: 'buttons,messages,funding-eligibility',
                     "enable-funding": "paylater",
                     currency: quoteObj['base_currency_code']
                 };
-                var merchantCountry = window.checkoutConfig.payment['braintree_paypal'].merchantCountry;
-                if (Braintree.getEnvironment() == 'sandbox' && merchantCountry != null) {
+                let merchantCountry = window.checkoutConfig.payment['braintree_paypal'].merchantCountry;
+                if (Braintree.getEnvironment() === 'sandbox' && merchantCountry !== null) {
                     configSDK["buyer-country"] = merchantCountry;
                 }
                 paypalCheckoutInstance.loadPayPalSDK(configSDK, function () {
@@ -341,15 +332,22 @@ define([
             }.bind(this));
         },
 
+        /**
+         * Load PayPal button
+         *
+         * @param paypalCheckoutInstance
+         * @param funding
+         */
         loadPayPalButton: function (paypalCheckoutInstance, funding) {
-            var paypalPayment = Braintree.config.paypal,
-                onPaymentMethodReceived = Braintree.config.onPaymentMethodReceived,
-                style = {
-                    color: Braintree.getColor(),
-                    shape: Braintree.getShape(),
-                    layout: Braintree.getLayout(),
-                    size: Braintree.getSize()
-                };
+            let paypalPayment = Braintree.config.paypal,
+                onPaymentMethodReceived = Braintree.config.onPaymentMethodReceived;
+            let style = {
+                color: Braintree.getColor(funding),
+                shape: Braintree.getShape(funding),
+                layout: Braintree.getLayout(funding),
+                size: Braintree.getSize(funding),
+                label: Braintree.getLabel(funding)
+            };
 
             if (Braintree.getBranding()) {
                 style.branding = Braintree.getBranding();
@@ -357,24 +355,23 @@ define([
             if (Braintree.getFundingIcons()) {
                 style.fundingicons = Braintree.getFundingIcons();
             }
+            if (Braintree.getLayout(funding) === 'horizontal') {
+                style.tagline = Braintree.getTagline(funding);
+            }
 
             if (funding === 'credit') {
-                style.layout = "horizontal";
-                style.color = "darkblue";
                 Braintree.config.buttonId = this.clientConfig.buttonCreditId;
             } else if (funding === 'paylater') {
-                style.layout = "horizontal";
-                style.color = "white";
                 Braintree.config.buttonId = this.clientConfig.buttonPaylaterId;
             } else {
                 Braintree.config.buttonId = this.clientConfig.buttonPayPalId;
             }
             // Render
             Braintree.config.paypalInstance = paypalCheckoutInstance;
-            var events = Braintree.events;
+            let events = Braintree.events;
             $('#' + Braintree.config.buttonId).html('');
 
-            var button = paypal.Buttons({
+            let button = paypal.Buttons({
                 fundingSource: funding,
                 env: Braintree.getEnvironment(),
                 style: style,
@@ -382,14 +379,14 @@ define([
                 locale: Braintree.config.paypal.locale,
 
                 onInit: function (data, actions) {
-                    var agreements = checkoutAgreements().agreements,
+                    let agreements = checkoutAgreements().agreements,
                         shouldDisableActions = false;
 
                     actions.disable();
 
                     _.each(agreements, function (item, index) {
                         if (checkoutAgreements().isAgreementRequired(item)) {
-                            var paymentMethodCode = quote.paymentMethod().method,
+                            let paymentMethodCode = quote.paymentMethod().method,
                                 inputId = '#agreement_' + paymentMethodCode + '_' + item.agreementId,
                                 inputEl = document.querySelector(inputId);
 
@@ -441,7 +438,7 @@ define([
                     }
                 }.bind(this),
 
-                onClick: function(data) {
+                onClick: function (data) {
                     if (!quote.isVirtual()) {
                         this.clientConfig.paypal.enableShippingAddress = true;
                         this.clientConfig.paypal.shippingAddressEditable = false;
@@ -464,7 +461,6 @@ define([
                             onPaymentMethodReceived(payload);
                         });
                 }
-
             });
             if (button.isEligible() && $('#' + Braintree.config.buttonId).length) {
                 button.render('#' + Braintree.config.buttonId).then(function () {
@@ -490,7 +486,11 @@ define([
 
         /**
          * Is Billing Address required from PayPal side
-         * @returns {exports.isRequiredBillingAddress|(function())|boolean}
+         * @returns {exports.isRequiredBillingAddress|(function())|String}
+         */
+        /**
+         *
+         * @returns {any}
          */
         isRequiredBillingAddress: function () {
             return window.checkoutConfig.payment[this.getCode()].isRequiredBillingAddress;
@@ -501,7 +501,7 @@ define([
          * @returns {Object}
          */
         getPayPalConfig: function () {
-            var totals = quote.totals(),
+            let totals = quote.totals(),
                 config = {},
                 isActiveVaultEnabler = this.isActiveVault();
 
@@ -545,28 +545,20 @@ define([
 
         /**
          * Get shipping address
+         *
          * @returns {Object}
          */
         getShippingAddress: function () {
+            let addressLine1, address = quote.shippingAddress();
 
-            var line0, line1, address;
-
-            address = quote.shippingAddress();
-
-            if(!_.isUndefined(address.street) && _.isArray(address.street)) {
-                line0 = !_.isUndefined(address.street[0]) ? address.street[0] : "";
-                address.street.shift();
-                line1 = address.street.slice(0, 2).filter(Boolean).join(' ');
-            }
-
-            if(!_.isUndefined(address.street) && _.isString(address.street)) {
-                line0 = address.street;
+            if (typeof address.street !== 'undefined') {
+                addressLine1 = address.street[0];
             }
 
             return {
                 recipientName: [address.firstname, address.lastname].filter(Boolean).join(' '),
-                line1: line0,
-                line2: line1,
+                line1: addressLine1,
+                line2: typeof address.street[2] === 'undefined' ? address.street[1] : address.street[1] + ' ' + address.street[2],
                 city: address.city,
                 countryCode: address.countryId,
                 postalCode: address.postcode,
@@ -587,7 +579,7 @@ define([
          * @returns {Object}
          */
         getData: function () {
-            var data = {
+            let data = {
                 'method': this.getCode(),
                 'additional_data': {
                     'payment_method_nonce': this.paymentMethodNonce
@@ -606,7 +598,6 @@ define([
          * @returns {String}
          */
         getPaymentAcceptanceMarkSrc: function () {
-
             return window.checkoutConfig.payment[this.getCode()].paymentAcceptanceMarkSrc;
         },
 
@@ -700,7 +691,7 @@ define([
             return window.checkoutConfig.payment['braintree_paypal_paylater']['isMessageActive'];
         },
 
-        getGrandTotalAmount: function() {
+        getGrandTotalAmount: function () {
             return parseFloat(this.grandTotalAmount).toFixed(2);
         },
 
@@ -708,5 +699,36 @@ define([
             return window.checkoutConfig.payment['braintree_paypal_credit']['isActive'];
         },
 
+        /**
+         * Get Message Layout
+         * @returns {*}
+         */
+        getMessagingLayout: function () {
+            return window.checkoutConfig.payment['braintree_paypal_paylater']['message']['layout'];
+        },
+
+        /**
+         * Get Message Logo
+         * @returns {*}
+         */
+        getMessagingLogo: function () {
+            return window.checkoutConfig.payment['braintree_paypal_paylater']['message']['logo'];
+        },
+
+        /**
+         * Get Message Logo position
+         * @returns {*}
+         */
+        getMessagingLogoPosition: function () {
+            return window.checkoutConfig.payment['braintree_paypal_paylater']['message']['logo_position'];
+        },
+
+        /**
+         * Get Message Text Color
+         * @returns {*}
+         */
+        getMessagingTextColor: function () {
+            return window.checkoutConfig.payment['braintree_paypal_paylater']['message']['text_color'];
+        }
     });
 });

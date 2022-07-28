@@ -9,5 +9,6 @@
     <head>
         <css src="Magento_Braintree::styles.css"/>
         <script src="Magento_Braintree::js/system.js" />
+        <script src="Magento_Braintree::js/paypalStylingPreview.js" />
     </head>
 </page>
