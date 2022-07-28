@@ -1,15 +1,14 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 
 namespace Magento\Braintree\Model\Config\Source;
 
-use Magento\Framework\Option\ArrayInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 
-/**
- * Class Size
- * @package Magento\Braintree\Model\Config\Source
- * @author Muj <muj@gene.co.uk>
- */
-class Size implements ArrayInterface
+class Size implements OptionSourceInterface
 {
     /**
      * Options getter
@@ -19,9 +18,9 @@ class Size implements ArrayInterface
     public function toOptionArray(): array
     {
         return [
-            ['value' => 0, 'label' => __('Medium')],
-            ['value' => 1, 'label' => __('Large')],
-            ['value' => 2, 'label' => __('Responsive')]
+            ['value' => 'medium', 'label' => __('Medium')],
+            ['value' => 'large', 'label' => __('Large')],
+            ['value' => 'responsive', 'label' => __('Responsive')]
         ];
     }
 
@@ -33,22 +32,23 @@ class Size implements ArrayInterface
     public function toArray(): array
     {
         return [
-            0 => __('Medium'),
-            1 => __('Large'),
-            2 => __('Responsive')
+            'medium' => __('Medium'),
+            'large' => __('Large'),
+            'responsive' => __('Responsive')
         ];
     }
 
     /**
      * Values in the format needed for the PayPal JS SDK
+     *
      * @return array
      */
     public function toRawValues(): array
     {
         return [
-            0 => 'medium',
-            1 => 'large',
-            2 => 'responsive'
+            'medium' => 'medium',
+            'large' => 'large',
+            'responsive' => 'responsive'
         ];
     }
 }

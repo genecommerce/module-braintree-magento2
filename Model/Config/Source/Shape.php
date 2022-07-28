@@ -1,15 +1,14 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 
 namespace Magento\Braintree\Model\Config\Source;
 
-use Magento\Framework\Option\ArrayInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 
-/**
- * Class Shape
- * @package Magento\Braintree\Model\Config\Source
- * @author Aidan Threadgold <aidan@gene.co.uk>
- */
-class Shape implements ArrayInterface
+class Shape implements OptionSourceInterface
 {
     /**
      * Options getter
@@ -19,8 +18,8 @@ class Shape implements ArrayInterface
     public function toOptionArray(): array
     {
         return [
-            ['value' => 0, 'label' => __('Pill')],
-            ['value' => 1, 'label' => __('Rectangle')]
+            ['value' => 'pill', 'label' => __('Pill')],
+            ['value' => 'rect', 'label' => __('Rectangle')]
         ];
     }
 
@@ -32,8 +31,8 @@ class Shape implements ArrayInterface
     public function toArray(): array
     {
         return [
-            0 => __('Pill'),
-            1 => __('Rectangle')
+            'pill' => __('Pill'),
+            'rect' => __('Rectangle')
         ];
     }
 
@@ -45,8 +44,8 @@ class Shape implements ArrayInterface
     public function toRawValues(): array
     {
         return [
-            0 => 'pill',
-            1 => 'rect',
+            'pill' => 'pill',
+            'rect' => 'rect',
         ];
     }
 }
