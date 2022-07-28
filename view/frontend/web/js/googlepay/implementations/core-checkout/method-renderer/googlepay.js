@@ -5,7 +5,7 @@
 define([
     'Magento_Checkout/js/view/payment/default',
     'Magento_Checkout/js/model/quote',
-    'PayPal_Braintree/js/googlepay/button',
+    'Magento_Braintree/js/googlepay/button',
     'Magento_Checkout/js/model/payment/additional-validators'
 ], function (
     Component,

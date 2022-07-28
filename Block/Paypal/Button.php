@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,6 +11,7 @@ use Magento\Braintree\Model\Ui\ConfigProvider;
 use Magento\Catalog\Block\ShortcutInterface;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\View\Element\Template;
@@ -20,14 +21,10 @@ use Magento\Braintree\Gateway\Config\Config as BraintreeConfig;
 use Magento\Braintree\Gateway\Config\PayPalCredit\Config as PayPalCreditConfig;
 use Magento\Braintree\Gateway\Config\PayPalPayLater\Config as PayPalPayLaterConfig;
 
-/**
- * Class Button
- * @package Magento\Braintree\Block\Paypal
- */
 class Button extends Template implements ShortcutInterface
 {
-    const ALIAS_ELEMENT_INDEX = 'alias';
-    const BUTTON_ELEMENT_INDEX = 'button_id';
+    public const ALIAS_ELEMENT_INDEX = 'alias';
+    public const BUTTON_ELEMENT_INDEX = 'button_id';
 
     /**
      * @var ResolverInterface $localeResolver
@@ -65,6 +62,11 @@ class Button extends Template implements ShortcutInterface
     private $payPalCreditConfig;
 
     /**
+     * @var PayPalPayLaterConfig $payPalPayLaterConfig
+     */
+    private $payPalPayLaterConfig;
+
+    /**
      * Button constructor
      *
      * @param Context $context
@@ -77,6 +79,7 @@ class Button extends Template implements ShortcutInterface
      * @param ConfigProvider $configProvider
      * @param MethodInterface $payment
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
@@ -123,6 +126,8 @@ class Button extends Template implements ShortcutInterface
     }
 
     /**
+     * Get Container Id
+     *
      * @return string
      */
     public function getContainerId(): string
@@ -131,6 +136,8 @@ class Button extends Template implements ShortcutInterface
     }
 
     /**
+     * Get Locale
+     *
      * @return string
      */
     public function getLocale(): string
@@ -139,23 +146,35 @@ class Button extends Template implements ShortcutInterface
     }
 
     /**
+     * Get currency
+     *
      * @return string|null
+     * @throws NoSuchEntityException
+     * @throws LocalizedException
      */
-    public function getCurrency()
+    public function getCurrency(): ?string
     {
         return $this->checkoutSession->getQuote()->getCurrency()->getBaseCurrencyCode();
     }
 
     /**
-     * @return float|null
+     * Get amount
+     *
+     * @return float
+     * @throws NoSuchEntityException
+     * @throws LocalizedException
      */
-    public function getAmount()
+    public function getAmount(): float
     {
         return $this->checkoutSession->getQuote()->getBaseGrandTotal();
     }
 
     /**
+     * Is active
+     *
      * @return bool
+     * @throws NoSuchEntityException
+     * @throws LocalizedException
      */
     public function isActive(): bool
     {
@@ -164,6 +183,8 @@ class Button extends Template implements ShortcutInterface
     }
 
     /**
+     * Is PayPal credit active
+     *
      * @return bool
      */
     public function isCreditActive(): bool
@@ -172,6 +193,8 @@ class Button extends Template implements ShortcutInterface
     }
 
     /**
+     * Is PayPal pay later active
+     *
      * @return bool
      */
     public function isPayLaterActive(): bool
@@ -180,64 +203,128 @@ class Button extends Template implements ShortcutInterface
     }
 
     /**
+     * Is Pay Later message active
+     *
      * @param string $type
      * @return bool
      */
-    public function isPayLaterMessageActive($type): bool
+    public function isPayLaterMessageActive(string $type): bool
     {
         return $this->payPalPayLaterConfig->isMessageActive($type);
     }
 
     /**
+     * Is show PayPal Button
+     *
+     * @param string $type
+     * @param string $location
+     * @return bool
+     */
+    public function showPayPalButton(string $type, string $location): bool
+    {
+        return $this->config->showPayPalButton($type, $location);
+    }
+
+    /**
+     * Is Pay Later button active
+     *
      * @param string $type
      * @return bool
      */
-    public function isPayLaterButtonActive($type): bool
+    public function isPayLaterButtonActive(string $type): bool
     {
         return $this->payPalPayLaterConfig->isButtonActive($type);
     }
 
     /**
+     * Is PayPal vault active
+     *
      * @return bool
      */
     public function isPayPalVaultActive(): bool
     {
-        return $this->payPalPayLaterConfig->IsPayPalVaultActive();
+        return (bool) $this->payPalPayLaterConfig->isPayPalVaultActive();
     }
 
     /**
+     * Get Merchant Name
+     *
      * @return string|null
      */
-    public function getMerchantName()
+    public function getMerchantName(): ?string
     {
         return $this->config->getMerchantName();
     }
 
     /**
+     * Get Button Shape
+     *
+     * @param string $type
      * @return string
      */
-    public function getButtonShape(): string
+    public function getButtonShape(string $type): string
     {
-        return $this->config->getButtonShape(Config::BUTTON_AREA_CART);
+        return $this->config->getButtonShape(Config::BUTTON_AREA_CART, $type);
     }
 
     /**
+     * Get Button Color
+     *
+     * @param string $type
      * @return string
      */
-    public function getButtonColor(): string
+    public function getButtonColor(string $type): string
     {
-        return $this->config->getButtonColor(Config::BUTTON_AREA_CART);
+        return $this->config->getButtonColor(Config::BUTTON_AREA_CART, $type);
     }
 
     /**
+     * Get Button Size
+     *
+     * @param string $type
      * @return string
      */
-    public function getButtonSize(): string
+    public function getButtonSize(string $type): string
     {
-        return $this->config->getButtonSize(Config::BUTTON_AREA_CART);
+        return $this->config->getButtonSize(Config::BUTTON_AREA_CART, $type);
     }
 
     /**
+     * Get Button Layout
+     *
+     * @param string $type
+     * @return string
+     */
+    public function getButtonLayout(string $type): string
+    {
+        return $this->config->getButtonLayout(Config::BUTTON_AREA_CART, $type);
+    }
+
+    /**
+     * Get Button Tagline
+     *
+     * @param string $type
+     * @return string
+     */
+    public function getButtonTagline(string $type): string
+    {
+        return $this->config->getButtonTagline(Config::BUTTON_AREA_CART, $type);
+    }
+
+    /**
+     * Get Button Label
+     *
+     * @param string $type
+     * @return string
+     */
+    public function getButtonLabel(string $type): string
+    {
+        return $this->config->getButtonLabel(Config::BUTTON_AREA_CART, $type);
+    }
+
+    /**
+     * Get Environment
+     *
      * @return string
      * @throws InputException
      * @throws NoSuchEntityException
@@ -248,16 +335,20 @@ class Button extends Template implements ShortcutInterface
     }
 
     /**
+     * Get Client Token
+     *
      * @return string|null
      * @throws InputException
      * @throws NoSuchEntityException
      */
-    public function getClientToken()
+    public function getClientToken(): ?string
     {
         return $this->configProvider->getClientToken();
     }
 
     /**
+     * Get Action Success
+     *
      * @return string
      */
     public function getActionSuccess(): string
@@ -266,17 +357,21 @@ class Button extends Template implements ShortcutInterface
     }
 
     /**
+     * Get Disabled Funding
+     *
      * @return array
      */
     public function getDisabledFunding(): array
     {
         return [
-            'card' => $this->config->getDisabledFundingOptionCard(Config::KEY_PAYPAL_DISABLED_FUNDING_CART),
-            'elv' => $this->config->getDisabledFundingOptionElv(Config::KEY_PAYPAL_DISABLED_FUNDING_CART)
+            'card' => $this->config->isFundingOptionCardDisabled(Config::KEY_PAYPAL_DISABLED_FUNDING_CART),
+            'elv' => $this->config->isFundingOptionElvDisabled(Config::KEY_PAYPAL_DISABLED_FUNDING_CART)
         ];
     }
 
     /**
+     * Get Extra Class name
+     *
      * @return string
      */
     public function getExtraClassname(): string
@@ -285,6 +380,8 @@ class Button extends Template implements ShortcutInterface
     }
 
     /**
+     * Is Required Billing Address
+     *
      * @return bool
      */
     public function isRequiredBillingAddress(): bool
@@ -293,10 +390,56 @@ class Button extends Template implements ShortcutInterface
     }
 
     /**
+     * Get Merchant Country
+     *
      * @return string|null
      */
-    public function getMerchantCountry()
+    public function getMerchantCountry(): ?string
     {
         return $this->payPalPayLaterConfig->getMerchantCountry();
+    }
+
+    /**
+     * Get Messaging Layout
+     *
+     * @param string $type
+     * @return string|null
+     */
+    public function getMessagingLayout(string $type): ?string
+    {
+        return $this->config->getMessagingStyle(Config::BUTTON_AREA_CART, $type, 'layout');
+    }
+
+    /**
+     * Get Messaging Logo
+     *
+     * @param string $type
+     * @return string|null
+     */
+    public function getMessagingLogo(string $type): ?string
+    {
+        return $this->config->getMessagingStyle(Config::BUTTON_AREA_CART, $type, 'logo');
+    }
+
+    /**
+     * Get Messaging Logo Position
+     *
+     * @param string $type
+     * @return string|null
+     */
+    public function getMessagingLogoPosition(string $type): ?string
+    {
+        return $this->config->getMessagingStyle(Config::BUTTON_AREA_CART, $type, 'logo_position');
+    }
+
+    /**
+     * Get Messaging Text Color
+     *
+     * @param string $type
+     * @return string|null
+     */
+    public function getMessagingTextColor(string $type): ?string
+    {
+        return $this->config->getMessagingStyle(Config::BUTTON_AREA_CART, $type, 'text_color');
     }
 }

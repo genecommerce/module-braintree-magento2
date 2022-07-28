@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Block\Paypal\Checkout;
@@ -8,8 +8,6 @@ namespace Magento\Braintree\Block\Paypal\Checkout;
 use Magento\Paypal\Block\Express;
 
 /**
- * Class Review
- *
  * @api
  * @since 100.1.0
  */
@@ -24,7 +22,7 @@ class Review extends Express\Review
     protected $_controllerPath = 'braintree/paypal'; // @codingStandardsIgnoreLine
 
     /**
-     * Does not allow editing payment information as customer has gone through paypal flow already
+     * Does not allow editing payment information as customer has gone through PayPal flow already
      *
      * @return null
      * @codeCoverageIgnore

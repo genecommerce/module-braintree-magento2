@@ -1,16 +1,17 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+declare(strict_types=1);
 
 namespace Magento\Braintree\Gateway\Config\PayPalCredit;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Store\Model\ScopeInterface;
-use \Magento\Paypal\Model\Config as PPConfig;
 
-/**
- * Class Config
- * @package Magento\Braintree\Gateway\Config\PayPalCredit
- */
 class Config implements ConfigInterface
 {
     const KEY_ACTIVE = 'active';
@@ -43,8 +44,8 @@ class Config implements ConfigInterface
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-        $methodCode = null,
-        $pathPattern = self::DEFAULT_PATH_PATTERN
+        string $methodCode = null,
+        string $pathPattern = self::DEFAULT_PATH_PATTERN
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->methodCode = $methodCode;
@@ -95,6 +96,8 @@ class Config implements ConfigInterface
     }
 
     /**
+     * Get config value
+     *
      * @param $field
      * @return mixed
      */
@@ -115,9 +118,11 @@ class Config implements ConfigInterface
     {
         $paypalActive = $this->getConfigValue("payment/braintree_paypal/active");
         $paypalCreditActive = $this->getConfigValue("payment/braintree_paypal_credit/active");
+        $paypalCreditShow =
+            $this->getConfigValue("payment/braintree_paypal/button_location_checkout_type_credit_show");
 
         // If PayPal or PayPal Credit is disabled in the admin
-        if (!$paypalActive || !$paypalCreditActive) {
+        if (!$paypalActive || !$paypalCreditActive || !$paypalCreditShow) {
             return false;
         }
 
@@ -150,7 +155,7 @@ class Config implements ConfigInterface
      *
      * @return string|null
      */
-    public function getMerchantName()
+    public function getMerchantName(): ?string
     {
         return $this->getValue(self::KEY_UK_MERCHANT_NAME);
     }
@@ -160,7 +165,7 @@ class Config implements ConfigInterface
      *
      * @return string|null
      */
-    public function getActivationCode()
+    public function getActivationCode(): ?string
     {
         return $this->getValue(self::KEY_UK_ACTIVATION_CODE);
     }
@@ -170,9 +175,9 @@ class Config implements ConfigInterface
      *
      * @return bool
      */
-    public function getSandbox(): bool
+    public function isSandbox(): bool
     {
-        return 'sandbox' === $this->getConfigValue('payment/braintree/environment');
+        return self::KEY_SANDBOX === $this->getConfigValue('payment/braintree/environment');
     }
 
     /**
@@ -180,7 +185,7 @@ class Config implements ConfigInterface
      *
      * @return string|null
      */
-    public function getClientId()
+    public function getClientId(): ?string
     {
         return $this->getValue(self::KEY_CLIENT_ID);
     }
@@ -189,13 +194,14 @@ class Config implements ConfigInterface
      * Secret Key
      * @return string|null
      */
-    public function getSecret()
+    public function getSecret(): ?string
     {
         return $this->getValue(self::KEY_SECRET);
     }
 
     /**
      * Merchant Country set to GB/UK
+     *
      * @return bool
      */
     public function isUk(): bool
@@ -205,6 +211,7 @@ class Config implements ConfigInterface
 
     /**
      * Merchant Country set to US
+     *
      * @return bool
      */
     public function isUS(): bool
@@ -217,41 +224,8 @@ class Config implements ConfigInterface
      *
      * @return string|null
      */
-    public function getMerchantCountry()
+    public function getMerchantCountry(): ?string
     {
         return $this->getConfigValue('paypal/general/merchant_country');
-    }
-
-    /**
-     * Get Display option from stored config
-     *
-     * @param string $section
-     * @return mixed
-     */
-    public function getBmlDisplay($section)
-    {
-        return $this->getConfigValue('payment/' . PPConfig::METHOD_WPP_BML . '/' . $section . '_display');
-    }
-
-    /**
-     * Get Position option from stored config
-     *
-     * @param string $section
-     * @return mixed
-     */
-    public function getBmlPosition($section)
-    {
-        return $this->getConfigValue('payment/' . PPConfig::METHOD_WPP_BML . '/' . $section . '_position');
-    }
-
-    /**
-     * Get Size option from stored config
-     *
-     * @param string $section
-     * @return mixed
-     */
-    public function getBmlSize($section)
-    {
-        return $this->getConfigValue('payment/' . PPConfig::METHOD_WPP_BML . '/' . $section . '_size');
     }
 }

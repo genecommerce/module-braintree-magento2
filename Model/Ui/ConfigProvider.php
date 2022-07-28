@@ -109,8 +109,8 @@ class ConfigProvider implements ConfigProviderInterface
                         'color' => $this->paypalConfig->getButtonColor(PayPalConfig::BUTTON_AREA_CHECKOUT)
                     ],
                     'disabledFunding' => [
-                        'card' => $this->paypalConfig->getDisabledFundingOptionCard(),
-                        'elv' => $this->paypalConfig->getDisabledFundingOptionElv()
+                        'card' => $this->paypalConfig->isFundingOptionCardDisabled(),
+                        'elv' => $this->paypalConfig->isFundingOptionElvDisabled()
                     ],
                     'icons' => $this->getIcons()
                 ],
