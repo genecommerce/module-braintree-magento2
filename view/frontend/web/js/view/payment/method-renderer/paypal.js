@@ -120,9 +120,7 @@ define([
             quote.paymentMethod.subscribe(function (value) {
                 let methodCode = value;
                 
-                console.log("THIS IS CALLED");
                 if (methodCode && (methodCode.method === 'braintree_paypal' || methodCode.method === 'braintree_paypal_vault')) {
-                    console.log("INSIDE IF CALLED");
                     self.reInitPayPal();
                 }
             });
