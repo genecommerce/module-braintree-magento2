@@ -86,7 +86,7 @@
                 <value id="click_safe_form" type="host">www.clicksafe.lloydstsb.com</value>
                 <value id="activa_card_form" type="host">pay.activa-card.com</value>
                 <value id="wirecard_form" type="host">*.wirecard.com acs.sia.eu</value>
-                <value id="touch_tech_payments_form" type="host">*touchtechpayments.com</value>
+                <value id="touch_tech_payments_form" type="host">*.touchtechpayments.com</value>
                 <value id="secure_suite_form" type="host">www.securesuite.co.uk</value>
                 <value id="rsa3ds_auth_form" type="host">rsa3dsauth.com</value>
                 <value id="monzo_form" type="host">*.monzo.com</value>
