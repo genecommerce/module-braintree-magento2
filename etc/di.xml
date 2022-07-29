@@ -703,6 +703,7 @@
                 <item name="channel" xsi:type="string">Magento\Braintree\Gateway\Request\ChannelDataBuilder</item>
                 <item name="address" xsi:type="string">Magento\Braintree\Gateway\Request\AddressDataBuilder</item>
                 <item name="dynamic_descriptor" xsi:type="string">Magento\Braintree\Gateway\Request\DescriptorDataBuilder</item>
+                <item name="level_2_3_processing" xsi:type="string">Magento\Braintree\Gateway\Request\Level23ProcessingDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
@@ -812,6 +813,7 @@
                 <item name="address" xsi:type="string">Magento\Braintree\Gateway\Request\AddressDataBuilder</item>
                 <item name="device_data" xsi:type="string">Magento\Braintree\Gateway\Request\DeviceDataBuilder</item>
                 <item name="dynamic_descriptor" xsi:type="string">Magento\Braintree\Gateway\Request\DescriptorDataBuilder</item>
+                <item name="level_2_3_processing" xsi:type="string">Magento\Braintree\Gateway\Request\Level23ProcessingDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
@@ -922,6 +924,7 @@
                 <item name="address" xsi:type="string">Magento\Braintree\Gateway\Request\AddressDataBuilder</item>
                 <item name="dynamic_descriptor" xsi:type="string">Magento\Braintree\Gateway\Request\DescriptorDataBuilder</item>
                 <item name="device_data" xsi:type="string">Magento\Braintree\Gateway\Request\DeviceDataBuilder</item>
+                <item name="level_2_3_processing" xsi:type="string">Magento\Braintree\Gateway\Request\Level23ProcessingDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
@@ -1030,6 +1033,7 @@
                 <item name="address" xsi:type="string">Magento\Braintree\Gateway\Request\AddressDataBuilder</item>
                 <item name="dynamic_descriptor" xsi:type="string">Magento\Braintree\Gateway\Request\DescriptorDataBuilder</item>
                 <item name="ach" xsi:type="string">Magento\Braintree\Gateway\Request\AchDataBuilder</item>
+                <item name="level_2_3_processing" xsi:type="string">Magento\Braintree\Gateway\Request\Level23ProcessingDataBuilder</item>sss
             </argument>
         </arguments>
     </virtualType>
@@ -1139,6 +1143,7 @@
                 <item name="channel" xsi:type="string">Magento\Braintree\Gateway\Request\ChannelDataBuilder</item>
                 <item name="address" xsi:type="string">Magento\Braintree\Gateway\Request\AddressDataBuilder</item>
                 <item name="dynamic_descriptor" xsi:type="string">Magento\Braintree\Gateway\Request\DescriptorDataBuilder</item>
+                <item name="level_2_3_processing" xsi:type="string">Magento\Braintree\Gateway\Request\Level23ProcessingDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
