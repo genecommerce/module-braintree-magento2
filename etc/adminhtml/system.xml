@@ -280,6 +280,10 @@
                             <label>Enable ACH Direct Debit</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/braintree_ach_direct_debit/active</config_path>
+                            <frontend_model>Magento\Braintree\Block\System\Config\Form\Field\RequiresStatus</frontend_model>
+                            <requires>
+                                <group id="braintree_required"/>
+                            </requires>
                         </field>
                         <field id="sort_order" translate="label" type="text" sortOrder="230" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Sort Order</label>
@@ -309,6 +313,10 @@
                             <label>Enable ApplePay through Braintree</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/braintree_applepay/active</config_path>
+                            <frontend_model>Magento\Braintree\Block\System\Config\Form\Field\RequiresStatus</frontend_model>
+                            <requires>
+                                <group id="braintree_required"/>
+                            </requires>
                             <comment>
                                 <![CDATA[You need to <a href="https://developers.braintreepayments.com/guides/apple-pay/configuration/javascript/v3" target="_blank" rel="noopener noreferrer">verify your domain name</a> in your Braintree account first.]]>
                             </comment>
@@ -342,6 +350,10 @@
                             <label>Enable Local Payment Methods</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/braintree_local_payment/active</config_path>
+                            <frontend_model>Magento\Braintree\Block\System\Config\Form\Field\RequiresStatus</frontend_model>
+                            <requires>
+                                <group id="braintree_required"/>
+                            </requires>
                         </field>
                         <field id="title" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Title</label>
