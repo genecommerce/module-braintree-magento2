@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -690,6 +690,7 @@
         <arguments>
             <argument name="handlers" xsi:type="array">
                 <item name="payment_details" xsi:type="string">Magento\Braintree\Model\ApplePay\PaymentDetailsHandler</item>
+                <item name="card_details" xsi:type="string">Magento\Braintree\Gateway\Response\CardDetailsHandler</item>
                 <item name="txn_id" xsi:type="string">Magento\Braintree\Gateway\Response\TransactionIdHandler</item>
             </argument>
         </arguments>
@@ -797,6 +798,7 @@
         <arguments>
             <argument name="handlers" xsi:type="array">
                 <item name="payment_details" xsi:type="string">Magento\Braintree\Model\GooglePay\PaymentDetailsHandler</item>
+                <item name="card_details" xsi:type="string">Magento\Braintree\Gateway\Response\CardDetailsHandler</item>
                 <item name="txn_id" xsi:type="string">Magento\Braintree\Gateway\Response\TransactionIdHandler</item>
             </argument>
         </arguments>
@@ -1181,7 +1183,7 @@
     <type name="Magento\Braintree\Console\VaultMigrate">
         <arguments>
             <argument name="braintreeAdapter" xsi:type="object">Magento\Braintree\Model\Adapter\BraintreeAdapter\Proxy</argument>
-            <argument name="customerRepository" xsi:type="object">Magento\Customer\Model\ResourceModel\CustomerRepository\Proxy</argument>
+            <argument name="customerRepository" xsi:type="object">Magento\Customer\Api\CustomerRepositoryInterface\Proxy</argument>
         </arguments>
     </type>
 
