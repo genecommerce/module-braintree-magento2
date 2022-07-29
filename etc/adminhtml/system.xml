@@ -280,6 +280,10 @@
                             <label>Enable ACH Direct Debit</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/braintree_ach_direct_debit/active</config_path>
+                            <frontend_model>Magento\Braintree\Block\System\Config\Form\Field\RequiresStatus</frontend_model>
+                            <requires>
+                                <group id="braintree_required"/>
+                            </requires>
                         </field>
                         <field id="sort_order" translate="label" type="text" sortOrder="230" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Sort Order</label>
@@ -309,6 +313,10 @@
                             <label>Enable ApplePay through Braintree</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/braintree_applepay/active</config_path>
+                            <frontend_model>Magento\Braintree\Block\System\Config\Form\Field\RequiresStatus</frontend_model>
+                            <requires>
+                                <group id="braintree_required"/>
+                            </requires>
                             <comment>
                                 <![CDATA[You need to <a href="https://developers.braintreepayments.com/guides/apple-pay/configuration/javascript/v3" target="_blank" rel="noopener noreferrer">verify your domain name</a> in your Braintree account first.]]>
                             </comment>
@@ -342,6 +350,10 @@
                             <label>Enable Local Payment Methods</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/braintree_local_payment/active</config_path>
+                            <frontend_model>Magento\Braintree\Block\System\Config\Form\Field\RequiresStatus</frontend_model>
+                            <requires>
+                                <group id="braintree_required"/>
+                            </requires>
                         </field>
                         <field id="title" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Title</label>
@@ -377,6 +389,10 @@
                             <label>Enable GooglePay through Braintree</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/braintree_googlepay/active</config_path>
+                            <frontend_model>Magento\Braintree\Block\System\Config\Form\Field\RequiresStatus</frontend_model>
+                            <requires>
+                                <group id="braintree_required"/>
+                            </requires>
                             <comment>
                                 <![CDATA[Consult the <A href="https://developers.braintreepayments.com/guides/google-pay/testing-go-live/javascript/v3#go-live">Braintree documentation</a> when enabling Google Pay for production.]]>
                             </comment>
@@ -426,6 +442,10 @@
                             <label>Enable Venmo through Braintree</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/braintree_venmo/active</config_path>
+                            <frontend_model>Magento\Braintree\Block\System\Config\Form\Field\RequiresStatus</frontend_model>
+                            <requires>
+                                <group id="braintree_required"/>
+                            </requires>
                         </field>
                         <field id="payment_action" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Payment Action</label>
@@ -453,6 +473,7 @@
                             <label>Enable PayPal through Braintree</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/braintree_paypal/active</config_path>
+                            <frontend_model>Magento\Braintree\Block\System\Config\Form\Field\RequiresStatus</frontend_model>
                             <requires>
                                 <group id="braintree_required"/>
                             </requires>
@@ -462,6 +483,7 @@
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/braintree_paypal_credit/active</config_path>
                             <comment>PayPal Credit is currently only available in the United States and United Kingdom. PayPal Credit will be disabled if the selected value for the Merchant Country field is not US or UK. This field only available if Merchant Country is US or UK.</comment>
+                            <frontend_model>Magento\Braintree\Block\System\Config\Form\Field\RequiresStatus</frontend_model>
                             <requires>
                                 <group id="braintree_required"/>
                             </requires>
@@ -508,6 +530,7 @@
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/braintree_paypal_paylater/active</config_path>
                             <comment>Display pay later messaging on your site for offers like Pay in 3, which lets customers pay with 3 interest-free monthly payments. We'll show messages on your site to promote this feature for you. You may not promote pay later offers with any other content, marketing, or materials.</comment>
+                            <frontend_model>Magento\Braintree\Block\System\Config\Form\Field\RequiresStatus</frontend_model>
                             <requires>
                                 <group id="braintree_required"/>
                             </requires>

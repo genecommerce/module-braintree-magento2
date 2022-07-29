@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*browser:true*/
@@ -17,40 +17,45 @@ define(
 
         let config = window.checkoutConfig.payment,
             braintreeType = 'braintree',
-            payPalType = 'braintree_paypal';
+            payPalType = 'braintree_paypal',
+            braintreeAchDirectDebit = 'braintree_ach_direct_debit',
+            braintreeVenmo = 'braintree_venmo',
+            braintreeLocalPayment = 'braintree_local_payment';
 
-        if (config[braintreeType].isActive) {
-            rendererList.push(
-                {
-                    type: braintreeType,
-                    component: 'Magento_Braintree/js/view/payment/method-renderer/hosted-fields'
-                }
-            );
+        if (config[braintreeType] && config[braintreeType].isActive && config[braintreeType].clientToken) {
+            rendererList.push({
+                type: braintreeType,
+                component: 'Magento_Braintree/js/view/payment/method-renderer/hosted-fields'
+            });
         }
 
-        if (config[payPalType].isActive) {
-            rendererList.push(
-                {
-                    type: payPalType,
-                    component: 'Magento_Braintree/js/view/payment/method-renderer/paypal'
-                }
-            );
+        if (config[payPalType] && config[payPalType].isActive) {
+            rendererList.push({
+                type: payPalType,
+                component: 'Magento_Braintree/js/view/payment/method-renderer/paypal'
+            });
         }
 
-        rendererList.push(
-            {
-                type: 'braintree_venmo',
+        if (config[braintreeVenmo] && config[braintreeVenmo].isAllowed && config[braintreeVenmo].clientToken) {
+            rendererList.push({
+                type: braintreeVenmo,
                 component: 'Magento_Braintree/js/view/payment/method-renderer/venmo'
-            },
-            {
-                type: 'braintree_ach_direct_debit',
+            });
+        }
+
+        if (config[braintreeAchDirectDebit] && config[braintreeAchDirectDebit].isActive && config[braintreeAchDirectDebit].clientToken) {
+            rendererList.push({
+                type: braintreeAchDirectDebit,
                 component: 'Magento_Braintree/js/view/payment/method-renderer/ach'
-            },
-            {
-                type: 'braintree_local_payment',
+            });
+        }
+
+        if (config[braintreeLocalPayment] && config[braintreeLocalPayment].clientToken) {
+            rendererList.push({
+                type: braintreeLocalPayment,
                 component: 'Magento_Braintree/js/view/payment/method-renderer/lpm'
-            }
-        );
+            });
+        }
 
         /** Add view logic here if needed */
         return Component.extend({});
