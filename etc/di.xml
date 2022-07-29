@@ -581,6 +581,7 @@
     <virtualType name="BraintreeTransactionsReporting" type="Magento\Framework\View\Element\UiComponent\DataProvider\Reporting">
         <arguments>
             <argument name="collectionFactory" xsi:type="object">BraintreeTransactionsCollectionFactoryForReporting</argument>
+            <argument name="filterPool" xsi:type="object">PayPal\Braintree\Ui\Component\Report\DataProvider\FilterPool</argument>
         </arguments>
     </virtualType>
     <virtualType name="BraintreeTransactionsDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
