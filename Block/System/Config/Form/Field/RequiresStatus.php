@@ -42,6 +42,10 @@ class RequiresStatus extends Field
             $requiresClass = str_replace('braintree_paypal_', '', $element->getClass());
             $element->setClass($requiresClass);
         }
+        if (str_contains($element->getClass(), 'braintree_webhook_')) {
+            $requiresClass = str_replace('braintree_webhook_', '', $element->getClass());
+            $element->setClass($requiresClass);
+        }
 
         return parent::render($element);
     }
