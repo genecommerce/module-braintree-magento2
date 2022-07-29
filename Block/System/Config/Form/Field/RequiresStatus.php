@@ -30,6 +30,18 @@ class RequiresStatus extends Field
             $requiresClass = str_replace('braintree_local_payment_', '', $element->getClass());
             $element->setClass($requiresClass);
         }
+        if (str_contains($element->getClass(), 'braintree_googlepay_')) {
+            $requiresClass = str_replace('braintree_googlepay_', '', $element->getClass());
+            $element->setClass($requiresClass);
+        }
+        if (str_contains($element->getClass(), 'braintree_venmo_')) {
+            $requiresClass = str_replace('braintree_venmo_', '', $element->getClass());
+            $element->setClass($requiresClass);
+        }
+        if (str_contains($element->getClass(), 'braintree_paypal_')) {
+            $requiresClass = str_replace('braintree_paypal_', '', $element->getClass());
+            $element->setClass($requiresClass);
+        }
 
         return parent::render($element);
     }
