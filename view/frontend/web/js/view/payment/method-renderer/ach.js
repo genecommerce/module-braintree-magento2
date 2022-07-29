@@ -54,10 +54,9 @@ define(
 
                 fullScreenLoader.startLoader();
 
-                var self = this;
+                let self = this;
 
-                var billingAddress = quote.billingAddress();
-
+                let billingAddress = quote.billingAddress();
                 let regionCode;
 
                 let bankDetails = {
@@ -81,19 +80,22 @@ define(
                     bankDetails.businessName = self.businessName();
                 }
 
-                var mandateText = document.getElementById('braintree-ach-mandate').textContent;
+                let mandateText = document.getElementById('braintree-ach-mandate').textContent;
 
                 // if no region code is available, lets find one!
                 if (typeof billingAddress.regionCode === 'undefined') {
                     $.get('/rest/V1/directory/countries/' + billingAddress.countryId).done(function (data) {
                         if (typeof data.available_regions !== 'undefined') {
-                            for (var i = 0; i < data.available_regions.length; ++i) {
+                            for (let i = 0; i < data.available_regions.length; ++i) {
                                 if (data.available_regions[i].id === billingAddress.regionId) {
                                     regionCode = data.available_regions[i].code;
                                     bankDetails.billingAddress.region = regionCode;
                                     self.tokenizeAch(bankDetails, mandateText);
                                 }
                             }
+                        } else {
+                            fullScreenLoader.stopLoader();
+                            self.tokenizeAch(bankDetails, mandateText);
                         }
                     }).fail(function() {
                         fullScreenLoader.stopLoader();
@@ -104,7 +106,7 @@ define(
             },
 
             tokenizeAch: function (bankDetails, mandateText) {
-                var self = this;
+                let self = this;
                 this.achInstance.tokenize({
                     bankDetails: bankDetails,
                     mandateText: mandateText
@@ -156,7 +158,7 @@ define(
             initialize: function () {
                 this._super();
 
-                var self = this;
+                let self = this;
 
                 braintree.create({
                     authorization: self.getClientToken()
@@ -186,7 +188,7 @@ define(
             },
 
             changeOwnershipType: function (data, event) {
-                var self = this;
+                let self = this;
                 if (event.currentTarget.value === 'business') {
                     self.business(true);
                     self.personal(false);

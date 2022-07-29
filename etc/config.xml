@@ -44,6 +44,11 @@
                 <kount_allowed_ips>208.75.112.0/22,209.81.12.0/24</kount_allowed_ips>
                 <group>braintree_group</group>
             </braintree>
+            <braintree_webhook>
+                <enabled>0</enabled>
+                <approve_order_status>processing</approve_order_status>
+                <reject_order_status>canceled</reject_order_status>
+            </braintree_webhook>
             <braintree_paypal>
                 <model>BraintreePayPalFacade</model>
                 <title>PayPal</title>
