@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 
 declare(strict_types=1);
 
@@ -12,15 +16,13 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool as Magent
 /**
  * Filter poll apply filters from search criteria
  * Created to fix error 'Call to undefined method getSelect() on TransactionsCollection'.
- * The error appeared after upgrade magento to 2.4.3.
  * Magento updated the method applyFilters of FilterPool class to use property 'Select' of collection, but
- * method applyFilters continue expect object of Magento\Framework\Data\Collection which haven't property 'Select'.
+ * method applyFilters continue to expect object of Magento\Framework\Data\Collection which haven't property 'Select'.
  *
  * @api
  */
 class FilterPool extends MagentoFilterPool
 {
-
     /**
      * @param FilterApplierInterface[] $appliers
      */
