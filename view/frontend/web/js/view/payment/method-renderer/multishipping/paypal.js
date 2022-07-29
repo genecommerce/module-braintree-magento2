@@ -96,13 +96,14 @@ define([
         },
 
         loadPayPalButton: function (paypalCheckoutInstance, funding) {
-            var paypalPayment = Braintree.config.paypal,
+            let paypalPayment = Braintree.config.paypal,
                 onPaymentMethodReceived = Braintree.config.onPaymentMethodReceived;
-            var style = {
-                color: Braintree.getColor(),
-                shape: Braintree.getShape(),
-                layout: Braintree.getLayout(),
-                size: Braintree.getSize()
+            let style = {
+                color: Braintree.getColor(funding),
+                shape: Braintree.getShape(funding),
+                layout: Braintree.getLayout(funding),
+                size: Braintree.getSize(funding),
+                label: Braintree.getLabel(funding)
             };
 
             if (Braintree.getBranding()) {
@@ -111,18 +112,18 @@ define([
             if (Braintree.getFundingIcons()) {
                 style.fundingicons = Braintree.getFundingIcons();
             }
+            if (Braintree.getLayout(funding) === 'horizontal') {
+                style.tagline = Braintree.getTagline(funding);
+            }
 
             if (funding === 'credit') {
-                style.layout = "horizontal";
-                style.color = "darkblue";
                 Braintree.config.buttonId = this.clientConfig.buttonCreditId;
             } else if (funding === 'paylater') {
-                style.layout = "horizontal";
-                style.color = "white";
                 Braintree.config.buttonId = this.clientConfig.buttonPaylaterId;
             } else {
                 Braintree.config.buttonId = this.clientConfig.buttonPayPalId;
             }
+
             // Render
             Braintree.config.paypalInstance = paypalCheckoutInstance;
             var events = Braintree.events;
@@ -280,7 +281,9 @@ define([
          * @param {Boolean} isActive
          */
         updateSubmitButtonHtml: function (isActive) {
+            $(this.submitButtonSelector).removeClass("primary");
             if (this.isPaymentMethodNonceReceived() || !isActive) {
+                $(this.submitButtonSelector).addClass("primary");
                 $(this.submitButtonSelector).html(this.reviewButtonHtml);
             }
         },
