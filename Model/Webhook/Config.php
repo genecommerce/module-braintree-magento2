@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,10 +14,10 @@ use Magento\Braintree\Gateway\Helper\SubjectReader;
 
 class Config
 {
-    private CONST WEBHOOK_ENABLED = 'payment/braintree_webhook/enabled';
-    private CONST WEBHOOK_FRAUD_PROTECTION_URL = 'payment/braintree_webhook/fraud_protection_url';
-    private CONST WEBHOOK_APPROVE_ORDER_STATUS = 'payment/braintree_webhook/approve_order_status';
-    private CONST WEBHOOK_REJECT_ORDER_STATUS = 'payment/braintree_webhook/reject_order_status';
+    private CONST WEBHOOK_ENABLED = 'payment/braintree/webhook_enabled';
+    private CONST WEBHOOK_FRAUD_PROTECTION_URL = 'payment/braintree/webhook_fraud_protection_url';
+    private CONST WEBHOOK_APPROVE_ORDER_STATUS = 'payment/braintree/webhook_approve_order_status';
+    private CONST WEBHOOK_REJECT_ORDER_STATUS = 'payment/braintree/webhook_reject_order_status';
 
     /**
      * @var SubjectReader

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -247,7 +247,7 @@
                         <field id="enabled" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Enabled Webhook</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                            <config_path>payment/braintree_webhook/enabled</config_path>
+                            <config_path>payment/braintree/webhook_enabled</config_path>
                             <frontend_model>Magento\Braintree\Block\System\Config\Form\Field\RequiresStatus</frontend_model>
                             <requires>
                                 <group id="braintree_required"/>
@@ -256,7 +256,7 @@
                         <field id="fraud_protection_url" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1">
                             <label>Fraud Protection URL</label>
                             <frontend_model>Magento\Braintree\Model\Config\Source\FraudProtectionUrl</frontend_model>
-                            <config_path>payment/braintree_webhook/fraud_protection_url</config_path>
+                            <config_path>payment/braintree/webhook_fraud_protection_url</config_path>
                             <comment>
                                 You will need to add this URL into your Braintree Account as Webhook Destination URL.
                                 This URL must be secure and publicly accessible.
@@ -265,12 +265,12 @@
                         <field id="approve_order_status" translate="label" type="select" sortOrder="15" showInDefault="1" showInWebsite="1">
                             <label>Fraud Protection Approve Order Status</label>
                             <source_model>Magento\Sales\Model\ResourceModel\Order\Status\Collection</source_model>
-                            <config_path>payment/braintree_webhook/approve_order_status</config_path>
+                            <config_path>payment/braintree/webhook_approve_order_status</config_path>
                         </field>
                         <field id="reject_order_status" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1">
                             <label>Fraud Protection Reject Order Status</label>
                             <source_model>Magento\Sales\Model\ResourceModel\Order\Status\Collection</source_model>
-                            <config_path>payment/braintree_webhook/reject_order_status</config_path>
+                            <config_path>payment/braintree/webhook_reject_order_status</config_path>
                         </field>
                     </group>
                     <group id="braintree_country_specific" translate="label" showInDefault="1" showInWebsite="1" sortOrder="30">
