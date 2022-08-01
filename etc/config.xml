@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -43,13 +43,11 @@
                 <privateInfoKeys>avsPostalCodeResponseCode,avsStreetAddressResponseCode,cvvResponseCode,processorAuthorizationCode,processorResponseCode,processorResponseText,liabilityShifted,liabilityShiftPossible,eciFlag,riskDataId,riskDataDecision,transactionSource</privateInfoKeys>
                 <paymentInfoKeys>cc_type,cc_number,avsPostalCodeResponseCode,avsStreetAddressResponseCode,cvvResponseCode,processorAuthorizationCode,processorResponseCode,processorResponseText,liabilityShifted,liabilityShiftPossible,eciFlag,riskDataId,riskDataDecision,transactionSource</paymentInfoKeys>
                 <kount_allowed_ips>208.75.112.0/22,209.81.12.0/24</kount_allowed_ips>
+                <webhook_enabled>0</webhook_enabled>
+                <webhook_approve_order_status>processing</webhook_approve_order_status>
+                <webhook_reject_order_status>canceled</webhook_reject_order_status>
                 <group>braintree_group</group>
             </braintree>
-            <braintree_webhook>
-                <enabled>0</enabled>
-                <approve_order_status>processing</approve_order_status>
-                <reject_order_status>canceled</reject_order_status>
-            </braintree_webhook>
             <braintree_paypal>
                 <model>BraintreePayPalFacade</model>
                 <title>PayPal</title>
