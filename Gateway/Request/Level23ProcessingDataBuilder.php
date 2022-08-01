@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
 declare(strict_types=1);
 
 namespace Magento\Braintree\Gateway\Request;
@@ -9,7 +14,6 @@ use Magento\Braintree\Gateway\Data\Order\OrderAdapter;
 use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Payment\Gateway\Request\BuilderInterface;
-use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Store\Model\ScopeInterface;
 
@@ -19,15 +23,16 @@ use Magento\Store\Model\ScopeInterface;
  */
 class Level23ProcessingDataBuilder implements BuilderInterface
 {
-    const KEY_PURCHASE_ORDER_NUMBER = 'purchaseOrderNumber';
-    const KEY_TAX_AMT = 'taxAmount';
-    const KEY_SHIPPING_AMT = 'shippingAmount';
-    const KEY_DISCOUNT_AMT = 'discountAmount';
-    const KEY_SHIPS_FROM_POSTAL_CODE = 'shipsFromPostalCode';
-    const KEY_SHIPPING = 'shipping';
-    const KEY_COUNTRY_CODE_ALPHA_3 = 'countryCodeAlpha3';
-    const KEY_LINE_ITEMS = 'lineItems';
-    const LINE_ITEMS_ARRAY = [
+    private const KEY_PURCHASE_ORDER_NUMBER = 'purchaseOrderNumber';
+    private const KEY_TAX_AMT = 'taxAmount';
+    private const KEY_SHIPPING_AMT = 'shippingAmount';
+    private const KEY_DISCOUNT_AMT = 'discountAmount';
+    private const KEY_SHIPS_FROM_POSTAL_CODE = 'shipsFromPostalCode';
+    private const KEY_SHIPPING = 'shipping';
+    private const KEY_COUNTRY_CODE_ALPHA_3 = 'countryCodeAlpha3';
+    private const KEY_LINE_ITEMS = 'lineItems';
+    private const XPATH_SEND_LINE_ITEMS = 'payment/braintree/send_line_items';
+    private const LINE_ITEMS_ARRAY = [
         'name',
         'kind',
         'quantity',
@@ -134,8 +139,12 @@ class Level23ProcessingDataBuilder implements BuilderInterface
             self::KEY_PURCHASE_ORDER_NUMBER => $order->getOrderIncrementId(), // Level 2.
             self::KEY_TAX_AMT => $this->numberToString($order->getBaseTaxAmount(), 2), // Level 2.
             self::KEY_DISCOUNT_AMT => $this->numberToString(abs($order->getBaseDiscountAmount()), 2), // Level 3.
-            self::KEY_LINE_ITEMS => $lineItems, // Level 3.
         ];
+
+        // Can send line items to braintree if enabled and line items are less than 250.
+        if ($this->canSendLineItems() && count($lineItems) < 250) {
+            $processingData[self::KEY_LINE_ITEMS] = $lineItems; // Level 3.
+        }
 
         // Only add these shipping related details if a shipping address is present.
         if ($order->getShippingAddress()) {
@@ -159,6 +168,8 @@ class Level23ProcessingDataBuilder implements BuilderInterface
     }
 
     /**
+     * number to string conversion
+     *
      * @param $num
      * @param int $precision
      * @return string
@@ -171,5 +182,18 @@ class Level23ProcessingDataBuilder implements BuilderInterface
         }
 
         return (string) round($num, $precision);
+    }
+
+    /**
+     * Can send line items to the braintree
+     *
+     * @return bool
+     */
+    private function canSendLineItems(): bool
+    {
+        return (bool) $this->scopeConfig->getValue(
+            self::XPATH_SEND_LINE_ITEMS,
+            ScopeInterface::SCOPE_STORE
+        );
     }
 }

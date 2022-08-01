@@ -225,6 +225,11 @@
                             <comment>Be sure to Enable AVS and/or CVV in Your Braintree Account in Settings/Processing Section.</comment>
                             <config_path>payment/braintree/useccv</config_path>
                         </field>
+                        <field id="send_line_items" translate="label" type="select" sortOrder="155" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Send Cart Line Items</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/braintree/send_line_items</config_path>
+                        </field>
                         <field id="cctypes" translate="label" type="multiselect" sortOrder="160" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Credit Card Types</label>
                             <source_model>Magento\Braintree\Model\Adminhtml\Source\CcType</source_model>
