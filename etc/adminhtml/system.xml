@@ -1194,16 +1194,24 @@
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/braintree/verify_3dsecure</config_path>
                         </field>
-                        <field id="threshold_amount" translate="label" type="text" sortOrder="151" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <field id="always_request_3ds" translate="label" type="select" sortOrder="151" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Always request 3DS</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/braintree/always_request_3ds</config_path>
+                            <depends>
+                                <field id="verify_3dsecure">1</field>
+                            </depends>
+                        </field>
+                        <field id="threshold_amount" translate="label" type="text" sortOrder="152" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Threshold Amount</label>
                             <config_path>payment/braintree/threshold_amount</config_path>
                         </field>
-                        <field id="allowspecific" translate="label" type="allowspecific" sortOrder="152" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <field id="allowspecific" translate="label" type="allowspecific" sortOrder="153" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Verify for Applicable Countries</label>
                             <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
                             <config_path>payment/braintree/verify_all_countries</config_path>
                         </field>
-                        <field id="specificcountry" translate="label" type="multiselect" sortOrder="153" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <field id="specificcountry" translate="label" type="multiselect" sortOrder="154" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Verify for Specific Countries</label>
                             <source_model>Magento\Braintree\Model\Adminhtml\System\Config\Country</source_model>
                             <can_be_empty>1</can_be_empty>

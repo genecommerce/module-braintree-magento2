@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*browser:true*/
@@ -50,12 +50,16 @@ define([
          * @returns {Object}
          */
         validate: function (context) {
-            var clientInstance = braintree.getApiClient(),
+            let clientInstance = braintree.getApiClient(),
                 state = $.Deferred(),
                 totalAmount = parseFloat(quote.totals()['base_grand_total']).toFixed(2),
                 billingAddress = quote.billingAddress();
 
-            if(billingAddress.regionCode != undefined && billingAddress.regionCode.length > 2) {
+            if (billingAddress.regionCode == null) {
+                billingAddress.regionCode = undefined;
+            }
+
+            if (billingAddress.regionCode != undefined && billingAddress.regionCode.length > 2) {
                 billingAddress.regionCode = undefined;
             }
 
@@ -72,12 +76,13 @@ define([
                 return state.promise();
             }
 
-            var firstName = this.escapeNonAsciiCharacters(billingAddress.firstname);
-            var lastName = this.escapeNonAsciiCharacters(billingAddress.lastname);
+            let firstName = this.escapeNonAsciiCharacters(billingAddress.firstname);
+            let lastName = this.escapeNonAsciiCharacters(billingAddress.lastname);
+            let challengeRequested = this.getChallengeRequested();
 
             fullScreenLoader.startLoader();
 
-            var setup3d = function(clientInstance) {
+            let setup3d = function(clientInstance) {
                 threeDSecure.create({
                     version: 2,
                     client: clientInstance
@@ -87,7 +92,7 @@ define([
                         return state.reject($t('Please try again with another form of payment.'));
                     }
 
-                    var threeDSContainer = document.createElement('div'),
+                    let threeDSContainer = document.createElement('div'),
                         tdmask = document.createElement('div'),
                         tdframe = document.createElement('div'),
                         tdbody = document.createElement('div');
@@ -104,6 +109,7 @@ define([
                     threeDSecureInstance.verifyCard({
                         amount: totalAmount,
                         nonce: context.paymentMethodNonce,
+                        challengeRequested: challengeRequested,
                         billingAddress: {
                             givenName: firstName,
                             surname: lastName,
@@ -156,7 +162,7 @@ define([
                             }
                         }
 
-                        var liability = {
+                        let liability = {
                             shifted: response.liabilityShifted,
                             shiftPossible: response.liabilityShiftPossible
                         };
@@ -173,7 +179,7 @@ define([
 
             if (!clientInstance) {
                 require(['Magento_Braintree/js/view/payment/method-renderer/cc-form'], function(c) {
-                    var config = c.extend({
+                    let config = c.extend({
                         defaults: {
                             clientConfig: {
                                 onReady: function() {}
@@ -197,7 +203,6 @@ define([
          */
         isAmountAvailable: function (amount) {
             amount = parseFloat(amount);
-
             return amount >= this.config.thresholdAmount;
         },
 
@@ -207,7 +212,7 @@ define([
          * @returns {Boolean}
          */
         isCountryAvailable: function (countryId) {
-            var key,
+            let key,
                 specificCountries = this.config.specificCountries;
 
             // all countries are available
@@ -222,6 +227,15 @@ define([
             }
 
             return false;
+        },
+
+        /**
+         * Get 3DS challenge requested
+         *
+         * @returns {Boolean}
+         */
+        getChallengeRequested: function () {
+            return this.config.challengeRequested;
         }
     };
 });
