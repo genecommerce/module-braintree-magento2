@@ -119,7 +119,7 @@ define([
 
             quote.paymentMethod.subscribe(function (value) {
                 let methodCode = value;
-                
+
                 if (methodCode && (methodCode.method === 'braintree_paypal' || methodCode.method === 'braintree_paypal_vault')) {
                     self.reInitPayPal();
                 }
@@ -296,6 +296,8 @@ define([
          * Setup PayPal instance
          */
         setupPayPal: function () {
+            var self = this;
+
             if (Braintree.config.paypalInstance) {
                 fullScreenLoader.stopLoader(true);
                 return;
@@ -310,13 +312,14 @@ define([
                     return;
                 }
                 let quoteObj = quote.totals();
-                let configSDK = {
+
+                var configSDK = {
                     components: 'buttons,messages,funding-eligibility',
                     "enable-funding": "paylater",
                     currency: quoteObj['base_currency_code']
                 };
-                let merchantCountry = window.checkoutConfig.payment['braintree_paypal'].merchantCountry;
-                if (Braintree.getEnvironment() === 'sandbox' && merchantCountry !== null) {
+                var merchantCountry = window.checkoutConfig.payment['braintree_paypal'].merchantCountry;
+                if (Braintree.getEnvironment() == 'sandbox' && merchantCountry != null) {
                     configSDK["buyer-country"] = merchantCountry;
                 }
                 paypalCheckoutInstance.loadPayPalSDK(configSDK, function () {
