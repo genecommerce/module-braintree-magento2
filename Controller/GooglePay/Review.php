@@ -23,7 +23,7 @@ class Review extends AbstractAction
     /**
      * @var QuoteUpdater
      */
-    private QuoteUpdater $quoteUpdater;
+    private $quoteUpdater;
 
     /**
      * @var string
