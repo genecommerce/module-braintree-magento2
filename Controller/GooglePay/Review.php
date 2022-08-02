@@ -28,7 +28,7 @@ class Review extends AbstractAction
     /**
      * @var string
      */
-    private static string $paymentMethodNonce = 'payment_method_nonce';
+    private static $paymentMethodNonce = 'payment_method_nonce';
 
     /**
      * Constructor
