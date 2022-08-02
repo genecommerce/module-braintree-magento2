@@ -148,9 +148,7 @@ class ConfigProviderTest extends TestCase
                     'getThresholdAmount' => 20.00,
                     'get3DSecureSpecificCountries' => ['GB', 'US', 'CA'],
                     'getEnvironment' => 'test-environment',
-                    'getKountMerchantId' => 'test-kount-merchant-id',
-                    'getMerchantId' => 'test-merchant-id',
-                    'hasFraudProtection' => true
+                    'getMerchantId' => 'test-merchant-id'
                 ],
                 'expected' => [
                     'payment' => [
@@ -166,9 +164,7 @@ class ConfigProviderTest extends TestCase
                             'availableCardTypes' => ['AE', 'VI', 'MC', 'DI', 'JCB'],
                             'useCvv' => true,
                             'environment' => 'test-environment',
-                            'kountMerchantId' => 'test-kount-merchant-id',
                             'merchantId' => 'test-merchant-id',
-                            'hasFraudProtection' => true,
                             'ccVaultCode' => ConfigProvider::CC_VAULT_CODE,
                             'style' => [
                                 'shape' => null,

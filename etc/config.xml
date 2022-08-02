@@ -42,7 +42,6 @@
                 <masked_fields>cvv,number</masked_fields>
                 <privateInfoKeys>avsPostalCodeResponseCode,avsStreetAddressResponseCode,cvvResponseCode,processorAuthorizationCode,processorResponseCode,processorResponseText,liabilityShifted,liabilityShiftPossible,eciFlag,riskDataId,riskDataDecision,transactionSource</privateInfoKeys>
                 <paymentInfoKeys>cc_type,cc_number,avsPostalCodeResponseCode,avsStreetAddressResponseCode,cvvResponseCode,processorAuthorizationCode,processorResponseCode,processorResponseText,liabilityShifted,liabilityShiftPossible,eciFlag,riskDataId,riskDataDecision,transactionSource</paymentInfoKeys>
-                <kount_allowed_ips>208.75.112.0/22,209.81.12.0/24</kount_allowed_ips>
                 <webhook_enabled>0</webhook_enabled>
                 <webhook_approve_order_status>processing</webhook_approve_order_status>
                 <webhook_reject_order_status>canceled</webhook_reject_order_status>
