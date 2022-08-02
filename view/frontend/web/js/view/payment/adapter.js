@@ -223,8 +223,6 @@ define([
 
                 if (typeof this.config.dataCollector === 'object' && typeof this.config.dataCollector.paypal === 'boolean') {
                     options.paypal = true;
-                } else {
-                    options.kount = true;
                 }
 
                 dataCollector.create(options, function (err, dataCollectorInstance) {
@@ -234,6 +232,10 @@ define([
 
                     this.deviceData = dataCollectorInstance.deviceData;
                     this.config.onDeviceDataRecieved(this.deviceData);
+                    console.log("HELLO, THIS IS CALLED");
+                    console.log(this.deviceData);
+                    console.log(options);
+                    console.log(this.config.onDeviceDataRecieved(this.deviceData));
                 }.bind(this));
 
                 this.clientInstance = clientInstance;

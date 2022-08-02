@@ -95,8 +95,6 @@ class ConfigProvider implements ConfigProviderInterface
                     'availableCardTypes' => $this->config->getAvailableCardTypes(),
                     'useCvv' => $this->config->isCvvEnabled(),
                     'environment' => $this->config->getEnvironment(),
-                    'kountMerchantId' => $this->config->getKountMerchantId(),
-                    'hasFraudProtection' => $this->config->hasFraudProtection(),
                     'merchantId' => $this->config->getMerchantId(),
                     'ccVaultCode' => self::CC_VAULT_CODE,
                     'style' => [

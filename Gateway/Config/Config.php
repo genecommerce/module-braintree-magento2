@@ -36,9 +36,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     public const KEY_VERIFY_SPECIFIC = 'verify_specific_countries';
     public const VALUE_3DSECURE_ALL = 0;
     public const CODE_3DSECURE = 'three_d_secure';
-    public const KEY_KOUNT_MERCHANT_ID = 'kount_id';
-    public const KEY_KOUNT_SKIP_ADMIN = 'kount_skip_admin';
-    public const FRAUD_PROTECTION = 'fraudprotection';
+    public const KEY_SKIP_ADMIN = 'skip_admin';
     public const FRAUD_PROTECTION_THRESHOLD = 'fraudprotection_threshold';
     public const ENABLE_RECAPTCHA = 'enable_recaptcha';
 
@@ -266,28 +264,13 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     }
 
     /**
-     * Get Kount Merchant Id
-     *
-     * @return string|null
-     * @throws InputException
-     * @throws NoSuchEntityException
-     */
-    public function getKountMerchantId()
-    {
-        return $this->getValue(
-            self::KEY_KOUNT_MERCHANT_ID,
-            $this->storeConfigResolver->getStoreId()
-        );
-    }
-
-    /**
      * @return bool
      * @throws InputException
      * @throws NoSuchEntityException
      */
     public function canSkipAdminFraudProtection(): bool
     {
-        return (bool) $this->getValue(self::KEY_KOUNT_SKIP_ADMIN, $this->storeConfigResolver->getStoreId());
+        return (bool) $this->getValue(self::KEY_SKIP_ADMIN, $this->storeConfigResolver->getStoreId());
     }
 
     /**
@@ -312,21 +295,6 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     }
 
     /**
-     * Check for fraud protection
-     *
-     * @return bool
-     * @throws InputException
-     * @throws NoSuchEntityException
-     */
-    public function hasFraudProtection(): bool
-    {
-        return (bool) $this->getValue(
-            self::FRAUD_PROTECTION,
-            $this->storeConfigResolver->getStoreId()
-        );
-    }
-
-    /**
      * Get fraud protection threshold
      *
      * @return float|null
@@ -342,7 +310,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     }
 
     /**
-     * Check is reCaptchs is enabled
+     * Check is ReCaptcha is enabled
      *
      * @return bool
      * @throws InputException
