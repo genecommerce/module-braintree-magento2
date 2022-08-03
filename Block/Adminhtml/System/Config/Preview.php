@@ -36,7 +36,7 @@ class Preview extends \Magento\Config\Block\System\Config\Form\Field
     /**
      * @var Config
      */
-    protected Config $config;
+    protected $config;
 
     /**
      * @var BraintreeConfig
