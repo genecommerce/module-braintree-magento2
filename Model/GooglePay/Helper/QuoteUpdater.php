@@ -21,12 +21,12 @@ class QuoteUpdater extends AbstractHelper
     /**
      * @var CartRepositoryInterface
      */
-    private CartRepositoryInterface $quoteRepository;
+    private $quoteRepository;
 
     /**
      * @var ManagerInterface
      */
-    private ManagerInterface $eventManager;
+    private $eventManager;
 
     /**
      * QuoteUpdater constructor
