@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Block;
@@ -9,7 +9,6 @@ use Magento\Backend\Model\Session\Quote;
 use Magento\Braintree\Gateway\Config\Config as GatewayConfig;
 use Magento\Braintree\Model\Adminhtml\Source\CcType;
 use Magento\Braintree\Model\Ui\ConfigProvider;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -21,7 +20,7 @@ use Magento\Payment\Model\MethodInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class Form
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Form extends Cc
 {
@@ -67,6 +66,7 @@ class Form extends Cc
         GatewayConfig $gatewayConfig,
         CcType $ccType,
         LoggerInterface $logger,
+        Data $paymentDataHelper,
         array $data = []
     ) {
         parent::__construct($context, $paymentConfig, $data);
@@ -75,6 +75,7 @@ class Form extends Cc
         $this->gatewayConfig = $gatewayConfig;
         $this->ccType = $ccType;
         $this->logger = $logger;
+        $this->paymentDataHelper = $paymentDataHelper;
     }
 
     /**
