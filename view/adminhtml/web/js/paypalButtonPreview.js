@@ -7,8 +7,9 @@ define([
     'jquery',
     'braintree',
     'braintreePayPalCheckout',
+    'Magento_Ui/js/modal/alert',
     'domReady!'
-], function (_, $, braintree, paypalCheckout) {
+], function (_, $, braintree, paypalCheckout, alert) {
     'use strict';
     let buttonIds = [];
 
@@ -45,12 +46,14 @@ define([
          * @param local
          */
         loadSDK: function (token, currency, env, local) {
+            let self = this;
+
             braintree.create({
                 authorization: token
             }, function (clientErr, clientInstance) {
                 if (clientErr) {
                     console.error('paypalCheckout error', clientErr);
-                    return this.showError("PayPal Checkout could not be initialized. Please contact the store owner.");
+                    return self.showError("PayPal Checkout could not be initialized. Please contact the store owner.");
                 }
                 paypalCheckout.create({
                     client: clientInstance
@@ -151,5 +154,15 @@ define([
                 button.render('#' + data.attr('id'));
             }
         },
+
+        /**
+         * Show alert message
+         * @param {String} message
+         */
+        showError: function (message) {
+            alert({
+                content: message
+            });
+        }
     }
 });
