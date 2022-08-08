@@ -67,7 +67,7 @@ define([
                             "enable-funding": "paylater",
                             currency: currency
                         };
-                        if (env === 'sandbox' && (local !== '' || local !== 'undefined')) {
+                        if (env === 'sandbox' && local !== "") {
                             configSDK["buyer-country"] = local;
                         }
                         paypalCheckoutInstance.loadPayPalSDK(configSDK, function () {
@@ -146,7 +146,7 @@ define([
                 }
             });
             if (!button.isEligible()) {
-                console.log('PayPal button is not eligible');
+                console.log(data.data('funding').charAt(0).toUpperCase() + data.data('funding').slice(1).toLowerCase() + ' button is not eligible');
                 data.parent().remove();
                 return;
             }

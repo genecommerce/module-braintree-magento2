@@ -232,10 +232,6 @@ define([
 
                     this.deviceData = dataCollectorInstance.deviceData;
                     this.config.onDeviceDataRecieved(this.deviceData);
-                    console.log("HELLO, THIS IS CALLED");
-                    console.log(this.deviceData);
-                    console.log(options);
-                    console.log(this.config.onDeviceDataRecieved(this.deviceData));
                 }.bind(this));
 
                 this.clientInstance = clientInstance;
