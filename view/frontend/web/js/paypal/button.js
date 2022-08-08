@@ -103,7 +103,7 @@ define(
                                 "enable-funding": "paylater",
                                 currency: currency
                             };
-                            if (env === 'sandbox' && local !== '') {
+                            if (env === 'sandbox' && local !== "") {
                                 configSDK["buyer-country"] = local;
                             }
                             paypalCheckoutInstance.loadPayPalSDK(configSDK, function () {
