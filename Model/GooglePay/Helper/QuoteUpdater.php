@@ -46,14 +46,14 @@ class QuoteUpdater extends AbstractHelper
      * Execute operation
      *
      * @param string $nonce
-     * @param array $deviceData
+     * @param string $deviceData
      * @param array $details
      * @param Quote $quote
      * @return void
      * @throws InvalidArgumentException
      * @throws LocalizedException
      */
-    public function execute(string $nonce, array $deviceData, array $details, Quote $quote)
+    public function execute(string $nonce, string $deviceData, array $details, Quote $quote)
     {
         if (empty($nonce) || empty($details)) {
             throw new InvalidArgumentException('The "nonce" and "details" fields do not exist');
