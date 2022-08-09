@@ -62,8 +62,8 @@ class CardDetailsHandler implements HandlerInterface
         ContextHelper::assertOrderPayment($payment);
 
         // Web Payments API - Google Pay, Apple Pay and Braintree Credit Card
-        if (!empty($transaction->googlePayCard['sourceCardLast4'])) {
-            $creditCard = $transaction->googlePayCard;
+        if (!empty($transaction->androidPayCard['sourceCardLast4'])) {
+            $creditCard = $transaction->androidPayCard;
             $payment->setCcLast4($creditCard['sourceCardLast4']);
             $payment->setCcExpMonth($creditCard[self::CARD_EXP_MONTH]);
             $payment->setCcExpYear($creditCard[self::CARD_EXP_YEAR]);
