@@ -75,7 +75,7 @@ define(
                         el.addEventListener('click', function (e) {
                             e.preventDefault();
 
-                            if(!context.validate() || !additionalValidators.validate()) {
+                            if (!additionalValidators.validate()) {
                                 return false;
                             }
 
