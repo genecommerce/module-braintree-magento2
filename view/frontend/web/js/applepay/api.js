@@ -1,18 +1,23 @@
 /**
  * Braintree Apple Pay button API
  *
- * @author Aidan Threadgold <aidan@gene.co.uk>
- */
+ **/
 define(
     [
+        'jquery',
+        'underscore',
         'uiComponent',
         'mage/translate',
-        'mage/storage'
+        'mage/storage',
+        'Magento_Customer/js/customer-data'
     ],
     function (
+        $,
+        _,
         Component,
         $t,
-        storage
+        storage,
+        customerData
     ) {
         'use strict';
 
@@ -365,8 +370,8 @@ define(
                                 "customer_address_id": 0,
                                 "save_in_address_book": 0
                             },
-                            "shipping_method_code": this.shippingMethods[this.shippingMethod].method_code,
-                            "shipping_carrier_code": this.shippingMethods[this.shippingMethod].carrier_code
+                            "shipping_method_code": this.shippingMethod ? this.shippingMethods[this.shippingMethod].method_code : '' ,
+                            "shipping_carrier_code": this.shippingMethod ? this.shippingMethods[this.shippingMethod].carrier_code : ''
                         }
                     };
 
