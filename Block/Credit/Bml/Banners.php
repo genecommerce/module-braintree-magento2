@@ -66,15 +66,15 @@ class Banners extends Template
         }
 
         $publisherId = $this->paypalConfig->getBmlPublisherId();
-        $display = $this->config->getBmlDisplay($this->section);
-        $position = $this->config->getBmlPosition($this->section);
+        $display = $this->paypalConfig->getBmlDisplay($this->section);
+        $position = $this->paypalConfig->getBmlPosition($this->section);
 
         if (!$publisherId || $display === 0 || $this->position === $position) {
             return '';
         }
 
         $this->setData('publisher_id', $publisherId);
-        $this->setData('size', $this->config->getBmlSize($this->section));
+        $this->setData('size', $this->paypalConfig->getBmlSize($this->section));
 
         return parent::_toHtml();
     }
