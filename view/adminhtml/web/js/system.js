@@ -3,9 +3,9 @@ require(['jquery', 'Magento_Ui/js/modal/alert', 'mage/translate', 'domReady!'], 
     {
         let merchantCountry = $('[data-ui-id="adminhtml-system-config-field-country-0-select-groups-account-fields-merchant-country-value"]').val();
         let payPalCredit = $('[data-ui-id="select-groups-braintree-section-groups-braintree-fields-braintree-paypal-credit-active-value"]').val();
-        let cart = $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-button-cart-fields-message-cart-enable-value"]');
-        let product = $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-button-checkout-fields-message-checkout-enable-value"]')
-        let checkout = $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-button-productpage-fields-message-productpage-enable-value"]')
+        let cart = $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-styling-groups-button-cart-groups-button-location-cart-type-messaging-fields-button-location-cart-type-messaging-show-value"]');
+        let product = $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-styling-groups-button-productpage-groups-button-location-productpage-type-messaging-fields-button-location-productpage-type-messaging-show-value"]')
+        let checkout = $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-styling-groups-button-checkout-groups-button-location-checkout-type-messaging-fields-button-location-checkout-type-messaging-show-value"]')
         let allowedCountries = ['GB', 'FR', 'US', 'DE', 'AU'];
 
         if($.inArray(merchantCountry, allowedCountries) === -1 || payPalCredit === 1){
