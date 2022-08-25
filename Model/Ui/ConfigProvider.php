@@ -85,6 +85,10 @@ class ConfigProvider implements ConfigProviderInterface
      */
     public function getConfig(): array
     {
+        if(!$this->config->isActive()) {
+            return [];
+        }
+
         $config = [
             'payment' => [
                 self::CODE => [
