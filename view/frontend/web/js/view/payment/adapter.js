@@ -55,7 +55,11 @@ define([
          * @returns {String}
          */
         getCode: function () {
-            return this.code;
+            if (window.checkoutConfig.payment[this.code]) {
+                return this.code;
+            } else {
+                return 'braintree_paypal';
+            }
         },
 
         /**
