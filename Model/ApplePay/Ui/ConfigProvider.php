@@ -1,6 +1,7 @@
 <?php
 namespace Magento\Braintree\Model\ApplePay\Ui;
 
+use Magento\Braintree\Gateway\Config\Config as BraintreeConfig;
 use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
 use Magento\Braintree\Model\ApplePay\Config;
 use Magento\Checkout\Model\ConfigProviderInterface;
@@ -11,15 +12,9 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Asset\Repository;
 use Magento\Store\Model\ScopeInterface;
 
-/**
- * Class ConfigProvider
- * @package Magento\Braintree\Model\ApplePay\Ui
- * @author Aidan Threadgold <aidan@gene.co.uk>
- */
 class ConfigProvider implements ConfigProviderInterface
 {
     const METHOD_CODE = 'braintree_applepay';
-
     const METHOD_KEY_ACTIVE = 'payment/braintree_applepay/active';
 
     /**
@@ -38,7 +33,7 @@ class ConfigProvider implements ConfigProviderInterface
     private $assetRepo;
 
     /**
-     * @var \Magento\Braintree\Gateway\Config\Config
+     * @var BraintreeConfig
      */
     private $braintreeConfig;
 
@@ -54,17 +49,18 @@ class ConfigProvider implements ConfigProviderInterface
 
     /**
      * ConfigProvider constructor.
+     *
      * @param Config $config
      * @param BraintreeAdapter $adapter
      * @param Repository $assetRepo
-     * @param \Magento\Braintree\Gateway\Config\Config $braintreeConfig
+     * @param BraintreeConfig $braintreeConfig
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         Config $config,
         BraintreeAdapter $adapter,
         Repository $assetRepo,
-        \Magento\Braintree\Gateway\Config\Config $braintreeConfig,
+        BraintreeConfig $braintreeConfig,
         ScopeConfigInterface $scopeConfig
     ) {
         $this->config = $config;

@@ -7,7 +7,7 @@
 namespace Magento\Braintree\Observer;
 
 use Magento\Braintree\Block\GooglePay\Shortcut\Button;
-use Magento\Braintree\Gateway\Config\Config;
+use Magento\Braintree\Model\GooglePay\Config;
 use Magento\Catalog\Block\ShortcutButtons;
 use Magento\Checkout\Block\QuoteShortcutButtons;
 use Magento\Framework\Event\Observer;

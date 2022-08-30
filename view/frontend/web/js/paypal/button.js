@@ -161,17 +161,11 @@ define(
                     color: data.data('color'),
                     shape: data.data('shape'),
                     size: data.data('size'),
-                    layout: data.data('layout'),
-                    tagline: data.data('tagline'),
                     label: data.data('label')
                 };
 
                 if (data.data('fundingicons')) {
                     style.fundingicons = data.data('fundingicons');
-                }
-
-                if (data.data('layout') === 'horizontal') {
-                    style.tagline = data.data('tagline');
                 }
 
                 // Render

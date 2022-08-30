@@ -347,7 +347,6 @@ define([
             let style = {
                 color: Braintree.getColor(funding),
                 shape: Braintree.getShape(funding),
-                layout: Braintree.getLayout(funding),
                 size: Braintree.getSize(funding),
                 label: Braintree.getLabel(funding)
             };
@@ -357,9 +356,6 @@ define([
             }
             if (Braintree.getFundingIcons()) {
                 style.fundingicons = Braintree.getFundingIcons();
-            }
-            if (Braintree.getLayout(funding) === 'horizontal') {
-                style.tagline = Braintree.getTagline(funding);
             }
 
             if (funding === 'credit') {

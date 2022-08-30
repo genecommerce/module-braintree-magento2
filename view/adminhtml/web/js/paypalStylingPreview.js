@@ -9,7 +9,7 @@ require([
 ], function (_, $) {
     'use strict';
     let buttonIds = [], currentButtonId = '';
-    let location = '', buttonType = '', buttonShow = '', buttonLayout = '', buttonTagline = '', buttonLabel = '', buttonColor = '', buttonShape = '', buttonSize = '';
+    let location = '', buttonType = '', buttonShow = '', buttonLabel = '', buttonColor = '', buttonShape = '', buttonSize = '';
     let messagingShow = '', messagingLayout = '', messagingLogo = '', messagingLogoPosition = '', messagingTextColor = '';
 
     function getCurrentLocationAndButtonType()
@@ -25,14 +25,12 @@ require([
             location = $(this).val();
             buttonType = $('.' + location + '-button-type').val();
             buttonShow = $('.' + location + '-' + buttonType + '-show').val();
-            buttonLayout = $('.' + location + '-' + buttonType + '-layout').val();
-            buttonTagline = $('.' + location + '-' + buttonType + '-tagline').val();
             buttonLabel = $('.' + location + '-' + buttonType + '-label').val();
             buttonColor = $('.' + location + '-' + buttonType + '-color').val();
             buttonShape = $('.' + location + '-' + buttonType + '-shape').val();
             buttonSize = $('.' + location + '-' + buttonType + '-size').val();
 
-            updatePayPalButtonStyling(location, buttonType, buttonShow, buttonLayout, buttonTagline, buttonLabel, buttonColor, buttonShape, buttonSize);
+            updatePayPalButtonStyling(location, buttonType, buttonShow, buttonLabel, buttonColor, buttonShape, buttonSize);
 
             // render pay later messages when location changed
             messagingShow = $('.' + location + '-messaging-show').val();
@@ -42,112 +40,74 @@ require([
             messagingTextColor = $('.' + location + '-messaging-text-color').val();
 
             renderPayLaterMessages(location, messagingShow, messagingLayout, messagingLogo, messagingLogoPosition, messagingTextColor);
-            customEvent.stopImmediatePropagation();
+            //customEvent.stopImmediatePropagation();
         });
 
         $("select").change(function () {
             $(document).on('change', '.' + location + '-button-type', function (customEvent) {
                 buttonType = $(this).val();
                 buttonShow = $('.' + location + '-' + buttonType + '-show').val();
-                buttonLayout = $('.' + location + '-' + buttonType + '-layout').val();
-                buttonTagline = $('.' + location + '-' + buttonType + '-tagline').val();
                 buttonLabel = $('.' + location + '-' + buttonType + '-label').val();
                 buttonColor = $('.' + location + '-' + buttonType + '-color').val();
                 buttonShape = $('.' + location + '-' + buttonType + '-shape').val();
                 buttonSize = $('.' + location + '-' + buttonType + '-size').val();
 
-                updatePayPalButtonStyling(location, buttonType, buttonShow, buttonLayout, buttonTagline, buttonLabel, buttonColor, buttonShape, buttonSize);
+                updatePayPalButtonStyling(location, buttonType, buttonShow, buttonLabel, buttonColor, buttonShape, buttonSize);
                 customEvent.stopImmediatePropagation();
             });
 
             $(document).on('change', '.' + location + '-' + buttonType + '-show', function (customEvent) {
                 buttonShow = $(this).val();
-                buttonLayout = $('.' + location + '-' + buttonType + '-layout').val();
-                buttonTagline = $('.' + location + '-' + buttonType + '-tagline').val();
                 buttonLabel = $('.' + location + '-' + buttonType + '-label').val();
                 buttonColor = $('.' + location + '-' + buttonType + '-color').val();
                 buttonShape = $('.' + location + '-' + buttonType + '-shape').val();
                 buttonSize = $('.' + location + '-' + buttonType + '-size').val();
 
-                updatePayPalButtonStyling(location, buttonType, buttonShow, buttonLayout, buttonTagline, buttonLabel, buttonColor, buttonShape, buttonSize);
-                customEvent.stopImmediatePropagation();
-            });
-
-            $(document).on('change', '.' + location + '-' + buttonType + '-layout', function (customEvent) {
-                buttonLayout = $(this).val();
-                buttonShow = $('.' + location + '-' + buttonType + '-show').val();
-                buttonTagline = $('.' + location + '-' + buttonType + '-tagline').val();
-                buttonLabel = $('.' + location + '-' + buttonType + '-label').val();
-                buttonColor = $('.' + location + '-' + buttonType + '-color').val();
-                buttonShape = $('.' + location + '-' + buttonType + '-shape').val();
-                buttonSize = $('.' + location + '-' + buttonType + '-size').val();
-
-                updatePayPalButtonStyling(location, buttonType, buttonShow, buttonLayout, buttonTagline, buttonLabel, buttonColor, buttonShape, buttonSize);
-                customEvent.stopImmediatePropagation();
-            });
-
-            $(document).on('change', '.' + location + '-' + buttonType + '-tagline', function (customEvent) {
-                buttonTagline = $(this).val();
-                buttonShow = $('.' + location + '-' + buttonType + '-show').val();
-                buttonLayout = $('.' + location + '-' + buttonType + '-layout').val();
-                buttonLabel = $('.' + location + '-' + buttonType + '-label').val();
-                buttonColor = $('.' + location + '-' + buttonType + '-color').val();
-                buttonShape = $('.' + location + '-' + buttonType + '-shape').val();
-                buttonSize = $('.' + location + '-' + buttonType + '-size').val();
-
-                updatePayPalButtonStyling(location, buttonType, buttonShow, buttonLayout, buttonTagline, buttonLabel, buttonColor, buttonShape, buttonSize);
+                updatePayPalButtonStyling(location, buttonType, buttonShow, buttonLabel, buttonColor, buttonShape, buttonSize);
                 customEvent.stopImmediatePropagation();
             });
 
             $(document).on('change', '.' + location + '-' + buttonType + '-label', function (customEvent) {
                 buttonLabel = $(this).val();
                 buttonShow = $('.' + location + '-' + buttonType + '-show').val();
-                buttonLayout = $('.' + location + '-' + buttonType + '-layout').val();
-                buttonTagline = $('.' + location + '-' + buttonType + '-tagline').val();
                 buttonColor = $('.' + location + '-' + buttonType + '-color').val();
                 buttonShape = $('.' + location + '-' + buttonType + '-shape').val();
                 buttonSize = $('.' + location + '-' + buttonType + '-size').val();
 
-                updatePayPalButtonStyling(location, buttonType, buttonShow, buttonLayout, buttonTagline, buttonLabel, buttonColor, buttonShape, buttonSize);
+                updatePayPalButtonStyling(location, buttonType, buttonShow, buttonLabel, buttonColor, buttonShape, buttonSize);
                 customEvent.stopImmediatePropagation();
             });
 
             $(document).on('change', '.' + location + '-' + buttonType + '-color', function (customEvent) {
                 buttonColor = $(this).val();
                 buttonShow = $('.' + location + '-' + buttonType + '-show').val();
-                buttonLayout = $('.' + location + '-' + buttonType + '-layout').val();
-                buttonTagline = $('.' + location + '-' + buttonType + '-tagline').val();
                 buttonLabel = $('.' + location + '-' + buttonType + '-label').val();
                 buttonShape = $('.' + location + '-' + buttonType + '-shape').val();
                 buttonSize = $('.' + location + '-' + buttonType + '-size').val();
 
-                updatePayPalButtonStyling(location, buttonType, buttonShow, buttonLayout, buttonTagline, buttonLabel, buttonColor, buttonShape, buttonSize);
+                updatePayPalButtonStyling(location, buttonType, buttonShow, buttonLabel, buttonColor, buttonShape, buttonSize);
                 customEvent.stopImmediatePropagation();
             });
 
             $(document).on('change', '.' + location + '-' + buttonType + '-shape', function (customEvent) {
                 buttonShape = $(this).val();
                 buttonShow = $('.' + location + '-' + buttonType + '-show').val();
-                buttonLayout = $('.' + location + '-' + buttonType + '-layout').val();
-                buttonTagline = $('.' + location + '-' + buttonType + '-tagline').val();
                 buttonLabel = $('.' + location + '-' + buttonType + '-label').val();
                 buttonColor = $('.' + location + '-' + buttonType + '-color').val();
                 buttonSize = $('.' + location + '-' + buttonType + '-size').val();
 
-                updatePayPalButtonStyling(location, buttonType, buttonShow, buttonLayout, buttonTagline, buttonLabel, buttonColor, buttonShape, buttonSize);
+                updatePayPalButtonStyling(location, buttonType, buttonShow, buttonLabel, buttonColor, buttonShape, buttonSize);
                 customEvent.stopImmediatePropagation();
             });
 
             $(document).on('change', '.' + location + '-' + buttonType + '-size', function (customEvent) {
                 buttonSize = $(this).val();
                 buttonShow = $('.' + location + '-' + buttonType + '-show').val();
-                buttonLayout = $('.' + location + '-' + buttonType + '-layout').val();
-                buttonTagline = $('.' + location + '-' + buttonType + '-tagline').val();
                 buttonLabel = $('.' + location + '-' + buttonType + '-label').val();
                 buttonColor = $('.' + location + '-' + buttonType + '-color').val();
                 buttonShape = $('.' + location + '-' + buttonType + '-shape').val();
 
-                updatePayPalButtonStyling(location, buttonType, buttonShow, buttonLayout, buttonTagline, buttonLabel, buttonColor, buttonShape, buttonSize);
+                updatePayPalButtonStyling(location, buttonType, buttonShow, buttonLabel, buttonColor, buttonShape, buttonSize);
                 customEvent.stopImmediatePropagation();
             });
 
@@ -214,14 +174,12 @@ require([
      * @param location
      * @param buttonType
      * @param buttonShow
-     * @param buttonLayout
-     * @param buttonTagline
      * @param buttonLabel
      * @param buttonColor
      * @param buttonShape
      * @param buttonSize
      */
-    let updatePayPalButtonStyling = function (location, buttonType, buttonShow, buttonLayout, buttonTagline, buttonLabel, buttonColor, buttonShape, buttonSize) {
+    let updatePayPalButtonStyling = function (location, buttonType, buttonShow, buttonLabel, buttonColor, buttonShape, buttonSize) {
         $('.action-braintree-paypal-logo').each(function () {
             if ($.inArray($(this).attr('id'), buttonIds) === -1) {
                 buttonIds.push($(this).attr('id'));
@@ -241,23 +199,12 @@ require([
                 color: buttonColor,
                 shape: buttonShape,
                 size: buttonSize,
-                layout: buttonLayout,
                 label: buttonLabel
             };
             style.fundingicons = true;
-            let fundingSource = buttonType;
-
-            if (buttonLayout === 'horizontal') {
-                if (buttonTagline === '1') {
-                    style.tagline = true;
-                } else {
-                    style.tagline = false;
-                }
-            }
-
             // Render
             let button = paypal.Buttons({
-                fundingSource: fundingSource,
+                fundingSource: buttonType,
                 style: style,
 
                 onInit: function (data, actions) {
