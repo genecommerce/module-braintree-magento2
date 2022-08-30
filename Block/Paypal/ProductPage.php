@@ -209,28 +209,6 @@ class ProductPage extends Button
     }
 
     /**
-     * Get button layout
-     *
-     * @param string $type
-     * @return string
-     */
-    public function getButtonLayout(string $type): string
-    {
-        return $this->config->getButtonLayout(Config::BUTTON_AREA_PDP, $type);
-    }
-
-    /**
-     * Get button tag line
-     *
-     * @param string $type
-     * @return string
-     */
-    public function getButtonTagline(string $type): string
-    {
-        return $this->config->getButtonTagline(Config::BUTTON_AREA_PDP, $type);
-    }
-
-    /**
      * Get button label
      *
      * @param string $type

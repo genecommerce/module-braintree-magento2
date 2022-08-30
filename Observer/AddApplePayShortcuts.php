@@ -7,7 +7,7 @@
 namespace Magento\Braintree\Observer;
 
 use Magento\Braintree\Block\ApplePay\Shortcut\Button;
-use Magento\Braintree\Gateway\Config\Config;
+use Magento\Braintree\Model\ApplePay\Ui\ConfigProvider;
 use Magento\Catalog\Block\ShortcutButtons;
 use Magento\Checkout\Block\QuoteShortcutButtons;
 use Magento\Framework\Event\Observer;
@@ -17,19 +17,19 @@ use Magento\Framework\Exception\LocalizedException;
 class AddApplePayShortcuts implements ObserverInterface
 {
     /**
-     * @var Config
+     * @var ConfigProvider
      */
-    private $config;
+    private $configProvider;
 
     /**
      * AddApplePayShortcuts Constructor
      *
-     * @param Config $config
+     * @param ConfigProvider $configProvider
      */
     public function __construct(
-        Config $config
+        ConfigProvider $configProvider
     ) {
-        $this->config = $config;
+        $this->configProvider = $configProvider;
     }
 
     /**
@@ -41,7 +41,7 @@ class AddApplePayShortcuts implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        if (!$this->config->isActive()) {
+        if (!$this->configProvider->isActive()) {
             return;
         }
 

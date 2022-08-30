@@ -105,14 +105,12 @@ require(['jquery', 'Magento_Ui/js/modal/alert', 'mage/translate', 'domReady!'], 
     };
 
     window.applyForAll = function () {
-        let buttonShowStatus = '', buttonLayout = '', buttonTagline = '', buttonLabel = '', buttonColor = '', buttonShape = '', buttonSize = '';
+        let buttonShowStatus = '', buttonLabel = '', buttonColor = '', buttonShape = '', buttonSize = '';
         let locations = ['checkout', 'productpage', 'cart'], buttonTypes = ['paypal', 'paylater', 'credit'];
 
         let location = $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-styling-fields-payment-location-value"]').val();
         let buttonType = $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-styling-groups-button-' + location + '-fields-paypal-location-' + location + '-button-type-value"]').val();
         buttonShowStatus = $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-styling-groups-button-' + location + '-groups-button-location-' + location + '-type-' + buttonType + '-fields-button-location-' + location + '-type-' + buttonType + '-show-value"]').val();
-        buttonLayout = $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-styling-groups-button-' + location + '-groups-button-location-' + location + '-type-' + buttonType + '-fields-button-location-' + location + '-type-' + buttonType + '-layout-value"]').val();
-        buttonTagline = $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-styling-groups-button-' + location + '-groups-button-location-' + location + '-type-' + buttonType + '-fields-button-location-' + location + '-type-' + buttonType + '-tagline-value"]').val();
         buttonLabel = $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-styling-groups-button-' + location + '-groups-button-location-' + location + '-type-' + buttonType + '-fields-button-location-' + location + '-type-' + buttonType + '-label-value"]').val();
         buttonColor = $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-styling-groups-button-' + location + '-groups-button-location-' + location + '-type-' + buttonType + '-fields-button-location-' + location + '-type-' + buttonType + '-color-value"]').val();
         buttonShape = $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-styling-groups-button-' + location + '-groups-button-location-' + location + '-type-' + buttonType + '-fields-button-location-' + location + '-type-' + buttonType + '-shape-value"]').val();
@@ -128,8 +126,6 @@ require(['jquery', 'Magento_Ui/js/modal/alert', 'mage/translate', 'domReady!'], 
         locations.each(function (loc) {
             buttonTypes.each(function (type) {
                 $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-styling-groups-button-' + loc + '-groups-button-location-' + loc + '-type-' + type + '-fields-button-location-' + loc + '-type-' + type + '-show-value"]').val(buttonShowStatus).click();
-                $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-styling-groups-button-' + loc + '-groups-button-location-' + loc + '-type-' + type + '-fields-button-location-' + loc + '-type-' + type + '-layout-value"]').val(buttonLayout).click();
-                $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-styling-groups-button-' + loc + '-groups-button-location-' + loc + '-type-' + type + '-fields-button-location-' + loc + '-type-' + type + '-tagline-value"]').val(buttonTagline).click();
                 $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-styling-groups-button-' + loc + '-groups-button-location-' + loc + '-type-' + type + '-fields-button-location-' + loc + '-type-' + type + '-label-value"]').val(buttonLabel).click();
                 $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-styling-groups-button-' + loc + '-groups-button-location-' + loc + '-type-' + type + '-fields-button-location-' + loc + '-type-' + type + '-color-value"]').val(buttonColor).click();
                 $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-styling-groups-button-' + loc + '-groups-button-location-' + loc + '-type-' + type + '-fields-button-location-' + loc + '-type-' + type + '-shape-value"]').val(buttonShape).click();
@@ -148,13 +144,11 @@ require(['jquery', 'Magento_Ui/js/modal/alert', 'mage/translate', 'domReady!'], 
 
     window.resetAll = function () {
         let locations = ['checkout', 'productpage', 'cart'], buttonTypes = ['paypal', 'paylater', 'credit'];
-        let buttonShowStatus = 1, buttonLayout = 'horizontal', buttonTagline = 0, buttonLabel = 'paypal', buttonColor = 'gold', buttonShape = 'rect', buttonSize = 'responsive';
+        let buttonShowStatus = 1, buttonLabel = 'paypal', buttonColor = 'gold', buttonShape = 'rect', buttonSize = 'responsive';
 
         locations.each(function (loc) {
             buttonTypes.each(function (type) {
                 $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-styling-groups-button-' + loc + '-groups-button-location-' + loc + '-type-' + type + '-fields-button-location-' + loc + '-type-' + type + '-show-value"]').val(buttonShowStatus).click();
-                $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-styling-groups-button-' + loc + '-groups-button-location-' + loc + '-type-' + type + '-fields-button-location-' + loc + '-type-' + type + '-layout-value"]').val(buttonLayout).click();
-                $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-styling-groups-button-' + loc + '-groups-button-location-' + loc + '-type-' + type + '-fields-button-location-' + loc + '-type-' + type + '-tagline-value"]').val(buttonTagline).click();
                 $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-styling-groups-button-' + loc + '-groups-button-location-' + loc + '-type-' + type + '-fields-button-location-' + loc + '-type-' + type + '-label-value"]').val(buttonLabel).click();
                 $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-styling-groups-button-' + loc + '-groups-button-location-' + loc + '-type-' + type + '-fields-button-location-' + loc + '-type-' + type + '-color-value"]').val(buttonColor).click();
                 $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-styling-groups-button-' + loc + '-groups-button-location-' + loc + '-type-' + type + '-fields-button-location-' + loc + '-type-' + type + '-shape-value"]').val(buttonShape).click();
@@ -177,8 +171,6 @@ require(['jquery', 'Magento_Ui/js/modal/alert', 'mage/translate', 'domReady!'], 
         locations.each(function (loc) {
             buttonTypes.each(function (type) {
                 $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-styling-groups-button-' + loc + '-groups-button-location-' + loc + '-type-' + type + '-fields-button-location-' + loc + '-type-' + type + '-show-value"]').click();
-                $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-styling-groups-button-' + loc + '-groups-button-location-' + loc + '-type-' + type + '-fields-button-location-' + loc + '-type-' + type + '-layout-value"]').click();
-                $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-styling-groups-button-' + loc + '-groups-button-location-' + loc + '-type-' + type + '-fields-button-location-' + loc + '-type-' + type + '-tagline-value"]').click();
                 $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-styling-groups-button-' + loc + '-groups-button-location-' + loc + '-type-' + type + '-fields-button-location-' + loc + '-type-' + type + '-label-value"]').click();
                 $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-styling-groups-button-' + loc + '-groups-button-location-' + loc + '-type-' + type + '-fields-button-location-' + loc + '-type-' + type + '-color-value"]').click();
                 $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-styling-groups-button-' + loc + '-groups-button-location-' + loc + '-type-' + type + '-fields-button-location-' + loc + '-type-' + type + '-shape-value"]').click();
@@ -198,6 +190,7 @@ require(['jquery', 'Magento_Ui/js/modal/alert', 'mage/translate', 'domReady!'], 
     let locations = ['checkout', 'productpage', 'cart'];
     hidePaypalSections();
     $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-styling-fields-payment-location-value"]').change(function () {
+        console.log("LOCATION CHANGE EVENT CALLED");
         hidePaypalSections();
     });
     locations.each(function (loc) {
@@ -207,9 +200,11 @@ require(['jquery', 'Magento_Ui/js/modal/alert', 'mage/translate', 'domReady!'], 
     });
 
     function hidePaypalSections() {
+        console.log("INSIDE HIDE PayPal SECTIONS");
         let mainLocation, merchantCountryIndex, mainType;
         let locations = ['checkout', 'productpage', 'cart'], buttonTypes = ['paypal', 'paylater', 'credit'];
         mainLocation = $('[data-ui-id="select-groups-braintree-section-groups-braintree-groups-braintree-paypal-groups-styling-fields-payment-location-value"]');
+        console.log("MAIN LOCATION VALUE: " + mainLocation.val());
         if (mainLocation.length < 1) {
             return false;
         }
@@ -222,6 +217,7 @@ require(['jquery', 'Magento_Ui/js/modal/alert', 'mage/translate', 'domReady!'], 
             });
         });
         $('#row_payment_' + merchantCountryIndex + '_braintree_section_braintree_braintree_paypal_styling_button_' + mainLocation.val() + '_button_location_' + mainLocation.val() + '_type_' + mainType.val()).show();
+        console.log("FIELD ID: " + '#row_payment_' + merchantCountryIndex + '_braintree_section_braintree_braintree_paypal_styling_button_' + mainLocation.val());
         $('#row_payment_' + merchantCountryIndex + '_braintree_section_braintree_braintree_paypal_styling_button_' + mainLocation.val()).show();
     }
     disablePayLaterMessages();

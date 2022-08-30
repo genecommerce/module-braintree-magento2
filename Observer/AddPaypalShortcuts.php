@@ -7,7 +7,7 @@
 namespace Magento\Braintree\Observer;
 
 use Magento\Braintree\Block\Paypal\Button;
-use Magento\Braintree\Gateway\Config\Config;
+use Magento\Braintree\Gateway\Config\PayPal\Config as PayPalConfig;
 use Magento\Catalog\Block\ShortcutButtons;
 use Magento\Checkout\Block\QuoteShortcutButtons;
 use Magento\Framework\Event\Observer;
@@ -22,19 +22,19 @@ class AddPaypalShortcuts implements ObserverInterface
     const PAYPAL_SHORTCUT_BLOCK = Button::class;
 
     /**
-     * @var Config
+     * @var PayPalConfig
      */
-    private $config;
+    private $payPalConfig;
 
     /**
-     * AddGooglePayShortcuts Constructor
+     * AddPaypalShortcuts Constructor
      *
-     * @param Config $config
+     * @param PayPalConfig $config
      */
     public function __construct(
-        Config $config
+        PayPalConfig $config
     ) {
-        $this->config = $config;
+        $this->payPalConfig = $config;
     }
 
     /**
@@ -46,7 +46,7 @@ class AddPaypalShortcuts implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        if (!$this->config->isActive()) {
+        if (!$this->payPalConfig->isActive()) {
             return;
         }
 

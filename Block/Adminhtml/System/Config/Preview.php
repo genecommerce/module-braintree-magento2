@@ -262,30 +262,6 @@ class Preview extends \Magento\Config\Block\System\Config\Form\Field
     }
 
     /**
-     * Get button layout
-     *
-     * @param string $type
-     * @param string $location
-     * @return string
-     */
-    public function getButtonLayout(string $type, string $location = Config::BUTTON_AREA_CART): string
-    {
-        return $this->getConfigValue($location, $type, 'layout', $this->getScopeType());
-    }
-
-    /**
-     * Get button tagline
-     *
-     * @param string $type
-     * @param string $location
-     * @return string
-     */
-    public function getButtonTagline(string $type, string $location = Config::BUTTON_AREA_CART): string
-    {
-        return $this->getConfigValue($location, $type, 'tagline', $this->getScopeType());
-    }
-
-    /**
      * Get button label
      *
      * @param string $type

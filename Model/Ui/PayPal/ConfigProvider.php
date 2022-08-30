@@ -122,8 +122,6 @@ class ConfigProvider implements ConfigProviderInterface
                         'shape' => $this->config->getButtonShape(Config::BUTTON_AREA_CHECKOUT, 'paypal'),
                         'size' => $this->config->getButtonSize(Config::BUTTON_AREA_CHECKOUT, 'paypal'),
                         'color' => $this->config->getButtonColor(Config::BUTTON_AREA_CHECKOUT, 'paypal'),
-                        'layout' => $this->config->getButtonLayout(Config::BUTTON_AREA_CHECKOUT, 'paypal'),
-                        'tagline' => $this->config->getButtonTagline(Config::BUTTON_AREA_CHECKOUT, 'paypal'),
                         'label' => $this->config->getButtonLabel(Config::BUTTON_AREA_CHECKOUT, 'paypal')
                     ],
                     'isRequiredBillingAddress' => $this->config->isRequiredBillingAddress()
@@ -143,8 +141,6 @@ class ConfigProvider implements ConfigProviderInterface
                         'shape' => $this->config->getButtonShape(Config::BUTTON_AREA_CHECKOUT, 'credit'),
                         'size' => $this->config->getButtonSize(Config::BUTTON_AREA_CHECKOUT, 'credit'),
                         'color' => $this->config->getButtonColor(Config::BUTTON_AREA_CHECKOUT, 'credit'),
-                        'layout' => $this->config->getButtonLayout(Config::BUTTON_AREA_CHECKOUT, 'credit'),
-                        'tagline' => $this->config->getButtonTagline(Config::BUTTON_AREA_CHECKOUT, 'credit'),
                         'label' => $this->config->getButtonLabel(Config::BUTTON_AREA_CHECKOUT, 'credit')
                     ],
                     'isRequiredBillingAddress' => $this->config->isRequiredBillingAddress()
@@ -165,15 +161,12 @@ class ConfigProvider implements ConfigProviderInterface
                         'shape' => $this->config->getButtonShape(Config::BUTTON_AREA_CHECKOUT, 'paylater'),
                         'size' => $this->config->getButtonSize(Config::BUTTON_AREA_CHECKOUT, 'paylater'),
                         'color' => $this->config->getButtonColor(Config::BUTTON_AREA_CHECKOUT, 'paylater'),
-                        'layout' => $this->config->getButtonLayout(Config::BUTTON_AREA_CHECKOUT, 'paylater'),
-                        'tagline' => $this->config->getButtonTagline(Config::BUTTON_AREA_CHECKOUT, 'paylater'),
                         'label' => $this->config->getButtonLabel(Config::BUTTON_AREA_CHECKOUT, 'paylater')
                     ],
                     'message' => [
                         'layout' => $this->config->getMessagingStyle(
                             Config::BUTTON_AREA_CHECKOUT,
-                            'messaging',
-                            'layout'
+                            'messaging'
                         ),
                         'logo' => $this->config->getMessagingStyle(
                             Config::BUTTON_AREA_CHECKOUT,

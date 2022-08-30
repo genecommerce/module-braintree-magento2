@@ -290,28 +290,6 @@ class Button extends Template implements ShortcutInterface
     }
 
     /**
-     * Get Button Layout
-     *
-     * @param string $type
-     * @return string
-     */
-    public function getButtonLayout(string $type): string
-    {
-        return $this->config->getButtonLayout(Config::BUTTON_AREA_CART, $type);
-    }
-
-    /**
-     * Get Button Tagline
-     *
-     * @param string $type
-     * @return string
-     */
-    public function getButtonTagline(string $type): string
-    {
-        return $this->config->getButtonTagline(Config::BUTTON_AREA_CART, $type);
-    }
-
-    /**
      * Get Button Label
      *
      * @param string $type
