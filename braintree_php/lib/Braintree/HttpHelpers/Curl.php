@@ -54,7 +54,7 @@ class Curl
         }
 
         if (!empty($file)) {
-            $boundary = "---------------------" . md5(mt_rand() . microtime());
+            $boundary = "---------------------" . hash('sha256', random_int(0, PHP_INT_MAX) . microtime());
             $headers[] = "Content-Type: multipart/form-data; boundary={$boundary}";
             self::_prepareMultipart($httpRequest, $requestBody, $file, $boundary);
         } elseif (!empty($requestBody)) {

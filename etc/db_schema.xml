@@ -7,30 +7,29 @@
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
-    <table comment="braintree_transaction_details Table" engine="innodb" name="braintree_transaction_details" resource="default">
-        <column xsi:type="int" name="entity_id" comment="Entity Id" unsigned="true" nullable="false" identity="true"/>
-        <column xsi:type="int" name="order_id" padding="10" unsigned="true" nullable="false" identity="false"
-                comment="Order ID"/>
-        <column xsi:type="text" name="transaction_source" comment="Transaction Source" nullable="true"/>
-        <constraint referenceId="PRIMARY" xsi:type="primary">
+    <table comment="Braintree transaction details table" engine="innodb" name="braintree_transaction_details" resource="default">
+        <column xsi:type="int" name="entity_id" identity="true" unsigned="true" nullable="false" comment="Entity ID"/>
+        <column xsi:type="int" name="order_id" padding="10" unsigned="true" nullable="false" comment="Order Id"/>
+        <column xsi:type="varchar" name="transaction_source" length="12" nullable="true" comment="Transaction Source"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
         <index referenceId="BRAINTREE_TRANSACTION_DETAILS_ORDER_ID" indexType="btree">
             <column name="order_id"/>
         </index>
-        <constraint xsi:type="foreign" referenceId="BRAINTREE_TRANSACTION_DETAILS_ORDER_ID_SALES_ORDER_ENTITY_ID" table="braintree_transaction_details"
-                    column="order_id" referenceTable="sales_order" referenceColumn="entity_id" onDelete="CASCADE"/>
-
+        <constraint xsi:type="foreign" referenceId="BRAINTREE_TRANSACTION_DETAILS_ORDER_ID_SALES_ORDER_ENTITY_ID"
+                    table="braintree_transaction_details" column="order_id"
+                    referenceTable="sales_order" referenceColumn="entity_id" onDelete="CASCADE"/>
     </table>
 
-    <table comment="braintree_credit_prices Table" engine="innodb" name="braintree_credit_prices" resource="default">
-        <column name="id" comment="Row ID" identity="true" nullable="false" unsigned="true" xsi:type="int"/>
-        <column name="product_id" comment="Product Id" nullable="false" unsigned="true" xsi:type="int"/>
-        <column name="term" comment="Credit Term" nullable="true" padding="4" xsi:type="int"/>
-        <column name="monthly_payment" comment="Monthly Payment" nullable="false" precision="12" scale="2" xsi:type="decimal"/>
-        <column name="instalment_rate" comment="Instalment Rate" nullable="false" precision="12" scale="2" xsi:type="decimal"/>
-        <column name="cost_of_purchase" comment="Cost of purchase" nullable="false" precision="12" scale="2" xsi:type="decimal"/>
-        <column name="total_inc_interest" comment="Total Inc Interest" nullable="false" precision="12" scale="2" xsi:type="decimal"/>
+    <table comment="Braintree credit rates" engine="innodb" name="braintree_credit_prices" resource="default">
+        <column xsi:type="int" name="id" identity="true" nullable="false" unsigned="true" comment="Row ID"/>
+        <column xsi:type="int" name="product_id" nullable="false" unsigned="true" comment="Product Id"/>
+        <column xsi:type="int" name="term" nullable="false" padding="4" comment="Credit Term"/>
+        <column xsi:type="decimal" name="monthly_payment" nullable="false" precision="12" scale="2" comment="Monthly Payment"/>
+        <column xsi:type="decimal" name="instalment_rate" nullable="false" precision="12" scale="2" comment="Instalment Rate"/>
+        <column xsi:type="decimal" name="cost_of_purchase" nullable="false" precision="12" scale="2" comment="Cost of purchase"/>
+        <column xsi:type="decimal" name="total_inc_interest" nullable="false" precision="12" scale="2" comment="Total Inc Interest"/>
 
         <constraint referenceId="PRIMARY" xsi:type="primary">
             <column name="id"/>
