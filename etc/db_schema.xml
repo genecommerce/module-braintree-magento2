@@ -8,7 +8,7 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table comment="Braintree transaction details table" engine="innodb" name="braintree_transaction_details" resource="default">
-        <column xsi:type="int" name="entity_id" identity="true" unsigned="true" nullable="false" comment="Entity ID"/>
+        <column xsi:type="int" name="entity_id" padding="10" identity="true" unsigned="true" nullable="false" comment="Entity ID"/>
         <column xsi:type="int" name="order_id" padding="10" unsigned="true" nullable="false" comment="Order Id"/>
         <column xsi:type="varchar" name="transaction_source" length="12" nullable="true" comment="Transaction Source"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
