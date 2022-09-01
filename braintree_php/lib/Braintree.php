@@ -1,5 +1,5 @@
 <?php // phpcs:disable
-
+namespace Braintree;
 require_once(__DIR__ . DIRECTORY_SEPARATOR . 'autoload.php');
 
 if (version_compare(PHP_VERSION, '7.3.0', '<')) {
