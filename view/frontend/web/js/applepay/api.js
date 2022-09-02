@@ -1,18 +1,23 @@
 /**
  * Braintree Apple Pay button API
  *
- * @author Aidan Threadgold <aidan@gene.co.uk>
- */
+ **/
 define(
     [
+        'jquery',
+        'underscore',
         'uiComponent',
         'mage/translate',
-        'mage/storage'
+        'mage/storage',
+        'Magento_Customer/js/customer-data'
     ],
     function (
+        $,
+        _,
         Component,
         $t,
-        storage
+        storage,
+        customerData
     ) {
         'use strict';
 
@@ -188,10 +193,23 @@ define(
                     JSON.stringify(payload)
                 ).done(function (result) {
                     // Stop if no shipping methods.
+                    let virtualFlag = false;
                     if (result.length === 0) {
-                        session.abort();
-                        alert($t("There are no shipping methods available for you right now. Please try again or use an alternative payment method."));
-                        return false;
+                        let productItems = customerData.get('cart')().items;
+                        _.each(productItems,
+                            function (item) {
+                                if (item.is_virtual) {
+                                    virtualFlag = true;
+                                } else {
+                                    virtualFlag = false;
+                                }
+                            }
+                        );
+                        if (!virtualFlag) {
+                            session.abort();
+                            alert($t("There are no shipping methods available for you right now. Please try again or use an alternative payment method."));
+                            return false;
+                        }
                     }
 
                     let shippingMethods = [];
@@ -229,8 +247,8 @@ define(
                                 "regionId": this.getRegionId(this.shippingAddress.country_id, this.shippingAddress.region),
                                 "postcode": this.shippingAddress.postcode
                             },
-                            "shipping_method_code": this.shippingMethods[shippingMethods[0].identifier].method_code,
-                            "shipping_carrier_code": this.shippingMethods[shippingMethods[0].identifier].carrier_code
+                            "shipping_method_code": virtualFlag ? null : this.shippingMethods[shippingMethods[0].identifier].method_code,
+                            "shipping_carrier_code": virtualFlag ? null : this.shippingMethods[shippingMethods[0].identifier].carrier_code
                         }
                     };
 
@@ -253,7 +271,7 @@ define(
                             [{
                                 type: 'final',
                                 label: $t('Shipping'),
-                                amount: shippingMethods[0].amount
+                                amount: virtualFlag ? 0 : shippingMethods[0].amount
                             }]
                         );
                     }.bind(this)).fail(function (result) {
@@ -338,7 +356,7 @@ define(
                             },
                             "billing_address": {
                                 "email": shippingContact.emailAddress,
-                                "telephone": '0000000000',
+                                "telephone": shippingContact.phoneNumber,
                                 "firstname": billingContact.givenName,
                                 "lastname": billingContact.familyName,
                                 "street": billingContact.addressLines,
@@ -352,8 +370,8 @@ define(
                                 "customer_address_id": 0,
                                 "save_in_address_book": 0
                             },
-                            "shipping_method_code": this.shippingMethods[this.shippingMethod].method_code,
-                            "shipping_carrier_code": this.shippingMethods[this.shippingMethod].carrier_code
+                            "shipping_method_code": this.shippingMethod ? this.shippingMethods[this.shippingMethod].method_code : '' ,
+                            "shipping_carrier_code": this.shippingMethod ? this.shippingMethods[this.shippingMethod].carrier_code : ''
                         }
                     };
 
@@ -363,19 +381,23 @@ define(
                     JSON.stringify(payload)
                 ).done(function () {
                     // Submit payment information
+                    let paymentInformation = {
+                        "email": shippingContact.emailAddress,
+                        "paymentMethod": {
+                            "method": "braintree_applepay",
+                            "additional_data": {
+                                "payment_method_nonce": nonce
+                            }
+                        }
+                    };
+                    if (window.checkout && window.checkout.agreementIds) {
+                        paymentInformation.paymentMethod.extension_attributes = {
+                            "agreement_ids": window.checkout.agreementIds
+                        };
+                    }
                     storage.post(
                         this.getApiUrl("payment-information"),
-                        JSON.stringify(
-                            {
-                                "email": shippingContact.emailAddress,
-                                "paymentMethod": {
-                                    "method": "braintree_applepay",
-                                    "additional_data": {
-                                        "payment_method_nonce": nonce
-                                    }
-                                }
-                            }
-                        )
+                        JSON.stringify(paymentInformation)
                     ).done(function (r) {
                         document.location = this.getActionSuccess();
                         session.completePayment(ApplePaySession.STATUS_SUCCESS);

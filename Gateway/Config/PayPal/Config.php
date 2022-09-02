@@ -1,8 +1,11 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Braintree\Gateway\Config\PayPal;
 
 use Magento\Store\Model\ScopeInterface;
@@ -12,26 +15,24 @@ use Magento\Braintree\Model\Config\Source\Size;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Payment\Model\CcConfig;
 
-/**
- * Class Config
- */
 class Config extends \Magento\Payment\Gateway\Config\Config
 {
-    const KEY_ACTIVE = 'active';
-    const KEY_TITLE = 'title';
-    const KEY_DISPLAY_ON_SHOPPING_CART = 'display_on_shopping_cart';
-    const KEY_ALLOW_TO_EDIT_SHIPPING_ADDRESS = 'allow_shipping_address_override';
-    const KEY_MERCHANT_NAME_OVERRIDE = 'merchant_name_override';
-    const KEY_REQUIRE_BILLING_ADDRESS = 'require_billing_address';
-    const KEY_PAYPAL_DISABLED_FUNDING_CHECKOUT = 'disabled_funding_checkout';
-    const KEY_PAYPAL_DISABLED_FUNDING_CART = 'disabled_funding_cart';
-    const KEY_PAYPAL_DISABLED_FUNDING_PDP = 'disabled_funding_productpage';
-    const BUTTON_AREA_CART = 'cart';
-    const BUTTON_AREA_CHECKOUT = 'checkout';
-    const BUTTON_AREA_PDP = 'productpage';
-    const KEY_BUTTON_COLOR = 'color';
-    const KEY_BUTTON_SHAPE = 'shape';
-    const KEY_BUTTON_SIZE = 'size';
+    public const KEY_ACTIVE = 'active';
+    public const KEY_TITLE = 'title';
+    public const KEY_DISPLAY_ON_SHOPPING_CART = 'display_on_shopping_cart';
+    public const KEY_ALLOW_TO_EDIT_SHIPPING_ADDRESS = 'allow_shipping_address_override';
+    public const KEY_MERCHANT_NAME_OVERRIDE = 'merchant_name_override';
+    public const KEY_REQUIRE_BILLING_ADDRESS = 'require_billing_address';
+    public const KEY_PAYPAL_DISABLED_FUNDING_CHECKOUT = 'disabled_funding_checkout';
+    public const KEY_PAYPAL_DISABLED_FUNDING_CART = 'disabled_funding_cart';
+    public const KEY_PAYPAL_DISABLED_FUNDING_PDP = 'disabled_funding_productpage';
+    public const BUTTON_AREA_CART = 'cart';
+    public const BUTTON_AREA_CHECKOUT = 'checkout';
+    public const BUTTON_AREA_PDP = 'productpage';
+    public const KEY_BUTTON_COLOR = 'color';
+    public const KEY_BUTTON_SHAPE = 'shape';
+    public const KEY_BUTTON_SIZE = 'size';
+    public const KEY_BUTTON_LABEL = 'label';
 
     /**
      * @var CcConfig
@@ -59,7 +60,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     private $shapeConfigSource;
 
     /**
-     * @var \PayPal\Braintree\Model\Config\Source\Shape
+     * @var ScopeConfigInterface
      */
     private $scopeConfigResolver;
 
@@ -70,7 +71,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @param Size $sizeConfigSource
      * @param Color $colorConfigSource
      * @param Shape $shapeConfigSource
-     * @param null $methodCode
+     * @param string|null $methodCode
      * @param string $pathPattern
      */
     public function __construct(
@@ -79,8 +80,8 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         Size $sizeConfigSource,
         Color $colorConfigSource,
         Shape $shapeConfigSource,
-        $methodCode = null,
-        $pathPattern = self::DEFAULT_PATH_PATTERN
+        string $methodCode = null,
+        string $pathPattern = self::DEFAULT_PATH_PATTERN
     ) {
         parent::__construct($scopeConfig, $methodCode, $pathPattern);
         $this->scopeConfigResolver = $scopeConfig;
@@ -101,6 +102,8 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     }
 
     /**
+     * Is button display on shopping cart
+     *
      * @return bool
      */
     public function isDisplayShoppingCart(): bool
@@ -123,9 +126,22 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      *
      * @return string|null
      */
-    public function getMerchantName()
+    public function getMerchantName(): ?string
     {
         return $this->getValue(self::KEY_MERCHANT_NAME_OVERRIDE);
+    }
+
+    /**
+     * Get Merchant country
+     *
+     * @return mixed|null
+     */
+    public function getMerchantCountry()
+    {
+        return $this->scopeConfigResolver->getValue(
+            'paypal/general/merchant_country',
+            ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
@@ -139,25 +155,11 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     }
 
     /**
-     * Get Merchant country
-     *
-     * @param int $storeId
-     * @return mixed|null
-     */
-    public function getMerchantCountry()
-    {
-        return $this->scopeConfigResolver->getValue(
-            'paypal/general/merchant_country',
-            ScopeInterface::SCOPE_STORE
-        );
-    }
-
-    /**
      * Get title of payment
      *
      * @return string|null
      */
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return $this->getValue(self::KEY_TITLE);
     }
@@ -165,42 +167,26 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * Retrieve the button style config values
      *
-     * @param $area
-     * @param $style
-     * @return string|array
+     * @param string $area
+     * @param string $style
+     * @param string $type
+     * @return mixed|null
      */
-    private function getButtonStyle($area, $style)
+    private function getButtonStyle(string $area, string $style, string $type)
     {
-        $useCustom = $this->getValue('button_customise_' . $area);
-        if ($useCustom) {
-            $value = $this->getValue('button_' . $style . '_' . $area);
-        } else {
-            $defaults = [
-                'button_color_cart' => 2,
-                'button_size_cart' => 2,
-                'button_shape_cart' => 1,
-                'button_color_checkout' => 2,
-                'button_size_checkout' => 2,
-                'button_shape_checkout' => 1,
-                'button_color_productpage' => 2,
-                'button_size_productpage' => 2,
-                'button_shape_productpage' => 1
-            ];
-            $value = $defaults['button_' . $style . '_' . $area];
-        }
-
-        return $value;
+        return $this->getValue('button_location_' . $area . '_type_' . $type . '_' . $style);
     }
 
     /**
      * Get button color mapped to the value expected by the PayPal API
      *
      * @param string $area
+     * @param string $type
      * @return string|null
      */
-    public function getButtonColor($area = self::BUTTON_AREA_CART)
+    public function getButtonColor(string $area = self::BUTTON_AREA_CART, string $type = 'paypal'): ?string
     {
-        $value = $this->getButtonStyle($area, self::KEY_BUTTON_COLOR);
+        $value = $this->getButtonStyle($area, self::KEY_BUTTON_COLOR, $type);
         $options = $this->colorConfigSource->toRawValues();
         return $options[$value];
     }
@@ -209,11 +195,12 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Get button shape mapped to the value expected by the PayPal API
      *
      * @param string $area
+     * @param string $type
      * @return string
      */
-    public function getButtonShape($area = self::BUTTON_AREA_CART)
+    public function getButtonShape(string $area = self::BUTTON_AREA_CART, string $type = 'paypal'): string
     {
-        $value = $this->getButtonStyle($area, self::KEY_BUTTON_SHAPE);
+        $value = $this->getButtonStyle($area, self::KEY_BUTTON_SHAPE, $type);
         $options = $this->shapeConfigSource->toRawValues();
         return $options[$value];
     }
@@ -222,13 +209,43 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Get button size mapped to the value expected by the PayPal API
      *
      * @param string $area
+     * @param string $type
      * @return string
      */
-    public function getButtonSize($area = self::BUTTON_AREA_CART)
+    public function getButtonSize(string $area = self::BUTTON_AREA_CART, string $type = 'paypal'): string
     {
-        $value = $this->getButtonStyle($area, self::KEY_BUTTON_SIZE);
+        $value = $this->getButtonStyle($area, self::KEY_BUTTON_SIZE, $type);
         $options = $this->sizeConfigSource->toRawValues();
         return $options[$value];
+    }
+
+    /**
+     * Get button label mapped to the value expected by the PayPal API
+     *
+     * @param string $area
+     * @param string $type
+     * @return string|null
+     */
+    public function getButtonLabel(string $area = self::BUTTON_AREA_CART, string $type = 'paypal'): ?string
+    {
+        return $this->getButtonStyle($area, self::KEY_BUTTON_LABEL, $type);
+    }
+
+    /**
+     * Retrieve message styling config values
+     *
+     * @param string $area
+     * @param string $type
+     * @param string $style
+     * @return string|null
+     */
+    public function getMessagingStyle(
+        string $area = self::BUTTON_AREA_CART,
+        string $type = 'paypal',
+        string $style = 'layout'
+    ): ?string
+    {
+        return $this->getButtonStyle($area, $style, $type);
     }
 
     /**
@@ -240,7 +257,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     {
         if (empty($this->icon)) {
             $asset = $this->ccConfig->createAsset('Magento_Braintree::images/paypal.png');
-            list($width, $height) = getimagesize($asset->getSourceFile());
+            list($width, $height) = getimagesizefromstring($asset->getSourceFile());
             $this->icon = [
                 'url' => $asset->getUrl(),
                 'width' => $width,
@@ -252,31 +269,45 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     }
 
     /**
-     * Disabled paypal funding options - Card
+     * Disabled PayPal funding options - Card
      *
-     * @param string|self $area
+     * @param string|null $area
      * @return bool
      */
-    public function getDisabledFundingOptionCard($area = null): bool
+    public function isFundingOptionCardDisabled(string $area = null): bool
     {
         if (!$area) {
             $area = self::KEY_PAYPAL_DISABLED_FUNDING_CHECKOUT;
         }
-        return false !== strpos($this->getValue($area), 'card');
+
+        if ($value = $this->getValue($area)) {
+            if (strpos($value, 'card') !== false) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
-     * Disabled paypal funding options - ELV
+     * Disabled PayPal funding options - ELV
      *
-     * @param string|self $area
+     * @param string|null $area
      * @return bool
      */
-    public function getDisabledFundingOptionElv($area = null): bool
+    public function isFundingOptionElvDisabled(string $area = null): bool
     {
         if (!$area) {
             $area = self::KEY_PAYPAL_DISABLED_FUNDING_CHECKOUT;
         }
-        return false !== strpos($this->getValue($area), 'elv');
+
+        if ($value = $this->getValue($area)) {
+            if (strpos($value, 'elv') !== false) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -284,8 +315,21 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      *
      * @return bool
      */
-    public function getProductPageBtnEnabled(): bool
+    public function isProductPageButtonEnabled(): bool
     {
-        return $this->getValue('button_productpage_enabled');
+        return (bool) $this->getValue('button_location_productpage_type_paypal_show');
+    }
+
+    /**
+     * Show PayPal button status
+     *
+     * @param string $type
+     * @param string $location
+     * @return bool
+     */
+    public function showPayPalButton(string $type, string $location): bool
+    {
+        $field = 'button_location_' . $location . '_type_' . $type . '_show';
+        return (bool) $this->getValue($field);
     }
 }

@@ -1,17 +1,22 @@
 <?php
+
 namespace Braintree;
 
 /**
  * Braintree OAuth Revocation module
  *
- * PHP Version 5
+ * A revoked OAuth access token
  *
- * @package   Braintree
+ * For more information, see {@link https://developer.paypal.com/braintree/docs/guides/extend/oauth/access-tokens/php#managing-access-tokens our developer docs}
  */
 class OAuthAccessRevocation extends Base
 {
     /**
-     * @ignore
+     * Creates an instance from given attributes
+     *
+     * @param array $attributes response object attributes
+     *
+     * @return OauthAccessRevocation
      */
     public static function factory($attributes)
     {
@@ -21,12 +26,9 @@ class OAuthAccessRevocation extends Base
         return $instance;
     }
 
-    /**
-     * @ignore
-     */
+    // phpcs:ignore PEAR.Commenting.FunctionComment.Missing
     protected function _initialize($attributes)
     {
         $this->_attributes = $attributes;
     }
 }
-class_alias('Braintree\OAuthAccessRevocation', 'Braintree_OAuthAccessRevocation');

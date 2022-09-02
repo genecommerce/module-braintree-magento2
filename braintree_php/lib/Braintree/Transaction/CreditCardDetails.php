@@ -1,4 +1,5 @@
 <?php
+
 namespace Braintree\Transaction;
 
 use Braintree\Instance;
@@ -7,33 +8,17 @@ use Braintree\Instance;
  * CreditCard details from a transaction
  * creates an instance of CreditCardDetails
  *
- * @package    Braintree
- * @subpackage Transaction
- *
- * @property-read string $bin
- * @property-read string $cardType
- * @property-read string $cardholderName
- * @property-read string $expirationDate
- * @property-read string $expirationMonth
- * @property-read string $expirationYear
- * @property-read string $issuerLocation
- * @property-read string $last4
- * @property-read string $maskedNumber
- * @property-read string $token
+ * See our {@link https://developer.paypal.com/braintree/docs/reference/response/transaction#credit_card_details developer docs} for information on attributes
  */
 class CreditCardDetails extends Instance
 {
     protected $_attributes = [];
 
-    /**
-     * @ignore
-     */
+    // phpcs:ignore PEAR.Commenting.FunctionComment.Missing
     public function __construct($attributes)
     {
         parent::__construct($attributes);
         $this->_attributes['expirationDate'] = $this->expirationMonth . '/' . $this->expirationYear;
         $this->_attributes['maskedNumber'] = $this->bin . '******' . $this->last4;
-
     }
 }
-class_alias('Braintree\Transaction\CreditCardDetails', 'Braintree_Transaction_CreditCardDetails');

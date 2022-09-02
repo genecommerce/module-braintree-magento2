@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Braintree\Controller\Adminhtml\Configuration;
 
 use Braintree\Configuration;
@@ -10,11 +13,6 @@ use Magento\Braintree\Gateway\Config\Config;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Braintree\Model\Adminhtml\Source\Environment;
 
-/**
- * Class Validate
- * @package Magento\Braintree\Controller\Adminhtml\Payment
- * @author Aidan Threadgold <aidan@gene.co.uk>
- */
 class Validate extends Action
 {
     const ADMIN_RESOURCE = 'Magento_Config::config';
@@ -73,9 +71,9 @@ class Validate extends Action
 
             Configuration::gateway()->plan()->all();
 
-            $response->setHttpResponseCode(200);
+            $response->setData(['success' => 'true']);
         } catch (Exception $e) {
-            $response->setHttpResponseCode(400);
+            $response->setData(['success' => 'false']);
         }
 
         return $response;

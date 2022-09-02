@@ -1,9 +1,11 @@
 <?php
+
 namespace Braintree\Result;
 
 use Braintree\RiskData;
 use Braintree\Util;
 use Braintree\UsBankAccount;
+use Braintree\Base;
 
 /**
  * Braintree US Bank Account Verification Result
@@ -11,18 +13,9 @@ use Braintree\UsBankAccount;
  * This object is returned as part of an Error Result; it provides
  * access to the credit card verification data from the gateway
  *
- *
- * @package    Braintree
- * @subpackage Result
- *
- * @property-read string $id
- * @property-read string $status
- * @property-read string $verificationMethod
- * @property-read \DateTime $verificationDeterminedAt
- * @property-read Braintree\UsBankAccount $usBankAccount
- *
+ * See our {@link https://developer.paypal.com/braintree/docs/guides/acv/server-side developer docs} for more information
  */
-class UsBankAccountVerification
+class UsBankAccountVerification extends Base
 {
     // Status
     const FAILED             = 'failed';
@@ -36,14 +29,11 @@ class UsBankAccountVerification
     const INDEPENDENT_CHECK = 'independent_check';
     const MICRO_TRANSFERS   = 'micro_transfers';
 
-    private $_attributes;
     private $_gatewayRejectionReason;
     private $_status;
 
-    /**
-     * @ignore
-     */
-    public function  __construct($attributes)
+    // phpcs:ignore PEAR.Commenting.FunctionComment.Missing
+    public function __construct($attributes)
     {
         $this->_initializeFromArray($attributes);
 
@@ -55,39 +45,39 @@ class UsBankAccountVerification
 
     /**
      * initializes instance properties from the keys/values of an array
-     * @ignore
-     * @access protected
+     *
      * @param <type> $aAttribs array of properties to set - single level
+     *
      * @return void
      */
     private function _initializeFromArray($attributes)
     {
         $this->_attributes = $attributes;
-        foreach($attributes AS $name => $value) {
+        foreach ($attributes as $name => $value) {
             $varName = "_$name";
             $this->$varName = $value;
         }
     }
 
-    /**
-     * @ignore
-     */
-    public function  __get($name)
+    // phpcs:ignore PEAR.Commenting.FunctionComment.Missing
+    public function __get($name)
     {
         $varName = "_$name";
         return isset($this->$varName) ? $this->$varName : null;
     }
 
-    /**
-     * returns a string representation of the customer
-     * @return string
-     */
-    public function  __toString()
+    // phpcs:ignore PEAR.Commenting.FunctionComment.Missing
+    public function __toString()
     {
         return __CLASS__ . '[' .
                 Util::attributesToString($this->_attributes) . ']';
     }
 
+    /**
+     * returns an array of all possible US Bank Account Verification statuses
+     *
+     * @return array
+     */
     public static function allStatuses()
     {
         return [
@@ -99,6 +89,11 @@ class UsBankAccountVerification
         ];
     }
 
+    /**
+     * returns an array of all possible US Bank Account Verification methods
+     *
+     * @return array
+     */
     public static function allVerificationMethods()
     {
         return [
@@ -109,4 +104,3 @@ class UsBankAccountVerification
         ];
     }
 }
-class_alias('Braintree\Result\UsBankAccountVerification', 'Braintree_Result_UsBankAccountVerification');

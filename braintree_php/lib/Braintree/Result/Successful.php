@@ -1,4 +1,5 @@
-<?php
+<?php // phpcs:disable Generic.Commenting.DocComment.MissingShort
+
 namespace Braintree\Result;
 
 use Braintree\Instance;
@@ -22,10 +23,6 @@ use Braintree\Util;
  *     // Error
  * }
  * </code>
- *
- *
- * @package    Braintree
- * @subpackage Result
  */
 class Successful extends Instance
 {
@@ -40,23 +37,22 @@ class Successful extends Instance
      */
     private $_returnObjectNames;
 
-    /**
-     * @ignore
-     * @param array|null $objsToReturn
-     * @param array|null $propertyNames
-     */
+    // phpcs:ignore PEAR.Commenting.FunctionComment.Missing
     public function __construct($objsToReturn = [], $propertyNames = [])
     {
         // Sanitize arguments (preserves backwards compatibility)
-        if (!is_array($objsToReturn)) { $objsToReturn = [$objsToReturn]; }
-        if (!is_array($propertyNames)) { $propertyNames = [$propertyNames]; }
+        if (!is_array($objsToReturn)) {
+            $objsToReturn = [$objsToReturn];
+        }
+        if (!is_array($propertyNames)) {
+            $propertyNames = [$propertyNames];
+        }
 
         $objects = $this->_mapPropertyNamesToObjsToReturn($propertyNames, $objsToReturn);
         $this->_attributes = [];
         $this->_returnObjectNames = [];
 
         foreach ($objects as $propertyName => $objToReturn) {
-
             // save the name for indirect access
             array_push($this->_returnObjectNames, $propertyName);
 
@@ -65,28 +61,24 @@ class Successful extends Instance
         }
     }
 
-   /**
-    *
-    * @ignore
-    * @return string string representation of the object's structure
-    */
-   public function __toString()
-   {
-       $objects = [];
-       foreach ($this->_returnObjectNames as $returnObjectName) {
-           array_push($objects, $returnObjectName);
-       }
-       return __CLASS__ . '[' . implode(', ', $objects) . ']';
-   }
+    // phpcs:ignore PEAR.Commenting.FunctionComment.Missing
+    public function __toString()
+    {
+        $objects = [];
+        foreach ($this->_returnObjectNames as $returnObjectName) {
+            array_push($objects, $returnObjectName);
+        }
+        return __CLASS__ . '[' . implode(', ', $objects) . ']';
+    }
 
-   private function _mapPropertyNamesToObjsToReturn($propertyNames, $objsToReturn) {
-       if(count($objsToReturn) != count($propertyNames)) {
-           $propertyNames = [];
-           foreach ($objsToReturn as $obj) {
-               array_push($propertyNames, Util::cleanClassName(get_class($obj)));
-           }
-       }
-       return array_combine($propertyNames, $objsToReturn);
-   }
+    private function _mapPropertyNamesToObjsToReturn($propertyNames, $objsToReturn)
+    {
+        if (count($objsToReturn) != count($propertyNames)) {
+            $propertyNames = [];
+            foreach ($objsToReturn as $obj) {
+                array_push($propertyNames, Util::cleanClassName(get_class($obj)));
+            }
+        }
+        return array_combine($propertyNames, $objsToReturn);
+    }
 }
-class_alias('Braintree\Result\Successful', 'Braintree_Result_Successful');

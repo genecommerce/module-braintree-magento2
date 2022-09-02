@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 
 namespace Magento\Braintree\Model\GooglePay\Helper;
 
@@ -12,9 +16,6 @@ use Magento\Braintree\Observer\DataAssignObserver;
 use Magento\Braintree\Model\Paypal\Helper\AbstractHelper;
 use Magento\Framework\Event\ManagerInterface;
 
-/**
- * Class QuoteUpdater
- */
 class QuoteUpdater extends AbstractHelper
 {
     /**
@@ -45,13 +46,14 @@ class QuoteUpdater extends AbstractHelper
      * Execute operation
      *
      * @param string $nonce
+     * @param string $deviceData
      * @param array $details
      * @param Quote $quote
      * @return void
      * @throws InvalidArgumentException
      * @throws LocalizedException
      */
-    public function execute($nonce, array $details, Quote $quote)
+    public function execute(string $nonce, string $deviceData, array $details, Quote $quote)
     {
         if (empty($nonce) || empty($details)) {
             throw new InvalidArgumentException('The "nonce" and "details" fields do not exist');
@@ -60,6 +62,7 @@ class QuoteUpdater extends AbstractHelper
         $payment = $quote->getPayment();
         $payment->setMethod(ConfigProvider::METHOD_CODE);
         $payment->setAdditionalInformation(DataAssignObserver::PAYMENT_METHOD_NONCE, $nonce);
+        $payment->setAdditionalInformation(DataAssignObserver::DEVICE_DATA, $deviceData);
         $this->updateQuote($quote, $details);
     }
 
@@ -119,6 +122,7 @@ class QuoteUpdater extends AbstractHelper
 
     /**
      * Update shipping address
+     * (PayPal doesn't provide detailed shipping info: prefix, suffix)
      *
      * @param Quote $quote
      * @param array $details
@@ -130,6 +134,7 @@ class QuoteUpdater extends AbstractHelper
         $shippingAddress->setCollectShippingRates(true);
         $this->updateAddressData($shippingAddress, $details['shippingAddress']);
 
+        // PayPal's address supposes not saving against customer account
         $shippingAddress->setSaveInAddressBook(false);
         $shippingAddress->setSameAsBilling(false);
         $shippingAddress->unsCustomerAddressId();
@@ -161,21 +166,27 @@ class QuoteUpdater extends AbstractHelper
      */
     private function updateAddressData(Address $address, array $addressData)
     {
-        $extendedAddress = $addressData['extendedAddress'] ?? null;
+        $street = $addressData['streetAddress'];
+
+        if (isset($addressData['extendedAddress'])) {
+            $street = $street . ' ' . $addressData['extendedAddress'];
+        }
 
         $name = explode(' ', $addressData['name'], 2);
 
         $address->setEmail($addressData['email']);
         $address->setFirstname($name[0]);
-        $address->setLastname($name[1]);
+        $address->setLastname($name[1] ?? '');
 
-        $address->setStreet([$addressData['streetAddress'], $extendedAddress]);
+        $address->setStreet($street);
         $address->setCity($addressData['locality']);
         $address->setRegionCode($addressData['region']);
         $address->setCountryId($addressData['countryCodeAlpha2']);
         $address->setPostcode($addressData['postalCode']);
 
-        $address->setTelephone($addressData['telephone']);
+        if (!empty($addressData['telephone'])) {
+            $address->setTelephone($addressData['telephone']);
+        }
 
         $address->setSaveInAddressBook(false);
         $address->setSameAsBilling(false);

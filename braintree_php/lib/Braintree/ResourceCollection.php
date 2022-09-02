@@ -1,4 +1,5 @@
 <?php
+
 namespace Braintree;
 
 use Iterator;
@@ -17,9 +18,6 @@ use Iterator;
  *   print_r($transaction->id);
  * }
  * </code>
- *
- * @package    Braintree
- * @subpackage Utility
  */
 class ResourceCollection implements Iterator
 {
@@ -30,15 +28,8 @@ class ResourceCollection implements Iterator
     private $_pageSize;
     private $_pager;
 
-    /**
-     * set up the resource collection
-     *
-     * expects an array of attributes with literal keys
-     *
-     * @param array $response
-     * @param array $pager
-     */
-    public function  __construct($response, $pager)
+    // phpcs:ignore PEAR.Commenting.FunctionComment.Missing
+    public function __construct($response, $pager)
     {
         $this->_pageSize = $response["searchResults"]["pageSize"];
         $this->_ids = $response["searchResults"]["ids"];
@@ -46,8 +37,11 @@ class ResourceCollection implements Iterator
     }
 
     /**
-     * returns the current item when iterating with foreach
+     * returns the current item when iterating with foreachi
+     *
+     * @return object
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return $this->_items[$this->_index];
@@ -65,6 +59,12 @@ class ResourceCollection implements Iterator
         return $page[0];
     }
 
+    /*
+     * returns null
+     *
+     * @return null
+     */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return null;
@@ -72,7 +72,10 @@ class ResourceCollection implements Iterator
 
     /**
      * advances to the next item in the collection when iterating with foreach
+     *
+     * @return object
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         ++$this->_index;
@@ -80,7 +83,10 @@ class ResourceCollection implements Iterator
 
     /**
      * rewinds the testIterateOverResults collection to the first item when iterating with foreach
+     *
+     * @return object
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->_batchIndex = 0;
@@ -89,7 +95,10 @@ class ResourceCollection implements Iterator
 
     /**
      * returns whether the current item is valid when iterating with foreach
+     *
+     * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         if ($this->_index == count($this->_items) && $this->_batchIndex < count($this->_ids)) {
@@ -103,6 +112,11 @@ class ResourceCollection implements Iterator
         }
     }
 
+    /*
+     * returns a maximum count
+     *
+     * @return int
+     */
     public function maximumCount()
     {
         return count($this->_ids);
@@ -110,23 +124,15 @@ class ResourceCollection implements Iterator
 
     private function _getNextPage()
     {
-        if (empty($this->_ids))
-        {
+        if (empty($this->_ids)) {
             $this->_items = [];
-        }
-        else
-        {
+        } else {
             $this->_items = $this->_getPage(array_slice($this->_ids, $this->_batchIndex, $this->_pageSize));
             $this->_batchIndex += $this->_pageSize;
             $this->_index = 0;
         }
     }
 
-    /**
-     * requests the next page of results for the collection
-     *
-     * @return void
-     */
     private function _getPage($ids)
     {
         $object = $this->_pager['object'];
@@ -150,7 +156,6 @@ class ResourceCollection implements Iterator
      */
     public function getIds()
     {
-       return $this->_ids;
+        return $this->_ids;
     }
 }
-class_alias('Braintree\ResourceCollection', 'Braintree_ResourceCollection');

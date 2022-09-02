@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Controller\GooglePay;
@@ -15,9 +15,6 @@ use Magento\Braintree\Model\GooglePay\Helper\QuoteUpdater;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Result\Page;
 
-/**
- * Class Review
- */
 class Review extends AbstractAction
 {
     /**
@@ -31,7 +28,7 @@ class Review extends AbstractAction
     private static $paymentMethodNonce = 'payment_method_nonce';
 
     /**
-     * Constructor
+     * Review Constructor
      *
      * @param Context $context
      * @param Config $config
@@ -45,7 +42,6 @@ class Review extends AbstractAction
         QuoteUpdater $quoteUpdater
     ) {
         parent::__construct($context, $config, $checkoutSession);
-
         $this->quoteUpdater = $quoteUpdater;
     }
 
@@ -66,6 +62,7 @@ class Review extends AbstractAction
             if ($this->validateRequestData($requestData)) {
                 $this->quoteUpdater->execute(
                     $requestData['nonce'],
+                    $requestData['deviceData'],
                     $requestData['details'],
                     $quote
                 );

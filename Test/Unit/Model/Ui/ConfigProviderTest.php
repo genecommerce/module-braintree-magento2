@@ -55,7 +55,7 @@ class ConfigProviderTest extends TestCase
      */
     private $assetSource;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
@@ -93,7 +93,7 @@ class ConfigProviderTest extends TestCase
      * @param array $expected
      * @dataProvider getConfigDataProvider
      */
-    public function testGetConfig($config, $expected)
+    public function testGetConfig(array $config, array $expected)
     {
         $this->braintreeAdapter->expects(static::once())
             ->method('generate')
@@ -129,7 +129,7 @@ class ConfigProviderTest extends TestCase
     /**
      * @return array
      */
-    public function getConfigDataProvider()
+    public function getConfigDataProvider(): array
     {
         return [
             [
@@ -144,12 +144,11 @@ class ConfigProviderTest extends TestCase
                     'getAvailableCardTypes' => ['AE', 'VI', 'MC', 'DI', 'JCB'],
                     'isCvvEnabled' => true,
                     'isVerify3DSecure' => true,
-                    'getThresholdAmount' => 20,
+                    'is3DSAlwaysRequested' => true,
+                    'getThresholdAmount' => 20.00,
                     'get3DSecureSpecificCountries' => ['GB', 'US', 'CA'],
                     'getEnvironment' => 'test-environment',
-                    'getKountMerchantId' => 'test-kount-merchant-id',
-                    'getMerchantId' => 'test-merchant-id',
-                    'hasFraudProtection' => true
+                    'getMerchantId' => 'test-merchant-id'
                 ],
                 'expected' => [
                     'payment' => [
@@ -165,9 +164,7 @@ class ConfigProviderTest extends TestCase
                             'availableCardTypes' => ['AE', 'VI', 'MC', 'DI', 'JCB'],
                             'useCvv' => true,
                             'environment' => 'test-environment',
-                            'kountMerchantId' => 'test-kount-merchant-id',
                             'merchantId' => 'test-merchant-id',
-                            'hasFraudProtection' => true,
                             'ccVaultCode' => ConfigProvider::CC_VAULT_CODE,
                             'style' => [
                                 'shape' => null,
@@ -182,7 +179,8 @@ class ConfigProviderTest extends TestCase
                         ],
                         Config::CODE_3DSECURE => [
                             'enabled' => true,
-                            'thresholdAmount' => 20,
+                            'challengeRequested' => true,
+                            'thresholdAmount' => 20.00,
                             'specificCountries' => ['GB', 'US', 'CA'],
                             'useCvvVault' => null
                         ],
@@ -198,7 +196,7 @@ class ConfigProviderTest extends TestCase
     /**
      * @return array
      */
-    public function getClientTokenDataProvider()
+    public function getClientTokenDataProvider(): array
     {
         return [
             [

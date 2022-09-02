@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 
 namespace Magento\Braintree\Block\Paypal;
 
@@ -10,6 +14,7 @@ use Magento\Braintree\Model\Ui\ConfigProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Checkout\Model\Session;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Registry;
@@ -19,8 +24,9 @@ use Magento\Payment\Model\MethodInterface;
 use Magento\Directory\Model\Currency;
 
 /**
- * Class ProductPage
- * @package Magento\Braintree\Block\Paypal
+ * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class ProductPage extends Button
 {
@@ -48,6 +54,7 @@ class ProductPage extends Button
      * @param Registry $registry
      * @param Currency $currency
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
@@ -86,15 +93,17 @@ class ProductPage extends Button
     public function isActive(): bool
     {
         if (parent::isActive() === true) {
-            return $this->config->getProductPageBtnEnabled();
+            return $this->config->isProductPageButtonEnabled();
         }
 
         return false;
     }
 
     /**
+     * Get Currency
+     *
      * @return string
-     * @throws NoSuchEntityException
+     * @throws NoSuchEntityException|LocalizedException
      */
     public function getCurrency(): string
     {
@@ -102,8 +111,10 @@ class ProductPage extends Button
     }
 
     /**
+     * Get currency symbol
+     *
      * @return string
-     * @throws NoSuchEntityException
+     * @throws NoSuchEntityException|LocalizedException
      */
     public function getCurrencySymbol(): string
     {
@@ -111,6 +122,8 @@ class ProductPage extends Button
     }
 
     /**
+     * Get final amount of product
+     *
      * @return float
      */
     public function getAmount(): float
@@ -133,6 +146,8 @@ class ProductPage extends Button
     }
 
     /**
+     * Get container Id
+     *
      * @return string
      */
     public function getContainerId(): string
@@ -141,6 +156,8 @@ class ProductPage extends Button
     }
 
     /**
+     * Get location
+     *
      * @return string
      */
     public function getLocation(): string
@@ -149,6 +166,8 @@ class ProductPage extends Button
     }
 
     /**
+     * Get action success url
+     *
      * @return string
      */
     public function getActionSuccess(): string
@@ -157,27 +176,47 @@ class ProductPage extends Button
     }
 
     /**
+     * Get button shape
+     *
+     * @param string $type
      * @return string
      */
-    public function getButtonShape(): string
+    public function getButtonShape(string $type): string
     {
-        return $this->config->getButtonShape(Config::BUTTON_AREA_PDP);
+        return $this->config->getButtonShape(Config::BUTTON_AREA_PDP, $type);
     }
 
     /**
-     * @inheritDoc
+     * Get button color
+     *
+     * @param string $type
+     * @return string
      */
-    public function getButtonColor(): string
+    public function getButtonColor(string $type): string
     {
-        return $this->config->getButtonColor(Config::BUTTON_AREA_PDP);
+        return $this->config->getButtonColor(Config::BUTTON_AREA_PDP, $type);
     }
 
     /**
-     * @inheritDoc
+     * Get button size
+     *
+     * @param string $type
+     * @return string
      */
-    public function getButtonSize(): string
+    public function getButtonSize(string $type): string
     {
-        return $this->config->getButtonSize(Config::BUTTON_AREA_PDP);
+        return $this->config->getButtonSize(Config::BUTTON_AREA_PDP, $type);
+    }
+
+    /**
+     * Get button label
+     *
+     * @param string $type
+     * @return string
+     */
+    public function getButtonLabel(string $type): string
+    {
+        return $this->config->getButtonLabel(Config::BUTTON_AREA_PDP, $type);
     }
 
     /**
@@ -186,8 +225,52 @@ class ProductPage extends Button
     public function getDisabledFunding(): array
     {
         return [
-            'card' => $this->config->getDisabledFundingOptionCard(Config::KEY_PAYPAL_DISABLED_FUNDING_PDP),
-            'elv' => $this->config->getDisabledFundingOptionElv(Config::KEY_PAYPAL_DISABLED_FUNDING_PDP)
+            'card' => $this->config->isFundingOptionCardDisabled(Config::KEY_PAYPAL_DISABLED_FUNDING_PDP),
+            'elv' => $this->config->isFundingOptionElvDisabled(Config::KEY_PAYPAL_DISABLED_FUNDING_PDP)
         ];
+    }
+
+    /**
+     * Get messaging layout
+     *
+     * @param string $type
+     * @return string|null
+     */
+    public function getMessagingLayout(string $type): ?string
+    {
+        return $this->config->getMessagingStyle(Config::BUTTON_AREA_PDP, $type, 'layout');
+    }
+
+    /**
+     * Get messaging logo
+     *
+     * @param string $type
+     * @return string|null
+     */
+    public function getMessagingLogo(string $type): ?string
+    {
+        return $this->config->getMessagingStyle(Config::BUTTON_AREA_PDP, $type, 'logo');
+    }
+
+    /**
+     * Get messaging logo position
+     *
+     * @param string $type
+     * @return string|null
+     */
+    public function getMessagingLogoPosition(string $type): ?string
+    {
+        return $this->config->getMessagingStyle(Config::BUTTON_AREA_PDP, $type, 'logo_position');
+    }
+
+    /**
+     * Get messaging text color
+     *
+     * @param string $type
+     * @return string|null
+     */
+    public function getMessagingTextColor(string $type): ?string
+    {
+        return $this->config->getMessagingStyle(Config::BUTTON_AREA_PDP, $type, 'text_color');
     }
 }

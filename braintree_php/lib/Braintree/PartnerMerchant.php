@@ -1,4 +1,5 @@
 <?php
+
 namespace Braintree;
 
 /**
@@ -6,8 +7,6 @@ namespace Braintree;
  * to or disconnected from a user.
  *
  * Creates an instance of PartnerMerchants
- *
- * @package    Braintree
  *
  * @property-read string $merchantPublicId
  * @property-read string $publicKey
@@ -20,7 +19,11 @@ class PartnerMerchant extends Base
     protected $_attributes = [];
 
     /**
-     * @ignore
+     * Creates an instance from given attributes
+     *
+     * @param array $attributes response object attributes
+     *
+     * @return PartnerMerchant
      */
     public static function factory($attributes)
     {
@@ -30,12 +33,8 @@ class PartnerMerchant extends Base
         return $instance;
     }
 
-    /**
-     * @ignore
-     */
     protected function _initialize($attributes)
     {
         $this->_attributes = $attributes;
     }
 }
-class_alias('Braintree\PartnerMerchant', 'Braintree_PartnerMerchant');

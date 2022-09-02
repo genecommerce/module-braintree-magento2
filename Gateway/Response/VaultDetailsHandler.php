@@ -105,11 +105,11 @@ class VaultDetailsHandler implements HandlerInterface
      * @throws InputException
      * @throws NoSuchEntityException
      */
-    protected function getVaultPaymentToken(Transaction $transaction)
+    protected function getVaultPaymentToken(Transaction $transaction): ?PaymentTokenInterface
     {
         // Check token existing in gateway response
         $token = $transaction->creditCardDetails->token;
-        if (empty($token)) {
+        if (empty($token) || empty($transaction->creditCardDetails->expirationYear)) {
             return null;
         }
 

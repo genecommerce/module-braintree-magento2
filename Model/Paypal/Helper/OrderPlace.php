@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Model\Paypal\Helper;
@@ -13,9 +13,9 @@ use Magento\Checkout\Model\Type\Onepage;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Checkout\Api\AgreementsValidatorInterface;
+use Magento\Braintree\Model\Paypal\OrderCancellationService;
 
 /**
- * Class OrderPlace
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OrderPlace extends AbstractHelper
@@ -41,23 +41,31 @@ class OrderPlace extends AbstractHelper
     private $checkoutHelper;
 
     /**
-     * Constructor
+     * @var OrderCancellationService
+     */
+    private $orderCancellationService;
+
+    /**
+     * OrderPlace Constructor
      *
      * @param CartManagementInterface $cartManagement
      * @param AgreementsValidatorInterface $agreementsValidator
      * @param Session $customerSession
      * @param Data $checkoutHelper
+     * @param OrderCancellationService $orderCancellationService
      */
     public function __construct(
         CartManagementInterface $cartManagement,
         AgreementsValidatorInterface $agreementsValidator,
         Session $customerSession,
-        Data $checkoutHelper
+        Data $checkoutHelper,
+        OrderCancellationService $orderCancellationService
     ) {
         $this->cartManagement = $cartManagement;
         $this->agreementsValidator = $agreementsValidator;
         $this->customerSession = $customerSession;
         $this->checkoutHelper = $checkoutHelper;
+        $this->orderCancellationService = $orderCancellationService;
     }
 
     /**
@@ -68,7 +76,7 @@ class OrderPlace extends AbstractHelper
      * @return void
      * @throws LocalizedException
      */
-    public function execute(Quote $quote, array $agreement)
+    public function execute(Quote $quote, array $agreement): void
     {
         if (!$this->agreementsValidator->isValid($agreement)) {
             throw new LocalizedException(__('Please agree to all the terms and conditions before placing the order.'));
@@ -81,7 +89,12 @@ class OrderPlace extends AbstractHelper
         $this->disabledQuoteAddressValidation($quote);
 
         $quote->collectTotals();
-        $this->cartManagement->placeOrder($quote->getId());
+        try {
+            $this->cartManagement->placeOrder($quote->getId());
+        } catch (\Exception $e) {
+            $this->orderCancellationService->execute($quote->getReservedOrderId());
+            throw $e;
+        }
     }
 
     /**
@@ -112,7 +125,7 @@ class OrderPlace extends AbstractHelper
      * @param Quote $quote
      * @return void
      */
-    private function prepareGuestQuote(Quote $quote)
+    private function prepareGuestQuote(Quote $quote): void
     {
         $quote->setCustomerId(null)
             ->setCustomerEmail($quote->getBillingAddress()->getEmail())

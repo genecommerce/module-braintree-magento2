@@ -5,11 +5,13 @@
 define([
     'Magento_Checkout/js/view/payment/default',
     'Magento_Checkout/js/model/quote',
-    'Magento_Braintree/js/googlepay/button'
+    'Magento_Braintree/js/googlepay/button',
+    'Magento_Checkout/js/model/payment/additional-validators'
 ], function (
     Component,
     quote,
-    button
+    button,
+    additionalValidators
 ) {
     'use strict';
 
@@ -17,12 +19,19 @@ define([
         defaults: {
             template: 'Magento_Braintree/googlepay/core-checkout',
             paymentMethodNonce: null,
-            deviceSupported: button.deviceSupported(),
+            deviceData: null,
             grandTotalAmount: 0
         },
 
         /**
-         * Inject the google pay button into the target element
+         * Reveal additionalValidators to button.js component
+         */
+        getAdditionalValidators: function() {
+            return additionalValidators;
+        },
+
+        /**
+         * Inject the Google Pay button into the target element
          */
         getGooglePayBtn: function (id) {
             button.init(
@@ -49,22 +58,39 @@ define([
         },
 
         /**
-         * Google pay place order method
+         * Google Pay place order method
+         *
+         * @param nonce
+         * @param paymentData
+         * @param device_data
          */
-        startPlaceOrder: function (nonce, paymentData) {
+        startPlaceOrder: function (nonce, paymentData, device_data) {
             this.setPaymentMethodNonce(nonce);
+            this.setDeviceData(device_data);
             this.placeOrder();
         },
 
         /**
          * Save nonce
+         *
+         * @param nonce
          */
         setPaymentMethodNonce: function (nonce) {
             this.paymentMethodNonce = nonce;
         },
 
         /**
+         * Save device_data
+         *
+         * @param device_data
+         */
+        setDeviceData: function (device_data) {
+            this.deviceData = device_data;
+        },
+
+        /**
          * Retrieve the client token
+         *
          * @returns null|string
          */
         getClientToken: function () {
@@ -75,27 +101,30 @@ define([
          * Payment request info
          */
         getPaymentRequest: function () {
-           var result = {
+            var result = {
                 transactionInfo: {
                     totalPriceStatus: 'FINAL',
                     totalPrice: this.grandTotalAmount,
                     currencyCode: this.currencyCode
                 },
-                allowedPaymentMethods: ['CARD'],
-                phoneNumberRequired: false,
-                emailRequired: false,
+                allowedPaymentMethods: [{
+                    "type": "CARD",
+                    "parameters": {
+                        "allowedCardNetworks": this.getCardTypes(),
+                        "billingAddressRequired": false,
+                    },
+                }],
                 shippingAddressRequired: false,
-                cardRequirements: {
-                    billingAddressRequired: false,
-                    allowedCardNetworks: this.getCardTypes()
-                }
+                emailRequired: false,
             };
 
-           if (this.getEnvironment() !== "TEST") {
-               result['merchantId'] = this.getMerchantId();
-           }
+            if (this.getEnvironment() !== "TEST") {
+                result.merchantInfo = {
+                    merchantId: this.getMerchantId()
+                };
+            }
 
-           return result;
+            return result;
         },
 
         /**
@@ -128,19 +157,21 @@ define([
 
         /**
          * Get data
+         *
          * @returns {Object}
          */
         getData: function () {
             return {
                 'method': this.getCode(),
                 'additional_data': {
-                    'payment_method_nonce': this.paymentMethodNonce
+                    'payment_method_nonce': this.paymentMethodNonce,
+                    'device_data': this.deviceData
                 }
             };
         },
 
         /**
-         * Return image url for the google pay mark
+         * Return image url for the Google Pay mark
          */
         getPaymentMarkSrc: function () {
             return window.checkoutConfig.payment[this.getCode()].paymentMarkSrc;

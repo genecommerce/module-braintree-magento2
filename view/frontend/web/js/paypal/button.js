@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define(
@@ -45,9 +45,9 @@ define(
              * @param currency
              */
             init: function (token, currency, env, local) {
-                if($('.action-braintree-paypal-message').length) {
-                    $('.product-add-form form').on('keyup change paste', 'input, select, textarea', function(){
-                        var currentPrice, currencySymbol;
+                if ($('.action-braintree-paypal-message').length) {
+                    $('.product-add-form form').on('keyup change paste', 'input, select, textarea', function () {
+                        let currentPrice, currencySymbol;
                         currentPrice = $(".product-info-main span").find("[data-price-type='finalPrice']").text();
                         currencySymbol = $('.action-braintree-paypal-message[data-pp-type="product"]').data('currency-symbol');
                         $('.action-braintree-paypal-message[data-pp-type="product"]').attr('data-pp-amount', currentPrice.replace(currencySymbol,''));
@@ -56,13 +56,13 @@ define(
 
                 buttonIds = [];
                 $('.action-braintree-paypal-logo').each(function () {
-                    if(!$(this).hasClass( "button-loaded" )) {
+                    if (!$(this).hasClass("button-loaded")) {
                         $(this).addClass('button-loaded');
                         buttonIds.push($(this).attr('id'));
                     }
                 });
 
-                if(buttonIds.length > 0){
+                if (buttonIds.length > 0) {
                     this.loadSDK(token, currency, env, local);
                 }
             },
@@ -72,6 +72,8 @@ define(
              *
              * @param token
              * @param currency
+             * @param env
+             * @param local
              */
             loadSDK: function (token, currency, env, local) {
                 braintree.create({
@@ -96,12 +98,12 @@ define(
                             this.renderPayPalButtons(buttonIds, paypalCheckoutInstance);
                             this.renderPayPalMessages();
                         } else {
-                            var configSDK = {
+                            let configSDK = {
                                 components: 'buttons,messages,funding-eligibility',
                                 "enable-funding": "paylater",
                                 currency: currency
                             };
-                            if (env == 'sandbox' && local != '') {
+                            if (env === 'sandbox' && local !== "") {
                                 configSDK["buyer-country"] = local;
                             }
                             paypalCheckoutInstance.loadPayPalSDK(configSDK, function () {
@@ -119,40 +121,47 @@ define(
              * @param ids
              * @param paypalCheckoutInstance
              */
-            renderPayPalButtons: function(ids, paypalCheckoutInstance) {
-                _.each(ids,function(id) {
+            renderPayPalButtons: function (ids, paypalCheckoutInstance) {
+                _.each(ids, function (id) {
                     this.payPalButton(id, paypalCheckoutInstance);
-
                 }.bind(this));
             },
 
             /**
              * Render PayPal messages
              */
-            renderPayPalMessages: function() {
+            renderPayPalMessages: function () {
                 $('.action-braintree-paypal-message').each(function () {
                     paypal.Messages({
                         amount: $(this).data('pp-amount'),
                         pageType: $(this).data('pp-type'),
                         style: {
-                            layout: 'text',
+                            layout: $(this).data('messaging-layout'),
+                            text: {
+                                color:   $(this).data('messaging-text-color')
+                            },
+                            logo: {
+                                type: $(this).data('messaging-logo'),
+                                position: $(this).data('messaging-logo-position')
+                            }
                         }
                     }).render('#' + $(this).attr('id'));
-
-
                 });
             },
 
             /**
+             * PayPal button
+             *
              * @param id
              * @param paypalCheckoutInstance
              */
-            payPalButton: function(id, paypalCheckoutInstance) {
+            payPalButton: function (id, paypalCheckoutInstance) {
                 let data = $('#' + id);
                 let style = {
                     color: data.data('color'),
                     shape: data.data('shape'),
                     size: data.data('size'),
+                    label: data.data('label')
                 };
 
                 if (data.data('fundingicons')) {
@@ -160,28 +169,25 @@ define(
                 }
 
                 // Render
-                var paypalActions;
-                var button = paypal.Buttons({
+                let paypalActions;
+                let button = paypal.Buttons({
                     fundingSource: data.data('funding'),
                     style: style,
                     createOrder: function () {
-                        return paypalCheckoutInstance.createPayment(
-                            {
-                                amount: data.data('amount'),
-                                locale: data.data('locale'),
-                                currency: data.data('currency'),
-                                flow: 'checkout',
-                                enableShippingAddress: true,
-                                displayName: data.data('displayname')
-                            });
+                        return paypalCheckoutInstance.createPayment({
+                            amount: data.data('amount'),
+                            locale: data.data('locale'),
+                            currency: data.data('currency'),
+                            flow: 'checkout',
+                            enableShippingAddress: true,
+                            displayName: data.data('displayname')
+                        });
                     },
-
-                    validate: function(actions) {
-                        var cart = customerData.get('cart'),
+                    validate: function (actions) {
+                        let cart = customerData.get('cart'),
                             customer = customerData.get('customer'),
                             declinePayment = false,
                             isGuestCheckoutAllowed;
-
                         isGuestCheckoutAllowed = cart().isGuestCheckoutAllowed;
                         declinePayment = !customer().firstname && !isGuestCheckoutAllowed;
                         if (declinePayment) {
@@ -199,8 +205,8 @@ define(
                         jQuery("#maincontent").trigger('processStop');
                     },
 
-                    onClick: function(data) {
-                        var cart = customerData.get('cart'),
+                    onClick: function (data) {
+                        let cart = customerData.get('cart'),
                             customer = customerData.get('customer'),
                             declinePayment = false,
                             isGuestCheckoutAllowed;
@@ -212,23 +218,33 @@ define(
                         }
                     },
 
-                    onApprove: function (data1)  {
+                    onApprove: function (data1) {
                         return paypalCheckoutInstance.tokenizePayment(data1, function (err, payload) {
                             jQuery("#maincontent").trigger('processStart');
 
                             // Map the shipping address correctly
-                            var address = payload.details.shippingAddress;
-                            var recipientName = address.recipientName.split(" ");
+                            let address = payload.details.shippingAddress;
+                            let recipientFirstName, recipientLastName;
+                            if (typeof address.recipientName !== 'undefined') {
+                                let recipientName = address.recipientName.split(" ");
+                                recipientFirstName = recipientName[0].replace(/'/g, "&apos;");
+                                recipientLastName = recipientName[1].replace(/'/g, "&apos;");
+                            } else {
+                                recipientFirstName = payload.details.firstName.replace(/'/g, "&apos;");
+                                recipientLastName = payload.details.lastName.replace(/'/g, "&apos;");
+                            }
                             payload.details.shippingAddress = {
                                 streetAddress: typeof address.line2 !== 'undefined' ? address.line1.replace(/'/g, "&apos;") + " " + address.line2.replace(/'/g, "&apos;") : address.line1.replace(/'/g, "&apos;"),
                                 locality: address.city.replace(/'/g, "&apos;"),
                                 postalCode: address.postalCode,
                                 countryCodeAlpha2: address.countryCode,
-                                recipientFirstName: recipientName[0].replace(/'/g, "&apos;"),
-                                recipientLastName: recipientName[1].replace(/'/g, "&apos;"),
+                                email: payload.details.email.replace(/'/g, "&apos;"),
+                                recipientFirstName: recipientFirstName,
+                                recipientLastName: recipientLastName,
                                 telephone: typeof payload.details.phone !== 'undefined' ? payload.details.phone : '',
                                 region: typeof address.state !== 'undefined' ? address.state.replace(/'/g, "&apos;") : ''
                             };
+
                             payload.details.email = payload.details.email.replace(/'/g, "&apos;");
                             payload.details.firstName = payload.details.firstName.replace(/'/g, "&apos;");
                             payload.details.lastName = payload.details.lastName.replace(/'/g, "&apos;");
@@ -239,7 +255,7 @@ define(
                             // Map the billing address correctly
                             let isRequiredBillingAddress = data.data('requiredbillingaddress');
                             if ((isRequiredBillingAddress === 1) && (typeof payload.details.billingAddress !== 'undefined')) {
-                                var billingAddress = payload.details.billingAddress;
+                                let billingAddress = payload.details.billingAddress;
                                 payload.details.billingAddress = {
                                     streetAddress: typeof billingAddress.line2 !== 'undefined' ? billingAddress.line1.replace(/'/g, "&apos;") + " " + billingAddress.line2.replace(/'/g, "&apos;") : billingAddress.line1.replace(/'/g, "&apos;"),
                                     locality: billingAddress.city.replace(/'/g, "&apos;"),
@@ -250,15 +266,15 @@ define(
                                 };
                             }
 
-                            if(data.data('location') === 'productpage') {
-                                var form = $("#product_addtocart_form");
+                            if (data.data('location') === 'productpage') {
+                                let form = $("#product_addtocart_form");
                                 if (!(form.validation() && form.validation('isValid'))) {
                                     return false;
                                 }
                                 payload.additionalData = form.serialize();
                             }
 
-                            var actionSuccess = data.data('actionsuccess');
+                            let actionSuccess = data.data('actionsuccess');
                             formBuilder.build(
                                 {
                                     action: actionSuccess,
@@ -271,7 +287,7 @@ define(
                     }
                 });
                 if (!button.isEligible()) {
-                    console.log('PayPal button is not elligible')
+                    console.log('PayPal button is not eligible')
                     data.parent().remove();
                     return;
                 }

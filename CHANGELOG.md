@@ -4,6 +4,45 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.9] - 2022-09-02
+### Added
+- Venmo Multi-Profile ID
+- Always 3DS challenge requested
+- Implemented webhook for Fraud Protection and ACH payments
+- Added line items for all the payment methods except PayPal
+- Added card details for Apple Pay and Google Pay
+- PayPal Styling Preview of buttons and messages in admin configuration
+- Re-implemented Google Pay
+- Added Device Data to Google Pay
+- Enabled partial refund for Apple Pay and Google Pay
+- Fixed too many line items error
+- Added T&C validation and Firefox support for Google Pay
+- Added additional check if vault token not exist
+- Cancel the transaction if order failed
+- Upgraded braintree PHP SDK to v6.5.1
+- Change regulation text for Pay Later messages
+- Implemented CSP to fix Braintree CSP errors by adding 'csp_whitelist.xml' file to the extension.
+
+### Fixed
+- Added additionalValidators for Apple Pay and Google Pay
+- Fixed multi-shipping PayPal button issue
+- Fixed Braintree Settlement Report page issue
+- Fixed Apple Pay for virtual, Gift card and downloadable products
+- Fixed Javascript error which were generating due to button shortcuts
+- Fixed save for later use checkout is not appearing issue
+- Added 3DS billing address validation error message on checkout
+- Fixed tooltip text spelling
+- Fixed getCcTypeLableMap method not found issue
+- Incorrect ReCaptcha Validation
+- Fixed missing billing telephone for Apple Pay
+- Update method to get CC types
+- Vault capture need also send the merchant account id
+- Added variable check to getShippingAddress method.
+- Replaced 'three_d_secure' with 'threeDSecure' as that is removed
+
+### Removed
+- Removed KOUNT integration as it has been discontinued by Braintree
+
 ## [4.0.3] - 2020-02-20
 ### Fixed
 - Feedback to end-user when using vaulted payment methods

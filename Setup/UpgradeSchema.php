@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 
 namespace Magento\Braintree\Setup;
 
@@ -9,15 +13,12 @@ use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Zend_Db_Exception;
 
-/**
- * Class UpgradeSchema
- * @package Magento\Braintree\Setup
- */
 class UpgradeSchema implements UpgradeSchemaInterface
 {
     /**
      * @inheritdoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @throws Zend_Db_Exception
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -37,6 +38,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
      * Create the braintree_transaction_details table
      *
      * @param SchemaSetupInterface $installer
+     * @return void
      * @throws Zend_Db_Exception
      */
     private function braintreeTransactionDetails(SchemaSetupInterface $installer)
@@ -86,6 +88,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
      * Create the braintree_credit_prices table
      *
      * @param SchemaSetupInterface $installer
+     * @return void
      * @throws Zend_Db_Exception
      */
     private function braintreeCreditPrices(SchemaSetupInterface $installer)

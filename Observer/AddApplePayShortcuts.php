@@ -1,22 +1,39 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
 namespace Magento\Braintree\Observer;
 
 use Magento\Braintree\Block\ApplePay\Shortcut\Button;
+use Magento\Braintree\Model\ApplePay\Ui\ConfigProvider;
 use Magento\Catalog\Block\ShortcutButtons;
 use Magento\Checkout\Block\QuoteShortcutButtons;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\LocalizedException;
 
-/**
- * Class AddApplePayShortcuts
- * @package Magento\Braintree\Observer
- * @author Aidan Threadgold <aidan@gene.co.uk>
- */
 class AddApplePayShortcuts implements ObserverInterface
 {
     /**
-     * Add apple pay shortcut button
+     * @var ConfigProvider
+     */
+    private $configProvider;
+
+    /**
+     * AddApplePayShortcuts Constructor
+     *
+     * @param ConfigProvider $configProvider
+     */
+    public function __construct(
+        ConfigProvider $configProvider
+    ) {
+        $this->configProvider = $configProvider;
+    }
+
+    /**
+     * Add Apple Pay shortcut button
      *
      * @param Observer $observer
      * @return void
@@ -24,6 +41,10 @@ class AddApplePayShortcuts implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
+        if (!$this->configProvider->isActive()) {
+            return;
+        }
+
         // Remove button from catalog pages
         if ($observer->getData('is_catalog_product')) {
             return;

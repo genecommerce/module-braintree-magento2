@@ -5,11 +5,13 @@
 define([
     'Magento_Checkout/js/view/payment/default',
     'Magento_Checkout/js/model/quote',
-    'Magento_Braintree/js/applepay/button'
+    'Magento_Braintree/js/applepay/button',
+    'Magento_Checkout/js/model/payment/additional-validators'
 ], function (
     Component,
     quote,
-    button
+    button,
+    additionalValidators
 ) {
     'use strict';
 
@@ -19,6 +21,13 @@ define([
             paymentMethodNonce: null,
             grandTotalAmount: 0,
             deviceSupported: button.deviceSupported()
+        },
+
+        /**
+         * Reveal additionalValidators to button.js component
+         */
+        getAdditionalValidators: function() {
+            return additionalValidators;
         },
 
         /**
@@ -48,7 +57,7 @@ define([
         },
 
         /**
-         * Apple pay place order method
+         * Apple Pay place order method
          */
         startPlaceOrder: function (nonce, event, session) {
             this.setPaymentMethodNonce(nonce);
@@ -96,7 +105,7 @@ define([
          * @returns {Object}
          */
         getData: function () {
-            var data = {
+            let data = {
                 'method': this.getCode(),
                 'additional_data': {
                     'payment_method_nonce': this.paymentMethodNonce
@@ -106,7 +115,7 @@ define([
         },
 
         /**
-         * Return image url for the apple pay mark
+         * Return image url for the Apple Pay mark
          */
         getPaymentMarkSrc: function () {
             return window.checkoutConfig.payment[this.getCode()].paymentMarkSrc;

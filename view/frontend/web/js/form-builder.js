@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 define(
@@ -18,11 +18,11 @@ define(
              * @returns {*|jQuery}
              */
             build: function (formData) {
-                var formTmpl = mageTemplate('<form action="<%= data.action %>"' +
+                let formTmpl = mageTemplate('<form action="<%= data.action %>"' +
                     ' method="POST" hidden enctype="application/x-www-form-urlencoded">' +
-                        '<% _.each(data.fields, function(val, key){ %>' +
-                            '<input value=\'<%= val %>\' name="<%= key %>" type="hidden">' +
-                        '<% }); %>' +
+                    '<% _.each(data.fields, function(val, key){ %>' +
+                    '<input value=\'<%= val %>\' name="<%= key %>" type="hidden">' +
+                    '<% }); %>' +
                     '</form>');
 
                 return $(formTmpl({
