@@ -123,8 +123,8 @@ class Config implements ConfigInterface
         $paypalPayLaterMessageActive = $this->getConfigValue(
             "payment/braintree_paypal/button_location_" . $buttonType . "_type_messaging_show"
         );
-        // If PayPal or PayPal Pay Later is disabled in the admin
-        if (!$paypalActive || !$paypalPayLaterMessageActive || $this->isPayPalVaultActive()) {
+        // If PayPal or PayPal Pay Later Message is disabled or PayPal Vault is enabled on checkout
+        if (!$paypalActive || !$paypalPayLaterMessageActive || ($this->IsPayPalVaultActive() && $type == 'checkout')) {
             return false;
         }
 
