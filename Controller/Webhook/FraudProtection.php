@@ -24,6 +24,7 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Braintree\Model\Webhook\Config;
+use Magento\Sales\Api\OrderManagementInterface;
 use Psr\Log\LoggerInterface;
 
 class FraudProtection extends Action implements CsrfAwareActionInterface
@@ -67,6 +68,11 @@ class FraudProtection extends Action implements CsrfAwareActionInterface
     private $orderRepository;
 
     /**
+     * @var OrderManagementInterface
+     */
+    private $orderManagement;
+
+    /**
      * FraudProtection constructor.
      *
      * @param Context $context
@@ -77,6 +83,7 @@ class FraudProtection extends Action implements CsrfAwareActionInterface
      * @param TransactionRepositoryInterface $transactionRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param OrderRepositoryInterface $orderRepository
+     * @param OrderManagementInterface $orderManagement
      */
     public function __construct(
         Context $context,
@@ -86,7 +93,8 @@ class FraudProtection extends Action implements CsrfAwareActionInterface
         BraintreeAdapter $adapter,
         TransactionRepositoryInterface $transactionRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        OrderRepositoryInterface $orderRepository
+        OrderRepositoryInterface $orderRepository,
+        OrderManagementInterface $orderManagement
     ) {
         parent::__construct($context);
         $this->webhookConfig = $webhookConfig;
@@ -96,6 +104,7 @@ class FraudProtection extends Action implements CsrfAwareActionInterface
         $this->transactionRepository = $transactionRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->orderRepository = $orderRepository;
+        $this->orderManagement = $orderManagement;
     }
 
     /**
@@ -216,9 +225,12 @@ class FraudProtection extends Action implements CsrfAwareActionInterface
     public function rejectOrder($order, $transactionReview)
     {
         $rejectedStatus = $this->webhookConfig->getFraudRejectOrderStatus();
-        $order->setState($rejectedStatus)
-            ->setStatus($rejectedStatus)
-            ->addStatusHistoryComment(__('Payment declined for Transaction ID: "%1". %2.', $transactionReview->transactionId, $transactionReview->reviewerNote));
+        if ($rejectedStatus === 'canceled') {
+            $this->orderManagement->cancel($order->getId());
+        } else {
+            $order->setState($rejectedStatus)->setStatus($rejectedStatus);
+        }
+        $order->addStatusHistoryComment(__('Payment declined for Transaction ID: "%1". %2.', $transactionReview->transactionId, $transactionReview->reviewerNote));
         $this->orderRepository->save($order);
     }
 
