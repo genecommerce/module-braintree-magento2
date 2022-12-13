@@ -96,7 +96,12 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         if (!$countryCardTypes) {
             return [];
         }
-        $countryCardTypes = $this->serializer->unserialize($countryCardTypes);
+        if (is_array($countryCardTypes)) {
+            return $countryCardTypes;
+        }
+        if (is_string($countryCardTypes)) {
+            $countryCardTypes = $this->serializer->unserialize($countryCardTypes);
+        }
         return is_array($countryCardTypes) ? $countryCardTypes : [];
     }
 
