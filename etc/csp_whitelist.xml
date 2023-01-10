@@ -28,7 +28,7 @@
         </policy>
         <policy id="style-src">
             <values>
-                <value id="unsafe_inline" type="host">unsafe-inline</value>
+                <value id="unsafe_inline" type="host">'unsafe-inline'</value>
                 <value id="assets_braintree_style" type="host">assets.braintreegateway.com</value>
             </values>
         </policy>
