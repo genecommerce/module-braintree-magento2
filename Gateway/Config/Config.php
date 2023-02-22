@@ -34,6 +34,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const KEY_USE_CVV = 'useccv';
     const KEY_USE_CVV_VAULT = 'useccv_vault';
     const KEY_VERIFY_3DSECURE = 'verify_3dsecure';
+    const KEY_ALWAYS_REQUEST_3DS = 'always_request_3ds';
     const KEY_THRESHOLD_AMOUNT = 'threshold_amount';
     const KEY_VERIFY_ALLOW_SPECIFIC = 'verify_all_countries';
     const KEY_VERIFY_SPECIFIC = 'verify_specific_countries';
@@ -66,15 +67,15 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * Config constructor.
      * @param StoreConfigResolver $storeConfigResolver
      * @param ScopeConfigInterface $scopeConfig
-     * @param null $methodCode
+     * @param string|null $methodCode
      * @param string $pathPattern
      * @param Json|null $serializer
      */
     public function __construct(
         StoreConfigResolver $storeConfigResolver,
         ScopeConfigInterface $scopeConfig,
-        $methodCode = null,
-        $pathPattern = self::DEFAULT_PATH_PATTERN,
+        string $methodCode = null,
+        string $pathPattern = self::DEFAULT_PATH_PATTERN,
         Json $serializer = null
     ) {
         parent::__construct($scopeConfig, $methodCode, $pathPattern);
@@ -147,7 +148,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @throws InputException
      * @throws NoSuchEntityException
      */
-    public function getCountryAvailableCardTypes($country): array
+    public function getCountryAvailableCardTypes(string $country): array
     {
         $types = $this->getCountrySpecificCardTypeConfig();
 
@@ -190,6 +191,21 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     {
         return (bool) $this->getValue(
             self::KEY_VERIFY_3DSECURE,
+            $this->storeConfigResolver->getStoreId()
+        );
+    }
+
+    /**
+     * Check if 3DS challenge requested for always
+     *
+     * @return bool
+     * @throws InputException
+     * @throws NoSuchEntityException
+     */
+    public function is3DSAlwaysRequested(): bool
+    {
+        return (bool) $this->getValue(
+            self::KEY_ALWAYS_REQUEST_3DS,
             $this->storeConfigResolver->getStoreId()
         );
     }
@@ -257,7 +273,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @throws InputException
      * @throws NoSuchEntityException
      */
-    public function getKountMerchantId()
+    public function getKountMerchantId(): ?string
     {
         return $this->getValue(
             self::KEY_KOUNT_MERCHANT_ID,
@@ -282,7 +298,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @throws InputException
      * @throws NoSuchEntityException
      */
-    public function getMerchantId()
+    public function getMerchantId(): ?string
     {
         if ($this->getEnvironment() === Environment::ENVIRONMENT_SANDBOX) {
             return $this->getValue(
@@ -318,7 +334,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @throws InputException
      * @throws NoSuchEntityException
      */
-    public function getFraudProtectionThreshold()
+    public function getFraudProtectionThreshold(): ?float
     {
         return $this->getValue(
             self::FRAUD_PROTECTION_THRESHOLD,
@@ -368,7 +384,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @throws InputException
      * @throws NoSuchEntityException
      */
-    public function getMerchantAccountId()
+    public function getMerchantAccountId(): ?string
     {
         return $this->getValue(
             self::KEY_MERCHANT_ACCOUNT_ID,

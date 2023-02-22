@@ -1,5 +1,5 @@
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*browser:true*/
@@ -41,7 +41,7 @@ define([
          * @returns {string}
          */
         escapeNonAsciiCharacters: function (str) {
-            return [...str].map(c => /^[\x00-\x7F]$/.test(c) ? c : c.split("").map(a => "\\u" + a.charCodeAt().toString(16).padStart(4, "0")).join("")).join("");
+            return str.split("").map(function (c) { return /[^\x00-\x7F]$/.test(c) ? c : c.split("").map(function (a) { return "\\u00" + a.charCodeAt().toString(16)}).join("")}).join("");
         },
 
         /**
@@ -50,10 +50,18 @@ define([
          * @returns {Object}
          */
         validate: function (context) {
-            var clientInstance = braintree.getApiClient(),
+            let clientInstance = braintree.getApiClient(),
                 state = $.Deferred(),
                 totalAmount = parseFloat(quote.totals()['base_grand_total']).toFixed(2),
                 billingAddress = quote.billingAddress();
+
+            if (billingAddress.regionCode == null) {
+                billingAddress.regionCode = undefined;
+            }
+
+            if (billingAddress.regionCode != undefined && billingAddress.regionCode.length > 2) {
+                billingAddress.regionCode = undefined;
+            }
 
             // No 3d secure if using CVV verification on vaulted cards
             if (quote.paymentMethod().method.indexOf('braintree_cc_vault_') !== -1) {
@@ -68,12 +76,13 @@ define([
                 return state.promise();
             }
 
-            var firstName = this.escapeNonAsciiCharacters(billingAddress.firstname);
-            var lastName = this.escapeNonAsciiCharacters(billingAddress.lastname);
+            let firstName = this.escapeNonAsciiCharacters(billingAddress.firstname);
+            let lastName = this.escapeNonAsciiCharacters(billingAddress.lastname);
+            let challengeRequested = this.getChallengeRequested();
 
             fullScreenLoader.startLoader();
 
-            var setup3d = function(clientInstance) {
+            let setup3d = function(clientInstance) {
                 threeDSecure.create({
                     version: 2,
                     client: clientInstance
@@ -83,7 +92,7 @@ define([
                         return state.reject($t('Please try again with another form of payment.'));
                     }
 
-                    var threeDSContainer = document.createElement('div'),
+                    let threeDSContainer = document.createElement('div'),
                         tdmask = document.createElement('div'),
                         tdframe = document.createElement('div'),
                         tdbody = document.createElement('div');
@@ -100,6 +109,7 @@ define([
                     threeDSecureInstance.verifyCard({
                         amount: totalAmount,
                         nonce: context.paymentMethodNonce,
+                        challengeRequested: challengeRequested,
                         billingAddress: {
                             givenName: firstName,
                             surname: lastName,
@@ -134,10 +144,25 @@ define([
 
                         if (err) {
                             console.error("3dsecure validation failed", err);
-                            return state.reject($t('Please try again with another form of payment.'));
+                            if (err.code === 'THREEDS_LOOKUP_VALIDATION_ERROR') {
+                                let errorMessage = err.details.originalError.details.originalError.error.message;
+                                if (errorMessage === 'Billing line1 format is invalid.' && billingAddress.street[0].length > 50) {
+                                    return state.reject(
+                                        $t('Billing line1 must be string and less than 50 characters. Please update the address and try again.')
+                                    );
+
+                                } else if (errorMessage === 'Billing line2 format is invalid.' && billingAddress.street[1].length > 50) {
+                                    return state.reject(
+                                        $t('Billing line2 must be string and less than 50 characters. Please update the address and try again.')
+                                    );
+                                }
+                                return state.reject($t(errorMessage));
+                            } else {
+                                return state.reject($t('Please try again with another form of payment.'));
+                            }
                         }
 
-                        var liability = {
+                        let liability = {
                             shifted: response.liabilityShifted,
                             shiftPossible: response.liabilityShiftPossible
                         };
@@ -154,7 +179,7 @@ define([
 
             if (!clientInstance) {
                 require(['Magento_Braintree/js/view/payment/method-renderer/cc-form'], function(c) {
-                    var config = c.extend({
+                    let config = c.extend({
                         defaults: {
                             clientConfig: {
                                 onReady: function() {}
@@ -178,7 +203,6 @@ define([
          */
         isAmountAvailable: function (amount) {
             amount = parseFloat(amount);
-
             return amount >= this.config.thresholdAmount;
         },
 
@@ -188,7 +212,7 @@ define([
          * @returns {Boolean}
          */
         isCountryAvailable: function (countryId) {
-            var key,
+            let key,
                 specificCountries = this.config.specificCountries;
 
             // all countries are available
@@ -203,6 +227,15 @@ define([
             }
 
             return false;
+        },
+
+        /**
+         * Get 3DS challenge requested
+         *
+         * @returns {Boolean}
+         */
+        getChallengeRequested: function () {
+            return this.config.challengeRequested;
         }
     };
 });
