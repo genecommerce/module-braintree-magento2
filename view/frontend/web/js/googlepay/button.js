@@ -124,6 +124,7 @@ define(
                                                 return googlePaymentInstance.parseResponse(paymentData);
                                             }).then(function (result) {
                                                 context.startPlaceOrder(result.nonce, responseData, dataCollectorInstance.deviceData);
+                                                jQuery("body").loader('hide');
                                             }).catch(function (err) {
                                                 // Handle errors
                                                 // err = {statusCode: "CANCELED"}
