@@ -41,12 +41,17 @@ class Payment extends Template
     }
 
     /**
+     * Get Payment Config
+     *
      * @return string
      */
     public function getPaymentConfig(): string
     {
-        $payment = $this->config->getConfig()['payment'];
-        $config = $payment[$this->getCode()];
+        $config = $this->config->getConfig();
+        if (isset($config['payment'])) {
+            $payment = $config['payment'];
+            $config = $payment[$this->getCode()];
+        }
         $config['code'] = $this->getCode();
 
         return json_encode($config, JSON_UNESCAPED_SLASHES);
