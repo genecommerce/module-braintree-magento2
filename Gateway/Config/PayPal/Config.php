@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\Braintree\Gateway\Config\PayPal;
 
+use Magento\Braintree\Model\Config\Source\CreditColor;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Braintree\Model\Config\Source\Color;
 use Magento\Braintree\Model\Config\Source\Shape;
@@ -65,12 +66,18 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     private $scopeConfigResolver;
 
     /**
+     * @var CreditColor
+     */
+    private $creditColorSource;
+
+    /**
      * Config constructor.
      * @param ScopeConfigInterface $scopeConfig
      * @param CcConfig $ccConfig
      * @param Size $sizeConfigSource
      * @param Color $colorConfigSource
      * @param Shape $shapeConfigSource
+     * @param CreditColor $creditColorSource
      * @param string|null $methodCode
      * @param string $pathPattern
      */
@@ -80,6 +87,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         Size $sizeConfigSource,
         Color $colorConfigSource,
         Shape $shapeConfigSource,
+        CreditColor $creditColorSource,
         string $methodCode = null,
         string $pathPattern = self::DEFAULT_PATH_PATTERN
     ) {
@@ -89,6 +97,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         $this->sizeConfigSource = $sizeConfigSource;
         $this->colorConfigSource = $colorConfigSource;
         $this->shapeConfigSource = $shapeConfigSource;
+        $this->creditColorSource = $creditColorSource;
     }
 
     /**
@@ -188,6 +197,20 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     {
         $value = $this->getButtonStyle($area, self::KEY_BUTTON_COLOR, $type);
         $options = $this->colorConfigSource->toRawValues();
+        return $options[$value];
+    }
+
+    /**
+     * Get credit button color mapped to the value expected by the PayPal Credit
+     *
+     * @param string $area
+     * @param string $type
+     * @return string|null
+     */
+    public function getCreditButtonColor(string $area = self::BUTTON_AREA_CART, string $type = 'credit'): ?string
+    {
+        $value = $this->getButtonStyle($area, self::KEY_BUTTON_COLOR, $type);
+        $options = $this->creditColorSource->toRawValues();
         return $options[$value];
     }
 

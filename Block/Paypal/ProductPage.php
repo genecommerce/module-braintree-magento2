@@ -194,6 +194,9 @@ class ProductPage extends Button
      */
     public function getButtonColor(string $type): string
     {
+        if ($type === 'credit') {
+            return $this->config->getCreditButtonColor(Config::BUTTON_AREA_PDP);
+        }
         return $this->config->getButtonColor(Config::BUTTON_AREA_PDP, $type);
     }
 

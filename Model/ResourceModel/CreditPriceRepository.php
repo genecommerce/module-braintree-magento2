@@ -5,7 +5,7 @@ namespace Magento\Braintree\Model\ResourceModel;
 use Magento\Braintree\Api\CreditPriceRepositoryInterface;
 use Magento\Braintree\Api\Data\CreditPriceDataInterface;
 use Magento\Braintree\Model\ResourceModel\CreditPrice\CollectionFactory;
-use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Data\Collection;
 
 /**
  * Class CreditPriceRepository
@@ -46,7 +46,7 @@ class CreditPriceRepository implements CreditPriceRepositoryInterface
         /** @var CreditPrice\Collection $collection */
         $collection = $this->collectionFactory->create();
         $collection->addFieldToFilter('product_id', $productId);
-        $collection->setOrder('term', AbstractDb::SORT_ORDER_ASC);
+        $collection->setOrder('term', Collection::SORT_ORDER_ASC);
         return $collection->getItems();
     }
 
@@ -58,7 +58,7 @@ class CreditPriceRepository implements CreditPriceRepositoryInterface
         /** @var CreditPrice\Collection $collection */
         $collection = $this->collectionFactory->create();
         $collection->addFieldToFilter('product_id', $productId);
-        $collection->setOrder('monthly_payment', AbstractDb::SORT_ORDER_ASC);
+        $collection->setOrder('monthly_payment', Collection::SORT_ORDER_ASC);
         $collection->setPageSize(1);
 
         return $collection->getFirstItem();

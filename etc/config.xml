@@ -92,7 +92,7 @@
                 <button_location_cart_type_paylater_size>responsive</button_location_cart_type_paylater_size>
                 <button_location_cart_type_credit_show>1</button_location_cart_type_credit_show>
                 <button_location_cart_type_credit_label>paypal</button_location_cart_type_credit_label>
-                <button_location_cart_type_credit_color>gold</button_location_cart_type_credit_color>
+                <button_location_cart_type_credit_color>darkblue</button_location_cart_type_credit_color>
                 <button_location_cart_type_credit_shape>rect</button_location_cart_type_credit_shape>
                 <button_location_cart_type_credit_size>responsive</button_location_cart_type_credit_size>
                 <button_location_checkout_type_paypal_show>1</button_location_checkout_type_paypal_show>
@@ -102,7 +102,7 @@
                 <button_location_checkout_type_paypal_size>responsive</button_location_checkout_type_paypal_size>
                 <button_location_checkout_type_credit_show>1</button_location_checkout_type_credit_show>
                 <button_location_checkout_type_credit_label>paypal</button_location_checkout_type_credit_label>
-                <button_location_checkout_type_credit_color>gold</button_location_checkout_type_credit_color>
+                <button_location_checkout_type_credit_color>darkblue</button_location_checkout_type_credit_color>
                 <button_location_checkout_type_credit_shape>rect</button_location_checkout_type_credit_shape>
                 <button_location_checkout_type_credit_size>responsive</button_location_checkout_type_credit_size>
                 <button_location_checkout_type_paylater_show>1</button_location_checkout_type_paylater_show>
@@ -122,7 +122,7 @@
                 <button_location_productpage_type_paylater_size>responsive</button_location_productpage_type_paylater_size>
                 <button_location_productpage_type_credit_show>1</button_location_productpage_type_credit_show>
                 <button_location_productpage_type_credit_label>paypal</button_location_productpage_type_credit_label>
-                <button_location_productpage_type_credit_color>gold</button_location_productpage_type_credit_color>
+                <button_location_productpage_type_credit_color>darkblue</button_location_productpage_type_credit_color>
                 <button_location_productpage_type_credit_shape>rect</button_location_productpage_type_credit_shape>
                 <button_location_productpage_type_credit_size>responsive</button_location_productpage_type_credit_size>
                 <button_location_cart_type_messaging_show>1</button_location_cart_type_messaging_show>
@@ -270,6 +270,11 @@
                 <allowed_methods>bancontact,eps,giropay,ideal,sofort,mybank,p24,sepa</allowed_methods>
                 <group>braintree_group</group>
             </braintree_local_payment>
+            <braintree_paypal_credit>
+                <model>BraintreePayPalCreditFacade</model>
+                <client_id backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <secret backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+            </braintree_paypal_credit>
         </payment>
     </default>
 </config>

@@ -41,10 +41,11 @@ define(
             },
 
             /**
-             * @param token
-             * @param currency
+             * Initialize button
+             *
+             * @param buttonConfig
              */
-            init: function (token, currency, env, local) {
+            init: function (buttonConfig) {
                 if ($('.action-braintree-paypal-message').length) {
                     $('.product-add-form form').on('keyup change paste', 'input, select, textarea', function () {
                         let currentPrice, currencySymbol;
@@ -54,30 +55,17 @@ define(
                     });
                 }
 
-                buttonIds = [];
-                $('.action-braintree-paypal-logo').each(function () {
-                    if (!$(this).hasClass("button-loaded")) {
-                        $(this).addClass('button-loaded');
-                        buttonIds.push($(this).attr('id'));
-                    }
-                });
-
-                if (buttonIds.length > 0) {
-                    this.loadSDK(token, currency, env, local);
-                }
+                this.loadSDK(buttonConfig);
             },
 
             /**
              * Load Braintree PayPal SDK
              *
-             * @param token
-             * @param currency
-             * @param env
-             * @param local
+             * @param buttonConfig
              */
-            loadSDK: function (token, currency, env, local) {
+            loadSDK: function (buttonConfig) {
                 braintree.create({
-                    authorization: token
+                    authorization: buttonConfig.clientToken
                 }, function (clientErr, clientInstance) {
                     if (clientErr) {
                         console.error('paypalCheckout error', clientErr);
@@ -100,14 +88,18 @@ define(
                         } else {
                             let configSDK = {
                                 components: 'buttons,messages,funding-eligibility',
-                                "enable-funding": "paylater",
-                                currency: currency
+                                "enable-funding": (this.isCreditActive(buttonConfig)) ? 'credit' : 'paylater',
+                                currency: buttonConfig.currency
                             };
-                            if (env === 'sandbox' && local !== "") {
-                                configSDK["buyer-country"] = local;
+
+                            let buyerCountry = this.getMerchantCountry(buttonConfig);
+                            if (buttonConfig.environment === 'sandbox'
+                                && (buyerCountry !== '' || buyerCountry !== 'undefined'))
+                            {
+                                configSDK["buyer-country"] = buyerCountry;
                             }
                             paypalCheckoutInstance.loadPayPalSDK(configSDK, function () {
-                                this.renderPayPalButtons(buttonIds, paypalCheckoutInstance);
+                                this.renderPayPalButtons(paypalCheckoutInstance);
                                 this.renderPayPalMessages();
                             }.bind(this));
                         }
@@ -116,15 +108,32 @@ define(
             },
 
             /**
+             * Is Credit enabled
+             *
+             * @param buttonConfig
+             * @returns {boolean}
+             */
+            isCreditActive: function (buttonConfig) {
+                return buttonConfig.isCreditActive;
+            },
+
+            /**
+             * Get merchant country
+             *
+             * @param buttonConfig
+             * @returns {string}
+             */
+            getMerchantCountry: function (buttonConfig) {
+                return buttonConfig.merchantCountry;
+            },
+
+            /**
              * Render PayPal buttons
              *
-             * @param ids
              * @param paypalCheckoutInstance
              */
-            renderPayPalButtons: function (ids, paypalCheckoutInstance) {
-                _.each(ids, function (id) {
-                    this.payPalButton(id, paypalCheckoutInstance);
-                }.bind(this));
+            renderPayPalButtons: function (paypalCheckoutInstance) {
+                this.payPalButton(paypalCheckoutInstance);
             },
 
             /**
@@ -152,149 +161,160 @@ define(
             /**
              * PayPal button
              *
-             * @param id
              * @param paypalCheckoutInstance
              */
-            payPalButton: function (id, paypalCheckoutInstance) {
-                let data = $('#' + id);
-                let style = {
-                    color: data.data('color'),
-                    shape: data.data('shape'),
-                    size: data.data('size'),
-                    label: data.data('label')
-                };
+            payPalButton: function (paypalCheckoutInstance) {
+                $('.action-braintree-paypal-logo').each(function () {
+                    if ($.inArray($(this).attr('id'), buttonIds) === -1) {
+                        buttonIds.push($(this).attr('id'));
 
-                if (data.data('fundingicons')) {
-                    style.fundingicons = data.data('fundingicons');
-                }
+                        let currentElement = $(this);
+                        let style = {
+                            label: currentElement.data('label'),
+                            color: currentElement.data('color'),
+                            shape: currentElement.data('shape'),
+                            size: currentElement.data('size')
+                        };
 
-                // Render
-                let paypalActions;
-                let button = paypal.Buttons({
-                    fundingSource: data.data('funding'),
-                    style: style,
-                    createOrder: function () {
-                        return paypalCheckoutInstance.createPayment({
-                            amount: data.data('amount'),
-                            locale: data.data('locale'),
-                            currency: data.data('currency'),
-                            flow: 'checkout',
-                            enableShippingAddress: true,
-                            displayName: data.data('displayname')
-                        });
-                    },
-                    validate: function (actions) {
-                        let cart = customerData.get('cart'),
-                            customer = customerData.get('customer'),
-                            declinePayment = false,
-                            isGuestCheckoutAllowed;
-                        isGuestCheckoutAllowed = cart().isGuestCheckoutAllowed;
-                        declinePayment = !customer().firstname && !isGuestCheckoutAllowed;
-                        if (declinePayment) {
-                            actions.disable();
+                        if (currentElement.data('fundingicons')) {
+                            style.fundingicons = currentElement.data('fundingicons');
                         }
-                        paypalActions = actions;
-                    },
 
-                    onCancel: function (data) {
-                        jQuery("#maincontent").trigger('processStop');
-                    },
+                        // Render
+                        let paypalActions;
+                        let button = paypal.Buttons({
+                            fundingSource: currentElement.data('funding'),
+                            style: style,
+                            createOrder: function () {
+                                return paypalCheckoutInstance.createPayment({
+                                    amount: currentElement.data('amount'),
+                                    locale: currentElement.data('locale'),
+                                    currency: currentElement.data('currency'),
+                                    flow: 'checkout',
+                                    enableShippingAddress: true,
+                                    displayName: currentElement.data('displayname')
+                                });
+                            },
+                            validate: function (actions) {
+                                let cart = customerData.get('cart'),
+                                    customer = customerData.get('customer'),
+                                    declinePayment = false,
+                                    isGuestCheckoutAllowed;
 
-                    onError: function (err) {
-                        console.error('paypalCheckout button render error', err);
-                        jQuery("#maincontent").trigger('processStop');
-                    },
+                                isGuestCheckoutAllowed = cart().isGuestCheckoutAllowed;
+                                declinePayment = !customer().firstname && !isGuestCheckoutAllowed && (typeof isGuestCheckoutAllowed !== 'undefined');
 
-                    onClick: function (data) {
-                        let cart = customerData.get('cart'),
-                            customer = customerData.get('customer'),
-                            declinePayment = false,
-                            isGuestCheckoutAllowed;
-
-                        isGuestCheckoutAllowed = cart().isGuestCheckoutAllowed;
-                        declinePayment = !customer().firstname && !isGuestCheckoutAllowed && (typeof isGuestCheckoutAllowed !== 'undefined');
-                        if (declinePayment) {
-                            alert($t('To check out, please sign in with your email address.'));
-                        }
-                    },
-
-                    onApprove: function (data1) {
-                        return paypalCheckoutInstance.tokenizePayment(data1, function (err, payload) {
-                            jQuery("#maincontent").trigger('processStart');
-
-                            // Map the shipping address correctly
-                            let address = payload.details.shippingAddress;
-                            let recipientFirstName, recipientLastName;
-                            if (typeof address.recipientName !== 'undefined') {
-                                let recipientName = address.recipientName.split(" ");
-                                recipientFirstName = recipientName[0].replace(/'/g, "&apos;");
-                                recipientLastName = recipientName[1].replace(/'/g, "&apos;");
-                            } else {
-                                recipientFirstName = payload.details.firstName.replace(/'/g, "&apos;");
-                                recipientLastName = payload.details.lastName.replace(/'/g, "&apos;");
-                            }
-                            payload.details.shippingAddress = {
-                                streetAddress: typeof address.line2 !== 'undefined' ? address.line1.replace(/'/g, "&apos;") + " " + address.line2.replace(/'/g, "&apos;") : address.line1.replace(/'/g, "&apos;"),
-                                locality: address.city.replace(/'/g, "&apos;"),
-                                postalCode: address.postalCode,
-                                countryCodeAlpha2: address.countryCode,
-                                email: payload.details.email.replace(/'/g, "&apos;"),
-                                recipientFirstName: recipientFirstName,
-                                recipientLastName: recipientLastName,
-                                telephone: typeof payload.details.phone !== 'undefined' ? payload.details.phone : '',
-                                region: typeof address.state !== 'undefined' ? address.state.replace(/'/g, "&apos;") : ''
-                            };
-
-                            payload.details.email = payload.details.email.replace(/'/g, "&apos;");
-                            payload.details.firstName = payload.details.firstName.replace(/'/g, "&apos;");
-                            payload.details.lastName = payload.details.lastName.replace(/'/g, "&apos;");
-                            if (typeof payload.details.businessName !== 'undefined') {
-                                payload.details.businessName = payload.details.businessName.replace(/'/g, "&apos;");
-                            }
-
-                            // Map the billing address correctly
-                            let isRequiredBillingAddress = data.data('requiredbillingaddress');
-                            if ((isRequiredBillingAddress === 1) && (typeof payload.details.billingAddress !== 'undefined')) {
-                                let billingAddress = payload.details.billingAddress;
-                                payload.details.billingAddress = {
-                                    streetAddress: typeof billingAddress.line2 !== 'undefined' ? billingAddress.line1.replace(/'/g, "&apos;") + " " + billingAddress.line2.replace(/'/g, "&apos;") : billingAddress.line1.replace(/'/g, "&apos;"),
-                                    locality: billingAddress.city.replace(/'/g, "&apos;"),
-                                    postalCode: billingAddress.postalCode,
-                                    countryCodeAlpha2: billingAddress.countryCode,
-                                    telephone: typeof payload.details.phone !== 'undefined' ? payload.details.phone : '',
-                                    region: typeof billingAddress.state !== 'undefined' ? billingAddress.state.replace(/'/g, "&apos;") : ''
-                                };
-                            }
-
-                            if (data.data('location') === 'productpage') {
-                                let form = $("#product_addtocart_form");
-                                if (!(form.validation() && form.validation('isValid'))) {
-                                    return false;
+                                if (declinePayment) {
+                                    actions.disable();
                                 }
-                                payload.additionalData = form.serialize();
-                            }
+                                paypalActions = actions;
+                            },
 
-                            let actionSuccess = data.data('actionsuccess');
-                            formBuilder.build(
-                                {
-                                    action: actionSuccess,
-                                    fields: {
-                                        result: JSON.stringify(payload)
+                            onCancel: function (cancelData) {
+                                jQuery("#maincontent").trigger('processStop');
+                            },
+
+                            onError: function (errorData) {
+                                console.error('paypalCheckout button render error', errorData);
+                                jQuery("#maincontent").trigger('processStop');
+                            },
+
+                            onClick: function (clickData) {
+                                if (currentElement.data('location') === 'productpage') {
+                                    let form = $("#product_addtocart_form");
+                                    if (!(form.validation() && form.validation('isValid'))) {
+                                        return false;
                                     }
                                 }
-                            ).submit();
+
+                                let cart = customerData.get('cart'),
+                                    customer = customerData.get('customer'),
+                                    declinePayment = false,
+                                    isGuestCheckoutAllowed;
+
+                                isGuestCheckoutAllowed = cart().isGuestCheckoutAllowed;
+                                declinePayment = !customer().firstname && !isGuestCheckoutAllowed && (typeof isGuestCheckoutAllowed !== 'undefined');
+                                if (declinePayment) {
+                                    alert($t('To check out, please sign in with your email address.'));
+                                }
+                            },
+
+                            onApprove: function (approveData) {
+                                return paypalCheckoutInstance.tokenizePayment(approveData, function (err, payload) {
+                                    jQuery("#maincontent").trigger('processStart');
+
+                                    // Map the shipping address correctly
+                                    let address = payload.details.shippingAddress;
+                                    let recipientFirstName, recipientLastName;
+                                    if (typeof address.recipientName !== 'undefined') {
+                                        let recipientName = address.recipientName.split(" ");
+                                        recipientFirstName = recipientName[0].replace(/'/g, "&apos;");
+                                        recipientLastName = recipientName[1].replace(/'/g, "&apos;");
+                                    } else {
+                                        recipientFirstName = payload.details.firstName.replace(/'/g, "&apos;");
+                                        recipientLastName = payload.details.lastName.replace(/'/g, "&apos;");
+                                    }
+                                    payload.details.shippingAddress = {
+                                        streetAddress: typeof address.line2 !== 'undefined' ? address.line1.replace(/'/g, "&apos;") + " " + address.line2.replace(/'/g, "&apos;") : address.line1.replace(/'/g, "&apos;"),
+                                        locality: address.city.replace(/'/g, "&apos;"),
+                                        postalCode: address.postalCode,
+                                        countryCodeAlpha2: address.countryCode,
+                                        email: payload.details.email.replace(/'/g, "&apos;"),
+                                        recipientFirstName: recipientFirstName,
+                                        recipientLastName: recipientLastName,
+                                        telephone: typeof payload.details.phone !== 'undefined' ? payload.details.phone : '',
+                                        region: typeof address.state !== 'undefined' ? address.state.replace(/'/g, "&apos;") : ''
+                                    };
+
+                                    payload.details.email = payload.details.email.replace(/'/g, "&apos;");
+                                    payload.details.firstName = payload.details.firstName.replace(/'/g, "&apos;");
+                                    payload.details.lastName = payload.details.lastName.replace(/'/g, "&apos;");
+                                    if (typeof payload.details.businessName !== 'undefined') {
+                                        payload.details.businessName = payload.details.businessName.replace(/'/g, "&apos;");
+                                    }
+
+                                    // Map the billing address correctly
+                                    let isRequiredBillingAddress = currentElement.data('requiredbillingaddress');
+                                    if ((isRequiredBillingAddress === 1) && (typeof payload.details.billingAddress !== 'undefined')) {
+                                        let billingAddress = payload.details.billingAddress;
+                                        payload.details.billingAddress = {
+                                            streetAddress: typeof billingAddress.line2 !== 'undefined' ? billingAddress.line1.replace(/'/g, "&apos;") + " " + billingAddress.line2.replace(/'/g, "&apos;") : billingAddress.line1.replace(/'/g, "&apos;"),
+                                            locality: billingAddress.city.replace(/'/g, "&apos;"),
+                                            postalCode: billingAddress.postalCode,
+                                            countryCodeAlpha2: billingAddress.countryCode,
+                                            telephone: typeof payload.details.phone !== 'undefined' ? payload.details.phone : '',
+                                            region: typeof billingAddress.state !== 'undefined' ? billingAddress.state.replace(/'/g, "&apos;") : ''
+                                        };
+                                    }
+
+                                    if (currentElement.data('location') === 'productpage') {
+                                        let form = $("#product_addtocart_form");
+                                        payload.additionalData = form.serialize();
+                                    }
+
+                                    let actionSuccess = currentElement.data('actionsuccess');
+                                    formBuilder.build(
+                                        {
+                                            action: actionSuccess,
+                                            fields: {
+                                                result: JSON.stringify(payload)
+                                            }
+                                        }
+                                    ).submit();
+                                });
+                            }
                         });
+                        if (!button.isEligible()) {
+                            console.log('PayPal button is not eligible')
+                            currentElement.parent().remove();
+                            return;
+                        }
+                        if (button.isEligible() && $('#' + currentElement.attr('id')).length) {
+                            button.render('#' + currentElement.attr('id'));
+                        }
                     }
                 });
-                if (!button.isEligible()) {
-                    console.log('PayPal button is not eligible')
-                    data.parent().remove();
-                    return;
-                }
-                if ($('#' + data.attr('id')).length) {
-                    button.render('#' + data.attr('id'));
-                }
-            },
+            }
         }
     }
 );

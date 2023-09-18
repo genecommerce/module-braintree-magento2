@@ -6,8 +6,12 @@ use Magento\Braintree\Block\Adminhtml\System\Config\Preview;
 try {
     $paypalId = sprintf('paypal-%s-%d', $block->getContainerId(), random_int(PHP_INT_MIN, PHP_INT_MAX));
     $paypalCreditId = sprintf('credit-%s-%d', $block->getContainerId(), random_int(PHP_INT_MIN, PHP_INT_MAX));
-    $paypalPaylaterId = sprintf('paylater-%s-%d', $block->getContainerId(), random_int(PHP_INT_MIN, PHP_INT_MAX));
-    $paypalPaylaterMessagingId = sprintf('paylater-%s-%d-message', $block->getContainerId(), random_int(PHP_INT_MIN, PHP_INT_MAX));
+    $paypalPayLaterId = sprintf('paylater-%s-%d', $block->getContainerId(), random_int(PHP_INT_MIN, PHP_INT_MAX));
+    $paypalPayLaterMessagingId = sprintf(
+        'paylater-%s-%d-message',
+        $block->getContainerId(),
+        random_int(PHP_INT_MIN, PHP_INT_MAX)
+    );
 } catch (Exception $e) {
     /**
      * Exception only thrown if an appropriate source of randomness cannot be found.
@@ -15,10 +19,11 @@ try {
      */
     $paypalId = sprintf('paypal-%s', $block->getContainerId());
     $paypalCreditId = sprintf('credit-%s', $block->getContainerId());
-    $paypalPaylaterId = sprintf('paylater-%s', $block->getContainerId());
-    $paypalPaylaterMessagingId = sprintf('paylater-%s-message', $block->getContainerId());
+    $paypalPayLaterId = sprintf('paylater-%s', $block->getContainerId());
+    $paypalPayLaterMessagingId = sprintf('paylater-%s-message', $block->getContainerId());
 }
 $location = $block->getButtonLocation();
+$buttonConfig = $block->getButtonConfig();
 ?>
 <script>
     require([
@@ -26,14 +31,9 @@ $location = $block->getButtonLocation();
         'jquery'
     ], function (button, $) {
         $(function () {
-            button.init(
-                '<?= $block->getClientToken() ?>',
-                '<?= $block->escapeHtmlAttr($block->getCurrency()) ?>',
-                '<?= $block->escapeHtmlAttr($block->getEnvironment()) ?>',
-                '<?= $block->escapeHtmlAttr($block->getMerchantCountry()) ?>'
-            );
-        })
-    })
+            button.init(<?= json_encode($buttonConfig) ?>);
+        });
+    });
 </script>
 <?php if ($block->isPayPalActive()):?>
     <div class="paypal paypal-<?= $location ?> checkout paypal-logo braintree-paypal-logo <?= $block->escapeHtmlAttr($block->getContainerId()) ?>-container">
@@ -67,7 +67,7 @@ $location = $block->getButtonLocation();
 <?php endif; ?>
 <?php if ($block->isPayLaterActive()): ?>
     <div class="paypal paylater-<?= $location ?> checkout paypal-logo braintree-paylater-logo <?= $block->escapeHtmlAttr($block->getContainerId()) ?>-container">
-        <div id="<?= $block->escapeHtmlAttr($paypalPaylaterId) ?>"
+        <div id="<?= $block->escapeHtmlAttr($paypalPayLaterId) ?>"
              data-show="<?= $block->showPayPalButton('paylater', $location) ?>"
              data-environment="<?= $block->getEnvironment() ?>"
              data-displayname="<?= $block->getMerchantName() ?>"
@@ -82,7 +82,7 @@ $location = $block->getButtonLocation();
 <?php endif; ?>
 <?php if (!$block->isPayPalVaultActive()): ?>
     <div class="action-braintree-paypal-message"
-         id="<?= $block->escapeHtmlAttr($paypalPaylaterMessagingId) ?>"
+         id="<?= $block->escapeHtmlAttr($paypalPayLaterMessagingId) ?>"
          data-pp-amount="<?= $block->escapeHtmlAttr($block->getAmount()) ?>"
          data-pp-type="<?= $location ?>"
          data-currency-symbol="<?= $block->getCurrencySymbol(); ?>"

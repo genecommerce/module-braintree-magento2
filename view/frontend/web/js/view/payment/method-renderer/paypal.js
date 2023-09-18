@@ -313,14 +313,15 @@ define([
                 }
                 let quoteObj = quote.totals();
 
-                var configSDK = {
+                let configSDK = {
                     components: 'buttons,messages,funding-eligibility',
-                    "enable-funding": "paylater",
+                    "enable-funding": (this.isCreditEnabled()) ? 'credit' : 'paylater',
                     currency: quoteObj['base_currency_code']
                 };
-                var merchantCountry = window.checkoutConfig.payment['braintree_paypal'].merchantCountry;
-                if (Braintree.getEnvironment() == 'sandbox' && merchantCountry != null) {
-                    configSDK["buyer-country"] = merchantCountry;
+
+                let buyerCountry = this.getMerchantCountry();
+                if (Braintree.getEnvironment() === 'sandbox' && buyerCountry !== null) {
+                    configSDK["buyer-country"] = buyerCountry;
                 }
                 paypalCheckoutInstance.loadPayPalSDK(configSDK, function () {
                     this.loadPayPalButton(paypalCheckoutInstance, 'paypal');
@@ -728,6 +729,15 @@ define([
          */
         getMessagingTextColor: function () {
             return window.checkoutConfig.payment['braintree_paypal_paylater']['message']['text_color'];
+        },
+
+        /**
+         * Get merchant country
+         *
+         * @returns {*}
+         */
+        getMerchantCountry: function () {
+            return window.checkoutConfig.payment[this.getCode()]['merchantCountry'];
         }
     });
 });

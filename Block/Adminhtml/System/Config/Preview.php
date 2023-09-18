@@ -399,4 +399,22 @@ class Preview extends \Magento\Config\Block\System\Config\Form\Field
             $scopeCode
         );
     }
+
+    /**
+     * Get button config
+     *
+     * @return array
+     * @throws InputException
+     * @throws NoSuchEntityException
+     */
+    public function getButtonConfig(): array
+    {
+        return [
+            'clientToken' => $this->getClientToken(),
+            'currency' => $this->getCurrency(),
+            'environment' => $this->getEnvironment(),
+            'merchantCountry' => $this->getMerchantCountry(),
+            'isCreditActive' => $this->isCreditActive()
+        ];
+    }
 }

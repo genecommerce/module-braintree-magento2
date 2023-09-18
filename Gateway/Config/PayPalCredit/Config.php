@@ -133,7 +133,11 @@ class Config implements ConfigInterface
 
         // Validate configuration if UK
         if ($this->isUk()) {
-            $merchantId = substr($this->getConfigValue('payment/braintree/merchant_id'), -4);
+            if ($this->isSandbox()) {
+                $merchantId = substr($this->getConfigValue('payment/braintree/sandbox_merchant_id'), -4);
+            } else {
+                $merchantId = substr($this->getConfigValue('payment/braintree/merchant_id'), -4);
+            }
             return $merchantId === $this->getActivationCode() && $this->getMerchantName();
         }
 

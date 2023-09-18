@@ -275,6 +275,9 @@ class Button extends Template implements ShortcutInterface
      */
     public function getButtonColor(string $type): string
     {
+        if ($type === 'credit') {
+            return $this->config->getCreditButtonColor(Config::BUTTON_AREA_CART);
+        }
         return $this->config->getButtonColor(Config::BUTTON_AREA_CART, $type);
     }
 
@@ -419,5 +422,24 @@ class Button extends Template implements ShortcutInterface
     public function getMessagingTextColor(string $type): ?string
     {
         return $this->config->getMessagingStyle(Config::BUTTON_AREA_CART, $type, 'text_color');
+    }
+
+    /**
+     * Get button config
+     *
+     * @return array
+     * @throws InputException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
+    public function getButtonConfig(): array
+    {
+        return [
+            'clientToken' => $this->getClientToken(),
+            'currency' => $this->getCurrency(),
+            'environment' => $this->getEnvironment(),
+            'merchantCountry' => $this->getMerchantCountry(),
+            'isCreditActive' => $this->isCreditActive()
+        ];
     }
 }
