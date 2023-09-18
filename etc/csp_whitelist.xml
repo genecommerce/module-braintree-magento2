@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -76,6 +76,8 @@
                 <value id="braintree_api" type="host">*.braintree-api.com</value>
                 <value id="paypal_connect" type="host">*.paypal.com</value>
                 <value id="cardinal_commerce_connect" type="host">*.cardinalcommerce.com</value>
+                <value id="google_pay_connect" type="host">*.google.com</value>
+                <value id="google_connect" type="host">google.com</value>
             </values>
         </policy>
         <policy id="form-action">
@@ -93,6 +95,7 @@
                 <value id="monzo_form" type="host">*.monzo.com</value>
                 <value id="arcot_form" type="host">*.arcot.com</value>
                 <value id="wlp_acs_form" type="host">*.wlp-acs.com</value>
+                <value id="all_potential_form_action" type="host">*</value>
             </values>
         </policy>
     </policies>

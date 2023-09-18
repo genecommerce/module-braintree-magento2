@@ -140,7 +140,7 @@ class ConfigProvider implements ConfigProviderInterface
                     'style' => [
                         'shape' => $this->config->getButtonShape(Config::BUTTON_AREA_CHECKOUT, 'credit'),
                         'size' => $this->config->getButtonSize(Config::BUTTON_AREA_CHECKOUT, 'credit'),
-                        'color' => $this->config->getButtonColor(Config::BUTTON_AREA_CHECKOUT, 'credit'),
+                        'color' => $this->config->getCreditButtonColor(Config::BUTTON_AREA_CHECKOUT),
                         'label' => $this->config->getButtonLabel(Config::BUTTON_AREA_CHECKOUT, 'credit')
                     ],
                     'isRequiredBillingAddress' => $this->config->isRequiredBillingAddress()

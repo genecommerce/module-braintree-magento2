@@ -10,6 +10,7 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Webapi\Exception;
 
 /**
@@ -41,7 +42,7 @@ class Cart extends Action
     public function execute()
     {
         $response = $this->resultFactory->create(ResultFactory::TYPE_JSON);
-        $amount = number_format($this->getRequest()->getParam('amount', 0), 2, '.', '');
+        $amount = number_format((float)$this->getRequest()->getParam('amount', 0), 2, '.', '');
 
         if (!$amount || $amount <= 0) {
             return $this->processBadRequest($response);
@@ -66,8 +67,8 @@ class Cart extends Action
             });
 
             $response->setData($options);
-        } catch (\Exception $e) {
-            return $this->processBadRequest($response);
+        } catch (\Exception|LocalizedException $exception) {
+            return $this->processBadRequest($response, $exception);
         }
 
         return $response;
@@ -76,12 +77,21 @@ class Cart extends Action
     /**
      * Return response for bad request
      * @param ResultInterface $response
+     * @param \Exception|LocalizedException|null $exception
      * @return ResultInterface
      */
-    private function processBadRequest(ResultInterface $response): ResultInterface
+    private function processBadRequest(ResultInterface $response, $exception = null): ResultInterface
     {
         $response->setHttpResponseCode(Exception::HTTP_BAD_REQUEST);
-        $response->setData(['message' => __('No Credit Options available')]);
+        if ($exception === null || empty($exception->getMessage())) {
+            $response->setData([
+                'message' => __('No Credit Options available')
+            ]);
+        } else {
+            $response->setData([
+                'message' => __($exception->getMessage())
+            ]);
+        }
 
         return $response;
     }

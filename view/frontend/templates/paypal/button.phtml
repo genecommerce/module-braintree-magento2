@@ -5,16 +5,22 @@ use Magento\Braintree\Block\Paypal\Button;
 /** @var Button $block */
 try {
     $paypalId = sprintf('paypal-%s-%d', $block->getContainerId(), random_int(PHP_INT_MIN, PHP_INT_MAX));
-    $paypalCreditId = sprintf('paypalcredit-%s-%d', $block->getContainerId(), random_int(PHP_INT_MIN, PHP_INT_MAX));
-    $paypalPaylaterId = sprintf('paypalpaylater-%s-%d', $block->getContainerId(), random_int(PHP_INT_MIN, PHP_INT_MAX));
+    $paypalCreditId = sprintf('credit-%s-%d', $block->getContainerId(), random_int(PHP_INT_MIN, PHP_INT_MAX));
+    $paypalPayLaterId = sprintf('paylater-%s-%d', $block->getContainerId(), random_int(PHP_INT_MIN, PHP_INT_MAX));
+    $paypalPayLaterMessagingId = sprintf(
+        'paylater-%s-%d-message',
+        $block->getContainerId(),
+        random_int(PHP_INT_MIN, PHP_INT_MAX)
+    );
 } catch (Exception $e) {
     /**
      * Exception only thrown if an appropriate source of randomness cannot be found.
      * https://www.php.net/manual/en/function.random-int.php
      */
     $paypalId = sprintf('paypal-%s', $block->getContainerId());
-    $paypalCreditId = sprintf('paypalcredit-%s', $block->getContainerId());
-    $paypalPaylaterId = sprintf('paypalpaylater-%s', $block->getContainerId());
+    $paypalCreditId = sprintf('credit-%s', $block->getContainerId());
+    $paypalPayLaterId = sprintf('paylater-%s', $block->getContainerId());
+    $paypalPayLaterMessagingId = sprintf('paylater-%s-message', $block->getContainerId());
 }
 ?>
 <?php if ($block->getAmount() > 0): ?>
@@ -24,14 +30,9 @@ try {
             'jquery'
         ], function (button, $) {
             $(function () {
-                button.init(
-                    '<?= $block->getClientToken() ?>',
-                    '<?= $block->escapeHtmlAttr($block->getCurrency()) ?>',
-                    '<?= $block->escapeHtmlAttr($block->getEnvironment()) ?>',
-                    '<?= $block->escapeHtmlAttr($block->getMerchantCountry()) ?>'
-                );
-            })
-        })
+                button.init(<?= json_encode($block->getButtonConfig()) ?>);
+            });
+        });
     </script>
     <?php if ($block->showPayPalButton('paypal', 'cart')):?>
         <div class="paypal paypal-cart checkout paypal-logo braintree-paypal-logo <?= $block->escapeHtmlAttr($block->getContainerId()) ?>-container">
@@ -76,7 +77,7 @@ try {
             <div data-currency="<?= $block->escapeHtmlAttr($block->getCurrency()) ?>"
                  data-locale="<?= $block->escapeHtmlAttr($block->getLocale()) ?>"
                  data-amount="<?= $block->escapeHtmlAttr($block->getAmount()) ?>"
-                 id="<?= $block->escapeHtmlAttr($paypalPaylaterId) ?>"
+                 id="<?= $block->escapeHtmlAttr($paypalPayLaterId) ?>"
                  data-environment="<?= $block->getEnvironment() ?>"
                  data-displayname="<?= $block->getMerchantName() ?>"
                  data-actionsuccess="<?= $block->getActionSuccess() ?>"
@@ -92,7 +93,7 @@ try {
     <?php endif; ?>
     <?php if ($block->showPayPalButton('messaging', 'cart') && !$block->isPayPalVaultActive()): ?>
         <div class="action-braintree-paypal-message"
-             id="<?= $block->escapeHtmlAttr($paypalPaylaterId) ?>-message"
+             id="<?= $block->escapeHtmlAttr($paypalPayLaterMessagingId) ?>"
              data-pp-amount="<?= $block->escapeHtmlAttr($block->getAmount()) ?>"
              data-pp-type="cart"
              data-currency-symbol="<?= $block->getCurrencySymbol(); ?>"
