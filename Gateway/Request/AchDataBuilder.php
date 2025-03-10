@@ -7,14 +7,12 @@ use Braintree\Customer;
 use Braintree\CustomerSearch;
 use Braintree\PaymentMethod;
 use Braintree\Result\UsBankAccountVerification;
+use Magento\Braintree\Gateway\Config\Config as BraintreeConfig;
 use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Braintree\Observer\DataAssignObserver;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 
-/**
- * Class AchDataBuilder
- */
 class AchDataBuilder implements BuilderInterface
 {
     const OPTIONS = 'options';
@@ -25,13 +23,22 @@ class AchDataBuilder implements BuilderInterface
     private $subjectReader;
 
     /**
+     * @var BraintreeConfig $braintreeConfig
+     */
+    private $braintreeConfig;
+
+    /**
      * AchDataBuilder constructor.
      *
      * @param SubjectReader $subjectReader
+     * @param BraintreeConfig $braintreeConfig
      */
-    public function __construct(SubjectReader $subjectReader)
-    {
+    public function __construct(
+        SubjectReader $subjectReader,
+        BraintreeConfig $braintreeConfig
+    ) {
         $this->subjectReader = $subjectReader;
+        $this->braintreeConfig = $braintreeConfig;
     }
 
     /**
@@ -71,14 +78,18 @@ class AchDataBuilder implements BuilderInterface
         } else {
             $customerId = $customers->getIds()[0];
         }
-
-        $result = PaymentMethod::create([
+        $createRequest = [
             'customerId' => $customerId,
             'paymentMethodNonce' => $nonce,
             'options' => [
                 'usBankAccountVerificationMethod' => 'network_check'
             ]
-        ]);
+        ];
+        $merchantAccountId = $this->braintreeConfig->getMerchantAccountId($order->getStoreId());
+        if (!empty($merchantAccountId)) {
+            $createRequest['options']['verificationMerchantAccountId'] = $merchantAccountId;
+        }
+        $result = PaymentMethod::create($createRequest);
 
         if ($result->success) {
             return [
