@@ -15,6 +15,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Braintree\Observer\DataAssignObserver;
 use Magento\Braintree\Model\Paypal\Helper\AbstractHelper;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Directory\Model\Region;
 
 class QuoteUpdater extends AbstractHelper
 {
@@ -29,6 +30,11 @@ class QuoteUpdater extends AbstractHelper
     private $eventManager;
 
     /**
+     * @var Region
+     */
+    private Region $region;
+
+    /**
      * QuoteUpdater constructor
      *
      * @param CartRepositoryInterface $quoteRepository
@@ -36,10 +42,12 @@ class QuoteUpdater extends AbstractHelper
      */
     public function __construct(
         CartRepositoryInterface $quoteRepository,
-        ManagerInterface $eventManager
+        ManagerInterface $eventManager,
+        Region $region
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->eventManager = $eventManager;
+        $this->region = $region;
     }
 
     /**
@@ -171,6 +179,8 @@ class QuoteUpdater extends AbstractHelper
         if (isset($addressData['extendedAddress'])) {
             $street = $street . ' ' . $addressData['extendedAddress'];
         }
+        
+        $regionFromAddressData = $this->region->loadByCode($addressData['region'], $addressData['countryCodeAlpha2']);
 
         $name = explode(' ', $addressData['name'], 2);
 
@@ -182,6 +192,10 @@ class QuoteUpdater extends AbstractHelper
         $address->setCity($addressData['locality']);
         $address->setRegionCode($addressData['region']);
         $address->setCountryId($addressData['countryCodeAlpha2']);
+        if( $regionFromAddressData ) {
+            $address->setRegion( $regionFromAddressData->getName() );
+            $address->setRegionId( $regionFromAddressData->getId() );
+        }
         $address->setPostcode($addressData['postalCode']);
 
         if (!empty($addressData['telephone'])) {
