@@ -12,7 +12,8 @@ define([
     'mage/translate',
     'Magento_Braintree/js/validator',
     'braintree',
-    'braintreeHostedFields'
+    'braintreeHostedFields',
+    'jquery/validate/'
 ], function ($, Class, alert, domObserver, $t, validator, client, hostedFields) {
     'use strict';
 
