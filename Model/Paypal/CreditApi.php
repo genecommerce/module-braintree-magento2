@@ -8,7 +8,6 @@ use Magento\Framework\App\Cache\Type\Config as Cache;
 use Magento\Braintree\Gateway\Config\PayPalCredit\Config;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\AuthenticationException;
-use Zend_Http_Client;
 
 /**
  * Class CreditApi
@@ -174,7 +173,7 @@ class CreditApi
      */
     private function getAuthorizationUrl(): string
     {
-        $sandbox = $this->config->getSandbox() ? '.sandbox' : '';
+        $sandbox = $this->config->isSandbox() ? '.sandbox' : '';
         return sprintf('https://api%s.paypal.com/v1/oauth2/token', $sandbox);
     }
 
@@ -183,7 +182,7 @@ class CreditApi
      */
     private function getCalcUrl(): string
     {
-        $sandbox = $this->config->getSandbox() ? '.sandbox' : '';
+        $sandbox = $this->config->isSandbox() ? '.sandbox' : '';
         return sprintf('https://api%s.paypal.com/v1/credit/calculated-financing-options', $sandbox);
     }
 
@@ -201,7 +200,7 @@ class CreditApi
 
         $this->curl->setConfig($configuration);
         $this->curl->write(
-            Zend_Http_Client::POST,
+            'POST',
             $url,
             '1.1',
             $headers,
